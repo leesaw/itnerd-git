@@ -9,10 +9,6 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav">
-
-            </ul>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
             <?php if ($this->session->userdata('sessstatus') == 1) { ?>
@@ -20,6 +16,22 @@
                 <a href="<?php echo site_url("main/config"); ?>"><i class="fa fa-gears"></i> ตั้งค่า</a>
               </li>
             <?php } ?>
+                
+            <!-- Notifications: style can be found in dropdown.less -->
+              <li class="dropdown notifications-menu">
+                <a href="<?php echo site_url("task/ringshow"); ?>">
+                  <i class="fa fa-bell-o"></i>
+                  <span class="label label-success"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
+                </a>
+              </li>
+            
+              <li class="dropdown notifications-menu">
+                <a href="<?php echo site_url("task/notification"); ?>">
+                  <i class="fa fa-bullhorn"></i>
+                  <span class="label label-danger"><?php if (isset($numstatus5) && ($numstatus5>0)) { echo $numstatus5; } ?></span>
+                </a>
+              </li>
+                
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -36,7 +48,6 @@
               </li>
             </ul>
           </div>
-        </div>
         </nav>
       </header>
 

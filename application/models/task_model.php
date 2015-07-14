@@ -39,10 +39,33 @@ function finish_task($temp)
     $query = $this->db->update('task', $temp); 	
     return $query;   
 }
+
+function ring_task($task_id, $condition)
+{
+    if ($condition=='plus') {
+        $sql = "update task set ring=ring+1 where task_id='".$task_id."'";
+    }elseif ($condition=='minus') {
+        $sql = "update task set ring=ring-1 where task_id='".$task_id."'";
+    }elseif ($condition=='clear') {
+        $sql = "update task set ring=0 where task_id='".$task_id."'";
+    }
+    $query = $this->db->query($sql); 	
+    return $query;
+}
     
 function getNumStatus5($userid)
 {
     $this->db->select("task_id");
+    $this->db->from("task");
+    $this->db->where("status",5);
+    $this->db->where("userid", $userid);
+    $query = $this->db->get();		
+    return $query->num_rows();
+}
+    
+function getNumRing($userid)
+{
+    $this->db->select("ring");
     $this->db->from("task");
     $this->db->where("status",5);
     $this->db->where("userid", $userid);
@@ -132,7 +155,7 @@ function getTaskTeam_today($userid, $teamid)
 {
     $today = date('Y-m-d');
     
-    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname", FALSE);
+    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname, ring", FALSE);
     $this->db->from("task");
     $this->db->join("users", "task.userid=users.id", "left");
     $this->db->join("category", "category.category_id=task.category_id", "left");
@@ -149,7 +172,7 @@ function getTaskTeam_late($userid, $teamid)
 {
     $today = date('Y-m-d');
     
-    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname", FALSE);
+    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname, ring", FALSE);
     $this->db->from("task");
     $this->db->join("users", "task.userid=users.id", "left");
     $this->db->join("category", "category.category_id=task.category_id", "left");
@@ -169,7 +192,7 @@ function getTaskTeam_tomorrow($userid, $teamid)
     $tmr[2]+=1;
     $tmr= $tmr[0]."-".$tmr[1]."-".$tmr[2];
     
-    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname", FALSE);
+    $this->db->select("task_id, topic, detail, category.name as name, userid, assign, date_format(dateon,'%d %M %Y') as dateon, firstname, lastname, ring", FALSE);
     $this->db->from("task");
     $this->db->join("users", "task.userid=users.id", "left");
     $this->db->join("category", "category.category_id=task.category_id", "left");

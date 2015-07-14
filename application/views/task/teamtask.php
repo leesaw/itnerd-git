@@ -13,9 +13,7 @@
 <body class="skin-purple">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-    <?php $url = site_url("task/finishtask_today"); 
-        $url2 = site_url("task/canceltask_today"); 
-        $url3 = site_url("task/gottask_notification");
+    <?php $url = site_url("task/ringtask"); 
     ?>
 	
 	
@@ -42,6 +40,10 @@
                   <ul class="todo-list">
                 <?php if(isset($task_array)) { foreach($task_array as $loop) { ?>
                     <li class="primary">
+                      <!-- drag handle -->
+                      <div class="tools">
+                        <?php if ($loop->ring>0) echo "[".$loop->ring."]"; ?><i class="fa fa-bell-o" onClick="ring(<?php echo $loop->task_id; ?>)"></i>
+                      </div>
                       <span class="text">
                         <i class="fa fa-ellipsis-v"></i>
                       </span>
@@ -66,6 +68,10 @@
                   <ul class="todo-list">
                 <?php if(isset($tasklate_array)) { foreach($tasklate_array as $loop) { ?>
                     <li class="danger">
+                      <!-- drag handle -->
+                      <div class="tools">
+                        <?php if ($loop->ring>0) echo "[".$loop->ring."]"; ?><i class="fa fa-bell-o" onClick="ring(<?php echo $loop->task_id; ?>)"></i>
+                      </div>
                       <span class="text">
                         <i class="fa fa-ellipsis-v"></i>
                       </span>
@@ -93,6 +99,10 @@
                   <ul class="todo-list">
                 <?php if(isset($tasktomorrow_array)) { foreach($tasktomorrow_array as $loop) { ?>
                     <li class="info">
+                      <!-- drag handle -->
+                      <div class="tools">
+                        <?php if ($loop->ring>0) echo "[".$loop->ring."]"; ?><i class="fa fa-bell-o" onClick="ring(<?php echo $loop->task_id; ?>)"></i>
+                      </div>
                       <span class="text">
                         <i class="fa fa-ellipsis-v"></i>
                       </span>
@@ -149,9 +159,15 @@ $(document).ready(function()
     'type':'iframe'}); 
 });
 
-function got_confirm(val1) {
-    var myurl = <?php echo json_encode($url3); ?>;
-    window.location.replace(myurl+"/"+val1);
+function ring(val1) {
+    bootbox.confirm("ยืนยันการเตือน ใช่หรือไม่ ?", function(result) {
+        var currentForm = this;
+        var myurl = <?php echo json_encode($url); ?>;
+        if (result) {
+            window.location.replace(myurl+"/"+val1);
+        }
+
+    });
 }
 
 function get_datepicker(id)

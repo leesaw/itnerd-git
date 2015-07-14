@@ -230,6 +230,7 @@ function teamtask()
     $data['task_array'] = $this->task_model->getTaskTeam_today($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
     $data['tasklate_array'] = $this->task_model->getTaskTeam_late($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
     $data['tasktomorrow_array'] = $this->task_model->getTaskTeam_tomorrow($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
+    $data['numstatus5'] = $this->num;
     $data['title'] = "NGG|IT Nerd - Team Tasks";
     $this->load->view('task/teamtask',$data);
 }
@@ -238,6 +239,7 @@ function myteam()
 {
     $this->load->model('user','',TRUE);
     $data['user_array'] = $this->user->getTeamOtherUserID($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
+    $data['numstatus5'] = $this->num;
     $data['title'] = "NGG|IT Nerd - My Team";
     $this->load->view('task/myteam',$data);
 }
@@ -255,8 +257,17 @@ function viewtask_myteam()
     $data['tasktomorrow_array'] = $this->task_model->getTaskTomorrow($id);
     $data['tasknext_array'] = $this->task_model->getTaskNext($id);
     
+    $data['numstatus5'] = $this->num;
     $data['title'] = "NGG|IT Nerd - Member Tasks";
     $this->load->view('task/myteam_task',$data);
+}
+    
+function ringtask()
+{
+    $id = $this->uri->segment(3);
+    $this->task_model->ring_task($id,"plus");
+
+	redirect('task/teamtask', 'refresh');
 }
     
 }

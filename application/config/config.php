@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/itnerd';
+$config['base_url']	= 'http://localhost/itnerd-git';
 
 /* testing
 |--------------------------------------------------------------------------

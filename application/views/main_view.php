@@ -10,7 +10,7 @@
 </style>
 </head>
 
-<body class="skin-purple">
+<body class="skin-purple sidebar-mini">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
     <?php $url = site_url("task/finishtask_today"); 
@@ -35,12 +35,12 @@
               <div class="box box-primary">
                 <div class="box-header">
                     <i class="fa fa-skyatlas"> Today</i> 
-                    <?php if (isset($numstatus5) && ($numstatus5>0)) { ?>
+                    <?php /*if (isset($numstatus5) && ($numstatus5>0)) { ?>
                     <a class="btn btn-sm btn-default" href="<?php echo site_url("task/notification"); ?>">
-                    <i class="fa fa-bullhorn"></i> Notifications 
+                    <i class="fa fa-bullhorn"></i>
                     <span class="badge bg-red"><?php  echo $numstatus5; ?></span>
-                    </a><?php } ?>
-                    <a class="btn btn-primary pull-right" href="<?php echo site_url("task/addtask"); ?>"><i class="fa fa-plus"></i> เพิ่มงานใหม่</a>
+                    </a><?php }  */?>
+                    <a class="btn btn-sm btn-primary pull-right" href="<?php echo site_url("task/addtask"); ?>"><i class="fa fa-plus"></i> เพิ่มงานใหม่</a>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
