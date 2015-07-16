@@ -13,9 +13,8 @@
 <body class="skin-purple">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-    <?php $url = site_url("task/finishtask_today"); 
-        $url2 = site_url("task/canceltask_today"); 
-        $url3 = site_url("task/gottask");
+    <?php $url = site_url("task/accepttask"); 
+          $url2 = site_url("task/rejecttask"); 
     ?>
 	
 	
@@ -24,7 +23,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            My Task List
+            <i class="fa fa-check-square-o"> Approval Tasks</i>
           </h1>
         </section>
 
@@ -32,42 +31,34 @@
         <section class="content">
 
         <!-- TO DO List -->
-              <div class="box box-primary">
+              <div class="box box-success">
                 <div class="box-header">
-                    <i class="fa fa-archive"> Next Tasks</i> <a class="btn btn-primary pull-right" href="<?php echo site_url("task/addtask"); ?>"><i class="fa fa-plus"></i> เพิ่มงานใหม่</a>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
                   <ul class="todo-list">
-                <?php if(isset($tasknext_array)) { foreach($tasknext_array as $loop) { ?>
-                    <li class="primary">
+                <?php if(isset($task_array)) { foreach($task_array as $loop) { ?>
+                    <li class="success">
                       <!-- drag handle -->
                       <div class="tools">
-                        <i class="fa fa-check-square-o" onClick="finish_confirm(<?php echo $loop->task_id; ?>)"></i>&nbsp; &nbsp;
-                        <i class="fa fa-remove" onClick="cancel_confirm(<?php echo $loop->task_id; ?>)"></i>
+                        <i class="fa fa-send-o" onClick="got_confirm(<?php echo $loop->task_id; ?>)"></i>&nbsp; &nbsp;
+                        <i class="fa fa-thumbs-o-down" onClick="cancel_confirm(<?php echo $loop->task_id; ?>)"></i>
                       </div>
                       <span class="text">
                         <i class="fa fa-ellipsis-v"></i>
                       </span>
                       <!-- todo text -->
                       <span class="text">
-                    <?php                                                 
-                        echo "<u>".$loop->topic."</u> - ".$loop->detail; 
-                        echo " <text class='text-green'>[".$loop->name."]</text>";                 
+                    <?php                     
+                        echo "<text class='text-maroon'>Owner: ".$loop->firstname." ".$loop->lastname."</text> - <u>".$loop->topic."</u> - ".$loop->detail; 
+                        echo " <text class='text-green'>[".$loop->name."]</text>";  
                     ?>
-                        <?php
-                         echo "<text class='text-blue'><small>วันที่เสร็จสิ้น : ".$loop->dateon." </small></text>";
-                        ?>
-                      </span>
-                      <!-- Emphasis label -->
-                        <?php if ($loop->userid!=$loop->assign) { ?>
-                      <small class="label label-danger"><i class="fa fa-clock-o"></i> Urgent</small>
-                        <?php } ?>
-                        <?php if ($loop->datecomplete!=0) { ?>
-                      <small class="label label-warning"><i class="fa fa-backward"></i> Return</small>
-                        <?php } ?>
+                    <?php
+                        echo "<text class='text-blue'><small>วันที่เสร็จสิ้น : ".$loop->dateon." </small></text> | ";
+                        echo "<text class='text-red'><small>วันที่ปิดงาน : ".$loop->datecomplete." </small></text>";
+                    ?>
                       <!-- General tools such as edit or delete-->
-                      
+                      </span>
                     </li>
                 <?php } } ?>
                   </ul>
@@ -108,30 +99,19 @@ $(document).ready(function()
     'type':'iframe'}); 
 });
 
-function finish_confirm(val1) {
-	bootbox.confirm("ยืนยันการปิดงานใช่หรือไม่ ?", function(result) {
-				var currentForm = this;
-				var myurl = <?php echo json_encode($url); ?>;
-            	if (result) {
-				
-					window.location.replace(myurl+"/"+val1);
-				}
-
-		});
-
+function got_confirm(val1) {
+    var myurl = <?php echo json_encode($url); ?>;
+    window.location.replace(myurl+"/"+val1);
 }
     
 function cancel_confirm(val1) {
-	bootbox.confirm("ยืนยันการยกเลิกงานใช่หรือไม่ ?", function(result) {
-				var currentForm = this;
-				var myurl = <?php echo json_encode($url2); ?>;
-            	if (result) {
-				
-					window.location.replace(myurl+"/"+val1);
-				}
-
-		});
-
+    bootbox.confirm("ให้ดำเนินการต่อ ใช่หรือไม่ ?", function(result) {
+        var currentForm = this;
+        var myurl = <?php echo json_encode($url2); ?>;
+        if (result) {
+            window.location.replace(myurl+"/"+val1);
+        }
+    });
 }
 
 function get_datepicker(id)

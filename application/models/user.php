@@ -43,7 +43,7 @@ function checkpass($id, $password)
  
  function getUsers()
  {
-	$this->db->select("id, username, firstname, lastname, status");
+	$this->db->select("id, username, firstname, lastname, status, team_id");
 	$this->db->order_by("id", "asc");
 	$this->db->from('users');	
 	$this->db->where('status >', 0);
@@ -53,8 +53,7 @@ function checkpass($id, $password)
  
  function getOneUser($id=NULL)
  {
-	$this->db->select("id, username, firstname, lastname, status");
-	$this->db->order_by("id", "asc");
+	$this->db->select("id, username, firstname, lastname, status, team_id");
 	$this->db->from('users');			
 	$this->db->where('id', $id);	
 	$query = $this->db->get();		
@@ -104,4 +103,3 @@ function checkpass($id, $password)
 
 }
 ?>
-

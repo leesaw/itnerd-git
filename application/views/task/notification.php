@@ -24,7 +24,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            My Task List
+            <i class="fa fa-bullhorn"> Notification</i>
           </h1>
         </section>
 
@@ -32,15 +32,14 @@
         <section class="content">
 
         <!-- TO DO List -->
-              <div class="box box-primary">
+              <div class="box box-danger">
                 <div class="box-header">
-                    <i class="fa fa-bell-o"> Notification</i>
                 </div><!-- /.box-header -->
                 <div class="box-body">
                 
                   <ul class="todo-list">
                 <?php if(isset($tasknotification_array)) { foreach($tasknotification_array as $loop) { ?>
-                    <li class="primary">
+                    <li class="danger">
                       <!-- drag handle -->
                       <div class="tools">
                         <i class="fa fa-plus-square" onClick="got_confirm(<?php echo $loop->task_id; ?>)"></i>

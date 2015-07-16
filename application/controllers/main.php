@@ -4,6 +4,7 @@ session_start();
 class Main extends CI_Controller {
 
 public $num = 0;
+public $ring = 0;
 
 	function __construct()
 	{
@@ -13,14 +14,23 @@ public $num = 0;
        if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
         
        $this->load->model('task_model','',TRUE);
+        // get number of status=5
        $this->num = $this->task_model->getNumStatus5($this->session->userdata('sessid'));
+        
+        // get number of ring
+       $query = $this->task_model->getNumRing($this->session->userdata('sessid'), $this->session->userdata('sessstatus'), $this->session->userdata('sessteam'));
+       if ($this->session->userdata('sessstatus')!=1) { foreach ($query as $loop) { $this->ring += $loop->ring; } }
+       else { $this->ring = $query; }
+        // end get ring
 	}
 	function index()
 	{
         $data['task_array'] = $this->task_model->getTaskToday($this->session->userdata('sessid'));
         $data['tasklate_array'] = $this->task_model->getTaskLate($this->session->userdata('sessid'));
         $data['tasktomorrow_array'] = $this->task_model->getTaskTomorrow($this->session->userdata('sessid'));
+        
         $data['numstatus5'] = $this->num;
+        $data['numring'] = $this->ring;
 		$data['title'] = "NGG|IT Nerd - Today";
 		$this->load->view('main_view',$data);
 	}
@@ -33,6 +43,9 @@ public $num = 0;
 	   $this->session->unset_userdata('sesslastname');
 	   $this->session->unset_userdata('sessstatus');
 	   session_destroy();
+        
+       $this->load->helper('cookie');
+       delete_cookie('itnerd_userid');
 	   redirect('main', 'refresh');
 	}
 	
@@ -93,6 +106,7 @@ public $num = 0;
         $data["config_array"] = $this->config_model->getAllconfig();
         
 		$data['numstatus5'] = $this->num;
+        $data['numring'] = $this->ring;
 		$data['title'] = "NGG|IT Nerd - Configuration";
 		$this->load->view('config',$data);
     }
@@ -110,6 +124,7 @@ public $num = 0;
         }
         $data["config_array"] = $this->config_model->getAllconfig();
         $data['numstatus5'] = $this->num;
+        $data['numring'] = $this->ring;
         $data['title'] = "NGG|IT Nerd - Configuration";
         redirect('main/config', 'refresh');
     }

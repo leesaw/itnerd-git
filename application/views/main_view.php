@@ -66,6 +66,10 @@
                         <?php if ($loop->userid!=$loop->assign) { ?>
                       <small class="label label-danger"><i class="fa fa-clock-o"></i> Urgent</small>
                         <?php } ?>
+                        
+                        <?php if ($loop->datecomplete!=0) { ?>
+                      <small class="label label-warning"><i class="fa fa-backward"></i> Return</small>
+                        <?php } ?>
                       <!-- General tools such as edit or delete-->
                       
                     </li>
@@ -98,6 +102,9 @@
                         <?php if ($loop->userid!=$loop->assign) { ?>
                       <small class="label label-danger"><i class="fa fa-clock-o"></i> Urgent</small>
                         <?php } ?>
+                        <?php if ($loop->datecomplete!=0) { ?>
+                      <small class="label label-warning"><i class="fa fa-backward"></i> Return</small>
+                        <?php } ?>
                       <!-- General tools such as edit or delete-->
                       
                     </li>
@@ -126,6 +133,9 @@
                       <!-- Emphasis label -->
                         <?php if ($loop->userid!=$loop->assign) { ?>
                       <small class="label label-danger"><i class="fa fa-clock-o"></i> Urgent</small>
+                        <?php } ?>
+                        <?php if ($loop->datecomplete!=0) { ?>
+                      <small class="label label-warning"><i class="fa fa-backward"></i> Return</small>
                         <?php } ?>
                       <!-- General tools such as edit or delete-->
                       

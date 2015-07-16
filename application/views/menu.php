@@ -11,17 +11,12 @@
           </a>
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
-              <li class="tasks-menu">
-                <a href="<?php echo site_url("main/config"); ?>"><i class="fa fa-gears"></i> ตั้งค่า</a>
-              </li>
-            <?php } ?>
-                
+            <?php if ($this->session->userdata('sessstatus') != 1) { ?>
             <!-- Notifications: style can be found in dropdown.less -->
               <li class="dropdown notifications-menu">
                 <a href="<?php echo site_url("task/ringshow"); ?>">
                   <i class="fa fa-bell-o"></i>
-                  <span class="label label-success"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
+                  <span class="label label-warning"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
                 </a>
               </li>
             
@@ -31,17 +26,28 @@
                   <span class="label label-danger"><?php if (isset($numstatus5) && ($numstatus5>0)) { echo $numstatus5; } ?></span>
                 </a>
               </li>
-                
-              <!-- User Account: style can be found in dropdown.less -->
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                  <span class="hidden-xs">ผู้ใช้งาน :  <strong><?php echo $this->session->userdata('sessfirstname')." ".$this->session->userdata('sesslastname'); ?></strong><i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i></span>
+            <?php }elseif($this->session->userdata('sessstatus') == 1) { ?>
+              <li class="dropdown notifications-menu">
+                <a href="<?php echo site_url("task/completedtask"); ?>">
+                  <i class="fa fa-check-square-o"></i>
+                  <span class="label label-success"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
                 </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="<?php echo site_url("main/changepass"); ?>"><i class="fa fa-gear fa-fw"></i> เปลี่ยนรหัสผ่าน</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a href="<?php echo site_url("main/logout"); ?>"><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ</a>
+              </li>
+            <?php } ?>
+              <!-- User Account: style can be found in dropdown.less -->
+              <li class="dropdown user user-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <img src="<?php echo base_url(); ?>/dist/img/user.png" class="user-image" alt="User Image" />
+                  <span class="hidden-xs">ผู้ใช้งาน :  <strong><?php echo $this->session->userdata('sessfirstname')." ".$this->session->userdata('sesslastname'); ?></strong>  <i class="fa fa-caret-down"></i></span>
+                </a>
+                    <ul class="dropdown-menu">
+                        <li class="user-footer">
+                            <div class="pull-left">
+                              <a href="<?php echo site_url("main/changepass"); ?>" class="btn btn-default btn-flat"><small><i class="fa fa-gear fa-fw"></i> เปลี่ยนรหัสผ่าน</small></a>
+                            </div>
+                            <div class="pull-right">
+                              <a href="<?php echo site_url("main/logout"); ?>" class="btn btn-default btn-flat"><small><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ</small></a>
+                            </div>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -90,7 +96,7 @@
             </li>
             <li>
               <a href="<?php echo site_url("task/main"); ?>">
-                <i class="fa fa-file-text-o"></i> <span>Task</span>
+                <i class="fa fa-check-square-o"></i> <span>Completed Tasks</span>
               </a>
             </li>
             <?php } ?>
