@@ -120,7 +120,7 @@ function getNumRing($userid, $status, $teamid)
         $this->db->join("users", "task.userid=users.id", "left");
         $this->db->where("task.status",3);
         $this->db->where("userid !=", $userid);
-        $this->db->where("team_id", $teamid);
+        $this->db->where("users.team_id", $teamid);
         $query = $this->db->get();		
         return $query->num_rows();
     }else{
@@ -233,7 +233,7 @@ function getTaskTeam_today($userid, $teamid)
     $this->db->join("category", "category.category_id=task.category_id", "left");
     $this->db->where("task.status",1);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->where("dateon between '".$today." 00:00:00' AND '".$today." 23:59:59'", NULL, FALSE);
     $this->db->order_by("task_id","asc");
     $query = $this->db->get();		
@@ -250,7 +250,7 @@ function getTaskTeam_late($userid, $teamid)
     $this->db->join("category", "category.category_id=task.category_id", "left");
     $this->db->where("task.status",1);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->where("dateon < '".$today." 00:00:00'", NULL, FALSE);
     $this->db->order_by("task_id","asc");
     $query = $this->db->get();		
@@ -270,7 +270,7 @@ function getTaskTeam_tomorrow($userid, $teamid)
     $this->db->join("category", "category.category_id=task.category_id", "left");
     $this->db->where("task.status",1);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->where("dateon between '".$tmr." 00:00:00' AND '".$tmr." 23:59:59'", NULL, FALSE);
     $this->db->order_by("task_id","asc");
     $query = $this->db->get();		
@@ -286,7 +286,7 @@ function getTaskTeam_waiting($userid, $teamid)
     $this->db->join("category", "category.category_id=task.category_id", "left");
     $this->db->where("task.status",5);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->order_by("task_id","asc");
     $query = $this->db->get();		
     return $query->result();
@@ -300,7 +300,7 @@ function completedTask($userid, $teamid)
     $this->db->join("category", "category.category_id=task.category_id", "left");
     $this->db->where("task.status",3);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->order_by("task_id","asc");
     $query = $this->db->get();		
     return $query->result();
@@ -318,7 +318,7 @@ function getNumTask_member_month($userid, $teamid)
     $this->db->join("users", "task.userid=users.id", "left");
     //$this->db->where("dateon between '".$start." 00:00:00' AND '".$end." 23:59:59'", NULL, FALSE);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $this->db->group_by("task.userid");
     $query = $this->db->get();		
     return $query->result();
@@ -336,7 +336,7 @@ function getNumTask_status_month($userid, $teamid)
     $this->db->join("users", "task.userid=users.id", "left");
     //$this->db->where("dateon between '".$start." 00:00:00' AND '".$end." 23:59:59'", NULL, FALSE);
     $this->db->where("userid !=", $userid);
-    $this->db->where("team_id", $teamid);
+    $this->db->where("users.team_id", $teamid);
     $query = $this->db->get();		
     return $query->result();
 }

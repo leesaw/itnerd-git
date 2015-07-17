@@ -190,7 +190,11 @@ function finishtask()
     $this->load->model('task_model','',TRUE);
     
     $datecomplete = date('Y-m-d H:i:s');
-    $task = array('task_id' => $id, 'status' => 3, 'datecomplete' => $datecomplete);
+    if ($this->session->userdata('sessstatus')==1) {
+        $task = array('task_id' => $id, 'status' => 4, 'datecomplete' => $datecomplete);
+    }else{
+        $task = array('task_id' => $id, 'status' => 3, 'datecomplete' => $datecomplete);
+    }
     $this->task_model->finish_task($task);
 
 	redirect('task/main', 'refresh');
@@ -203,7 +207,11 @@ function finishtask_today()
     $this->load->model('task_model','',TRUE);
        
     $datecomplete = date('Y-m-d H:i:s');
-    $task = array('task_id' => $id, 'status' => 3, 'datecomplete' => $datecomplete);
+    if ($this->session->userdata('sessstatus')==1) {
+        $task = array('task_id' => $id, 'status' => 4, 'datecomplete' => $datecomplete);
+    }else{
+        $task = array('task_id' => $id, 'status' => 3, 'datecomplete' => $datecomplete);
+    }
     $this->task_model->finish_task($task);
 
 	redirect('main', 'refresh');

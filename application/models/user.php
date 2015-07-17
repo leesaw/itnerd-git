@@ -7,6 +7,7 @@ Class User extends CI_Model
    $this -> db -> from('users');
    $this -> db -> where('username', $username);
    $this -> db -> where('password', MD5($password));
+   $this -> db -> where('status >', 0);
    $this -> db -> limit(1);
 
    $query = $this -> db -> get();
@@ -51,6 +52,15 @@ function checkpass($id, $password)
 	return $query->result();
  }
     
+ function getAllUsers()
+ {
+	$this->db->select("id, username, firstname, lastname, status, team_id");
+	$this->db->order_by("id", "asc");
+	$this->db->from('users');	
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function getUsers_team($teamid)
  {
 	$this->db->select("id, username, firstname, lastname, status");
@@ -69,6 +79,15 @@ function checkpass($id, $password)
 	$this->db->where('id', $id);	
 	$query = $this->db->get();		
 	return $query->result();
+ }
+    
+ function checkUsername($username=NULL)
+ {
+	$this->db->select("id");
+	$this->db->from('users');			
+	$this->db->where('username', $username);	
+	$query = $this->db->get();		
+	return $query->num_rows();
  }
  
  function addUser($user=NULL)
@@ -95,7 +114,6 @@ function checkpass($id, $password)
  {
 	$this->db->where('id', $id);
 	$user = array(
-				'username' => "",
 				'status' => 0
 			);
 	$query = $this->db->update('users', $user); 	

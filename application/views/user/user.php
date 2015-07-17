@@ -9,14 +9,14 @@
 <body class="skin-purple">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-    <?php $url = site_url("task/deleteCategory"); 
+    <?php $url = site_url("login/banUser"); 
         ?>
 	
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงประเภทงานทั้งหมด
+            Users
         </h1>
     </section>
 	
@@ -32,21 +32,30 @@
 			<div class="col-xs-6">
                 <div class="box">
                     <div class="box-header">
-                      <h3 class="box-title">ประเภทงาน</h3> <button type="button" class="btn btn-primary btn-sm pull-right" onClick="add_category();"> <i class="fa fa-plus"></i> เพิ่มประเภทงาน</button>
+                      <a class="btn btn-primary btn-sm pull-right" href="<?php echo site_url("login/adduser"); ?>"><i class="fa fa-plus"></i> เพิ่ม User</a>
                     </div><!-- /.box-header -->
                     <div class="box-body no-padding">
                       <table class="table table-condensed">
                         <tr>
                           <th style="width: 40px">#</th>
-                          <th>ชื่อประเภทงาน</th>
+                          <th>Username</th>
+                          <th>ชื่อ</th>
+                          <th>นามสกุล</th>
+                          <th>สถานะ</th>
+                          <th>หมายเลขทีม</th>
                           <th style="width: 80px"> </th>
                         </tr>
                     <?php   $count=1;
-                            foreach($category_array as $loop) { ?>
+                        foreach($user_array as $loop) { ?>
                             <tr>
                             <td><?php echo $count; ?></td>
-                            <td><?php echo $loop->name; ?></td>
-                            <td><button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="Delete" onClick="del_confirm(<?php echo $loop->category_id; ?>)"><span class="glyphicon glyphicon-remove"></span></button></td>
+                            <td><?php echo $loop->username; ?></td>
+                            <td><?php echo $loop->firstname; ?></td>
+                            <td><?php echo $loop->lastname; ?></td>
+                            <td><?php echo $loop->status; ?></td>
+                            <td><?php echo $loop->team_id; ?></td>
+                            <td><a href="<?php echo site_url("login/edituser/".$loop->id); ?>" class="btn btn-warning btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="Edit"><span class="glyphicon glyphicon-edit"></span></a>
+                                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="Delete" onClick="del_confirm(<?php echo $loop->id; ?>)"><span class="glyphicon glyphicon-remove"></span></button></td>
                             </tr>
                     <?php $count++; } ?>
                       </table>
@@ -88,18 +97,6 @@ $(document).ready(function()
     'type':'iframe'}); 
 });
 
-function finish_confirm(val1) {
-	bootbox.confirm("ยืนยันการปิดงานใช่หรือไม่ ?", function(result) {
-				var currentForm = this;
-				var myurl = <?php echo json_encode($url); ?>;
-            	if (result) {
-				
-					window.location.replace(myurl+"/"+val1);
-				}
-
-		});
-
-}
     
 function del_confirm(val1) {
 	bootbox.confirm("ต้องการลบข้อมูลที่เลือกไว้ใช่หรือไม่ ?", function(result) {
@@ -112,25 +109,6 @@ function del_confirm(val1) {
 
 		});
 
-}
-    
-function add_category() {
-            bootbox.prompt("ป้อนชื่อประเภทงานใหม่", function(result) {       
-                if (result != null && result !="") {                                                                        
-                    var name = result;
-                    $.ajax({
-                            'url' : '<?php echo site_url('task/addNewCategory'); ?>',
-                            'type':'post',
-                            'data': { category_name:name },
-                            'success' : function(data){
-                                window.location.reload();
-                            }
-                        }); 
-
-                }else if (result =="") {
-                    alert('ไม่สามารถเพิ่มข้อมูลได้');
-                }
-            });
 }
 
 </script>

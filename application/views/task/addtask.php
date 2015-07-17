@@ -15,9 +15,6 @@
         <h1>
             เพิ่มงานใหม่
         </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> เพิ่มงานใหม่</a></li>
-        </ol>
     </section>
 	
 	<section class="content">
