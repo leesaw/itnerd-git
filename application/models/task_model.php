@@ -43,8 +43,42 @@ function getAllCategory()
 {
     $this->db->select("category_id, name");
     $this->db->from("category");
+    $this->db->where("disable",0);
     $query = $this->db->get();		
     return $query->result();
+}
+    
+function getAllCategory_team($teamid)
+{
+    $this->db->select("category_id, name");
+    $this->db->from("category");
+    $this->db->where("team_id",$teamid);
+    $this->db->where("disable",0);
+    $query = $this->db->get();		
+    return $query->result();
+}
+    
+function checkCategoryName($name)
+{
+    $this->db->select("category_id");
+    $this->db->from("category");
+    $this->db->where("name",$name);
+    $this->db->where("disable",0);
+    $query = $this->db->get();		
+    return $query->num_rows();
+}
+    
+function delCategory($id)
+{
+    $cat = array('disable'=>1);
+    $this->db->where('category_id',$id);
+    $query = $this->db->update('category', $cat); 
+}
+    
+function addCategory($cat)
+{
+    $this->db->insert('category', $cat);
+	return $this->db->insert_id();	
 }
     
 function finish_task($temp)

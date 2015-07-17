@@ -99,6 +99,11 @@
                 <i class="fa fa-check-square-o"></i> <span>Completed Tasks</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("task/category"); ?>">
+                <i class="fa fa-pencil-square-o"></i> <span>Category</span>
+              </a>
+            </li>
             <?php } ?>
           </ul>
         </section>

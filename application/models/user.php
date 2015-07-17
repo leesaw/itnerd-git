@@ -50,6 +50,17 @@ function checkpass($id, $password)
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getUsers_team($teamid)
+ {
+	$this->db->select("id, username, firstname, lastname, status");
+	$this->db->order_by("id", "asc");
+	$this->db->from('users');	
+	$this->db->where('status >', 0);
+    $this->db->where('team_id', $teamid);
+	$query = $this->db->get();		
+	return $query->result();
+ }
  
  function getOneUser($id=NULL)
  {

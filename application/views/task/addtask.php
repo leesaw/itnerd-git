@@ -71,7 +71,7 @@
 							</div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                     <div class="form-group">
                                             <label>ผู้ปฏิบัติงาน *</label>
                                         <?php if($user_status>1) { ?>
@@ -89,7 +89,7 @@
                                     </div>
 							</div>
                             <?php if($user_status==1) { ?>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                     <div class="form-group">
                                             <label>ผู้สั่งงาน *</label>
                                             <input type="hidden" name="assign" value="<?php echo $user_id; ?>">

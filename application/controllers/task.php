@@ -39,6 +39,39 @@ function main()
     $this->load->view('task/main',$data);
 }
     
+function category()
+{
+    $query = $this->task_model->getAllCategory_team($this->session->userdata('sessteam'));
+    $data['category_array'] = $query;
+       
+    $data['numstatus5'] = $this->num;
+    $data['numring'] = $this->ring;
+    $data['title'] = "NGG|IT Nerd - Category";
+    $this->load->view('task/category',$data);   
+}
+    
+function addNewCategory()
+{
+    $name = $this->input->post('category_name');
+    $count = $this->task_model->checkCategoryName($name);
+    
+    if ($count<=0) {
+        $category = array('name' => $name, 'team_id' => $this->session->userdata('sessteam'));
+        $query = $this->task_model->addCategory($category);
+        echo 1;
+    }else{
+        echo 0;
+    }
+}
+    
+function deleteCategory()
+{
+    $id = $this->uri->segment(3);
+
+    $result = $this->task_model->delCategory($id);
+    redirect('task/category', 'refresh');
+}
+    
 function viewtask_alluser()
 {
     if ($this->session->userdata('sessstatus')==1) {
@@ -67,12 +100,12 @@ function viewtask_finish()
 
 function addtask()
 {
-    $query = $this->task_model->getAllCategory();
+    $query = $this->task_model->getAllCategory_team($this->session->userdata('sessteam'));
     $data['category_array'] = $query;
     
     if ($this->session->userdata('sessstatus')==1) {
         $this->load->model('user','',TRUE);
-        $query = $this->user->getUsers();   
+        $query = $this->user->getUsers_team($this->session->userdata('sessteam'));   
         $data['user_array'] = $query;
     }
     

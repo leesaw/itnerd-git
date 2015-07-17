@@ -10,9 +10,7 @@
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
     <?php $url = site_url("task/finishtask"); 
-          $url2 = site_url("task/canceltask"); 
-          $url3 = site_url("task/gottask");
-        ?>
+    ?>
 	
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -104,36 +102,6 @@ $(document).ready(function()
     'type':'iframe'}); 
 });
 
-function finish_confirm(val1) {
-	bootbox.confirm("ยืนยันการปิดงานใช่หรือไม่ ?", function(result) {
-				var currentForm = this;
-				var myurl = <?php echo json_encode($url); ?>;
-            	if (result) {
-				
-					window.location.replace(myurl+"/"+val1);
-				}
-
-		});
-
-}
-    
-function cancel_confirm(val1) {
-	bootbox.confirm("ยืนยันการยกเลิกงานใช่หรือไม่ ?", function(result) {
-				var currentForm = this;
-				var myurl = <?php echo json_encode($url2); ?>;
-            	if (result) {
-				
-					window.location.replace(myurl+"/"+val1);
-				}
-
-		});
-
-}
-    
-function got_confirm(val1) {
-    var myurl = <?php echo json_encode($url3); ?>;
-    window.location.replace(myurl+"/"+val1);
-}
 
 </script>
 </body>
