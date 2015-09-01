@@ -44,7 +44,9 @@
                       <!-- drag handle -->
                       <div class="tools">
                         <i class="fa fa-check-square-o" onClick="finish_confirm(<?php echo $loop->task_id; ?>)"></i>&nbsp; &nbsp;
-                        <i class="fa fa-remove" onClick="cancel_confirm(<?php echo $loop->task_id; ?>)"></i>
+                        <?php if ($loop->userid==$loop->assign) { ?>
+                          <i class="fa fa-remove" onClick="cancel_confirm(<?php echo $loop->task_id; ?>)"></i>
+                        <?php } ?>
                       </div>
                       <span class="text">
                         <i class="fa fa-ellipsis-v"></i>

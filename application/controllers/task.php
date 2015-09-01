@@ -53,7 +53,7 @@ function category()
 function addNewCategory()
 {
     $name = $this->input->post('category_name');
-    $count = $this->task_model->checkCategoryName($name);
+    $count = $this->task_model->checkCategoryName($name, $this->session->userdata('sessteam'));
     
     if ($count<=0) {
         $category = array('name' => $name, 'team_id' => $this->session->userdata('sessteam'));
@@ -289,6 +289,7 @@ function teamtask()
     $data['tasklate_array'] = $this->task_model->getTaskTeam_late($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
     $data['tasktomorrow_array'] = $this->task_model->getTaskTeam_tomorrow($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
     $data['taskwaiting_array'] = $this->task_model->getTaskTeam_waiting($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
+    $data['nexttask_array'] = $this->task_model->getTaskTeam_nexttask($this->session->userdata('sessid'),$this->session->userdata('sessteam'));
     $data['numstatus5'] = $this->num;
     $data['numring'] = $this->ring;
     $data['title'] = "NGG|IT Nerd - Team Tasks";

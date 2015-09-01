@@ -132,9 +132,40 @@
                 <?php } } ?>
                   </ul>
                 <hr>
-                    <h3 class='text-orange'>Wating</h3>
+                    <h3 class='text-orange'>Waiting</h3>
                   <ul class="todo-list">
                 <?php if(isset($taskwaiting_array)) { foreach($taskwaiting_array as $loop) { ?>
+                    <li class="info">
+                      <!-- drag handle -->
+                      <div class="tools">
+                        <?php if ($loop->ring>0) echo "[".$loop->ring."]"; ?><i class="fa fa-bell-o" onClick="ring(<?php echo $loop->task_id; ?>)"></i>
+                      </div>
+                      <span class="text">
+                        <i class="fa fa-ellipsis-v"></i>
+                      </span>
+                      <!-- todo text -->
+                      <span class="text">
+                    <?php                                                 
+                        echo "<text class='text-maroon'>Owner: ".$loop->firstname." ".$loop->lastname."</text> - <u>".$loop->topic."</u> - ".$loop->detail;
+                        echo " <text class='text-green'>[".$loop->name."]</text>";                 
+                    ?>
+                      </span>
+                      <!-- Emphasis label -->
+                        <?php if ($loop->userid!=$loop->assign) { ?>
+                      <small class="label label-danger"><i class="fa fa-clock-o"></i> Urgent</small>
+                        <?php } ?>
+                        <?php if ($loop->datecomplete!=0) { ?>
+                      <small class="label label-warning"><i class="fa fa-backward"></i> Return</small>
+                        <?php } ?>
+                      <!-- General tools such as edit or delete-->
+                      
+                    </li>
+                <?php } } ?>
+                  </ul>
+                <hr>
+                    <h3 class='text-orange'>Next Tasks</h3>
+                  <ul class="todo-list">
+                <?php if(isset($nexttask_array)) { foreach($nexttask_array as $loop) { ?>
                     <li class="info">
                       <!-- drag handle -->
                       <div class="tools">

@@ -54,7 +54,7 @@ function checkpass($id, $password)
     
  function getAllUsers()
  {
-	$this->db->select("id, username, firstname, lastname, status, team_id");
+	$this->db->select("id, username, firstname, lastname, status, team_id, ngg_worker_id, ngg_company_id, ngg_position_id, ngg_department_id, approval_status");
 	$this->db->order_by("id", "asc");
 	$this->db->from('users');	
 	$query = $this->db->get();		
