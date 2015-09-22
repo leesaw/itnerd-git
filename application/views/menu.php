@@ -112,6 +112,11 @@
                 <i class="fa fa-pencil-square-o"></i> <span>Category</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("jes/license_now"); ?>">
+                <i class="fa fa-pencil-square-o"></i> <span>JES</span>
+              </a>
+            </li>
             <?php } ?>
           </ul>
         </section>

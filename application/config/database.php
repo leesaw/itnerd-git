@@ -65,5 +65,23 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
 
+$db['db2']['hostname'] = "jes"; 
+//$db['db2']['port'] = "1433"; 
+$db['db2']['username'] = 'sa';
+$db['db2']['password'] = 'JESnggSa';
+$db['db2']['database'] = 'JES_NGG';
+$db['db2']['dbdriver'] = 'mssql';
+$db['db2']['dbprefix'] = '';
+$db['db2']['pconnect'] = FALSE; // Pay attention to this, codeigniter makes true for default
+$db['db2']['db_debug'] = TRUE;
+$db['db2']['cache_on'] = FALSE;
+$db['db2']['cachedir'] = '';
+$db['db2']['char_set'] = 'utf8';
+$db['db2']['dbcollat'] = 'utf8_general_ci';
+$db['db2']['swap_pre'] = '';
+$db['db2']['autoinit'] = TRUE;
+$db['db2']['stricton'] = FALSE;
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */
