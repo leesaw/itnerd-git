@@ -73,7 +73,13 @@
                 <i class="fa fa-users"></i> <span>Users</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("jes/license_now"); ?>">
+                <i class="fa fa-pencil-square-o"></i> <span>JES</span>
+              </a>
+            </li>
             <?php } ?>
+            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 2)) { ?>
             <li>
               <a href="<?php echo site_url("main"); ?>">
                 <i class="fa fa-home"></i> <span>Today</span>
@@ -84,13 +90,6 @@
                 <i class="fa fa-calendar"></i> <span>Next Tasks</span>
               </a>
             </li>
-            <!-- 
-            <li>
-              <a href="<?php echo site_url("task/notification"); ?>">
-                <i class="fa fa-bullhorn"></i> <span>Notifications</span><?php if (isset($numstatus5) && ($numstatus5>0)) { ?><small class="label pull-right bg-red"><?php echo $numstatus5; ?></small> <?php } ?>
-              </a>
-            </li>
-            -->
             <?php if ($this->session->userdata('sessstatus') == 1) { ?>
             <li>
               <a href="<?php echo site_url("task/teamtask"); ?>">
@@ -112,12 +111,20 @@
                 <i class="fa fa-pencil-square-o"></i> <span>Category</span>
               </a>
             </li>
+            <?php } } ?>
+            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') < 3)) { ?>
+            <li>
+              <a href="<?php echo site_url("jes/watch/main"); ?>">
+                <i class="fa fa-home"></i> <span>Dashboard</span>
+              </a>
+            </li>
+            <?php if ($this->session->userdata('sessstatus') == 99) { ?>
             <li>
               <a href="<?php echo site_url("jes/license_now"); ?>">
                 <i class="fa fa-pencil-square-o"></i> <span>JES</span>
               </a>
             </li>
-            <?php } ?>
+            <?php } } ?>
           </ul>
         </section>
         <!-- /.sidebar -->

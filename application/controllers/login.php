@@ -23,11 +23,18 @@ class Login extends CI_Controller {
              'sessfirstname' => $row->firstname,
              'sesslastname' => $row->lastname,
              'sessstatus' => $row->status,
-             'sessteam' => $row->team_id
+             'sessteam' => $row->team_id,
+             'sesscompany' => $row->ngg_company_id,
+             'sessposition' => $row->ngg_position_id
            );
         }
         $this->session->set_userdata($sess_array); 
-        redirect('main', 'refresh');
+        if (($this->session->userdata('sessstatus') < 10) || ($this->session->userdata('sessstatus') == 99)) {
+            redirect('main', 'refresh');
+        }elseif ($this->session->userdata('sesscompany') == 1) {
+            redirect('jes/watch', 'refresh');
+        }
+        //redirect('main', 'refresh');
 
    }else{
         $data['title'] = "NGG|IT Nerd";

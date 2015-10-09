@@ -32,6 +32,9 @@ public $ring = 0;
         $data['numstatus5'] = $this->num;
         $data['numring'] = $this->ring;
 		$data['title'] = "NGG|IT Nerd - Today";
+        if ($this->session->userdata('sesscompany') == 1) {
+            redirect('jes/watch', 'refresh');
+        }
 		$this->load->view('main_view',$data);
 	}
 	

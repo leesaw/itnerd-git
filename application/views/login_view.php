@@ -7,6 +7,8 @@
     <div class="login-box">
       <div class="login-logo">
         <b>NGG | </b>IT Nerd <i class="fa fa-fw fa-angellist"></i>
+        <br>
+          <h4>- Lemme Help You -</h4>#NGGTimepieces
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">เข้าสู่ระบบ</p>

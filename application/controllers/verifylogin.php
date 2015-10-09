@@ -29,7 +29,11 @@ class VerifyLogin extends CI_Controller {
    else
    {
       //Go to private area
-       redirect('main', 'refresh');
+        if (($this->session->userdata('sessstatus') < 10) || ($this->session->userdata('sessstatus') == 99)) {
+            redirect('main', 'refresh');
+        }elseif ($this->session->userdata('sesscompany') == 1) {
+            redirect('jes/watch', 'refresh');
+        }
    }
 
  }
@@ -55,10 +59,21 @@ class VerifyLogin extends CI_Controller {
 		 'sessfirstname' => $row->firstname,
 		 'sesslastname' => $row->lastname,
 		 'sessstatus' => $row->status,
-         'sessteam' => $row->team_id
+         'sessteam' => $row->team_id,
+         'sesscompany' => $row->ngg_company_id,
+         'sessposition' => $row->ngg_position_id
        );
-    
+        
        $this->session->set_userdata($sess_array);
+       
+       // insert log into log_user_login table
+       $log_array = array(
+           'userid' => $row->id,
+           'username' => $row->username,
+           'ip_address' => $this->input->ip_address(),
+           'dateadd' => date('Y-m-d H:i:s')
+       );
+       $this->user->addLogLogin($log_array);
      }
      $this->load->helper('cookie');
      if($remember=="1") {
