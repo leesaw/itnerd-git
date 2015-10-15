@@ -7,8 +7,8 @@
 <tbody>
 <?php foreach($brand_array as $loop) { ?>
     <tr>
-    <td style="font-size: 9pt;"><?php echo $loop->IHWareHouse; ?></td>
-    <td style="font-size: 9pt;"><?php echo $loop->WHDesc1; ?></td>
+    <td><?php echo $loop->WTCode; ?></td>
+    <td><?php echo $loop->WTDesc1; ?></td>
     </tr>
  <?php } ?>
 </tbody>
