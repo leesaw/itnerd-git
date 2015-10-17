@@ -27,6 +27,11 @@ foreach($pt_array as $loop) {
         <h1>
             แสดงสินค้าทั้งหมดในสต็อก : <B><U><?php echo $branchname; ?></U></B>
         </h1>
+        <ol class="breadcrumb">
+            <li><a href="<?php echo site_url("jes/watch"); ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
+            <li><a href="<?php echo site_url("jes/watch_viewInventory_whtype/".$whtypecode); ?>"> <?php echo $whtypename; ?></a></li>
+            <li class="active"><?php echo $branchname; ?></li>
+        </ol>
     </section>
 	
 	<section class="content">

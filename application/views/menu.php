@@ -114,8 +114,13 @@
             <?php } } ?>
             <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') < 3)) { ?>
             <li>
-              <a href="<?php echo site_url("jes/watch/main"); ?>">
+              <a href="<?php echo site_url("jes/watch"); ?>">
                 <i class="fa fa-home"></i> <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("jes/report"); ?>">
+                <i class="fa fa-file-o"></i> <span>Reports</span>
               </a>
             </li>
             <?php if ($this->session->userdata('sessstatus') == 99) { ?>

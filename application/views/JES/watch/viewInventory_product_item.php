@@ -34,7 +34,7 @@ foreach($pt_array as $loop) {
             <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <a id="fancyboxall" href="<?php echo site_url("jes/watch_store"); ?>"><button type="button" class="btn btn-primary">แสดงรหัสสาขา</button></a>
+                            <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_product/".$pt_code); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
                         </div>
                         <div class="box-body chart-responsive">
                             <div class="chart" id="bar-pt" style="height: 300px;"></div>

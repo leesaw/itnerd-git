@@ -166,6 +166,19 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
+    function getProductType_onlyWatch_lf($brand)
+    {
+        $db2 = $this->load->database('db2',TRUE);
+        $db2->select("PTCode, PTDesc1");
+        $db2->from("[JES_NGG].[dbo].[ProductType]");
+        $db2->like("PTCode", 'W-', 'after');
+        $db2->where("Expired",'F');
+        $db2->like("PTRemarks",$brand);
+        $db2->order_by("PTDesc1");
+        $query = $db2->get();
+        return $query->result();
+    }
+    
     function getInventoryWatch_branch_item($branch)
     {
         $db2 = $this->load->database('db2',TRUE);
@@ -175,10 +188,10 @@ Class Jes_model extends CI_Model
         $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("(select MAX(ITPK) as MITPK, ITCode from [JES_NGG].[dbo].[Item] group by ITCode) ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
         $db2->join("[JES_NGG].[dbo].[Item] ori","ori.ITPK=ss.MITPK","left");
-        $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
+        //$db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
         $db2->like("ori2.IFProdType", 'W-', 'after');
         $db2->where("IHQtyCal >",0);
-        $db2->where("WHType", $branch);
+        $db2->where("IHWareHouse", $branch);
         $db2->where("wh.Expired",'F');
         $query = $db2->get();
         return $query->result();
@@ -219,6 +232,26 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
+    function getInventoryWatch_whtype_brand($whtype, $remark)
+    {
+        $db2 = $this->load->database('db2',TRUE);
+        $db2->select("PTCode, PTDesc1, SUM(IHQtyCal) as sum1");
+        $db2->from("[JES_NGG].[dbo].[ItemWHBal] as wh");
+        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from [JES_NGG].[dbo].[ItemFinGoods] group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
+        $db2->join("[JES_NGG].[dbo].[ProductType]","PTCode=ori2.IFProdType","left");
+        $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
+        $db2->like("ori2.IFProdType", 'W-', 'after');
+        $db2->like("PTRemarks", $remark);
+        $db2->where("wh.Expired",'F');
+        $db2->where("IHQtyCal >=",0);
+        $db2->where("WHType", $whtype);
+        $db2->group_by("PTCode, PTDesc1");
+        $db2->having("SUM(IHQtyCal) >",0);
+        $query = $db2->get();
+        return $query->result();
+    }
+    
     function getInventoryWatch_product_item_branch($pt)
     {
         $db2 = $this->load->database('db2',TRUE);
@@ -240,7 +273,7 @@ Class Jes_model extends CI_Model
     function getStoreName($wh)
     {
         $db2 = $this->load->database('db2',TRUE);
-        $db2->select("WHDesc1");
+        $db2->select("WHDesc1, WHType");
         $db2->from("[JES_NGG].[dbo].[Warehouse]");
         $db2->where("WHCode", $wh);
         $query = $db2->get();
@@ -253,6 +286,44 @@ Class Jes_model extends CI_Model
         $db2->select("WTDesc1");
         $db2->from("[JES_NGG].[dbo].[WarehouseType]");
         $db2->where("WTCode", $wh);
+        $query = $db2->get();
+        return $query->result();
+    }
+
+    function getWarehouse_branch($wh)
+    {
+        $db2 = $this->load->database('db2',TRUE);
+        $db2->select("WHCode, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->from("[JES_NGG].[dbo].[ItemWHBal] as wh");
+        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from [JES_NGG].[dbo].[ItemFinGoods] group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
+        $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
+        $db2->join("[JES_NGG].[dbo].[ProductType] pt","PTCode=ori2.IFProdType","left");
+        $db2->like("ori2.IFProdType", 'W-', 'after');
+        $db2->where("IHQtyCal >=",0);
+        $db2->where("wh.Expired",'F');
+        $db2->where("WHType", $wh);
+        $db2->group_by("WHCode,WHDesc1");
+        $db2->having("SUM(IHQtyCal) >",0);
+        $query = $db2->get();
+        return $query->result();
+    }
+    
+    function getWarehouse_product($pt)
+    {
+        $db2 = $this->load->database('db2',TRUE);
+        $db2->select("WHCode, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->from("[JES_NGG].[dbo].[ItemWHBal] as wh");
+        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from [JES_NGG].[dbo].[ItemFinGoods] group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
+        $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
+        $db2->join("[JES_NGG].[dbo].[ProductType] pt","PTCode=ori2.IFProdType","left");
+        //$db2->like("ori2.IFProdType", 'W-', 'after');
+        $db2->where("IHQtyCal >=",0);
+        $db2->where("wh.Expired",'F');
+        $db2->where("ori2.IFProdType", $pt);
+        $db2->group_by("WHCode,WHDesc1");
+        $db2->having("SUM(IHQtyCal) >",0);
         $query = $db2->get();
         return $query->result();
     }
