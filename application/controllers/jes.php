@@ -282,6 +282,7 @@ function report_filter()
     }
     
     
+    
     $data['warehouse'] = $warehouse;
     $data['producttype'] = $producttype;
     //$data['fashion'] = $fashion;
