@@ -240,10 +240,54 @@ function watch_store_product()
     
 function report()
 {
-    $data['whtype_array'] = $this->jes_model->getAllWHType();
+    $query = $this->jes_model->getAllWHType();
+    $data['whtype_array'] = $query;
+    
+    $whname_array = array();
+    foreach($query as $loop) {
+        $whname_array[] = array("wh" => $this->jes_model->getWarehouse_branch($loop->WTCode), "WHType" => $loop->WTCode);
+    }
+    
+    $data['whname_array'] = $whname_array;
+    $data['lux_array'] = $this->jes_model->getProductType_onlyWatch_lf("_L");
+    $data['fashion_array'] = $this->jes_model->getProductType_onlyWatch_lf("_F");
     
     $data['title'] = "NGG|IT Nerd - Report";
     $this->load->view('JES/watch/report',$data);
+}
+    
+function report_filter()
+{
+    $query = $this->jes_model->getAllWHType();
+    $warehouse = array();
+    $count = 0;
+    foreach($query as $loop) {
+        $x = $this->input->post("whname_".$loop->WTCode);
+        if (count($x)>0) {
+            $warehouse[] = $x;
+            $count++;
+        }
+    }
+    
+    $lux = $this->input->post("ptype_lux");
+    $fashion = $this->input->post("ptype_fashion");
+    $producttype = array_merge($lux, $fashion);
+    $stock = array();
+    for ($i=0; $i<$count; $i++) {
+        for ($j=0; $i<count($warehouse[$i]); $i++) {
+            $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
+            foreach($query as $loop) $whname = $loop->WHDesc1;
+            $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
+        }
+    }
+    
+    
+    $data['warehouse'] = $warehouse;
+    $data['producttype'] = $producttype;
+    //$data['fashion'] = $fashion;
+    
+    $data['title'] = "NGG|IT Nerd - Report";
+    $this->load->view('JES/watch/report_filter',$data);
 }
     
 }

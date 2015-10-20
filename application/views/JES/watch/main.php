@@ -205,11 +205,12 @@
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>WTCode
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
+<script src="<?php echo base_url(); ?>js/spin.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function()
+{
 
-      $(function () {
-
-        //BAR CHART color type
+    //BAR CHART color type
         if ($('#bar-brand').length > 0)
         var all = Morris.Bar({
           element: 'bar-brand',
@@ -289,11 +290,7 @@
         }).on('click', function(i, row){
             window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+row.y);
         });
-
-    });
     
-$(document).ready(function()
-{
     $('#fancyboxall').fancybox({ 
     'width': '40%',
     'height': '70%', 
@@ -302,6 +299,7 @@ $(document).ready(function()
     'transitionOut':'none', 
     'type':'iframe'}); 
 });
+
 </script>
 </body>
 </html>
