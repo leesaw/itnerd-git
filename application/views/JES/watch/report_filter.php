@@ -12,36 +12,43 @@
 			<div class="col-xs-12">
                 <div class="panel panel-primary">
 					<div class="panel-heading">
+                        <a class="btn btn-success" href="<?php echo site_url("jes/exportExcel_stock"); ?>"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</a>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body table-responsive">
+                        <?php $count=0; ?>
                         <table class="table table-bordered table-striped" id="tablebarcode" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Warehouse</th>
-                                        <th>Item Code</th>
-                                        <th>Ref Code</th>
-                                        <th width="200">Description</th>
-                                        <th width="300">Long Description</th>
-                                        <th>Warehouse</th>
-										<th width="50">Qty (Pcs.)</th>
-                                    </tr>
-                                </thead>
+                            <thead>
+                                <tr>
+                                    <th>Warehouse</th>
+                                <?php for($i=0; $i<count($product); $i++) { ?>
+                                    <th><?php echo $product[$i]; ?></th>
+                                <?php $count++; $sum_product[$i] = 0; } ?>
+                                    <th>Sum</th>
+                                </tr>
+                            </thead>
                                 
-								<tbody>
-                                    <?php foreach($item_array as $loop) { ?>
-                                    <tr>
-                                        <td><?php echo $loop->IHBarcode; ?></td>
-                                        <td><?php echo $loop->itemcode; ?></td>
-                                        <td><?php echo $loop->ITRefCode; ?></td>
-                                        <td><?php echo $loop->ITShortDesc2." ".$loop->ITShortDesc1; ?></td>
-                                        <td><?php echo $loop->ITLongDesc1; ?></td>
-                                        <td><?php echo $loop->WHDesc1." (".$loop->WHCode.")"; ?></td>
-                                        <td><?php echo $loop->IHQtyCal; ?></td>
-                                    </tr>
+				            <tbody>
+                                <?php for($i=0; $i<count($stock); $i++) { ?>
+                                <tr>
+                                    <td><?php echo $stock[$i]['whname']; ?></td>
+                                    <?php foreach($stock[$i]['number'] as $loop) { 
+                                        $sum_store=0; for($k=0; $k<$count; $k++) {
+                                    ?>
+                                    <td><?php if($loop->{"num".$k} >0) echo $loop->{"num".$k}; $sum_store+=$loop->{"num".$k}; $sum_product[$k]+=$loop->{"num".$k}; ?></td>
+                                    <?php } } ?>
+                                    <td><b><?php echo $sum_store; ?></b></td>
+                                </tr>
+                                <?php } ?>
+                                <tr>
+                                    <td>Sum</td>
+                                    <?php for($i=0; $i<count($product); $i++) { ?>
+                                    <td><b><?php echo $sum_product[$i]; ?></b></td>
                                     <?php } ?>
-								</tbody>
+                                    <td> </td>
+                                </tr>
+				            </tbody>
                                 
-							</table>
+				        </table>
                     </div>
                 </div>
             </div>
@@ -54,7 +61,7 @@
     
 $(document).ready(function()
 {    
-    var oTable = $('#tablebarcode').dataTable();
+    //var oTable = $('#tablebarcode').dataTable();
     
     $('#fancyboxall').fancybox({ 
     'width': '40%',

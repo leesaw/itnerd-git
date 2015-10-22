@@ -15,7 +15,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            NGG Timepiece - Dashboard
+            Dashboard <small>NGG Timepieces</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -63,7 +63,7 @@
                         <div class="box box-success">
                             <div class="box-header with-border">
                                 <a id="fancyboxall" href="<?php echo site_url("jes/watch_store"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                            <label class="pull-right">All Warehouse</label>
+                            <label class="pull-right">Stock Balance - All Warehouse</label>
                             </div>
                             <div class="box-body chart-responsive">
                                 <div class="chart" id="bar-brand" style="height: 200px;"></div>
@@ -82,7 +82,7 @@
                         <div class="box box-danger">
                             <div class="box-header with-border">
                                 <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/ct"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                                <label class="pull-right">Central (Counter)</label>
+                                <label class="pull-right">Stock Balance - Central (Counter)</label>
                             </div>
                             <div class="box-body chart-responsive">
                                 <div class="chart" id="bar-ct" style="height: 200px;"></div>
@@ -103,7 +103,7 @@
                         <div class="box box-info">
                             <div class="box-header with-border">
                                 <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/mg"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                            <label class="pull-right">The Mall (Counter)</label>
+                            <label class="pull-right">Stock Balance - The Mall (Counter)</label>
                             </div>
                             <div class="box-body chart-responsive">
                                 <div class="chart" id="bar-mg" style="height: 200px;"></div>
@@ -122,7 +122,7 @@
                         <div class="box box-primary">
                             <div class="box-header with-border">
                                 <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/rb"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                                <label class="pull-right">Robinson (Counter)</label>
+                                <label class="pull-right">Stock Balance - Robinson (Counter)</label>
                             </div>
                             <div class="box-body chart-responsive">
                                 <div class="chart" id="bar-rb" style="height: 200px;"></div>

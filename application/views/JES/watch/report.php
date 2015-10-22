@@ -15,7 +15,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            NGG Timepiece - Reports
+            Reports <small>NGG Timepieces</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="<?php echo site_url("jes/watch"); ?>"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -73,24 +73,24 @@
                                         <label class="pull-right text-black"><input type="checkbox" name="all_whtype" id="all_ptype" onClick="toggle_all_product(this)"> ทั้งหมด</label>
                                         </div>
                                         <div class="panel-body">
-                                            <label><input type="checkbox" name="ptype_lux" id="ptype_lux" value="0" onClick="toggle(this,'ptype_lux[]')"> Luxury</label>
+                                            <label><input type="checkbox" name="ptype_lux_all" id="ptype_lux_all" value="0" onClick="toggle(this,'ptype_lux[]')"> Luxury</label>
                                 <?php if(is_array($lux_array)) {  ?>
                                         <ul>
                                 <?php    foreach($lux_array as $loop){ ?>
                                             <div class="checkbox">
                                                 <label>
-                                                <input type="checkbox" name="ptype_lux[]" id="whtype" value="<?php echo $loop->PTCode ?>">
+                                                <input type="checkbox" name="ptype_lux[]" id="ptype_lux[]" value="<?php echo $loop->PTCode ?>">
                                                 <?php echo $loop->PTDesc1; ?>
                                                 </label>
                                             </div>
                                 <?php } ?> </ul> <?php } ?>
-                                <label><input type="checkbox" name="ptype_fashion" id="ptype_fashion" value="0" onClick="toggle(this,'ptype_fashion[]')"> Fashion</label>
+                                <label><input type="checkbox" name="ptype_fashion_all" id="ptype_fashion_all" value="0" onClick="toggle(this,'ptype_fashion[]')"> Fashion</label>
                                 <?php if(is_array($fashion_array)) {  ?>
                                         <ul>
                                 <?php    foreach($fashion_array as $loop){ ?>
                                             <div class="checkbox">
                                                 <label>
-                                                <input type="checkbox" name="ptype_fashion[]" id="whtype" value="<?php echo $loop->PTCode ?>">
+                                                <input type="checkbox" name="ptype_fashion[]" id="ptype_fashion[]" value="<?php echo $loop->PTCode ?>">
                                                 <?php echo $loop->PTDesc1; ?>
                                                 </label>
                                             </div>
@@ -101,7 +101,9 @@
                                 <div class="col-md-4">
                                     <div class="panel panel-warning">
                                         <div class="panel-body">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-fw fa-bar-chart"></i> Stock Balance Report</button>
+                                            <button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-fw fa-bar-chart"></i> Stock Balance Report</button>
+                                            <br> <br>
+                                            <button type="submit" name="action" value="1" class="btn btn-primary"><span class="glyphicon glyphicon-list-alt"></span> Stock Item List Report</button>
                                         </div>
                                 </div>
                                     
@@ -149,7 +151,7 @@ function toggle_all(source) {
         for(var i=0, n=checkboxes.length;i<n;i++) {
             checkboxes[i].checked = source.checked;
         }
-        checkboxes = document.getElementsByName('whname_'+wh_array[j]);
+        checkboxes = document.getElementsByName('whname_'+wh_array[j]+'[]');
         for(var i=0, n=checkboxes.length;i<n;i++) {
             checkboxes[i].checked = source.checked;
         }
@@ -159,12 +161,19 @@ function toggle_all(source) {
 }
     
 function toggle_all_product(source) {
-    
-    checkboxes = document.getElementsByName('ptype_lux');
+    checkboxes = document.getElementsByName('ptype_lux_all');
     for(var i=0, n=checkboxes.length;i<n;i++) {
         checkboxes[i].checked = source.checked;
     }
-    checkboxes = document.getElementsByName('ptype_fashion');
+    checkboxes = document.getElementsByName('ptype_fashion_all');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+    }
+    checkboxes = document.getElementsByName('ptype_lux[]');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+        checkboxes[i].checked = source.checked;
+    }
+    checkboxes = document.getElementsByName('ptype_fashion[]');
     for(var i=0, n=checkboxes.length;i<n;i++) {
         checkboxes[i].checked = source.checked;
     }

@@ -122,24 +122,23 @@ function watch()
 function watch_viewInventory_graph($whtype)
 {
     $whname = $this->jes_model->getAllWHName($whtype);
+    
     foreach($whname as $loop) {
+        $lux_sum = 0;
+        $fashion_sum = 0;
         $lux_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_L');
         $fashion_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_F');
         
         if(!empty($lux_query)) {
             foreach($lux_query as $loop2) {
-                $lux_sum = $loop2->sum1;
+                $lux_sum += $loop2->sum1;
             }
-        }else{
-            $lux_sum = 0;
         }
         
         if(!empty($fashion_query)) {
             foreach($fashion_query as $loop2) {
                 $fashion_sum = $loop2->sum1;
             }
-        }else{
-            $fashion_sum = 0;
         }
         if (($lux_sum>0)||($fashion_sum>0))
         $result_array[] = array("WHCode"=>$loop->WHCode, "WHDesc1"=>$loop->WHDesc1, "luxsum"=>$lux_sum, "fashionsum"=>$fashion_sum);
@@ -259,6 +258,7 @@ function report()
 function report_filter()
 {
     $query = $this->jes_model->getAllWHType();
+    // warehouse[][] => All warehouse code chosen 
     $warehouse = array();
     $count = 0;
     foreach($query as $loop) {
@@ -268,27 +268,138 @@ function report_filter()
             $count++;
         }
     }
-    
     $lux = $this->input->post("ptype_lux");
     $fashion = $this->input->post("ptype_fashion");
+    if (empty($lux)) $lux = array();
+    if (empty($fashion)) $fashion = array();
+    // all product type code
     $producttype = array_merge($lux, $fashion);
+    
+    if ($this->input->post("action")==0) {
+        // When you need stock balance report
+        
+        $product = array();
+        for($i=0; $i<count($producttype); $i++) {
+            $query = $this->jes_model->getOneProductType($producttype[$i]);
+            foreach($query as $loop) {
+                $product[] = $loop->PTDesc1;
+            }
+        }
+
+        $stock = array();
+        for ($i=0; $i<$count; $i++) {
+            for ($j=0; $j<count($warehouse[$i]); $j++) {
+                if ($warehouse[$i][$j] !="") {
+                    $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
+                    foreach($query as $loop) $whname = $loop->WHDesc1;
+
+                    $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
+                }
+            }
+        }
+
+        $data['stock'] = $stock;
+        //$data['warehouse'] = $warehouse;
+        $data['producttype'] = $producttype;
+        $data['product'] = $product;
+
+        $this->session->set_userdata("sessionproduct", $product);
+        $this->session->set_userdata("sessionproducttype", $producttype);
+        $this->session->set_userdata("sessionwarehouse", $warehouse);
+
+        $data['title'] = "NGG|IT Nerd - Report";
+        $this->load->view('JES/watch/report_filter',$data);
+        
+    }elseif($this->input->post("action")==1) {
+        // When you need stock item list
+            
+        $data['item_array'] = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
+        
+        $data['title'] = "NGG|IT Nerd - Report";
+        $this->load->view('JES/watch/report_filter_itemlist',$data);
+    }
+}
+    
+function exportExcel_stock()
+{
+    $warehouse = $this->session->userdata("sessionwarehouse");
+    $product = $this->session->userdata("sessionproduct");  
+    $producttype = $this->session->userdata("sessionproducttype");  
+    
+    $this->session->unset_userdata('sessionwarehouse');
+    $this->session->unset_userdata('sessionproduct');
+    $this->session->unset_userdata('sessionproducttype');
+    
     $stock = array();
-    for ($i=0; $i<$count; $i++) {
-        for ($j=0; $i<count($warehouse[$i]); $i++) {
-            $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
-            foreach($query as $loop) $whname = $loop->WHDesc1;
-            $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
+    for ($i=0; $i<count($warehouse); $i++) {
+        for ($j=0; $j<count($warehouse[$i]); $j++) {
+            if ($warehouse[$i][$j] !="") {
+                $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
+                foreach($query as $loop) $whname = $loop->WHDesc1;
+                
+                $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
+            }
         }
     }
     
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_Balance');
+
+    //$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "ทองคำแท่ง (96.5)");
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Warehouse');
+    $char = 'B';
+    $count = 0;
+    for($i=0; $i<count($product); $i++) {
+        $this->excel->getActiveSheet()->setCellValue($char.'1', $product[$i]);
+        $char++;
+        $count++;
+        $sum_product[$i] = 0;
+    }
     
+    $this->excel->getActiveSheet()->setCellValue($char.'1', "Sum");
     
-    $data['warehouse'] = $warehouse;
-    $data['producttype'] = $producttype;
-    //$data['fashion'] = $fashion;
+    $row = 2;
+    for($i=0; $i<count($stock); $i++) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $stock[$i]['whname']);
+        
+        foreach($stock[$i]['number'] as $loop) {
+            $sum_store=0;
+            $column = 1;
+            for($k=0; $k<$count; $k++) {
+                $this->excel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $loop->{"num".$k});
+                $sum_store+=$loop->{"num".$k};
+                $sum_product[$k]+=$loop->{"num".$k};
+                $column++;
+            }
+            $this->excel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $sum_store);
+        }
+        
+        
+        $row++;
+    }
     
-    $data['title'] = "NGG|IT Nerd - Report";
-    $this->load->view('JES/watch/report_filter',$data);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, "Sum");
+    $column = 1;
+    for($i=0; $i<count($product); $i++) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $sum_product[$i]);
+        $column++;
+    }
+    
+
+    $filename='timepieces_stock_balance.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 }
