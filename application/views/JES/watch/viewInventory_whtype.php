@@ -174,7 +174,7 @@ $(document).ready(function()
           xLabelMargin: 10,
           hideHover: 'auto'
         }).on('click', function(i, row){
-            window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+row.y);
+            window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+<?php echo json_encode($remark); ?>+"/"+row.y);
         });
     
 });

@@ -47,10 +47,39 @@ function license_now()
     
 function watch()
 {
+    $remark = $this->uri->segment(3);
+    
     $whtype = $this->jes_model->getAllWHType();
     foreach($whtype as $loop) {
-        $lux_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_L');
-        $fashion_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_F');
+        if(($remark=='0') || (!isset($remark))) {
+            $lux_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_L');
+            $fashion_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_F');
+        }elseif($remark=='1') {
+            $lux_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_LC#');
+            $fashion_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_FC#');
+        }elseif($remark=='2') {
+            $lux_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_L');
+            $fashion_query = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_F');
+            
+            $lux_temp = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_LC#');
+            $fashion_temp = $this->jes_model->getNumberWatch_warehouse($loop->WTCode, '_FC#');
+            
+            foreach($lux_query as &$loop1) {
+                foreach($lux_temp as $loop2) {
+                    if($loop1->WTCode == $loop2->WTCode) {
+                        $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                    }
+                }
+            }
+            
+            foreach($fashion_query as &$loop1) {
+                foreach($fashion_temp as $loop2) {
+                    if($loop1->WTCode == $loop2->WTCode) {
+                        $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                    }
+                }
+            }
+        }
         
         if(!empty($lux_query)) {
             foreach($lux_query as $loop2) {
@@ -67,13 +96,30 @@ function watch()
         }else{
             $fashion_sum = 0;
         }
-        if (($lux_sum>0)||($fashion_sum>0))
+        if (($lux_sum>0)||($fashion_sum>0)) {
         $whcode_array[] = array("WTCode"=>$loop->WTCode, "WTDesc1"=>$loop->WTDesc1, "luxsum"=>$lux_sum, "fashionsum"=>$fashion_sum);
+        }
     }
     
     //$data['brand_array'] = $this->jes_model->getInventoryWatch_whtype();
     //$query = $this->jes_model->getProductType_onlyWatch();
-    $query = $this->jes_model->getProductType_onlyWatch_lf("_L");
+    if(($remark=='0') || (!isset($remark))) {
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_L");
+    }elseif($remark=='1') {
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_LC#");
+    }else{
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_L");
+        
+        $query_temp = $this->jes_model->getProductType_onlyWatch_lf("_LC#");
+        
+        foreach($query as $loop1 => $pt_result) {
+            foreach($query_temp as $loop2) {
+                if($pt_result->PTCode == $loop2->PTCode) {
+                    unset($query[$loop1]);
+                }
+            }
+        }
+    }
     $data['producttype_array'] = $query;
     //$pt_array = array();
     foreach($query as $loop) {
@@ -87,7 +133,23 @@ function watch()
         }
     }
     
-    $query = $this->jes_model->getProductType_onlyWatch_lf("_F");
+    if(($remark=='0') || (!isset($remark))) {
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_F");
+    }elseif($remark=='1') {
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_FC#");
+    }else{
+        $query = $this->jes_model->getProductType_onlyWatch_lf("_F");
+        
+        $query_temp = $this->jes_model->getProductType_onlyWatch_lf("_FC#");
+        
+        foreach($query as $loop1 => $pt_result) {
+            foreach($query_temp as $loop2) {
+                if($pt_result->PTCode == $loop2->PTCode) {
+                    unset($query[$loop1]);
+                }
+            }
+        }
+    }
     $data['producttype_array'] = $query;
     //$pt_array = array();
     foreach($query as $loop) {
@@ -102,11 +164,11 @@ function watch()
     }
     
     // only CT central graph
-    $ct_array = $this->watch_viewInventory_graph('CT');
+    $ct_array = $this->watch_viewInventory_graph('CT', $remark);
     // only CT The mall graph
-    $mg_array = $this->watch_viewInventory_graph('MG');
+    $mg_array = $this->watch_viewInventory_graph('MG', $remark);
     // only CT robinson graph
-    $rb_array = $this->watch_viewInventory_graph('RB');
+    $rb_array = $this->watch_viewInventory_graph('RB', $remark);
     
     $data['luxbrand_array'] = $luxbrand_array;
     $data['fashionbrand_array'] = $fashionbrand_array;
@@ -115,19 +177,50 @@ function watch()
     $data['mg_array'] = $mg_array;
     $data['rb_array'] = $rb_array;
     
+    if($remark=='') $remark='0';
+    $data['remark'] = $remark;
+    
     $data['title'] = "NGG|IT Nerd - Watch";
     $this->load->view('JES/watch/main',$data);
 }
     
-function watch_viewInventory_graph($whtype)
+function watch_viewInventory_graph($whtype, $remark)
 {
     $whname = $this->jes_model->getAllWHName($whtype);
+    $result_array = array();
     
     foreach($whname as $loop) {
         $lux_sum = 0;
         $fashion_sum = 0;
-        $lux_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_L');
-        $fashion_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_F');
+        if(($remark=='0') || (!isset($remark))) {
+            $lux_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_L');
+            $fashion_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_F');
+        }elseif ($remark=='1') {
+            $lux_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_LC#');
+            $fashion_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_FC#');
+        }elseif ($remark=='2') {
+            $lux_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_L');
+            $fashion_query = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_F');
+            
+            $lux_temp = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_LC#');
+            $fashion_temp = $this->jes_model->getNumberWatch_departmentstore($loop->WHCode, '_FC#');
+            
+            foreach($lux_query as &$loop1) {
+                foreach($lux_temp as $loop2) {
+                    if($loop1->IHWareHouse == $loop2->IHWareHouse) {
+                        $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                    }
+                }
+            }
+            
+            foreach($fashion_query as &$loop1) {
+                foreach($fashion_temp as $loop2) {
+                    if($loop1->IHWareHouse == $loop2->IHWareHouse) {
+                        $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                    }
+                }
+            }
+        }
         
         if(!empty($lux_query)) {
             foreach($lux_query as $loop2) {
@@ -140,8 +233,9 @@ function watch_viewInventory_graph($whtype)
                 $fashion_sum = $loop2->sum1;
             }
         }
-        if (($lux_sum>0)||($fashion_sum>0))
-        $result_array[] = array("WHCode"=>$loop->WHCode, "WHDesc1"=>$loop->WHDesc1, "luxsum"=>$lux_sum, "fashionsum"=>$fashion_sum);
+        if (($lux_sum>0)||($fashion_sum>0)) {
+            $result_array[] = array("WHCode"=>$loop->WHCode, "WHDesc1"=>$loop->WHDesc1, "luxsum"=>$lux_sum, "fashionsum"=>$fashion_sum);
+        }
     }
     
     return $result_array;
@@ -149,9 +243,10 @@ function watch_viewInventory_graph($whtype)
     
 function watch_viewInventory_branch()
 {
-    $wh_code = $this->uri->segment(3);
+    $remark = $this->uri->segment(3);
+    $wh_code = $this->uri->segment(4);
     
-    $data['item_array'] = $this->jes_model->getInventoryWatch_branch_item($wh_code);
+    //$data['item_array'] = $this->jes_model->getInventoryWatch_branch_item($wh_code);
     $query = $this->jes_model->getStoreName($wh_code);
     foreach($query as $loop) {
         $data['branchname'] = $loop->WHDesc1;
@@ -161,27 +256,85 @@ function watch_viewInventory_branch()
             $data['whtypename'] = $loop->WTDesc1;
         }
     }
-    $data['pt_array'] = $this->jes_model->getInventoryWatch_branch_item_producttype($wh_code);
     
+    if ($remark==0) {
+        $data['pt_array'] = $this->jes_model->getInventoryWatch_branch_item_producttype($wh_code,"");
+        $data['item_array'] = $this->jes_model->getInventoryWatch_branch_item($wh_code,"");
+    }elseif($remark==1) {
+        $data['pt_array'] = $this->jes_model->getInventoryWatch_branch_item_producttype($wh_code,"C#");
+        $data['item_array'] = $this->jes_model->getInventoryWatch_branch_item($wh_code,"C#");
+    }elseif($remark==2) {
+        $pt_query = $this->jes_model->getInventoryWatch_branch_item_producttype($wh_code,"");
+        $pt_temp = $this->jes_model->getInventoryWatch_branch_item_producttype($wh_code,"C#");
+        
+        foreach($pt_query as &$loop1) {
+            foreach($pt_temp as $loop2) {
+                if($loop1->PTCode == $loop2->PTCode) {
+                    $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                }
+            }
+        }
+        
+        $data['pt_array'] = $pt_query;
+        
+        $item_query1 = $this->jes_model->getInventoryWatch_branch_item($wh_code,"H#");
+        $item_query2 = $this->jes_model->getInventoryWatch_branch_item($wh_code,"D#");
+        $data['item_array'] = array_merge($item_query1,$item_query2);
+    }
+        
     $data['title'] = "NGG|IT Nerd - Watch";
     $this->load->view('JES/watch/viewInventory_branch_item',$data);
 }
     
 function watch_viewInventory_whtype()
 {
-    $wh_code = $this->uri->segment(3);
+    $remark = $this->uri->segment(3);
+    $wh_code = $this->uri->segment(4);
 
     $query = $this->jes_model->getWarehouseTypeName($wh_code);
     foreach($query as $loop) {
         $data['branchname'] = $loop->WTDesc1;
     }
-    $data['lux_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_L");
-    $data['fashion_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_F");
+    
+    if ($remark==0) {
+        $data['lux_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_L");
+        $data['fashion_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_F");
+    }elseif($remark==1) {
+        $data['lux_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_LC#");
+        $data['fashion_array'] = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_FC#");
+    }elseif($remark==2) {
+        $lux_query = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_L");
+        $fashion_query = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_F"); 
+        
+        $lux_temp = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_LC#");
+        $fashion_temp = $this->jes_model->getInventoryWatch_whtype_brand($wh_code,"_FC#"); 
+        
+        foreach($lux_query as &$loop1) {
+            foreach($lux_temp as $loop2) {
+                if($loop1->PTCode == $loop2->PTCode) {
+                    $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                }
+            }
+        }
+            
+        foreach($fashion_query as &$loop1) {
+            foreach($fashion_temp as $loop2) {
+                if($loop1->PTCode == $loop2->PTCode) {
+                    $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                }
+            }
+        }
+        
+        $data['lux_array'] = $lux_query;
+        $data['fashion_array'] = $fashion_query;
+    }
     
     if ($wh_code != "HQ") {
-        $data['branch_array'] = $this->watch_viewInventory_graph($wh_code);
+        $data['branch_array'] = $this->watch_viewInventory_graph($wh_code, $remark);
         $data['whcode'] = $wh_code;
     }
+    
+    $data['remark'] = $remark;
     
     $data['title'] = "NGG|IT Nerd - Watch";
     $this->load->view('JES/watch/viewInventory_whtype',$data);
@@ -303,9 +456,9 @@ function report_filter()
         $data['producttype'] = $producttype;
         $data['product'] = $product;
 
-        $this->session->set_userdata("sessionproduct", $product);
-        $this->session->set_userdata("sessionproducttype", $producttype);
-        $this->session->set_userdata("sessionwarehouse", $warehouse);
+        $this->session->set_flashdata("sessionproduct", $product);
+        $this->session->set_flashdata("sessionproducttype", $producttype);
+        $this->session->set_flashdata("sessionwarehouse", $warehouse);
 
         $data['title'] = "NGG|IT Nerd - Report";
         $this->load->view('JES/watch/report_filter',$data);
@@ -315,6 +468,9 @@ function report_filter()
             
         $data['item_array'] = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
         
+        $this->session->set_flashdata("sessionproducttype", $producttype);
+        $this->session->set_flashdata("sessionwarehouse", $warehouse);
+        
         $data['title'] = "NGG|IT Nerd - Report";
         $this->load->view('JES/watch/report_filter_itemlist',$data);
     }
@@ -322,14 +478,10 @@ function report_filter()
     
 function exportExcel_stock()
 {
-    $warehouse = $this->session->userdata("sessionwarehouse");
-    $product = $this->session->userdata("sessionproduct");  
-    $producttype = $this->session->userdata("sessionproducttype");  
-    
-    $this->session->unset_userdata('sessionwarehouse');
-    $this->session->unset_userdata('sessionproduct');
-    $this->session->unset_userdata('sessionproducttype');
-    
+    $warehouse = $this->session->flashdata("sessionwarehouse");
+    $product = $this->session->flashdata("sessionproduct");  
+    $producttype = $this->session->flashdata("sessionproducttype");  
+
     $stock = array();
     for ($i=0; $i<count($warehouse); $i++) {
         for ($j=0; $j<count($warehouse[$i]); $j++) {
@@ -387,6 +539,56 @@ function exportExcel_stock()
     for($i=0; $i<count($product); $i++) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $sum_product[$i]);
         $column++;
+    }
+    
+
+    $filename='timepieces_stock_balance.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
+    
+function exportExcel_stock_itemlist()
+{
+    $warehouse = $this->session->flashdata("sessionwarehouse");
+    $producttype = $this->session->flashdata("sessionproducttype");  
+    
+    $item_array = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_Item_List');
+
+    //$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "ทองคำแท่ง (96.5)");
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Barcode');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'Item Code');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref Code');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Long Description');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Warehouse');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->IHBarcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->itemcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->ITRefCode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->ITShortDesc2." ".$loop->ITShortDesc1);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->ITLongDesc1);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->ITSRP));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->WHDesc1." (".$loop->WHCode.")");
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->IHQtyCal);
+        $row++;
     }
     
 

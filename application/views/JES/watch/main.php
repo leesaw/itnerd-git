@@ -16,6 +16,9 @@
     <section class="content-header">
         <h1>
             Dashboard <small>NGG Timepieces</small>
+            &nbsp; &nbsp;<small><input type="radio" name="stock" id="allstock" value="0" <?php if(($remark=='0') || (!isset($remark))) echo "checked"; ?>> <label class="text-green"> ทั้งหมด</label>&nbsp; &nbsp;
+              <input type="radio" name="stock" id="onlyconsignment" value="1" <?php if ($remark=='1') echo "checked"; ?>> <label class="text-red"> เฉพาะ Consignment</label>&nbsp; &nbsp;
+              <input type="radio" name="stock" id="noconsignment" value="2" <?php if ($remark=='2') echo "checked"; ?>> <label class="text-blue"> ไม่รวม Consignment</label></small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Dashboard</a></li>
@@ -28,6 +31,9 @@
 <?php 
     
     $dataset_brand = array();
+    $dataset_ct = array();
+    $dataset_mg = array();
+    $dataset_rb = array();
     //$dataset_wh = array();
     $sum_main = 0;
     $sum_ct = 0;
@@ -35,7 +41,7 @@
     $sum_rb = 0;
     for($i=0; $i<count($whcode_array); $i++) {
         $dataset_brand[] = array($whcode_array[$i]['WTCode'], $whcode_array[$i]['luxsum'], $whcode_array[$i]['fashionsum']);
-        //$dataset_wh[] = array($whcode_array[$i]['WTCode'], $whcode_array[$i]['WTDesc1']);
+            //$dataset_wh[] = array($whcode_array[$i]['WTCode'], $whcode_array[$i]['WTDesc1']);
         $sum_main += $whcode_array[$i]['luxsum'] + $whcode_array[$i]['fashionsum'];
     }
     
@@ -72,7 +78,7 @@
                                 จำนวนทั้งหมด <u><?php echo $sum_main; ?></u> ชิ้น
                                 <div class="pull-right">
                                 <i class="fa fa-circle text-green"></i> Luxury Watch 
-                                <i class="fa fa-circle text-teal"></i> Fashion Watch 
+                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
                                 </div>
                             </div>
                         </div>
@@ -90,8 +96,8 @@
                             <div class="box-footer">
                                 จำนวนทั้งหมด <u><?php echo $sum_ct; ?></u> ชิ้น 
                                 <div class="pull-right">
-                                <i class="fa fa-circle text-blue"></i> Luxury Watch 
-                                <i class="fa fa-circle text-red"></i> Fashion Watch 
+                                <i class="fa fa-circle text-green"></i> Luxury Watch 
+                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
                                 </div>
                             </div>
                         </div>
@@ -111,7 +117,7 @@
                             <div class="box-footer">
                                 จำนวนทั้งหมด <u><?php echo $sum_mg; ?></u> ชิ้น
                                 <div class="pull-right">
-                                <i class="fa fa-circle text-orange"></i> Luxury Watch 
+                                <i class="fa fa-circle text-green"></i> Luxury Watch 
                                 <i class="fa fa-circle text-purple"></i> Fashion Watch 
                                 </div>
                             </div>
@@ -130,8 +136,8 @@
                             <div class="box-footer">
                                 จำนวนทั้งหมด <u><?php echo $sum_rb; ?></u> ชิ้น 
                                 <div class="pull-right">
-                                <i class="fa fa-circle text-aqua"></i> Luxury Watch 
-                                <i class="fa fa-circle text-maroon"></i> Fashion Watch 
+                                <i class="fa fa-circle text-green"></i> Luxury Watch 
+                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
                                 </div>
                             </div>
                         </div>
@@ -220,14 +226,14 @@ $(document).ready(function()
             {y: <?php echo json_encode($dataset_brand[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_brand[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_brand[$i][2], JSON_NUMERIC_CHECK)); ?>},
               <?php } ?>
           ],
-          barColors: ['#00a65a', '#39CCCC'],
+          barColors: ['#00a65a', '#605ca8'],
           xkey: 'y',
           ykeys: ['a', 'b'],
           labels: ['Luxury Watch', 'Fashion Watch'],
           xLabelMargin: 10,
           hideHover: 'auto'
         }).on('click', function(i, row){
-            window.location.replace("<?php echo site_url('jes/watch_viewInventory_whtype'); ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_whtype')."/".$remark; ?>"+"/"+row.y);
         });
           
         
@@ -241,14 +247,14 @@ $(document).ready(function()
             {y: <?php echo json_encode($dataset_ct[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_ct[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_ct[$i][2], JSON_NUMERIC_CHECK)); ?>},
               <?php } ?>
           ],
-          barColors: ['#3c8dbc', '#f56954'],
+          barColors: ['#00a65a', '#605ca8'],
           xkey: 'y',
           ykeys: ['a', 'b'],
           labels: ['Luxury Watch', 'Fashion Watch'],
           xLabelMargin: 10,
           hideHover: 'auto'
         }).on('click', function(i, row){
-            window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
         });
           
         //BAR CHART - MG
@@ -261,14 +267,14 @@ $(document).ready(function()
             {y: <?php echo json_encode($dataset_mg[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_mg[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_mg[$i][2], JSON_NUMERIC_CHECK)); ?>},
               <?php } ?>
           ],
-          barColors: ['#ff851b', '#605ca8'],
+          barColors: ['#00a65a', '#605ca8'],
           xkey: 'y',
           ykeys: ['a', 'b'],
           labels: ['Luxury Watch', 'Fashion Watch'],
           xLabelMargin: 10,
           hideHover: 'auto'
         }).on('click', function(i, row){
-            window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
         });
           
         //BAR CHART - RB
@@ -281,14 +287,14 @@ $(document).ready(function()
             {y: <?php echo json_encode($dataset_rb[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_rb[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_rb[$i][2], JSON_NUMERIC_CHECK)); ?>},
               <?php } ?>
           ],
-          barColors: ['#00c0ef', '#D81B60'],
+          barColors: ['#00a65a', '#605ca8'],
           xkey: 'y',
           ykeys: ['a', 'b'],
           labels: ['Luxury Watch', 'Fashion Watch'],
           xLabelMargin: 10,
           hideHover: 'auto'
         }).on('click', function(i, row){
-            window.location.replace("<?php echo site_url('jes/watch_viewInventory_branch'); ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
         });
     
     $('#fancyboxall').fancybox({ 
@@ -298,6 +304,18 @@ $(document).ready(function()
     'transitionIn':'none', 
     'transitionOut':'none', 
     'type':'iframe'}); 
+    
+    $('#allstock').on('click', function(){            
+            window.location.replace("<?php echo site_url("jes/watch"); ?>");
+    });
+    
+    $('#onlyconsignment').on('click', function(){            
+            window.location.replace("<?php echo site_url("jes/watch/1"); ?>");
+    });
+
+    $('#noconsignment').on('click', function(){            
+            window.location.replace("<?php echo site_url("jes/watch/2"); ?>");
+    });
 });
 
 </script>

@@ -220,7 +220,7 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
-    function getInventoryWatch_branch_item($branch)
+    function getInventoryWatch_branch_item($branch, $remark)
     {
         $db2 = $this->load->database('db2',TRUE);
         $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1 , IHQtyCal");
@@ -229,8 +229,10 @@ Class Jes_model extends CI_Model
         $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("(select MAX(ITPK) as MITPK, ITCode from [JES_NGG].[dbo].[Item] group by ITCode) ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
         $db2->join("[JES_NGG].[dbo].[Item] ori","ori.ITPK=ss.MITPK","left");
+        $db2->join("[JES_NGG].[dbo].[ProductType]","PTCode=ori2.IFProdType","left");
         $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
         $db2->like("ori2.IFProdType", 'W-', 'after');
+        $db2->like("PTRemarks", $remark);
         $db2->where("IHQtyCal >",0);
         $db2->where("IHWareHouse", $branch);
         $db2->where("wh.Expired",'F');
@@ -257,7 +259,7 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
-    function getInventoryWatch_branch_item_producttype($branch)
+    function getInventoryWatch_branch_item_producttype($branch, $remark)
     {
         $db2 = $this->load->database('db2',TRUE);
         $db2->select("PTCode, PTDesc1, SUM(IHQtyCal) as sum1");
@@ -267,6 +269,7 @@ Class Jes_model extends CI_Model
         $db2->join("[JES_NGG].[dbo].[ProductType]","PTCode=ori2.IFProdType","left");
         $db2->join("[JES_NGG].[dbo].[Warehouse] wh2","WHCode=wh.IHWareHouse","left");
         $db2->like("ori2.IFProdType", 'W-', 'after');
+        $db2->like("PTRemarks", $remark);
         $db2->where("wh.Expired",'F');
         $db2->where("wh2.Expired",'F');
         $db2->where("IHWareHouse", $branch);
@@ -433,7 +436,7 @@ Class Jes_model extends CI_Model
         $sql .=")";
         
         $db2 = $this->load->database('db2',TRUE);
-        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1, IHQtyCal, WHDesc1, WHCode");
+        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1, IHQtyCal, WHDesc1, WHCode, ITSRP");
         $db2->from("[JES_NGG].[dbo].[ItemWHBal] as wh");
         $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from [JES_NGG].[dbo].[ItemFinGoods] group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");

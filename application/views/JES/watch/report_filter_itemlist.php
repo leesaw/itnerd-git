@@ -24,6 +24,7 @@
                                         <th>Ref Code</th>
                                         <th width="200">Description</th>
                                         <th width="300">Long Description</th>
+                                        <th>SRP (Baht)</th>
                                         <th>Warehouse</th>
 										<th width="50">Qty (Pcs.)</th>
                                     </tr>
@@ -37,6 +38,7 @@
                                         <td><?php echo $loop->ITRefCode; ?></td>
                                         <td><?php echo $loop->ITShortDesc2." ".$loop->ITShortDesc1; ?></td>
                                         <td><?php echo $loop->ITLongDesc1; ?></td>
+                                        <td><?php echo number_format($loop->ITSRP); ?></td>
                                         <td><?php echo $loop->WHDesc1." (".$loop->WHCode.")"; ?></td>
                                         <td><?php echo $loop->IHQtyCal; ?></td>
                                     </tr>
