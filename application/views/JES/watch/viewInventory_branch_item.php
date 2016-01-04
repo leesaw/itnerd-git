@@ -63,6 +63,7 @@ foreach($pt_array as $loop) {
                                         <th width="80">Barcode</th>
                                         <th>Item Code</th>
                                         <th>Ref Code</th>
+                                        <th>SRP</th>
                                         <th width="200">Description</th>
                                         <th width="400">Long Description</th>
 										<th width="50">Qty (Pcs.)</th>
@@ -75,6 +76,7 @@ foreach($pt_array as $loop) {
                                         <td><?php echo $loop->IHBarcode; ?></td>
                                         <td><?php echo $loop->itemcode; ?></td>
                                         <td><?php echo $loop->ITRefCode; ?></td>
+                                        <td><?php echo number_format($loop->ITSRP); ?></td>
                                         <td><?php echo $loop->ITShortDesc2." ".$loop->ITShortDesc1; ?></td>
                                         <td><?php echo $loop->ITLongDesc1; ?></td>
                                         <td><?php echo $loop->IHQtyCal; ?></td>

@@ -82,6 +82,22 @@ $db['db2']['swap_pre'] = '';
 $db['db2']['autoinit'] = TRUE;
 $db['db2']['stricton'] = FALSE;
 
+$db['db3']['hostname'] = 'localhost';
+$db['db3']['username'] = 'root';
+$db['db3']['password'] = 'root';
+$db['db3']['database'] = 'test';
+$db['db3']['dbdriver'] = 'mysql';
+$db['db3']['dbprefix'] = '';
+$db['db3']['pconnect'] = TRUE;
+$db['db3']['db_debug'] = TRUE;
+$db['db3']['cache_on'] = FALSE;
+$db['db3']['cachedir'] = '';
+$db['db3']['char_set'] = 'utf8';
+$db['db3']['dbcollat'] = 'utf8_general_ci';
+$db['db3']['swap_pre'] = '';
+$db['db3']['autoinit'] = TRUE;
+$db['db3']['stricton'] = FALSE;
+
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

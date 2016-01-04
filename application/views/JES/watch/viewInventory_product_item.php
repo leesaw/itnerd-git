@@ -61,6 +61,7 @@ foreach($pt_array as $loop) {
                                         <th width="80">Barcode</th>
                                         <th>Item Code</th>
                                         <th>Ref Code</th>
+                                        <th>SRP</th>
                                         <th width="200">Description</th>
                                         <th width="300">Long Description</th>
                                         <th>Warehouse</th>
@@ -72,8 +73,9 @@ foreach($pt_array as $loop) {
                                     <?php foreach($item_array as $loop) { ?>
                                     <tr>
                                         <td><?php echo $loop->IHBarcode; ?></td>
-                                        <td><?php echo $loop->itemcode; ?></td>
+                                        <td><a href="#" class="pop"><?php echo $loop->itemcode; ?></a></td>
                                         <td><?php echo $loop->ITRefCode; ?></td>
+                                        <td><?php echo number_format($loop->ITSRP); ?></td>
                                         <td><?php echo $loop->ITShortDesc2." ".$loop->ITShortDesc1; ?></td>
                                         <td><?php echo $loop->ITLongDesc1; ?></td>
                                         <td><?php echo $loop->WHDesc1." (".$loop->WHCode.")"; ?></td>
@@ -101,7 +103,16 @@ foreach($pt_array as $loop) {
     
 	</div>
 
-
+<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" data-dismiss="modal">
+    <div class="modal-content"  >              
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="" class="imagepreview" style="width: 100%;" >
+      </div> 
+    </div>
+  </div>
+</div>
 
 <?php $this->load->view('js_footer'); ?>
 <script src="<?php echo base_url(); ?>plugins/datatables/jquery.dataTables2.js"></script>
@@ -139,6 +150,11 @@ $(document).ready(function()
         hideHover: 'auto',
         xLabelAngle: 0
     });
+    
+    $('.pop').on('click', function() {
+			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
+			$('#imagemodal').modal('show');   
+		});	
     
 });
     
