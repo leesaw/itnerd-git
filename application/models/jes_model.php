@@ -23,9 +23,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_allBrand()
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("IHWareHouse, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("IHWareHouse, WHDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->like("ori2.IFProdType", 'W-', 'after');
@@ -42,9 +42,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_whtype()
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("WTCode as IHWareHouse, WTDesc1 as WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("WTCode as IHWareHouse, WTDesc1 as WHDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("WarehouseType","WTCode=wh2.WHType","left");
@@ -125,21 +125,10 @@ Class Jes_model extends CI_Model
     function getNumberWatch_warehouse($wh, $remark)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("WTCode, WTDesc1, SUM(IHQtyCal) as sum1");
-        $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
-        $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
-        $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
-        $db2->join("WarehouseType","WTCode=wh2.WHType","left");
-        $db2->join("ProductType pt","PTCode=ori2.IFProdType","left");
-        $db2->like("ori2.IFProdType", 'W-', 'after');
-        $db2->where("IHQtyCal >=",0);
-        $db2->where("wh.Expired",'F');
-        $db2->where("wh2.Expired",'F');
+        $db2->select("WTCode, WTDesc1, SUM(IHQtyCalSum) as sum1", FALSE);
+        $db2->from("NumberWatchWH");
         $db2->where("WTCode", $wh);
-        if ($remark != "") $db2->like("pt.PTRemarks", $remark);
-        $db2->group_by("WTCode,WTDesc1");
-        //$db2->order_by("IHWareHouse");
+        if ($remark != "") $db2->like("PTRemarks", $remark);
         $query = $db2->get();
         return $query->result();
     }
@@ -148,9 +137,9 @@ Class Jes_model extends CI_Model
     function getNumberWatch_departmentstore($wh, $remark)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("IHWareHouse,pt.PTRemarks, SUM(IHQtyCal) as sum1");
+        $db2->select("IHWareHouse,pt.PTRemarks, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("ProductType pt","PTCode=ori2.IFProdType","left");
@@ -169,9 +158,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_producttype($pt)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("PTCode, PTDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("PTCode, PTDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("ProductType","PTCode=IFProdType","left");
@@ -223,11 +212,11 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_branch_item($branch, $remark)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1 , IHQtyCal, ori.ITSRP");
+        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1 , FLOOR(IHQtyCal) as IHQtyCal, ori.ITSRP", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
-        $db2->join("(select MAX(ITPK) as MITPK, ITCode from Item group by ITCode) ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
+        $db2->join("ItemMax ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
         $db2->join("Item ori","ori.ITPK=ss.MITPK","left");
         $db2->join("ProductType","PTCode=ori2.IFProdType","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
@@ -244,17 +233,22 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_product_item($pt)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1, IHQtyCal, WHDesc1, WHCode, ori.ITSRP");
+        $db2->select("IHItemCode as itemcode, IHBarcode, ITRefCode, ITShortDesc1,ITShortDesc2 as ITShortDesc2, ITLongDesc1, FLOOR(IHQtyCal) as IHQtyCal, WHDesc1, WHCode, ITSRP", FALSE);
+        $db2->from("ProductList");
+        /*
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
-        $db2->join("(select MAX(ITPK) as MITPK, ITCode from Item group by ITCode) ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
+        $db2->join("ItemMax ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
         $db2->join("Item ori","ori.ITPK=ss.MITPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
-        $db2->where("ori2.IFProdType", $pt);
+        */
+        $db2->where("IFProdType", $pt);
+        /*
         $db2->where("IHQtyCal >",0);
         $db2->where("wh.Expired",'F');
         $db2->where("wh2.Expired",'F');
+        */
         $query = $db2->get();
         return $query->result();
     }
@@ -262,9 +256,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_branch_item_producttype($branch, $remark)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("PTCode, PTDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("PTCode, PTDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("ProductType","PTCode=ori2.IFProdType","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
@@ -283,9 +277,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_whtype_brand($whtype, $remark)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("PTCode, PTDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("PTCode, PTDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("ProductType","PTCode=ori2.IFProdType","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
@@ -304,9 +298,9 @@ Class Jes_model extends CI_Model
     function getInventoryWatch_product_item_branch($pt)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("WHCode, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("WHCode, WHDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->like("ori2.IFProdType", 'W-', 'after');
@@ -343,9 +337,9 @@ Class Jes_model extends CI_Model
     function getWarehouse_branch($wh)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("WHCode, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("WHCode, WHDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("ProductType pt","PTCode=ori2.IFProdType","left");
@@ -363,9 +357,9 @@ Class Jes_model extends CI_Model
     function getWarehouse_product($pt)
     {
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("WHCode, WHDesc1, SUM(IHQtyCal) as sum1");
+        $db2->select("WHCode, WHDesc1, FLOOR(SUM(IHQtyCal)) as sum1", FALSE);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("ProductType pt","PTCode=ori2.IFProdType","left");
@@ -395,13 +389,13 @@ Class Jes_model extends CI_Model
         $sql = "";
         for ($i=0; $i<count($producttype); $i++) {
             if ($i>0) $sql .= ",";
-            $sql .= "SUM(CASE WHEN PTCode = '".$producttype[$i]."' THEN IHQtyCal ELSE 0 END) as num".$i;
+            $sql .= "SUM(CASE WHEN PTCode = '".$producttype[$i]."' THEN FLOOR(IHQtyCal) ELSE 0 END) as num".$i;
         }
         
         $db2 = $this->load->database('db3',TRUE);
         $db2->select($sql);
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->join("ProductType pt","PTCode=ori2.IFProdType","left");
@@ -420,7 +414,9 @@ Class Jes_model extends CI_Model
             if ($i==0) { $sql .= "(IFProdType='".$producttype[$i]."'"; }
             $sql .= " OR IFProdType = '".$producttype[$i]."'";
         }
-        $sql .=")";
+        if (count($producttype)>0) $sql .=")";
+        else $sql .= "(IFProdType='qwerty')";
+        
         $count =0;
         for ($i=0; $i<count($warehouse); $i++) {
             for ($j=0; $j<count($warehouse[$i]); $j++) {
@@ -433,20 +429,45 @@ Class Jes_model extends CI_Model
                 }
             }
         }
-        $sql .=")";
+        if ($count>0) $sql .=")";
+        else $sql .= " AND (WHCode='qwerty')";
+
         
         $db2 = $this->load->database('db3',TRUE);
-        $db2->select("IHItemCode as itemcode, IHBarcode, ori.ITRefCode as ITRefCode, ori.ITShortDesc1 as ITShortDesc1,ori.ITShortDesc2 as ITShortDesc2, ori.ITLongDesc1 as ITLongDesc1, IHQtyCal, WHDesc1, WHCode, ITSRP");
+        $db2->select("IHItemCode as itemcode, IHBarcode, ITRefCode, ITShortDesc1, ITShortDesc2, ITLongDesc1, FLOOR(IHQtyCal) as IHQtyCal, WHDesc1, WHCode, ITSRP", FALSE);
+        $db2->from("ProductList");
+        /*
         $db2->from("ItemWHBal as wh");
-        $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from ItemFinGoods group by IFItemCode) tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
+        $db2->join("ItemFinGoodsMax as tt","wh.IHItemCode=tt.IFItemCode","inner",FALSE);
         $db2->join("ItemFinGoods ori2","ori2.IFPK=tt.MIFPK","left");
-        $db2->join("(select MAX(ITPK) as MITPK, ITCode from Item group by ITCode) ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
+        $db2->join("ItemMax ss","wh.IHItemCode=ss.ITCode","inner",FALSE);
         $db2->join("Item ori","ori.ITPK=ss.MITPK","left");
         $db2->join("Warehouse wh2","WHCode=wh.IHWareHouse","left");
         $db2->where("IHQtyCal >",0);
         $db2->where("wh.Expired",'F');
         $db2->where("wh2.Expired",'F');
-        $db2->where($sql);
+        */
+        if (($sql !="))") && ($sql !=")") && ($sql !="")) $db2->where($sql);
+        else $db2->where();
+        $query = $db2->get();
+        return $query->result();
+    }
+    
+    function getRefcode($refcode)
+    {
+        $keyword = explode(" ",$refcode);
+        
+        $db2 = $this->load->database('db3',TRUE);
+        $db2->select("IHItemCode as itemcode, IHBarcode, ITRefCode, ITShortDesc1,ITShortDesc2 as ITShortDesc2, ITLongDesc1, FLOOR(IHQtyCal) as IHQtyCal, WHDesc1, WHCode, ITSRP", FALSE);
+        $db2->from("ProductList");
+        if (count($keyword) < 2) { 
+            $db2->like("ITLongDesc1", $refcode);
+            $db2->or_like("ITRefCode", $refcode); 
+        }else{
+            for($i=0; $i<count($keyword); $i++) {
+                $db2->like("ITLongDesc1", $keyword[$i]);
+            }
+        }
         $query = $db2->get();
         return $query->result();
     }

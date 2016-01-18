@@ -604,5 +604,20 @@ function exportExcel_stock_itemlist()
     $objWriter->save('php://output');
 }
     
+function search_refcode()
+{
+    $data['title'] = "NGG|IT Nerd - Search";
+    $this->load->view('JES/watch/search_refcode',$data);
+}
+    
+function show_refcode()
+{
+    $refcode = $this->input->post("refcode");
+    $data['refcode_array'] = $this->jes_model->getRefcode($refcode);
+    $data['refcode'] = $refcode;
+    $data['title'] = "NGG|IT Nerd - Ref Code";
+    $this->load->view('JES/watch/show_refcode',$data);
+}
+    
 }
 ?>

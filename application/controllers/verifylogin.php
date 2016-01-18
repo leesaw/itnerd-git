@@ -32,6 +32,7 @@ class VerifyLogin extends CI_Controller {
         if (($this->session->userdata('sessstatus') < 10) || ($this->session->userdata('sessstatus') == 99)) {
             redirect('main', 'refresh');
         }elseif ($this->session->userdata('sesscompany') == 1) {
+            if ($this->session->userdata('sessstatus')==18) redirect('jes/search_refcode', 'refresh');
             redirect('jes/watch', 'refresh');
         }
    }

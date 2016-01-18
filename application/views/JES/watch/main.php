@@ -209,7 +209,7 @@
 <script src="<?php echo base_url(); ?>plugins/morris/raphael-min.js"></script>
 <script src="<?php echo base_url(); ?>plugins/morris/morris.min.js" type="text/javascript"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker.js"></script>
-<script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>WTCode
+<script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script src="<?php echo base_url(); ?>js/spin.min.js"></script>
 <script type="text/javascript">

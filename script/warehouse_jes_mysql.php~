@@ -1,21 +1,6 @@
 <?php
 require("inc.php");
-$query = mssql_query('select WHCode
-                                ,WHOldCode
-                                ,WHDesc1 COLLATE thai_CI_AS as WHDesc1
-                                ,WHDesc2 COLLATE thai_CI_AS as WHDesc2
-                                ,WHType
-                                ,WHSBU
-                                ,WHLocation
-                                ,WHVarianceRpt
-                                ,LastUpdate
-                                ,LastUpdatedBy
-                                ,Expired
-                                ,ActionLog
-                                ,WHAccessibleToAllFrom
-                                ,WHAccessibleToAllTo
-                                ,WHAccessibleToAllView
-                                from Warehouse');
+$query = mssql_query('select * from Warehouse');
 $num = mssql_num_rows($query);
 
 mysql_query("DELETE FROM Warehouse",$mysqllink2);
@@ -45,7 +30,7 @@ while ( $record = mssql_fetch_array($query) )
     if (($i!=$num) && ($i%1000!=0) )
         $query2 .= "('".mysql_real_escape_string($record['WHCode']).
         "','".mysql_real_escape_string($record['WHOldCode']).
-        "','".mysql_real_escape_string($record['WHDesc1']).
+        "','"."ทดสอบ".
         "','".mysql_real_escape_string($record['WHDesc2']).
         "','".mysql_real_escape_string($record['WHType']).
         "','".mysql_real_escape_string($record['WHSBU']).
@@ -98,7 +83,7 @@ while ( $record = mssql_fetch_array($query) )
     
     //$result = mysql_query($query2,$mysqllink2);
     if ($result) echo "completed(warehouse) "; else echo "error(warehouse) ";
-    echo html_entity_decode("ทดสอบ");
+    echo "ทดสอบ";
     //echo $num;
 }
 else

@@ -123,6 +123,11 @@
                 <i class="fa fa-file-o"></i> <span>Reports</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("jes/search_refcode"); ?>">
+                <i class="fa fa-search"></i> <span>Search</span>
+              </a>
+            </li>
             <?php if ($this->session->userdata('sessstatus') == 99) { ?>
             <li>
               <a href="<?php echo site_url("jes/license_now"); ?>">
@@ -130,6 +135,13 @@
               </a>
             </li>
             <?php } } ?>
+            <?php if (($this->session->userdata('sessstatus') == 18) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') == 3)) { ?>
+              <li>
+              <a href="<?php echo site_url("jes/search_refcode"); ?>">
+                <i class="fa fa-search"></i> <span>Search</span>
+              </a>
+            </li>
+            <?php } ?>
           </ul>
         </section>
         <!-- /.sidebar -->

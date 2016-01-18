@@ -641,9 +641,29 @@ class CI_DB_mssql_driver extends CI_DB {
 	 */
 	function _limit($sql, $limit, $offset)
 	{
+        /*
 		$i = $limit + $offset;
 
 		return preg_replace('/(^\SELECT (DISTINCT)?)/i','\\1 TOP '.$i.' ', $sql);
+        */
+        
+        if (count($this->ar_orderby) > 0)
+        {
+            $OrderBy  = "ORDER BY ";
+            $OrderBy .= implode(', ', $this->ar_orderby);
+
+            if ($this->ar_order !== FALSE)
+            {
+                $OrderBy .= ($this->ar_order == 'desc') ? ' DESC' : ' ASC';
+            }
+        }
+
+        $sql = preg_replace('/(\\'. $OrderBy .'\n?)/i','', $sql);
+        $sql = preg_replace('/(^\SELECT (DISTINCT)?)/i','\\1 row_number() OVER ('.$OrderBy.') AS rownum, ', $sql);
+
+        $NewSQL = "SELECT * \nFROM (\n" . $sql . ") AS A \nWHERE A.rownum BETWEEN (" .($limit) . ") AND (".($offset).")";
+
+        return     $NewSQL;
 	}
 
 	// --------------------------------------------------------------------
