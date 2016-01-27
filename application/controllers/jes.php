@@ -607,13 +607,24 @@ function exportExcel_stock_itemlist()
 function search_refcode()
 {
     $data['title'] = "NGG|IT Nerd - Search";
+    $data['session_user'] = $this->session->userdata('sessposition');
+    $data['brand_array'] = $this->jes_model->getProductType_onlyWatch_lf("_");
     $this->load->view('JES/watch/search_refcode',$data);
 }
     
 function show_refcode()
 {
     $refcode = $this->input->post("refcode");
-    $data['refcode_array'] = $this->jes_model->getRefcode($refcode);
+    $brand = $this->input->post("brand");
+    $minprice = $this->input->post("minprice");
+    $maxprice = $this->input->post("maxprice");
+    if (($brand=="") && ($minprice=="") && ($maxprice==""))
+        if ($refcode!="")
+            $data['refcode_array'] = $this->jes_model->getRefcode($refcode);
+        else
+            $data['refcode_array'] = array();
+    else
+        $data['refcode_array'] = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$minprice,$maxprice);
     $data['refcode'] = $refcode;
     $data['title'] = "NGG|IT Nerd - Ref Code";
     $this->load->view('JES/watch/show_refcode',$data);

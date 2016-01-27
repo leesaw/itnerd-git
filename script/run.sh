@@ -9,3 +9,6 @@ curl -k "http://localhost/itnerd/scriptjes/itemfingoodsmax" -o result_itemfingoo
 curl -k "http://localhost/itnerd/scriptjes/itemmax" -o result_itemmax.txt
 curl -k "http://localhost/itnerd/scriptjes/productlist" -o result_productlist.txt
 curl -k "http://localhost/itnerd/scriptjes/numberwatch_warehouse" -o result_numberwatchWH.txt
+curl -k "http://localhost/itnerd/scriptjes/pos_invoice" -o result_pos_invoice.txt
+curl -k "http://localhost/itnerd/scriptjes/pos_invoicedetail" -o result_pos_invoicedetail.txt
+curl -k "http://localhost/itnerd/scriptjes/shop" -o result_shop.txt

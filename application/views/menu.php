@@ -66,7 +66,6 @@
         <section class="sidebar">
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
-            <li class="header">MAIN NAVIGATION</li>
             <?php if ($this->session->userdata('sessstatus') == 99) { ?>
             <li>
               <a href="<?php echo site_url("login/users"); ?>">
@@ -113,6 +112,7 @@
             </li>
             <?php } } ?>
             <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') < 3)) { ?>
+            <li class="header">Stock</li>
             <li>
               <a href="<?php echo site_url("jes/watch"); ?>">
                 <i class="fa fa-home"></i> <span>Dashboard</span>
@@ -120,7 +120,7 @@
             </li>
             <li>
               <a href="<?php echo site_url("jes/report"); ?>">
-                <i class="fa fa-file-o"></i> <span>Reports</span>
+                <i class="fa fa-file-o"></i> <span>Report</span>
               </a>
             </li>
             <li>
@@ -134,6 +134,21 @@
                 <i class="fa fa-pencil-square-o"></i> <span>JES</span>
               </a>
             </li>
+            <?php } ?>
+            <?php if ($this->session->userdata('sessstatus') == 19) { ?>
+            <li class="header">Sale</li>
+            <li>
+              <a href="<?php echo site_url("jes_salereport/salereport_graph"); ?>">
+                <i class="fa fa-bar-chart"></i> <span>Graph Report</span>
+              </a>
+            </li>
+            <!--
+            <li>
+              <a href="<?php echo site_url("jes_salereport/salereport_table"); ?>">
+                <i class="fa fa-file-o"></i> <span>Sale Report</span>
+              </a>
+            </li>
+            -->
             <?php } } ?>
             <?php if (($this->session->userdata('sessstatus') == 18) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') == 3)) { ?>
               <li>

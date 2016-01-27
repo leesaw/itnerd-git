@@ -471,5 +471,31 @@ Class Jes_model extends CI_Model
         $query = $db2->get();
         return $query->result();
     }
+    
+    function getRefcode_fullsearch($refcode,$brand,$minprice,$maxprice)
+    {
+        $keyword = explode(" ",$refcode);
+        
+        $db2 = $this->load->database('db3',TRUE);
+        $db2->select("IHItemCode as itemcode, IHBarcode, ITRefCode, ITShortDesc1,ITShortDesc2 as ITShortDesc2, ITLongDesc1, FLOOR(IHQtyCal) as IHQtyCal, WHDesc1, WHCode, ITSRP", FALSE);
+        $db2->from("ProductList");
+        $db2->like("IFProdType", 'W-', 'after');
+        if ($refcode !="") {
+            if (count($keyword) < 2) { 
+                $db2->where("(ITLongDesc1 like '%".$refcode."%' OR ITRefCode like '%".$refcode."%')");
+                //$db2->or_like("ITRefCode", $refcode); 
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $db2->like("ITLongDesc1", $keyword[$i]);
+                }
+            }
+        }
+        
+        if ($brand!="0") $db2->like("IFProdType", $brand);
+        if (($minprice !="") && ($minprice>=0)) $db2->where("ITSRP >=", $minprice);
+        if (($maxprice !="") && ($maxprice>=0)) $db2->where("ITSRP <=", $maxprice);
+        $query = $db2->get();
+        return $query->result();
+    }
 }
 ?>

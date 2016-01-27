@@ -1262,4 +1262,443 @@ class Scriptjes extends CI_Controller {
         }
         if ($message) echo "completed(NumberWatchWH) "; else echo "error(NumberWatchWH) ";
 	}
+    
+    public function pos_invoice()
+	{
+        
+        $db1 = $this->load->database('db3',TRUE);
+		$db1->empty_table('POSInvoice'); 
+        
+		$db2 = $this->load->database('db2',TRUE);
+        
+		$db2->select("PINO");
+		$db2->from("[JES_NGG].[dbo].[POSInvoice]");
+		$query = $db2->get();
+		$numrows = $query->num_rows(); 
+        $startlimit = 0;
+        $end = ceil($numrows / 1000);
+        $count = 1;
+        while ($count <= $end) {
+            $db2->select("PINO,
+                            PINOShop,
+                            PIStatus,
+                            PIType,
+                            PISettled,
+                            PIReturned,
+                            PIReturnNoInvoice,
+                            PIRefDoc,
+                            PIShop,
+                            CONVERT(varchar(20),PIIssueDate,120) AS PIIssueDate,
+                            PIIssueTime,
+                            CONVERT(varchar(20),PIPickupDate,120) AS PIPickupDate,
+                            PISalesPerson,
+                            PIRemarks,
+                            PIPayMethod,
+                            PIPayRef1,
+                            PIPayRef2,
+                            PICurrency,
+                            PIExchangeRate,
+                            PIDeposit,
+                            PITender,
+                            PITenderForeign,
+                            PIBalance,
+                            PIBalanceForeign,
+                            PIChange,
+                            PIChangeForeign,
+                            PIAmount,
+                            PIAmountForeign,
+                            PIQty,
+                            CONVERT(varchar(20),PILastDayEnd,120) AS PILastDayEnd,
+                            PIPrevBalance,
+                            CONVERT(varchar(20),LastUpdate,120) AS LastUpdate,
+                            LastUpdatedBy,
+                            ActionLog,
+                            PIMember,
+                            TxRefDoc,
+                            CalculateGST,
+                            GstAmount,
+                            GstPercentage,
+                            Expired,
+                            PPTCode,
+                            PIPeriod,
+                            CONVERT(varchar(20),PIPaymentDate,120) AS PIPaymentDate,
+                            PIGstRate,
+                            PIGstAmount,
+                            PIFGAmount,
+                            PIPurGoldAmount,
+                            PIRecGoldAmount,
+                            PIExchangeAmount,
+                            PISRPIncludedGST,
+                            PIPTInterest,
+                            PINature");
+		    $db2->from("[JES_NGG].[dbo].[POSInvoice]");
+            
+            $endlimit = $count * 1000;
+            //echo $startlimit." / ".$endlimit."+";
+            $db2->order_by("PINO");
+            $db2->limit($startlimit, $endlimit);
+		    $query = $db2->get();
+            $numrows = $query->num_rows();
+            $result = $query->result();
+            //if ($result) echo "yes"; else echo "no";
+            $i = 1;
+            $sql2 = "INSERT INTO POSInvoice(PINO,
+                            PINOShop,
+                            PIStatus,
+                            PIType,
+                            PISettled,
+                            PIReturned,
+                            PIReturnNoInvoice,
+                            PIRefDoc,
+                            PIShop,
+                            PIIssueDate,
+                            PIIssueTime,
+                            PIPickupDate,
+                            PISalesPerson,
+                            PIRemarks,
+                            PIPayMethod,
+                            PIPayRef1,
+                            PIPayRef2,
+                            PICurrency,
+                            PIExchangeRate,
+                            PIDeposit,
+                            PITender,
+                            PITenderForeign,
+                            PIBalance,
+                            PIBalanceForeign,
+                            PIChange,
+                            PIChangeForeign,
+                            PIAmount,
+                            PIAmountForeign,
+                            PIQty,
+                            PILastDayEnd,
+                            PIPrevBalance,
+                            LastUpdate,
+                            LastUpdatedBy,
+                            ActionLog,
+                            PIMember,
+                            TxRefDoc,
+                            CalculateGST,
+                            GstAmount,
+                            GstPercentage,
+                            Expired,
+                            PPTCode,
+                            PIPeriod,
+                            PIPaymentDate,
+                            PIGstRate,
+                            PIGstAmount,
+                            PIFGAmount,
+                            PIPurGoldAmount,
+                            PIRecGoldAmount,
+                            PIExchangeAmount,
+                            PISRPIncludedGST,
+                            PIPTInterest,
+                            PINature) VALUES";
+            $query2 = $sql2;
+
+            foreach($result as $loop) {
+                $query2 .= "('".mysql_real_escape_string($loop->PINO).
+                "','".mysql_real_escape_string($loop->PINOShop).
+                "','".mysql_real_escape_string($loop->PIStatus).
+                "','".mysql_real_escape_string($loop->PIType).
+                "','".mysql_real_escape_string($loop->PISettled).
+                "','".mysql_real_escape_string($loop->PIReturned).
+                "','".mysql_real_escape_string($loop->PIReturnNoInvoice).
+                "','".mysql_real_escape_string($loop->PIRefDoc).
+                "','".mysql_real_escape_string($loop->PIShop).
+                "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->PIIssueDate))).
+                "','".mysql_real_escape_string($loop->PIIssueTime).
+                "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->PIPickupDate))).
+                "','".mysql_real_escape_string($loop->PISalesPerson).
+                "','".mysql_real_escape_string($loop->PIRemarks).
+                "','".mysql_real_escape_string($loop->PIPayMethod).
+                "','".mysql_real_escape_string($loop->PIPayRef1).
+                "','".mysql_real_escape_string($loop->PIPayRef2).
+                "','".mysql_real_escape_string($loop->PICurrency).
+                "','".mysql_real_escape_string($loop->PIExchangeRate).
+                "','".mysql_real_escape_string($loop->PIDeposit).
+                "','".mysql_real_escape_string($loop->PITender).
+                "','".mysql_real_escape_string($loop->PITenderForeign).
+                "','".mysql_real_escape_string($loop->PIBalance).
+                "','".mysql_real_escape_string($loop->PIBalanceForeign).
+                "','".mysql_real_escape_string($loop->PIChange).
+                "','".mysql_real_escape_string($loop->PIChangeForeign).
+                "','".mysql_real_escape_string($loop->PIAmount).
+                "','".mysql_real_escape_string($loop->PIAmountForeign).
+                "','".mysql_real_escape_string($loop->PIQty).
+                "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->PILastDayEnd))).
+                "','".mysql_real_escape_string($loop->PIPrevBalance).
+                "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->LastUpdate))).
+                "','".mysql_real_escape_string($loop->LastUpdatedBy).
+                "','".mysql_real_escape_string($loop->ActionLog).
+                "','".mysql_real_escape_string($loop->PIMember).
+                "','".mysql_real_escape_string($loop->TxRefDoc).
+                "','".mysql_real_escape_string($loop->CalculateGST).
+                "','".mysql_real_escape_string($loop->GstAmount).
+                "','".mysql_real_escape_string($loop->GstPercentage).
+                "','".mysql_real_escape_string($loop->Expired).
+                "','".mysql_real_escape_string($loop->PPTCode).
+                "','".mysql_real_escape_string($loop->PIPeriod).
+                "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->PIPaymentDate))).
+                "','".mysql_real_escape_string($loop->PIGstRate).
+                "','".mysql_real_escape_string($loop->PIGstAmount).
+                "','".mysql_real_escape_string($loop->PIFGAmount).
+                "','".mysql_real_escape_string($loop->PIPurGoldAmount).
+                "','".mysql_real_escape_string($loop->PIRecGoldAmount).
+                "','".mysql_real_escape_string($loop->PIExchangeAmount).
+                "','".mysql_real_escape_string($loop->PISRPIncludedGST).
+                "','".mysql_real_escape_string($loop->PIPTInterest).
+                "','".mysql_real_escape_string($loop->PINature);
+                if ($i!=$numrows) {
+                    $query2 .= "'),";
+                }else{
+                    $query2 .= "')";
+                    //$db1->query($query2);
+                    //$query2 = $sql2;
+                }
+                $i++;
+            }
+            //echo $query2;
+            $message = $db1->query($query2);
+            $count++;
+            $startlimit = $endlimit + 1;
+            //echo $endlimit;
+            
+        }
+        
+        if ($message) echo "completed(POS invoice) "; else echo "error(POS invoice) ";
+	}
+    
+    public function pos_invoicedetail()
+	{
+        
+        $db1 = $this->load->database('db3',TRUE);
+		$db1->empty_table('POSInvoiceDetail'); 
+        
+		$db2 = $this->load->database('db2',TRUE);
+        
+		$db2->select("PDPK");
+		$db2->from("[JES_NGG].[dbo].[POSInvoiceDetail]");
+		$query = $db2->get();
+		$numrows = $query->num_rows(); 
+        $startlimit = 0;
+        $end = ceil($numrows / 1000);
+        $count = 1;
+        while ($count <= $end) {
+            $db2->select("PDPK,
+                            PDPINo,
+                            PDSeq,
+                            PDItemCode,
+                            PDQty,
+                            PDUnitPrice,
+                            PDDiscPercent,
+                            PDAmount,
+                            PDRemarks,
+                            PDRefDoc,
+                            PDReturned,
+                            PDMoveItem,
+                            CONVERT(varchar(20),first.LastUpdate,120) AS LastUpdate,
+                            first.LastUpdatedBy AS LastUpdatedBy,
+                            first.ActionLog AS ActionLog,
+                            PDDiscAmt,
+                            PDUnitLabourCost,
+                            PDReturnedQty,
+                            PDQtyRef,
+                            PDOrgWeight,
+                            PDCutWeight,
+                            PDACost,
+                            PDBCost,
+                            PDType,
+                            PDSTDQty,
+                            PDSrp,
+                            PDRcdType,
+                            PDCutGold,
+                            PDPurity,
+                            ori2.IFProdType AS IFProdType");
+		    $db2->from("[JES_NGG].[dbo].[POSInvoiceDetail] as first");
+            $db2->join("(select IFItemCode, MAX(IFPK) as MIFPK from [JES_NGG].[dbo].[ItemFinGoods] group by IFItemCode) tt","first.PDItemCode=tt.IFItemCode","inner",FALSE);
+            $db2->join("[JES_NGG].[dbo].[ItemFinGoods] ori2","ori2.IFPK=tt.MIFPK","left");
+            
+            $endlimit = $count * 1000;
+            //echo $startlimit." / ".$endlimit."+";
+            $db2->order_by("PDPK");
+            $db2->limit($startlimit, $endlimit);
+		    $query = $db2->get();
+            $numrows = $query->num_rows();
+            $result = $query->result();
+            //if ($result) echo "yes"; else echo "no";
+            $i = 1;
+            $sql2 = "INSERT INTO POSInvoiceDetail(PDPK,
+                            PDPINo,
+                            PDSeq,
+                            PDItemCode,
+                            PDQty,
+                            PDUnitPrice,
+                            PDDiscPercent,
+                            PDAmount,
+                            PDRemarks,
+                            PDRefDoc,
+                            PDReturned,
+                            PDMoveItem,
+                            LastUpdate,
+                            LastUpdatedBy,
+                            ActionLog,
+                            PDDiscAmt,
+                            PDUnitLabourCost,
+                            PDReturnedQty,
+                            PDQtyRef,
+                            PDOrgWeight,
+                            PDCutWeight,
+                            PDACost,
+                            PDBCost,
+                            PDType,
+                            PDSTDQty,
+                            PDSrp,
+                            PDRcdType,
+                            PDCutGold,
+                            PDPurity,
+                            PDProdType) VALUES";
+            $query2 = $sql2;
+
+            foreach($result as $loop) {
+                $query2 .= "('".mysql_real_escape_string($loop->PDPK).
+                  "','".mysql_real_escape_string($loop->PDPINo).
+                  "','".mysql_real_escape_string($loop->PDSeq).
+                  "','".mysql_real_escape_string($loop->PDItemCode).
+                  "','".mysql_real_escape_string($loop->PDQty).
+                  "','".mysql_real_escape_string($loop->PDUnitPrice).
+                  "','".mysql_real_escape_string($loop->PDDiscPercent).
+                  "','".mysql_real_escape_string($loop->PDAmount).
+                  "','".mysql_real_escape_string($loop->PDRemarks).
+                  "','".mysql_real_escape_string($loop->PDRefDoc).
+                  "','".mysql_real_escape_string($loop->PDReturned).
+                  "','".mysql_real_escape_string($loop->PDMoveItem).
+                  "','".date('Y-m-d H:i:s',strtotime(mysql_real_escape_string($loop->LastUpdate))).
+                  "','".mysql_real_escape_string($loop->LastUpdatedBy).
+                  "','".mysql_real_escape_string($loop->ActionLog).
+                  "','".mysql_real_escape_string($loop->PDDiscAmt).
+                  "','".mysql_real_escape_string($loop->PDUnitLabourCost).
+                  "','".mysql_real_escape_string($loop->PDReturnedQty).
+                  "','".mysql_real_escape_string($loop->PDQtyRef).
+                  "','".mysql_real_escape_string($loop->PDOrgWeight).
+                  "','".mysql_real_escape_string($loop->PDCutWeight).
+                  "','".mysql_real_escape_string($loop->PDACost).
+                  "','".mysql_real_escape_string($loop->PDBCost).
+                  "','".mysql_real_escape_string($loop->PDType).
+                  "','".mysql_real_escape_string($loop->PDSTDQty).
+                  "','".mysql_real_escape_string($loop->PDSrp).
+                  "','".mysql_real_escape_string($loop->PDRcdType).
+                  "','".mysql_real_escape_string($loop->PDCutGold).
+                  "','".mysql_real_escape_string($loop->PDPurity).
+                  "','".mysql_real_escape_string($loop->IFProdType);
+                
+                if ($i!=$numrows) {
+                    $query2 .= "'),";
+                }else{
+                    $query2 .= "')";
+                    //$db1->query($query2);
+                    //$query2 = $sql2;
+                }
+                $i++;
+            }
+            //echo $query2;
+            $message = $db1->query($query2);
+            $count++;
+            $startlimit = $endlimit + 1;
+            //echo $endlimit;
+            
+        }
+        
+        if ($message) echo "completed(POS invoice detail) "; else echo "error(POS invoice detail) ";
+	}
+    
+    public function shop()
+	{
+        
+        $db1 = $this->load->database('db3',TRUE);
+		$db1->empty_table('Shop'); 
+        
+		$db2 = $this->load->database('db2',TRUE);
+        
+		$db2->select("SHCode");
+		$db2->from("[JES_NGG].[dbo].[Shop]");
+		$query = $db2->get();
+		$numrows = $query->num_rows(); 
+        $startlimit = 0;
+        $end = ceil($numrows / 1000);
+        $count = 1;
+        while ($count <= $end) {
+            $db2->select("SHCode,
+                            SHDesc1,
+                            SHDesc2,
+                            SHAddress,
+                            SHPhone,
+                            SHWarehouse,
+                            SHCurrency,
+                            SHRegion,
+                            SHCountry,
+                            Expired,
+                            WTCode,
+                            SHFGWH,
+                            SHRSWH");
+		    $db2->from("[JES_NGG].[dbo].[Shop]");
+            
+            $endlimit = $count * 1000;
+            //echo $startlimit." / ".$endlimit."+";
+            $db2->order_by("SHCode");
+            $db2->limit($startlimit, $endlimit);
+		    $query = $db2->get();
+            $numrows = $query->num_rows();
+            $result = $query->result();
+            //if ($result) echo "yes"; else echo "no";
+            $i = 1;
+            $sql2 = "INSERT INTO Shop(SHCode,
+                            SHDesc1,
+                            SHDesc2,
+                            SHAddress,
+                            SHPhone,
+                            SHWarehouse,
+                            SHCurrency,
+                            SHRegion,
+                            SHCountry,
+                            Expired,
+                            WTCode,
+                            SHFGWH,
+                            SHRSWH) VALUES";
+            $query2 = $sql2;
+
+            foreach($result as $loop) {
+                $query2 .= "('".mysql_real_escape_string($loop->SHCode).
+                  "','".mysql_real_escape_string($loop->SHDesc1).
+                  "','".mysql_real_escape_string($loop->SHDesc2).
+                  "','".mysql_real_escape_string($loop->SHAddress).
+                  "','".mysql_real_escape_string($loop->SHPhone).
+                  "','".mysql_real_escape_string($loop->SHWarehouse).
+                  "','".mysql_real_escape_string($loop->SHCurrency).
+                  "','".mysql_real_escape_string($loop->SHRegion).
+                  "','".mysql_real_escape_string($loop->SHCountry).
+                  "','".mysql_real_escape_string($loop->Expired).
+                  "','".mysql_real_escape_string($loop->WTCode).
+                  "','".mysql_real_escape_string($loop->SHFGWH).
+                  "','".mysql_real_escape_string($loop->SHRSWH);
+                
+                if ($i!=$numrows) {
+                    $query2 .= "'),";
+                }else{
+                    $query2 .= "')";
+                    //$db1->query($query2);
+                    //$query2 = $sql2;
+                }
+                $i++;
+            }
+            //echo $query2;
+            $message = $db1->query($query2);
+            $count++;
+            $startlimit = $endlimit + 1;
+            //echo $endlimit;
+            
+        }
+        
+        if ($message) echo "completed(Shop) "; else echo "error(Shop) ";
+	}
 }

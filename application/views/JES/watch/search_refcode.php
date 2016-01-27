@@ -37,11 +37,41 @@
                     </div>
                 </div>
             </div>
-            </form>
-        </div>       
+
+        </div> 
+        <br>
+        <?php if ($session_user==2) { ?>
+        <div class="row">
+            <div class="col-md-4">
+                <label>เลือกยี่ห้อ</label>
+                <div class="input-group">
+                    <select id="brand" name="brand" class="form-control">
+                        <option value="0" selected>เลือกทั้งหมด</option>
+                        <?php foreach($brand_array as $loop) { ?>
+                        <option value="<?php echo $loop->PTCode; ?>"><?php echo $loop->PTDesc1; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label>ราคาต่ำสุด</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="minprice" id="minprice">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label>ราคาสูงสุด</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="maxprice" id="maxprice">
+                </div>
+            </div>
+            
+        </div>
+        <br>
+            <div class="row"><div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div></div>
+        <?php } ?>                
                         
-                        
-                        
+        </form>               
                         
 					</div>
                 </div>
