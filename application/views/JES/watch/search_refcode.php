@@ -22,13 +22,13 @@
 	<!-- Main content -->
     <section class="content">
 		<div class="row">
-            <div class="col-md-6">
+            <div class="col-md-10">
                 <div class="box box-primary">
                         
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("jes/show_refcode"); ?>" method="post">
-            <div class="col-md-6">
+            <div class="col-xs-8 col-md-4">
                 <label>Ref. Code หรือ Description ที่ต้องการค้นหา</label>
                 <div class="input-group">
                     <input type="text" class="form-control" name="refcode" id="refcode">
@@ -42,7 +42,7 @@
         <br>
         <?php if ($session_user==2) { ?>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-xs-5 col-md-3">
                 <label>เลือกยี่ห้อ</label>
                 <div class="input-group">
                     <select id="brand" name="brand" class="form-control">
@@ -53,13 +53,28 @@
                     </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xs-5 col-md-3">
+                <label>เลือก Warehouse</label>
+                <div class="input-group">
+                    <select id="warehouse" name="warehouse" class="form-control">
+                        <option value="0" selected>เลือกทั้งหมด</option>
+                        <?php 
+                            for($i=0; $i<count($whname_array); $i++) {
+                                foreach($whname_array[$i]["wh"] as $loop2) { 
+                        ?>
+                        <option value="<?php echo $loop2->WHCode; ?>"><?php echo $whname_array[$i]["WHType"]."-".$loop2->WHDesc1; ?>
+                        </option>
+                        <?php } } ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-3 col-md-2">
                 <label>ราคาต่ำสุด</label>
                 <div class="input-group">
                     <input type="text" class="form-control" name="minprice" id="minprice">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xs-3 col-md-2">
                 <label>ราคาสูงสุด</label>
                 <div class="input-group">
                     <input type="text" class="form-control" name="maxprice" id="maxprice">

@@ -162,26 +162,85 @@ function watch()
             $fashionbrand_array[] = array("PTCode"=>$loop->PTCode, "PTDesc1"=>$loop->PTDesc1, "sum1"=> 0);
         }
     }
-    
+    /*
     // only CT central graph
     $ct_array = $this->watch_viewInventory_graph('CT', $remark);
     // only CT The mall graph
     $mg_array = $this->watch_viewInventory_graph('MG', $remark);
     // only CT robinson graph
     $rb_array = $this->watch_viewInventory_graph('RB', $remark);
+    // only Dealer Graph graph
+    $dw_array = $this->watch_viewInventory_graph('DW', $remark);
+    // only Pro Warehouse graph
+    $pr_array = $this->watch_viewInventory_graph('PR', $remark);
+    */
+    // only HQ warehouse graph
+    $hq_array = $this->watch_viewInventory_graph_brand('HQ', $remark);
     
     $data['luxbrand_array'] = $luxbrand_array;
     $data['fashionbrand_array'] = $fashionbrand_array;
     $data['whcode_array'] = $whcode_array;
+    /*
     $data['ct_array'] = $ct_array;
     $data['mg_array'] = $mg_array;
     $data['rb_array'] = $rb_array;
+    $data['dw_array'] = $dw_array;
+    $data['pr_array'] = $pr_array;
+    */
+    $data['hq_array'] = $hq_array;
     
     if($remark=='') $remark='0';
     $data['remark'] = $remark;
     
     $data['title'] = "NGG|IT Nerd - Watch";
     $this->load->view('JES/watch/main',$data);
+}
+    
+function watch_viewInventory_graph_brand($whtype, $remark)
+{
+    if(($remark=='0') || (!isset($remark))) {
+        $lux_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_L');
+        $fashion_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_F');
+    }elseif ($remark=='1') {
+        $lux_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_LC#');
+        $fashion_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_FC#');
+    }elseif ($remark=='2') {
+        $lux_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_L');
+        $fashion_query = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_F');
+        
+        $lux_temp = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_LC#');
+        $fashion_temp = $this->jes_model->getInventoryWatch_whtype_brand($whtype, '_FC#');
+        
+        foreach($lux_query as &$loop1) {
+            foreach($lux_temp as $loop2) {
+                if($loop1->IHWareHouse == $loop2->IHWareHouse) {
+                    $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                }
+            }
+        }
+        
+        foreach($fashion_query as &$loop1) {
+            foreach($fashion_temp as $loop2) {
+                if($loop1->IHWareHouse == $loop2->IHWareHouse) {
+                    $loop1->sum1 = $loop1->sum1 - $loop2->sum1;
+                }
+            }
+        }
+    }
+    
+    if(!empty($lux_query)) {
+        foreach($lux_query as $loop2) {
+            $result_array[] = array("PTCode"=>$loop2->PTCode, "PTDesc1"=>$loop2->PTDesc1, "sum1"=>$loop2->sum1);
+        }
+    }
+    
+    if(!empty($fashion_query)) {
+        foreach($fashion_query as $loop2) {
+            $result_array[] = array("PTCode"=>$loop2->PTCode, "PTDesc1"=>$loop2->PTDesc1, "sum1"=>$loop2->sum1);
+        }
+    }
+    
+    return $result_array;
 }
     
 function watch_viewInventory_graph($whtype, $remark)
@@ -284,6 +343,33 @@ function watch_viewInventory_branch()
         
     $data['title'] = "NGG|IT Nerd - Watch";
     $this->load->view('JES/watch/viewInventory_branch_item',$data);
+}
+    
+function watch_viewInventory_whtype_brand()
+{
+    $remark = $this->uri->segment(3);
+    $wh_code = "HQ";
+    $pt_code = $this->uri->segment(4);
+    
+    $data['branchname'] = "HeadQuarter";
+    
+    $query = $this->jes_model->getOneProductType($pt_code);
+    foreach($query as $loop) {
+        $data['productname'] = $loop->PTDesc1;
+    }
+
+    if ($remark==0) {
+        $data['item_array'] = $this->jes_model->getInventoryWatch_branch_pt_item($wh_code,$pt_code,"");
+    }elseif($remark==1) {
+        $data['item_array'] = $this->jes_model->getInventoryWatch_branch_pt_item($wh_code,$pt_code,"C#");
+    }elseif($remark==2) {
+        $item_query1 = $this->jes_model->getInventoryWatch_branch_pt_item($wh_code,"H#");
+        $item_query2 = $this->jes_model->getInventoryWatch_branch_pt_item($wh_code,"D#");
+        $data['item_array'] = array_merge($item_query1,$item_query2);
+    }
+        
+    $data['title'] = "NGG|IT Nerd - Watch";
+    $this->load->view('JES/watch/viewInventory_branch_pt_item',$data);
 }
     
 function watch_viewInventory_whtype()
@@ -609,6 +695,14 @@ function search_refcode()
     $data['title'] = "NGG|IT Nerd - Search";
     $data['session_user'] = $this->session->userdata('sessposition');
     $data['brand_array'] = $this->jes_model->getProductType_onlyWatch_lf("_");
+    
+    $query = $this->jes_model->getAllWHType();
+    $whname_array = array();
+    foreach($query as $loop) {
+        $whname_array[] = array("wh" => $this->jes_model->getWarehouse_branch($loop->WTCode),"WHType" => $loop->WTCode);
+    }
+    
+    $data['whname_array'] = $whname_array;
     $this->load->view('JES/watch/search_refcode',$data);
 }
     
@@ -616,15 +710,16 @@ function show_refcode()
 {
     $refcode = $this->input->post("refcode");
     $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
-    if (($brand=="") && ($minprice=="") && ($maxprice==""))
+    if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice==""))
         if ($refcode!="")
             $data['refcode_array'] = $this->jes_model->getRefcode($refcode);
         else
             $data['refcode_array'] = array();
     else
-        $data['refcode_array'] = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$minprice,$maxprice);
+        $data['refcode_array'] = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$warehouse,$minprice,$maxprice);
     $data['refcode'] = $refcode;
     $data['title'] = "NGG|IT Nerd - Ref Code";
     $this->load->view('JES/watch/show_refcode',$data);

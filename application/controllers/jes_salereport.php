@@ -28,9 +28,9 @@ function salereport_graph()
     $end = $current[0]."-".$current[1]."-".$current[2];
     
     // sum sale by brand
-    $data['sale_fashion_brand'] = $this->jes_salereport_model->getSale_watch_lf_between("_L",$start,$end);
+    $data['sale_fashion_brand'] = $this->jes_salereport_model->getSale_watch_lf_between("_F",$start,$end);
     
-    $data['sale_luxury_brand'] = $this->jes_salereport_model->getSale_watch_lf_between("_F",$start,$end);
+    $data['sale_luxury_brand'] = $this->jes_salereport_model->getSale_watch_lf_between("_L",$start,$end);
     
     // sum sale by shop WTCode
     $shop_fashion[] = array("WTCode"=>0, "WTDesc1"=>0, "sum1"=>0);

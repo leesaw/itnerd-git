@@ -31,33 +31,33 @@
 <?php 
     
     $dataset_brand = array();
-    $dataset_ct = array();
-    $dataset_mg = array();
-    $dataset_rb = array();
-    //$dataset_wh = array();
+    $dataset_hq = array();
+    $dataset_lux = array();
+    $dataset_fashion = array();
+
     $sum_main = 0;
-    $sum_ct = 0;
-    $sum_mg = 0;
-    $sum_rb = 0;
+    $sum_hq = 0;
+    $sum_lux = 0;
+    $sum_fashion = 0;
+
     for($i=0; $i<count($whcode_array); $i++) {
         $dataset_brand[] = array($whcode_array[$i]['WTCode'], $whcode_array[$i]['luxsum'], $whcode_array[$i]['fashionsum']);
             //$dataset_wh[] = array($whcode_array[$i]['WTCode'], $whcode_array[$i]['WTDesc1']);
         $sum_main += $whcode_array[$i]['luxsum'] + $whcode_array[$i]['fashionsum'];
     }
-    
-    for($i=0; $i<count($ct_array); $i++) {
-        $dataset_ct[] = array($ct_array[$i]['WHCode'], $ct_array[$i]['luxsum'], $ct_array[$i]['fashionsum']);
-        $sum_ct += $ct_array[$i]['luxsum'] + $ct_array[$i]['fashionsum'];
+    for($i=0; $i<count($hq_array); $i++) {
+        $dataset_hq[] = array($hq_array[$i]['PTCode'], $hq_array[$i]['PTDesc1'], $hq_array[$i]['sum1']);
+        $sum_hq += $hq_array[$i]['sum1'];
     }
         
-    for($i=0; $i<count($mg_array); $i++) {
-        $dataset_mg[] = array($mg_array[$i]['WHCode'], $mg_array[$i]['luxsum'], $mg_array[$i]['fashionsum']);
-        $sum_mg += $mg_array[$i]['luxsum'] + $mg_array[$i]['fashionsum'];
+    for($i=0; $i<count($luxbrand_array); $i++) {
+        $dataset_lux[] = array($luxbrand_array[$i]['PTCode'], str_replace(array('Consignment','Baume&Mercier','Frederique Constant','Maurice Lacroix'),array('C','B&M','Fred. Cons.','Maur. Lacr.'),$luxbrand_array[$i]['PTDesc1']), $luxbrand_array[$i]['sum1']);
+        $sum_lux += $luxbrand_array[$i]['sum1'];
     }
         
-    for($i=0; $i<count($rb_array); $i++) {
-        $dataset_rb[] = array($rb_array[$i]['WHCode'], $rb_array[$i]['luxsum'], $rb_array[$i]['fashionsum']);
-        $sum_rb += $rb_array[$i]['luxsum'] + $rb_array[$i]['fashionsum'];
+    for($i=0; $i<count($fashionbrand_array); $i++) {
+        $dataset_fashion[] = array($fashionbrand_array[$i]['PTCode'], preg_replace("/\([^)]+\)/","",$fashionbrand_array[$i]['PTDesc1']), $fashionbrand_array[$i]['sum1']);
+        $sum_fashion += $fashionbrand_array[$i]['sum1'];
     }
 
 ?>
@@ -65,6 +65,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row">
+                    <div class="col-md-6">
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <label class="pull-right">Stock Balance - HeadQuarter</label>
+                            </div>
+                            <div class="box-body chart-responsive">
+                                <div class="chart" id="bar-hq" style="height: 200px;"></div>
+                            </div>
+                            <div class="box-footer">
+                                จำนวนทั้งหมด <u><?php echo $sum_hq; ?></u> ชิ้น 
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="box box-success">
                             <div class="box-header with-border">
@@ -76,118 +89,42 @@
                             </div>
                             <div class="box-footer">
                                 จำนวนทั้งหมด <u><?php echo $sum_main; ?></u> ชิ้น
-                                <div class="pull-right">
-                                <i class="fa fa-circle text-green"></i> Luxury Watch 
-                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
-                                </div>
                             </div>
                         </div>
                     </div>
-                        
-                    <div class="col-md-6">
-                        <div class="box box-danger">
-                            <div class="box-header with-border">
-                                <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/ct"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                                <label class="pull-right">Stock Balance - Central (Counter)</label>
-                            </div>
-                            <div class="box-body chart-responsive">
-                                <div class="chart" id="bar-ct" style="height: 200px;"></div>
-                            </div>
-                            <div class="box-footer">
-                                จำนวนทั้งหมด <u><?php echo $sum_ct; ?></u> ชิ้น 
-                                <div class="pull-right">
-                                <i class="fa fa-circle text-green"></i> Luxury Watch 
-                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                         
                     </div>
                     <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="box box-info">
                             <div class="box-header with-border">
-                                <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/mg"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                            <label class="pull-right">Stock Balance - The Mall (Counter)</label>
+                            <label class="pull-right">Stock Balance - Luxury</label>
                             </div>
                             <div class="box-body chart-responsive">
-                                <div class="chart" id="bar-mg" style="height: 200px;"></div>
+                                <div class="chart" id="bar-luxury" style="height: 200px;"></div>
                             </div>
                             <div class="box-footer">
-                                จำนวนทั้งหมด <u><?php echo $sum_mg; ?></u> ชิ้น
-                                <div class="pull-right">
-                                <i class="fa fa-circle text-green"></i> Luxury Watch 
-                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
-                                </div>
+                                จำนวนทั้งหมด <u><?php echo $sum_lux; ?></u> ชิ้น
                             </div>
                         </div>
                     </div>
-                        
-                    <div class="col-md-6">
+                    </div>
+                    <div class="row">   
+                    <div class="col-md-12">
                         <div class="box box-primary">
                             <div class="box-header with-border">
-                                <a id="fancyboxall" href="<?php echo site_url("jes/watch_store_departmentstore/rb"); ?>"><button type="button" class="btn btn-xs btn-primary">แสดงรหัสสาขา</button></a>
-                                <label class="pull-right">Stock Balance - Robinson (Counter)</label>
+                                <label class="pull-right">Stock Balance - Fashion</label>
                             </div>
                             <div class="box-body chart-responsive">
-                                <div class="chart" id="bar-rb" style="height: 200px;"></div>
+                                <div class="chart" id="bar-fashion" style="height: 200px;"></div>
                             </div>
                             <div class="box-footer">
-                                จำนวนทั้งหมด <u><?php echo $sum_rb; ?></u> ชิ้น 
-                                <div class="pull-right">
-                                <i class="fa fa-circle text-green"></i> Luxury Watch 
-                                <i class="fa fa-circle text-purple"></i> Fashion Watch 
-                                </div>
+                                จำนวนทั้งหมด <u><?php echo $sum_fashion; ?></u> ชิ้น 
                             </div>
                         </div>
                     </div>
                         
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
-                        <div class="box box-success">
-                            <div class="box-body">
-                                <table class="table table-bordered table-striped" id="tabletask" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Luxury Brand</th>
-                                            <th>Balance(Pcs.)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php 
-                                        for($i=0; $i<(count($luxbrand_array)); $i++) { ?>
-                                        <tr>
-                                            <td><?php echo $luxbrand_array[$i]['PTDesc1']; ?></td>
-                                            <td width="100"><?php if($luxbrand_array[$i]['sum1']>0) { echo "<a href='".site_url("jes/watch_viewInventory_product")."/".$luxbrand_array[$i]['PTCode']."'>".$luxbrand_array[$i]['sum1']."</a>"; }else{ echo "<code><b>".$luxbrand_array[$i]['sum1']."</b></code>"; }; ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div></div>
-                        <div class="col-md-4">
-                        <div class="box box-success">
-                            <div class="box-body">
-                                <table class="table table-bordered table-striped" id="tabletask" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th>Fashion Brand</th>
-                                            <th>Balance(Pcs.)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    <?php for($i=0; $i<count($fashionbrand_array); $i++) { ?>
-                                        <tr>
-                                            <td><?php echo $fashionbrand_array[$i]['PTDesc1']; ?></td>
-                                            <td width="100"><?php if($fashionbrand_array[$i]['sum1']>0) { echo "<a href='".site_url("jes/watch_viewInventory_product")."/".$fashionbrand_array[$i]['PTCode']."'>".$fashionbrand_array[$i]['sum1']."</a>"; }else{ echo "<code><b>".$fashionbrand_array[$i]['sum1']."</b></code>"; }; ?></td>
-                                        </tr>
-                                    <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                            </div></div>
                     </div>
                 </div>
             </div>
@@ -236,65 +173,67 @@ $(document).ready(function()
             window.open("<?php echo site_url('jes/watch_viewInventory_whtype')."/".$remark; ?>"+"/"+row.y);
         });
           
-        
-        //BAR CHART - CT
-        if ($('#bar-ct').length > 0)
+        //BAR CHART - HQ
+        if ($('#bar-hq').length > 0)
         var ct = Morris.Bar({
-          element: 'bar-ct',
+          element: 'bar-hq',
           resize: true,
           data: [
-              <?php for($i=0; $i<count($dataset_ct); $i++) { ?>
-            {y: <?php echo json_encode($dataset_ct[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_ct[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_ct[$i][2], JSON_NUMERIC_CHECK)); ?>},
+              <?php for($i=0; $i<count($dataset_hq); $i++) { ?>
+            {y: <?php echo json_encode($dataset_hq[$i][1]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_hq[$i][2], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_hq[$i][0])); ?>},
               <?php } ?>
           ],
-          barColors: ['#00a65a', '#605ca8'],
+          barColors: ['#FE2E64'],
           xkey: 'y',
-          ykeys: ['a', 'b'],
-          labels: ['Luxury Watch', 'Fashion Watch'],
+          ykeys: ['a'],
+          labels: ['จำนวน'],
           xLabelMargin: 10,
-          hideHover: 'auto'
+          hideHover: 'auto',
+          xLabelAngle: 30
         }).on('click', function(i, row){
-            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_whtype_brand')."/".$remark; ?>"+"/"+row.b);
+        });    
+    
+        // BAR CHART - ONLY Fashion
+        if ($('#bar-fashion').length > 0)
+        var ct = Morris.Bar({
+          element: 'bar-fashion',
+          resize: true,
+          data: [
+              <?php for($i=0; $i<count($dataset_fashion); $i++) { ?>
+            {y: <?php echo json_encode($dataset_fashion[$i][1]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_fashion[$i][2], JSON_NUMERIC_CHECK)); ?>, b: <?php echo json_encode($dataset_fashion[$i][0]); ?>},
+              <?php } ?>
+          ],
+          barColors: ['#605ca8'],
+          xkey: 'y',
+          ykeys: ['a'],
+          labels: ['จำนวน'],
+          xLabelMargin: 10,
+          hideHover: 'auto',
+          xLabelAngle: 30
+        }).on('click', function(i, row){
+            window.open("<?php echo site_url('jes/watch_viewInventory_product'); ?>"+"/"+row.b);
         });
-          
-        //BAR CHART - MG
-        if ($('#bar-mg').length > 0)
+    
+        // BAR CHART - ONLY LUXURY
+        if ($('#bar-luxury').length > 0)
         var ct = Morris.Bar({
-          element: 'bar-mg',
+          element: 'bar-luxury',
           resize: true,
           data: [
-              <?php for($i=0; $i<count($dataset_mg); $i++) { ?>
-            {y: <?php echo json_encode($dataset_mg[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_mg[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_mg[$i][2], JSON_NUMERIC_CHECK)); ?>},
+              <?php for($i=0; $i<count($dataset_lux); $i++) { ?>
+            {y: <?php echo json_encode($dataset_lux[$i][1]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_lux[$i][2], JSON_NUMERIC_CHECK)); ?>, b: <?php echo json_encode($dataset_lux[$i][0]); ?>},
               <?php } ?>
           ],
-          barColors: ['#00a65a', '#605ca8'],
+          barColors: ['#00a65a'],
           xkey: 'y',
-          ykeys: ['a', 'b'],
-          labels: ['Luxury Watch', 'Fashion Watch'],
+          ykeys: ['a'],
+          labels: ['จำนวน'],
           xLabelMargin: 10,
-          hideHover: 'auto'
+          hideHover: 'auto',
+          xLabelAngle: 30
         }).on('click', function(i, row){
-            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
-        });
-          
-        //BAR CHART - RB
-        if ($('#bar-rb').length > 0)
-        var ct = Morris.Bar({
-          element: 'bar-rb',
-          resize: true,
-          data: [
-              <?php for($i=0; $i<count($dataset_rb); $i++) { ?>
-            {y: <?php echo json_encode($dataset_rb[$i][0]); ?>, a: <?php echo str_replace( ',', '', json_encode($dataset_rb[$i][1], JSON_NUMERIC_CHECK)); ?>, b: <?php echo str_replace( ',', '', json_encode($dataset_rb[$i][2], JSON_NUMERIC_CHECK)); ?>},
-              <?php } ?>
-          ],
-          barColors: ['#00a65a', '#605ca8'],
-          xkey: 'y',
-          ykeys: ['a', 'b'],
-          labels: ['Luxury Watch', 'Fashion Watch'],
-          xLabelMargin: 10,
-          hideHover: 'auto'
-        }).on('click', function(i, row){
-            window.open("<?php echo site_url('jes/watch_viewInventory_branch')."/".$remark; ?>"+"/"+row.y);
+            window.open("<?php echo site_url('jes/watch_viewInventory_product'); ?>"+"/"+row.b);
         });
     
     $('#fancyboxall').fancybox({ 

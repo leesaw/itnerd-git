@@ -230,6 +230,20 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
+    function getInventoryWatch_branch_pt_item($whcode, $ptcode, $remark)
+    {
+        $db2 = $this->load->database('db3',TRUE);
+        $db2->select("IHItemCode as itemcode, IHBarcode, ITRefCode, ITShortDesc1,ITShortDesc2 as ITShortDesc2, ITLongDesc1, FLOOR(IHQtyCal) as IHQtyCal, pl.WHDesc1 as WHDesc1, pl.WHCode as WHCode, ITSRP", FALSE);
+        $db2->from("ProductList as pl");
+        $db2->join("ProductType","PTCode=IFProdType","left");
+        $db2->join("Warehouse wh2","wh2.WHCode=pl.WHCode","left");
+        $db2->where("IFProdType", $ptcode);
+        $db2->where("wh2.WHType", $whcode);
+        if ($remark != "") $db2->like("PTRemarks", $remark);
+        $query = $db2->get();
+        return $query->result();
+    }
+    
     function getInventoryWatch_product_item($pt)
     {
         $db2 = $this->load->database('db3',TRUE);
@@ -472,7 +486,7 @@ Class Jes_model extends CI_Model
         return $query->result();
     }
     
-    function getRefcode_fullsearch($refcode,$brand,$minprice,$maxprice)
+    function getRefcode_fullsearch($refcode,$brand,$warehouse,$minprice,$maxprice)
     {
         $keyword = explode(" ",$refcode);
         
@@ -491,7 +505,8 @@ Class Jes_model extends CI_Model
             }
         }
         
-        if ($brand!="0") $db2->like("IFProdType", $brand);
+        if ($brand!="0") $db2->where("IFProdType", $brand);
+        if ($warehouse!="0") $db2->where("WHCode", $warehouse);
         if (($minprice !="") && ($minprice>=0)) $db2->where("ITSRP >=", $minprice);
         if (($maxprice !="") && ($maxprice>=0)) $db2->where("ITSRP <=", $maxprice);
         $query = $db2->get();
