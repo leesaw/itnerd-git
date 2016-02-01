@@ -516,7 +516,7 @@ function report_filter()
     
     if ($this->input->post("action")==0) {
         // When you need stock balance report
-        
+        $warehouse = $warehouse;
         $product = array();
         for($i=0; $i<count($producttype); $i++) {
             $query = $this->jes_model->getOneProductType($producttype[$i]);
@@ -526,9 +526,11 @@ function report_filter()
         }
 
         $stock = array();
+        $whcode = array();
         for ($i=0; $i<$count; $i++) {
             for ($j=0; $j<count($warehouse[$i]); $j++) {
                 if ($warehouse[$i][$j] !="") {
+                    $whcode = $warehouse[$i][$j];
                     $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
                     foreach($query as $loop) $whname = $loop->WHDesc1;
 
@@ -544,7 +546,7 @@ function report_filter()
 
         $this->session->set_flashdata("sessionproduct", $product);
         $this->session->set_flashdata("sessionproducttype", $producttype);
-        $this->session->set_flashdata("sessionwarehouse", $warehouse);
+        $this->session->set_flashdata("sessionwarehouse", $whcode);
 
         $data['title'] = "NGG|IT Nerd - Report";
         $this->load->view('JES/watch/report_filter',$data);
@@ -567,8 +569,14 @@ function exportExcel_stock()
     $warehouse = $this->session->flashdata("sessionwarehouse");
     $product = $this->session->flashdata("sessionproduct");  
     $producttype = $this->session->flashdata("sessionproducttype");  
-
+    //$stock = $this->session->flashdata("sessionstock");  
+    /*
+    $this->session->set_flashdata("sessionproduct", $product);
+    $this->session->set_flashdata("sessionproducttype", $producttype);
+    $this->session->set_flashdata("sessionwarehouse", $warehouse);
+    */
     $stock = array();
+    /*
     for ($i=0; $i<count($warehouse); $i++) {
         for ($j=0; $j<count($warehouse[$i]); $j++) {
             if ($warehouse[$i][$j] !="") {
@@ -577,6 +585,15 @@ function exportExcel_stock()
                 
                 $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
             }
+        }
+    }
+    */
+    for ($i=0; $i<count($warehouse); $i++) {
+        if ($warehouse[$i]!="") {
+            $query = $this->jes_model->getOneWareHouseName($warehouse[$i]);
+            foreach($query as $loop) $whname = $loop->WHDesc1;
+                
+            $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i],$producttype), "whname" => $whname);
         }
     }
     
@@ -588,7 +605,7 @@ function exportExcel_stock()
     $this->excel->getActiveSheet()->setTitle('Stock_Balance');
 
     //$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "ทองคำแท่ง (96.5)");
-    $this->excel->getActiveSheet()->setCellValue('A1', 'Warehouse');
+    $this->excel->getActiveSheet()->setCellValue('A1', "cc:".count($warehouse));
     $char = 'B';
     $count = 0;
     for($i=0; $i<count($product); $i++) {
@@ -644,6 +661,9 @@ function exportExcel_stock_itemlist()
 {
     $warehouse = $this->session->flashdata("sessionwarehouse");
     $producttype = $this->session->flashdata("sessionproducttype");  
+    
+    $this->session->set_flashdata("sessionproducttype", $producttype);
+    $this->session->set_flashdata("sessionwarehouse", $warehouse);
     
     $item_array = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
     
@@ -720,9 +740,84 @@ function show_refcode()
             $data['refcode_array'] = array();
     else
         $data['refcode_array'] = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$warehouse,$minprice,$maxprice);
+    
     $data['refcode'] = $refcode;
+    
+    $this->session->set_flashdata("ssrefcode", $refcode);
+    $this->session->set_flashdata("ssbrand", $brand);
+    $this->session->set_flashdata("sswarehouse", $warehouse);
+    $this->session->set_flashdata("ssminprice", $minprice);
+    $this->session->set_flashdata("ssmaxprice", $maxprice);
+
+    
     $data['title'] = "NGG|IT Nerd - Ref Code";
     $this->load->view('JES/watch/show_refcode',$data);
+}
+    
+function exportExcel_search()
+{
+    $refcode = $this->session->flashdata("ssrefcode");
+    $brand = $this->session->flashdata("ssbrand");  
+    $warehouse = $this->session->flashdata("sswarehouse");
+    $minprice = $this->session->flashdata("ssminprice"); 
+    $maxprice = $this->session->flashdata("ssmaxprice");
+    
+    $this->session->set_flashdata("ssrefcode", $refcode);
+    $this->session->set_flashdata("ssbrand", $brand);
+    $this->session->set_flashdata("sswarehouse", $warehouse);
+    $this->session->set_flashdata("ssminprice", $minprice);
+    $this->session->set_flashdata("ssmaxprice", $maxprice);
+    
+    if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice==""))
+        if ($refcode!="")
+            $item_array = $this->jes_model->getRefcode($refcode);
+        else
+            $item_array = array();
+    else
+        $item_array = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$warehouse,$minprice,$maxprice);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Search_Items');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Barcode');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'Item Code');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref Code');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Warehouse');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Qty (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Long Description');
+    
+    
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->IHBarcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->itemcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->ITRefCode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->WHDesc1." (".$loop->WHCode.")");
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->IHQtyCal);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->ITSRP));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->ITShortDesc2." ".$loop->ITShortDesc1);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->ITLongDesc1);
+        $row++;
+    }
+    
+
+    $filename='timepieces_search.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 }

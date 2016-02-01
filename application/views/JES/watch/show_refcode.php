@@ -30,7 +30,9 @@
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-default">
-					<div class="panel-heading"></div>
+					<div class="panel-heading">
+                        <a class="btn btn-success" href="<?php echo site_url("jes/exportExcel_search"); ?>"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</a>
+                    </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
@@ -144,7 +146,7 @@ $(document).ready(function()
  
             // Update footer
             $( api.column( 4 ).footer() ).html(
-                pageTotal+' ('+total+')'
+                total+' ('+pageTotal+')'
             );
         }
     });
