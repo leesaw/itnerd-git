@@ -12,7 +12,20 @@
 			<div class="col-xs-12">
                 <div class="panel panel-primary">
 					<div class="panel-heading">
-                        <a class="btn btn-success" href="<?php echo site_url("jes/exportExcel_stock"); ?>"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</a>
+                        <form action="<?php echo site_url("jes/exportExcel_stock"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                    <?php
+                        foreach($producttype as $value)
+                        {
+                          echo '<input type="hidden" name="producttype[]" value="'. $value. '">';
+                        }
+                            
+                        foreach($warehouse as $value)
+                        {
+                          echo '<input type="hidden" name="warehouse[]" value="'. $value. '">';
+                        }
+                    ?>
+                        </form>
                     </div>
                     <div class="panel-body table-responsive">
                         <?php $count=0; ?>

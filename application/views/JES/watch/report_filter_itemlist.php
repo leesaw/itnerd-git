@@ -12,7 +12,20 @@
 			<div class="col-xs-12">
                 <div class="panel panel-primary">
 					<div class="panel-heading">
-                        <a class="btn btn-success" href="<?php echo site_url("jes/exportExcel_stock_itemlist"); ?>"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</a>
+                        <form action="<?php echo site_url("jes/exportExcel_stock_itemlist"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                    <?php
+                        foreach($producttype as $value)
+                        {
+                          echo '<input type="hidden" name="producttype[]" value="'. $value. '">';
+                        }
+                            
+                        foreach($warehouse as $value)
+                        {
+                          echo '<input type="hidden" name="warehouse[]" value="'. $value. '">';
+                        }
+                    ?>
+                        </form>
                     </div>
                     <div class="panel-body table-responsive">
                         <?php $loading = base_url()."dist/img/ajax-loader.gif";  ?>
@@ -44,7 +57,12 @@
                                     </tr>
                                     <?php } ?>
 								</tbody>
-                                
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="7" style="text-align:right">จำนวนทั้งหมด:</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
 							</table>
                     </div>
                 </div>
@@ -61,9 +79,38 @@
 $(document).ready(function()
 {    
     $('#tablebarcode').dataTable({
-        oLanguage: {
-      sLoadingRecords: '<img src="<?php echo json_encode($loading); ?>">'
-    }
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            
+            // Total over this page
+            pageTotal = api
+                .column( 7, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                total+' ('+pageTotal+')'
+            );
+        }
     });
     
     $('#fancyboxall').fancybox({ 

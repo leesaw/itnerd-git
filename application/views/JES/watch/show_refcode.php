@@ -31,7 +31,14 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        <a class="btn btn-success" href="<?php echo site_url("jes/exportExcel_search"); ?>"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</a>
+                        <form action="<?php echo site_url("jes/exportExcel_search"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
+                        <input type="hidden" name="brand" value="<?php echo $brand; ?>">
+                        <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
+                        <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
+                        <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
+                        </form>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">

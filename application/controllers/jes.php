@@ -516,7 +516,6 @@ function report_filter()
     
     if ($this->input->post("action")==0) {
         // When you need stock balance report
-        $warehouse = $warehouse;
         $product = array();
         for($i=0; $i<count($producttype); $i++) {
             $query = $this->jes_model->getOneProductType($producttype[$i]);
@@ -530,7 +529,7 @@ function report_filter()
         for ($i=0; $i<$count; $i++) {
             for ($j=0; $j<count($warehouse[$i]); $j++) {
                 if ($warehouse[$i][$j] !="") {
-                    $whcode = $warehouse[$i][$j];
+                    $whcode[] = $warehouse[$i][$j];
                     $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
                     foreach($query as $loop) $whname = $loop->WHDesc1;
 
@@ -540,24 +539,29 @@ function report_filter()
         }
 
         $data['stock'] = $stock;
-        //$data['warehouse'] = $warehouse;
+        $data['warehouse'] = $whcode;
         $data['producttype'] = $producttype;
         $data['product'] = $product;
-
-        $this->session->set_flashdata("sessionproduct", $product);
-        $this->session->set_flashdata("sessionproducttype", $producttype);
-        $this->session->set_flashdata("sessionwarehouse", $whcode);
 
         $data['title'] = "NGG|IT Nerd - Report";
         $this->load->view('JES/watch/report_filter',$data);
         
     }elseif($this->input->post("action")==1) {
         // When you need stock item list
-            
-        $data['item_array'] = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
         
-        $this->session->set_flashdata("sessionproducttype", $producttype);
-        $this->session->set_flashdata("sessionwarehouse", $warehouse);
+        $whcode = array();
+        for ($i=0; $i<$count; $i++) {
+            for ($j=0; $j<count($warehouse[$i]); $j++) {
+                if ($warehouse[$i][$j] !="") {
+                    $whcode[] = $warehouse[$i][$j];
+                }
+            }
+        }
+            
+        $data['item_array'] = $this->jes_model->reportStock_itemlist_store_product($whcode, $producttype);
+        
+        $data['warehouse'] = $whcode;
+        $data['producttype'] = $producttype;
         
         $data['title'] = "NGG|IT Nerd - Report";
         $this->load->view('JES/watch/report_filter_itemlist',$data);
@@ -566,28 +570,24 @@ function report_filter()
     
 function exportExcel_stock()
 {
-    $warehouse = $this->session->flashdata("sessionwarehouse");
-    $product = $this->session->flashdata("sessionproduct");  
-    $producttype = $this->session->flashdata("sessionproducttype");  
-    //$stock = $this->session->flashdata("sessionstock");  
     /*
-    $this->session->set_flashdata("sessionproduct", $product);
-    $this->session->set_flashdata("sessionproducttype", $producttype);
-    $this->session->set_flashdata("sessionwarehouse", $warehouse);
+    $warehouse = $this->session->flashdata("sswarehouse");
+    $producttype = $this->session->flashdata("ssproducttype");  
     */
+    
+    $warehouse = $this->input->post("warehouse");
+    $producttype = $this->input->post("producttype");
+
     $stock = array();
-    /*
-    for ($i=0; $i<count($warehouse); $i++) {
-        for ($j=0; $j<count($warehouse[$i]); $j++) {
-            if ($warehouse[$i][$j] !="") {
-                $query = $this->jes_model->getOneWareHouseName($warehouse[$i][$j]);
-                foreach($query as $loop) $whname = $loop->WHDesc1;
-                
-                $stock[] = array("number" => $this->jes_model->reportStock_store_product($warehouse[$i][$j],$producttype), "whname" => $whname);
-            }
+
+    $product = array();
+    for($i=0; $i<count($producttype); $i++) {
+        $query = $this->jes_model->getOneProductType($producttype[$i]);
+        foreach($query as $loop) {
+            $product[] = $loop->PTDesc1;
         }
     }
-    */
+    
     for ($i=0; $i<count($warehouse); $i++) {
         if ($warehouse[$i]!="") {
             $query = $this->jes_model->getOneWareHouseName($warehouse[$i]);
@@ -605,7 +605,7 @@ function exportExcel_stock()
     $this->excel->getActiveSheet()->setTitle('Stock_Balance');
 
     //$this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, 1, "ทองคำแท่ง (96.5)");
-    $this->excel->getActiveSheet()->setCellValue('A1', "cc:".count($warehouse));
+    $this->excel->getActiveSheet()->setCellValue('A1', "Warehouse");
     $char = 'B';
     $count = 0;
     for($i=0; $i<count($product); $i++) {
@@ -615,7 +615,7 @@ function exportExcel_stock()
         $sum_product[$i] = 0;
     }
     
-    $this->excel->getActiveSheet()->setCellValue($char.'1', "Sum");
+    $this->excel->getActiveSheet()->setCellValue($char.'1', "รวม");
     
     $row = 2;
     for($i=0; $i<count($stock); $i++) {
@@ -637,7 +637,7 @@ function exportExcel_stock()
         $row++;
     }
     
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, "Sum");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, "รวม");
     $column = 1;
     for($i=0; $i<count($product); $i++) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow($column, $row, $sum_product[$i]);
@@ -659,11 +659,8 @@ function exportExcel_stock()
     
 function exportExcel_stock_itemlist()
 {
-    $warehouse = $this->session->flashdata("sessionwarehouse");
-    $producttype = $this->session->flashdata("sessionproducttype");  
-    
-    $this->session->set_flashdata("sessionproducttype", $producttype);
-    $this->session->set_flashdata("sessionwarehouse", $warehouse);
+    $warehouse = $this->input->post("warehouse");
+    $producttype = $this->input->post("producttype");
     
     $item_array = $this->jes_model->reportStock_itemlist_store_product($warehouse, $producttype);
     
@@ -742,31 +739,22 @@ function show_refcode()
         $data['refcode_array'] = $this->jes_model->getRefcode_fullsearch($refcode,$brand,$warehouse,$minprice,$maxprice);
     
     $data['refcode'] = $refcode;
-    
-    $this->session->set_flashdata("ssrefcode", $refcode);
-    $this->session->set_flashdata("ssbrand", $brand);
-    $this->session->set_flashdata("sswarehouse", $warehouse);
-    $this->session->set_flashdata("ssminprice", $minprice);
-    $this->session->set_flashdata("ssmaxprice", $maxprice);
+    $data['brand'] = $brand;
+    $data['warehouse'] = $warehouse;
+    $data['minprice'] = $minprice;
+    $data['maxprice'] = $maxprice;
 
-    
     $data['title'] = "NGG|IT Nerd - Ref Code";
     $this->load->view('JES/watch/show_refcode',$data);
 }
     
 function exportExcel_search()
 {
-    $refcode = $this->session->flashdata("ssrefcode");
-    $brand = $this->session->flashdata("ssbrand");  
-    $warehouse = $this->session->flashdata("sswarehouse");
-    $minprice = $this->session->flashdata("ssminprice"); 
-    $maxprice = $this->session->flashdata("ssmaxprice");
-    
-    $this->session->set_flashdata("ssrefcode", $refcode);
-    $this->session->set_flashdata("ssbrand", $brand);
-    $this->session->set_flashdata("sswarehouse", $warehouse);
-    $this->session->set_flashdata("ssminprice", $minprice);
-    $this->session->set_flashdata("ssmaxprice", $maxprice);
+    $refcode = $this->input->post("refcode");
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+    $minprice = $this->input->post("minprice");
+    $maxprice = $this->input->post("maxprice");
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice==""))
         if ($refcode!="")

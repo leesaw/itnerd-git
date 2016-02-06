@@ -98,6 +98,22 @@ $db['db3']['swap_pre'] = '';
 $db['db3']['autoinit'] = TRUE;
 $db['db3']['stricton'] = FALSE;
 
+$db['db4']['hostname'] = 'localhost';
+$db['db4']['username'] = 'root';
+$db['db4']['password'] = 'root';
+$db['db4']['database'] = 'nerd_db';
+$db['db4']['dbdriver'] = 'mysql';
+$db['db4']['dbprefix'] = '';
+$db['db4']['pconnect'] = TRUE;
+$db['db4']['db_debug'] = TRUE;
+$db['db4']['cache_on'] = FALSE;
+$db['db4']['cachedir'] = '';
+$db['db4']['char_set'] = 'utf8';
+$db['db4']['dbcollat'] = 'utf8_general_ci';
+$db['db4']['swap_pre'] = '';
+$db['db4']['autoinit'] = TRUE;
+$db['db4']['stricton'] = FALSE;
+
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */

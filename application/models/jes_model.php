@@ -433,14 +433,12 @@ Class Jes_model extends CI_Model
         
         $count =0;
         for ($i=0; $i<count($warehouse); $i++) {
-            for ($j=0; $j<count($warehouse[$i]); $j++) {
-                if ($warehouse[$i][$j] !="") {
-                    if ($count==0) {
-                        $sql .= " AND (WHCode='".$warehouse[$i][$j]."'";
-                        $count++;
-                    }
-                    $sql .= " OR WHCode='".$warehouse[$i][$j]."'";
+            if ($warehouse[$i] !="") {
+                if ($count==0) {
+                    $sql .= " AND (WHCode='".$warehouse[$i]."'";
+                    $count++;
                 }
+                $sql .= " OR WHCode='".$warehouse[$i]."'";
             }
         }
         if ($count>0) $sql .=")";

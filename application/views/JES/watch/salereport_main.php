@@ -34,25 +34,25 @@
     $sum_lux_shop = 0;
     $sum_fashion_shop = 0;
     foreach($sale_fashion_brand as $loop) {
-        $dataset_fashion_brand[] = array($loop->PTDesc1, number_format($loop->sum1,2, '.', ','));
+        $dataset_fashion_brand[] = array($loop->PTDesc1, number_format($loop->sum1,2, '.', ','), $loop->PDProdType);
         $sum_fashion_brand += $loop->sum1;
     }
     
     foreach($sale_luxury_brand as $loop) {
-        $dataset_luxury_brand[] = array($loop->PTDesc1, number_format($loop->sum1,2, '.', ','));
+        $dataset_luxury_brand[] = array($loop->PTDesc1, number_format($loop->sum1,2, '.', ','), $loop->PDProdType);
         $sum_lux_brand += $loop->sum1;
     }
     
     for($i=0; $i<count($sale_fashion_shop); $i++) {
         if ($sale_fashion_shop[$i]['sum1']>0) {
-            $dataset_fashion_shop[] = array($sale_fashion_shop[$i]['WTDesc1'], number_format($sale_fashion_shop[$i]['sum1'],2, '.', ','));
+            $dataset_fashion_shop[] = array($sale_fashion_shop[$i]['WTDesc1'], number_format($sale_fashion_shop[$i]['sum1'],2, '.', ','),$sale_fashion_shop[$i]['WTCode'] );
             $sum_fashion_shop += $sale_fashion_shop[$i]['sum1'];
         }
     }
     
     for($i=0; $i<count($sale_luxury_shop); $i++) {
         if ($sale_luxury_shop[$i]['sum1']>0) {
-            $dataset_luxury_shop[] = array($sale_luxury_shop[$i]['WTDesc1'], number_format($sale_luxury_shop[$i]['sum1'],2, '.', ','));
+            $dataset_luxury_shop[] = array($sale_luxury_shop[$i]['WTDesc1'], number_format($sale_luxury_shop[$i]['sum1'],2, '.', ','),$sale_luxury_shop[$i]['WTCode'] );
             $sum_lux_shop += $sale_luxury_shop[$i]['sum1'];
         }
     }
@@ -149,6 +149,17 @@
                     </div>
                         
                     </div>
+                    <form id="viewBrand" method="post" action="<?php echo site_url('jes_salereport/sale_viewBrand_filter'); ?>" target="_blank">
+                        <input type="hidden" name="startdate" value="<?php echo $start_date ?>" />
+                        <input type="hidden" name="enddate" value="<?php echo $end_date ?>" />
+                        <input type="hidden" name="code" value="" />
+                    </form>
+                    <form id="viewShop" method="post" action="<?php echo site_url('jes_salereport/sale_viewShop_filter'); ?>" target="_blank">
+                        <input type="hidden" name="startdate" value="<?php echo $start_date ?>" />
+                        <input type="hidden" name="enddate" value="<?php echo $end_date ?>" />
+                        <input type="hidden" name="code" value="" />
+                        <input type="hidden" name="remark" value="" />
+                    </form>
                 </div>
             </div>
         </div>
@@ -194,12 +205,16 @@ $(document).ready(function()
         resize: true,
         data: [
             <?php for($i=0; $i<count($dataset_luxury_brand); $i++) { ?>
-        {label: <?php echo json_encode($dataset_luxury_brand[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_luxury_brand[$i][1], JSON_NUMERIC_CHECK)); ?>},
+        {label: <?php echo json_encode($dataset_luxury_brand[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_luxury_brand[$i][1], JSON_NUMERIC_CHECK)); ?>, code: <?php echo json_encode($dataset_luxury_brand[$i][2]); ?>},
             <?php } ?>
         ],
         colors: colors_array,
         hideHover: 'auto'
-    });
+    }).on('click', function(i, row){
+            var f = document.getElementById('viewBrand');
+            f.code.value = row.code;
+            f.submit();
+        });
     
     
     
@@ -209,12 +224,17 @@ $(document).ready(function()
         resize: true,
         data: [
             <?php for($i=0; $i<count($dataset_fashion_brand); $i++) { ?>
-        {label: <?php echo json_encode($dataset_fashion_brand[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_fashion_brand[$i][1], JSON_NUMERIC_CHECK)); ?>},
+        {label: <?php echo json_encode($dataset_fashion_brand[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_fashion_brand[$i][1], JSON_NUMERIC_CHECK)); ?>,
+         code: <?php echo json_encode($dataset_fashion_brand[$i][2]); ?>},
             <?php } ?>
         ],
         colors: colors_array,
         hideHover: 'auto'
-    });
+    }).on('click', function(i, row){
+            var f = document.getElementById('viewBrand');
+            f.code.value = row.code;
+            f.submit();
+        });
     
     if (($('#bar-lux2').length > 0) && (dataset_lux2))
     var morris = Morris.Donut({
@@ -222,12 +242,18 @@ $(document).ready(function()
         resize: true,
         data: [
             <?php for($i=0; $i<count($dataset_luxury_shop); $i++) { ?>
-        {label: <?php echo json_encode($dataset_luxury_shop[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_luxury_shop[$i][1], JSON_NUMERIC_CHECK)); ?>},
+        {label: <?php echo json_encode($dataset_luxury_shop[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_luxury_shop[$i][1], JSON_NUMERIC_CHECK)); ?>,
+         code: <?php echo json_encode($dataset_luxury_shop[$i][2]); ?>},
             <?php } ?>
         ],
         colors: colors_array,
         hideHover: 'auto'
-    });
+    }).on('click', function(i, row){
+            var f = document.getElementById('viewShop');
+            f.code.value = row.code;
+            f.remark.value = "_L";
+            f.submit();
+        });
     
     
     
@@ -237,12 +263,18 @@ $(document).ready(function()
         resize: true,
         data: [
             <?php for($i=0; $i<count($dataset_fashion_shop); $i++) { ?>
-        {label: <?php echo json_encode($dataset_fashion_shop[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_fashion_shop[$i][1], JSON_NUMERIC_CHECK)); ?>},
+        {label: <?php echo json_encode($dataset_fashion_shop[$i][0]); ?>, value: <?php echo str_replace( ',', '', json_encode($dataset_fashion_shop[$i][1], JSON_NUMERIC_CHECK)); ?>,
+         code: <?php echo json_encode($dataset_fashion_shop[$i][2]); ?>},
             <?php } ?>
         ],
         colors: colors_array,
         hideHover: 'auto'
-    });
+    }).on('click', function(i, row){
+            var f = document.getElementById('viewShop');
+            f.code.value = row.code;
+            f.remark.value = "_F";
+            f.submit();
+        });
 
 });
     

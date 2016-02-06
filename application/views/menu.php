@@ -115,17 +115,17 @@
             <li class="header">Stock</li>
             <li>
               <a href="<?php echo site_url("jes/watch"); ?>">
-                <i class="fa fa-home"></i> <span>Dashboard</span>
+                <i class="fa fa-home"></i> Dashboard
               </a>
             </li>
             <li>
               <a href="<?php echo site_url("jes/report"); ?>">
-                <i class="fa fa-file-o"></i> <span>Report</span>
+                <i class="fa fa-file-o"></i> Report
               </a>
             </li>
             <li>
               <a href="<?php echo site_url("jes/search_refcode"); ?>">
-                <i class="fa fa-search"></i> <span>Search</span>
+                <i class="fa fa-search"></i> Search
               </a>
             </li>
             <?php if ($this->session->userdata('sessstatus') == 99) { ?>
@@ -142,13 +142,11 @@
                 <i class="fa fa-bar-chart"></i> <span>Graph Report</span>
               </a>
             </li>
-            <!--
             <li>
               <a href="<?php echo site_url("jes_salereport/salereport_table"); ?>">
                 <i class="fa fa-file-o"></i> <span>Sale Report</span>
               </a>
             </li>
-            -->
             <?php } } ?>
             <?php if (($this->session->userdata('sessstatus') == 18) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') == 3)) { ?>
               <li>
