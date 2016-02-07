@@ -22,22 +22,19 @@ class Login extends CI_Controller {
              'sessusername' => $row->username,
              'sessfirstname' => $row->firstname,
              'sesslastname' => $row->lastname,
-             'sessstatus' => $row->status,
-             'sessteam' => $row->team_id,
-             'sesscompany' => $row->ngg_company_id,
-             'sessposition' => $row->ngg_position_id
+             'sessstatus' => $row->status
            );
         }
         $this->session->set_userdata($sess_array); 
-        if (($this->session->userdata('sessstatus') < 10) || ($this->session->userdata('sessstatus') == 99)) {
+        if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 99)) {
             redirect('main', 'refresh');
-        }elseif ($this->session->userdata('sesscompany') == 1) {
+        }elseif ($this->session->userdata('sessstatus') > 2) {
             redirect('jes/watch', 'refresh');
         }
         //redirect('main', 'refresh');
 
    }else{
-        $data['title'] = "NGG|IT Nerd";
+        $data['title'] = "NGG| Nerd";
         $this->load->helper(array('form'));
         $this->load->view('login_view',$data);
    }
@@ -49,7 +46,7 @@ class Login extends CI_Controller {
     $query = $this->user->getAllUsers();
     $data['user_array'] = $query;
        
-    $data['title'] = "NGG|IT Nerd - Users";
+    $data['title'] = "NGG| Nerd - Users";
     $this->load->view('user/user',$data);      
  }
     
@@ -64,7 +61,7 @@ class Login extends CI_Controller {
     
  function addUser()
  {
-    $data['title'] = "NGG|IT Nerd - New User";
+    $data['title'] = "NGG| Nerd - New User";
     $this->load->view('user/adduser',$data);   
  }
     
@@ -100,7 +97,7 @@ class Login extends CI_Controller {
         $this->session->set_flashdata('showresult', 'fail');
     }
 
-    $data['title'] = "NGG|IT Nerd - New User";
+    $data['title'] = "NGG| Nerd - New User";
     redirect('login/addUser','refresh');
  }
     
@@ -112,7 +109,7 @@ class Login extends CI_Controller {
     $query = $this->user->getOneUser($id);
     $data['user_array'] = $query;
     
-    $data['title'] = "NGG|IT Nerd - Edit User";
+    $data['title'] = "NGG| Nerd - Edit User";
     $this->load->view('user/edituser',$data);   
  }
     
@@ -142,7 +139,7 @@ class Login extends CI_Controller {
         $this->session->set_flashdata('showresult', 'fail');
     }
 
-    $data['title'] = "NGG|IT Nerd - Edit User";
+    $data['title'] = "NGG| Nerd - Edit User";
     redirect('login/edituser/'.$userid,'refresh');
     
     

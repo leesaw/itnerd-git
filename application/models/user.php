@@ -3,11 +3,12 @@ Class User extends CI_Model
 {
  function login($username, $password)
  {
-   $this -> db -> select('id, username, password, firstname, lastname, status, team_id, ngg_company_id, ngg_position_id');
+   $this -> db -> select('id, username, password, firstname, lastname, status');
    $this -> db -> from('users');
    $this -> db -> where('username', $username);
    $this -> db -> where('password', MD5($password));
    $this -> db -> where('status >', 0);
+   $this -> db -> where('enable', 1);
    $this -> db -> limit(1);
 
    $query = $this -> db -> get();
@@ -74,7 +75,7 @@ function checkpass($id, $password)
  
  function getOneUser($id=NULL)
  {
-	$this->db->select("id, username, firstname, lastname, status, team_id, ngg_company_id, ngg_position_id");
+	$this->db->select("id, username, firstname, lastname, status");
 	$this->db->from('users');			
 	$this->db->where('id', $id);	
 	$query = $this->db->get();		
