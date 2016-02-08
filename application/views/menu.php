@@ -1,5 +1,5 @@
     <header class="main-header">
-        <a href="#" class="logo"><b>NGG | </b>Nerd <i class="fa fa-fw fa-angellist"></i></a>
+        <a href="#" class="logo"><b>NGG | </b>Nerd </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
@@ -94,9 +94,11 @@
 				    <li>
                         <a href="<?php echo site_url("item/additem"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลสินค้า</a>
                     </li>
+                    <!--
 					<li>
                         <a href="<?php echo site_url("managecat"); ?>"><i class="fa fa-circle-o"></i> จัดการประเภทสินค้า</a>
                     </li>
+                    -->
                 </ul>
 
             </li>

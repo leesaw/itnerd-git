@@ -17,18 +17,24 @@ function index()
     
 function manage()
 {   
-    $query = $this->tp_item_model->getCat();
-		if($query){
-			$data['cat_array'] =  $query;
-		}else{
-			$data['cat_array'] = array();
-		}
-
-		$data['product_array'] = array();
-		$data['page'] = 0;
+    $sql = "br_enable = 1";
+    $query = $this->tp_item_model->getBrand($sql);
+	if($query){
+		$data['brand_array'] =  $query;
+	}else{
+		$data['brand_array'] = array();
+	}
+    
+    $sql = "itc_enable = 1";
+	$query = $this->tp_item_model->getItemCategory($sql);
+	if($query){
+		$data['cat_array'] =  $query;
+	}else{
+		$data['cat_array'] = array();
+	}
     
     $data['title'] = "NGG| Nerd";
-    $this->load->view('TP/main',$data);
+    $this->load->view('TP/item/allitem_view',$data);
 }
     
 function additem()
@@ -129,22 +135,21 @@ function save()
         $long= ($this->input->post('long'));
 
         $product = array(
-            'standardID' => $standardid,
-            'supplierID' => $supplierid,
-            'barcode' => $barcodeid,
-            'name' => $name,
-            'categoryID' => $categoryid,
-            'unit' => $unit,
-            'costPrice' => $cost,
-            'priceNoVAT' => $pricenovat,
-            'priceVAT' => $pricevat,
-            //'priceDiscount' => $pricediscount,
-            'detail' => $detail,
-            'lowestprice' => $lowestprice,
-            'shelf' => $shelf
+            'it_refcode' => $refcode,
+            'it_code' => $itcode,
+            'it_name' => $name,
+            'it_category_id' => $catid,
+            'it_brand_id' => $brandid,
+            'it_uom' => $uom,
+            'it_model' => $model,
+            'it_srp' => $srp,
+            'it_cost_baht' => $cost,
+            'it_short_description' => $short,
+            'it_long_description' => $long,
+            'it_min_stock' => $minstock
         );
 
-        $result = $this->product->addProduct($product);
+        $result = $this->tp_item_model->addItem($product);
         if ($result) 
             $this->session->set_flashdata('showresult', 'success');
         else
@@ -172,7 +177,23 @@ function save()
 	$this->load->view('TP/item/additem_view',$data);
 }
     
-    
+public function ajaxViewAllItem()
+{
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("it_code, it_refcode, it_name, br_name, it_model, it_srp, itc_name, it_id")
+    ->from('tp_item')
+    ->join('tp_item_category', 'it_category_id = itc_id','left')		
+    ->join('tp_brand', 'it_brand_id = br_id','left')
+    ->where('it_enable',1)
+
+    ->edit_column("it_id",'<div class="tooltip-demo">
+<a href="'.site_url("item/viewproduct/$1").'" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+<a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+</div>',"it_id");
+    echo $this->datatables->generate(); 
+}
+
 function viewSelectedCat() {
     $catid = $this->uri->segment(3);
 
@@ -198,41 +219,6 @@ function viewSelectedCat() {
     $this->load->view('product_view',$data);
 }
 	
-	public function getdatabyajax()
-	{
-		$catid = $this->uri->segment(3);
-        $this->load->library('Datatables');
-        if ($catid>0) {
-		$this->datatables
-		->select("standardID, supplierID, product.name as pname, category.name as cname, product.id as pid")
-		->from('product')
-		->join('category', 'product.categoryID = category.id')
-		->where('category.id', $catid)
-		//->edit_column("pid","$1","pid");
-		
-		->edit_column("pid",'<div class="tooltip-demo">
-	<a href="'.site_url("manageproduct/viewproduct/$1").'" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-	<a href="'.site_url("manageproduct/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-	<button class="btnDelete btn btn-danger btn-xs" onclick="del_confirm($1)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button>
-	</div>',"pid");
-        
-        }else{
-            
-        $this->datatables
-		->select("standardID, supplierID, product.name as pname, category.name as cname, product.id as pid")
-		->from('product')
-		->join('category', 'product.categoryID = category.id')
-		//->where('category.id', $catid)
-		//->edit_column("pid","$1","pid");
-		
-		->edit_column("pid",'<div class="tooltip-demo">
-	<a href="'.site_url("manageproduct/viewproduct/$1").'" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-	<a href="'.site_url("manageproduct/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-	<button class="btnDelete btn btn-danger btn-xs" onclick="del_confirm($1)" data-title="Delete" data-toggle="modal" data-target="#delete" data-placement="top" rel="tooltip" title="ลบข้อมูล"><span class="glyphicon glyphicon-trash"></span></button>
-	</div>',"pid");
-        }
-		echo $this->datatables->generate(); 
-	}
 
 	
 	
