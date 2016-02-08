@@ -12,4 +12,3 @@ Class Title extends CI_Model
 
 }
 ?>
-

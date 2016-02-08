@@ -44,4 +44,3 @@ Class Branch extends CI_Model
 
 }
 ?>
-

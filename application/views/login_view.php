@@ -6,9 +6,12 @@
 <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <b>NGG | </b>IT Nerd <i class="fa fa-fw fa-angellist"></i>
-        <br>
-          <h4>- Lemme Help You -</h4>#NGGTimepieces
+        <img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="130.5px" /> 
+          <br>
+        <b>NGG </b>| Nerd
+        <h5>0.1.0</h5>
+         
+          
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">เข้าสู่ระบบ</p>
@@ -40,6 +43,8 @@
 
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
+    
+    <center>NGG Nerd 2016 - All rights reserved</center>
 
     <?php $this->load->view('js_footer'); ?>
     <script>

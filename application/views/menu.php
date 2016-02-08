@@ -1,5 +1,5 @@
     <header class="main-header">
-        <a href="#" class="logo"><b>NGG | </b>IT Nerd <i class="fa fa-fw fa-angellist"></i></a>
+        <a href="#" class="logo"><b>NGG | </b>Nerd <i class="fa fa-fw fa-angellist"></i></a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
@@ -66,6 +66,7 @@
         <section class="sidebar">
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu">
+            <li class="header">MAIN NAVIGATION</li>
             <?php if ($this->session->userdata('sessstatus') == 99) { ?>
             <li>
               <a href="<?php echo site_url("login/users"); ?>">
@@ -78,40 +79,74 @@
               </a>
             </li>
             <?php } ?>
-            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 2)) { ?>
+            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 3)) { ?>
             <li>
-              <a href="<?php echo site_url("main"); ?>">
-                <i class="fa fa-home"></i> <span>Today</span>
+              <a href="<?php echo site_url("timepieces/main"); ?>">
+                <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("item/manage"); ?>"><i class="fa fa-circle-o"></i> จัดการสินค้า</a>
+                    </li>
+				    <li>
+                        <a href="<?php echo site_url("item/additem"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลสินค้า</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managecat"); ?>"><i class="fa fa-circle-o"></i> จัดการประเภทสินค้า</a>
+                    </li>
+                </ul>
+
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-truck"></i> <span>คลังสินค้า (Stock)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+				    <li>
+					   <a href="<?php echo site_url("managestock"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
+					</li>
+                    <li>
+                        <a href="<?php echo site_url("managestock/importstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าเข้าสต็อก</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managestock/exportstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าออกจากสต็อก</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managestock/returnstock"); ?>"><i class="fa fa-circle-o"></i> คืนสินค้า</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managestock/historyimportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าสต็อก</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managestock/historyexportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าออกจากสต็อก</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("managestock/historyreturnstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติคืนสินค้า</a>
+                    </li>
+                </ul>
+
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span>ข้อมูลลูกค้า (Customer)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("managecustomer"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลลูกค้า</a>
+                    </li>
+                    
+				    <li>
+                        <a href="<?php echo site_url("managecustomer/addcustomer"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลลูกค้า</a>
+                    </li>
+                </ul>
+
+            </li>
             <li>
-              <a href="<?php echo site_url("task/nexttask"); ?>">
-                <i class="fa fa-calendar"></i> <span>Next Tasks</span>
+              <a href="<?php echo site_url("TP/main"); ?>">
+                <i class="fa fa-usd"></i><span>ออกใบกำกับภาษี/ใบส่งสินค้า/<br>ใบเสร็จรับเงิน</span>
               </a>
             </li>
-            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
-            <li>
-              <a href="<?php echo site_url("task/teamtask"); ?>">
-                <i class="fa fa-coffee"></i> <span>Team Tasks</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("task/myteam"); ?>">
-                <i class="fa fa-users"></i> <span>My Team</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("task/main"); ?>">
-                <i class="fa fa-check-square-o"></i> <span>Completed Tasks</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("task/category"); ?>">
-                <i class="fa fa-pencil-square-o"></i> <span>Category</span>
-              </a>
-            </li>
-            <?php } } ?>
-            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sesscompany') == 1) && ($this->session->userdata('sessposition') < 3)) { ?>
+            <?php  } ?>
+            <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 3)) { ?>
             <li class="header">Stock</li>
             <li>
               <a href="<?php echo site_url("jes/watch"); ?>">

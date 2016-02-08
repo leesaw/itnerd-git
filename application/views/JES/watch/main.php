@@ -27,7 +27,6 @@
 	<!-- Main content -->
     <section class="content">
 
-            
 <?php 
     
     $dataset_brand = array();

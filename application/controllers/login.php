@@ -28,8 +28,6 @@ class Login extends CI_Controller {
         $this->session->set_userdata($sess_array); 
         if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 99)) {
             redirect('main', 'refresh');
-        }elseif ($this->session->userdata('sessstatus') > 2) {
-            redirect('jes/watch', 'refresh');
         }
         //redirect('main', 'refresh');
 

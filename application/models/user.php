@@ -4,7 +4,7 @@ Class User extends CI_Model
  function login($username, $password)
  {
    $this -> db -> select('id, username, password, firstname, lastname, status');
-   $this -> db -> from('users');
+   $this -> db -> from('nerd_users');
    $this -> db -> where('username', $username);
    $this -> db -> where('password', MD5($password));
    $this -> db -> where('status >', 0);
@@ -26,7 +26,7 @@ Class User extends CI_Model
 function checkpass($id, $password)
  {
    $this -> db -> select('username');
-   $this -> db -> from('users');
+   $this -> db -> from('nerd_users');
    $this -> db -> where('id', $id);
    $this -> db -> where('password', $password);
    $this -> db -> limit(1);
@@ -47,7 +47,7 @@ function checkpass($id, $password)
  {
 	$this->db->select("id, username, firstname, lastname, status, team_id");
 	$this->db->order_by("id", "asc");
-	$this->db->from('users');	
+	$this->db->from('nerd_users');	
 	$this->db->where('status >', 0);
 	$query = $this->db->get();		
 	return $query->result();
@@ -57,7 +57,7 @@ function checkpass($id, $password)
  {
 	$this->db->select("id, username, firstname, lastname, status, team_id, ngg_worker_id, ngg_company_id, ngg_position_id, ngg_department_id, approval_status");
 	$this->db->order_by("id", "asc");
-	$this->db->from('users');	
+	$this->db->from('nerd_users');	
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -66,7 +66,7 @@ function checkpass($id, $password)
  {
 	$this->db->select("id, username, firstname, lastname, status");
 	$this->db->order_by("id", "asc");
-	$this->db->from('users');	
+	$this->db->from('nerd_users');	
 	$this->db->where('status >', 0);
     $this->db->where('team_id', $teamid);
 	$query = $this->db->get();		
@@ -76,7 +76,7 @@ function checkpass($id, $password)
  function getOneUser($id=NULL)
  {
 	$this->db->select("id, username, firstname, lastname, status");
-	$this->db->from('users');			
+	$this->db->from('nerd_users');			
 	$this->db->where('id', $id);	
 	$query = $this->db->get();		
 	return $query->result();
@@ -85,7 +85,7 @@ function checkpass($id, $password)
  function checkUsername($username=NULL)
  {
 	$this->db->select("id");
-	$this->db->from('users');			
+	$this->db->from('nerd_users');			
 	$this->db->where('username', $username);	
 	$query = $this->db->get();		
 	return $query->num_rows();
@@ -93,21 +93,21 @@ function checkpass($id, $password)
  
  function addUser($user=NULL)
  {		
-	$this->db->insert('users', $user);
+	$this->db->insert('nerd_users', $user);
 	return $this->db->insert_id();			
  }
  
  function delUser($id=NULL)
  {
 	$this->db->where('id', $id);
-	$this->db->delete('users'); 
+	$this->db->delete('nerd_users'); 
  }
  
  function editUser($user=NULL)
  {
 	$this->db->where('id', $user['id']);
 	unset($user['id']);
-	$query = $this->db->update('users', $user); 	
+	$query = $this->db->update('nerd_users', $user); 	
 	return $query;
  }
  
@@ -117,14 +117,14 @@ function checkpass($id, $password)
 	$user = array(
 				'status' => 0
 			);
-	$query = $this->db->update('users', $user); 	
+	$query = $this->db->update('nerd_users', $user); 	
 	return $query;
  }
     
  function getTeamOtherUserID($userid, $teamid)
  {
     $this->db->select("id, firstname, lastname");
-    $this->db->from("users");
+    $this->db->from("nerd_users");
     $this->db->where("id !=", $userid);
     $this->db->where("team_id", $teamid);
     $query = $this->db->get();		

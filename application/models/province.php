@@ -12,4 +12,3 @@ Class Province extends CI_Model
 
 }
 ?>
-

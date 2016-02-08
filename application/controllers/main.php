@@ -12,7 +12,7 @@ public $ring = 0;
 	   $this->load->model('user','',TRUE);
        
        if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
-        
+       /*
        $this->load->model('task_model','',TRUE);
         // get number of status=5
        $this->num = $this->task_model->getNumStatus5($this->session->userdata('sessid'));
@@ -21,21 +21,12 @@ public $ring = 0;
        $query = $this->task_model->getNumRing($this->session->userdata('sessid'), $this->session->userdata('sessstatus'), $this->session->userdata('sessteam'));
        if ($this->session->userdata('sessstatus')!=1) { foreach ($query as $loop) { $this->ring += $loop->ring; } }
        else { $this->ring = $query; }
+       */
         // end get ring
 	}
 	function index()
 	{
-        $data['task_array'] = $this->task_model->getTaskToday($this->session->userdata('sessid'));
-        $data['tasklate_array'] = $this->task_model->getTaskLate($this->session->userdata('sessid'));
-        $data['tasktomorrow_array'] = $this->task_model->getTaskTomorrow($this->session->userdata('sessid'));
-        
-        $data['numstatus5'] = $this->num;
-        $data['numring'] = $this->ring;
-		$data['title'] = "NGG|IT Nerd - Today";
-        if ($this->session->userdata('sesscompany') == 1) {
-            redirect('jes/watch', 'refresh');
-        }
-		$this->load->view('main_view',$data);
+
 	}
 	
 	function logout()

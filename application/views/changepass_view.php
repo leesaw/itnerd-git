@@ -4,7 +4,7 @@
 <?php $this->load->view('header_view'); ?>
 </head>
 
-<body class="skin-purple">
+<body class="skin-red">
 	<div id="wrapper">
 	<?php $this->load->view('menu'); ?>
 	
@@ -25,10 +25,10 @@
                 <div class="box box-primary">
 				<?php if ($this->session->flashdata('showresult') == 'success') {
 						echo '<div class="box-heading"><div class="alert alert-success"> ระบบทำการเปลี่ยนรหัสผ่านเรียบร้อยแล้ว</div>'; 
-						?> <button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("main"); ?>'"> กลับไปหน้าแรก </button></div> <?php
+						?> <button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("TP/main"); ?>'"> กลับไปหน้าแรก </button></div> <?php
 					  } else if ($this->session->flashdata('showresult') == 'fail') {
 					    echo '<div class="box-heading"><div class="alert alert-danger"> ระบบไม่สามารถเปลี่ยนรหัสผ่านได้</div>';
-						?> <button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("main"); ?>'"> กลับไปหน้าแรก </button></div> <?php
+						?> <button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("TP/main"); ?>'"> กลับไปหน้าแรก </button></div> <?php
 					  } else { 
 				?>
 					<div class="box-heading"><h4 class="box-title">* กรุณาใส่ข้อมูลให้ครบทุกช่อง</h4></div>
