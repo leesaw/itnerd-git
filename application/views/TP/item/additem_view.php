@@ -138,7 +138,7 @@
 						<div class="row">
 							<div class="col-md-6">
 									<button type="submit" class="btn btn-primary">  เพิ่มข้อมูลสินค้า  </button>
-									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("manageproduct"); ?>'"> ยกเลิก </button>
+									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("item/manage"); ?>'"> ยกเลิก </button>
 							</div>
 						</div>
 								

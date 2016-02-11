@@ -197,7 +197,7 @@ public function ajaxViewAllItem()
 function viewproduct()
 {
     $id = $this->uri->segment(3);
-    $sql = "where it_id = '".$id."'";
+    $sql = "it_id = '".$id."'";
     $query = $this->tp_item_model->getItem($sql);
     if($query){
         $data['product_array'] =  $query;
