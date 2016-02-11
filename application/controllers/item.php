@@ -193,6 +193,20 @@ public function ajaxViewAllItem()
 </div>',"it_id");
     echo $this->datatables->generate(); 
 }
+    
+function viewproduct()
+{
+    $id = $this->uri->segment(3);
+    $sql = "where it_id = '".$id."'";
+    $query = $this->tp_item_model->getItem($sql);
+    if($query){
+        $data['product_array'] =  $query;
+    }
+
+    $data['title'] = "NGG| Nerd - View Product";
+    $this->load->view('TP/item/viewitem_view',$data);
+}    
+
 
 function viewSelectedCat() {
     $catid = $this->uri->segment(3);
@@ -232,34 +246,7 @@ function viewSelectedCat() {
 		redirect('manageproduct', 'refresh');
 	}
 	
-	function viewproduct()
-	{
-		$id = $this->uri->segment(3);
-		$query = $this->product->getOneProduct($id);
-		if($query){
-			$data['product_array'] =  $query;
-		}
-		
-		$this->load->model('branch','',TRUE);
-		$query = $this->branch->getBranch();
-		if($query){
-			$data['branch_array'] =  $query;
-		}else{
-			$data['branch_array'] = array();
-		}
-		
-		$this->load->model('category','',TRUE);
-		$query = $this->category->getCat();
-		if($query){
-			$data['cat_array'] =  $query;
-		}else{
-			$data['cat_array'] = array();
-		}
-		
-		$data['title'] = "Pradit and Friends - View Product";
-        $data['id'] = $id;
-		$this->load->view('viewproduct_view',$data);
-	}
+	
 	
 	function viewproduct_iframe()
 	{

@@ -29,7 +29,8 @@
             </div>
             <div class="col-xs-3 col-md-3">
                 เลือกยี่ห้อ
-                    <select class="form-control-sm" name="catid" id="catid">
+                    <select class="form-control-sm" name="brandid" id="brandid">
+                        <option value='0'>เลือกทั้งหมด</option>
                     <?php 	if(is_array($brand_array)) {
                                 foreach($brand_array as $loop){
                                     echo "<option value='".$loop->br_id."'>".$loop->br_code." - ".$loop->br_name."</option>";
@@ -39,6 +40,7 @@
             <div class="col-xs-3 col-md-3">
                 เลือกประเภทสินค้า
                     <select class="form-control-sm" name="catid" id="catid">
+                        <option value='0'>เลือกทั้งหมด</option>
                         <?php 	if(is_array($cat_array)) {
 								    foreach($cat_array as $loop){
 								        echo "<option value='".$loop->itc_id."'>".$loop->itc_name."</option>";
@@ -84,17 +86,15 @@
         </section>
 	</div>
 </div>
+<?php $this->load->view('js_footer'); ?>
 <script src="<?php echo base_url(); ?>plugins/datatables/jquery.dataTables2.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.js"></script>
-<?php $this->load->view('js_footer'); ?>
 <script type="text/javascript">
 $(document).ready(function()
 {    
-    var oTable = $('#itemtable').dataTable
+    $('#itemtable').dataTable
         ({
-            "bJQueryUI": false,
             "bProcessing": true,
-            "sPaginationType": "simple_numbers",
             'bServerSide'    : false,
             "bDeferRender": true,
             'sAjaxSource'    : '<?php echo site_url("item/ajaxViewAllItem"); ?>',

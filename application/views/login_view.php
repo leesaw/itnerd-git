@@ -8,7 +8,7 @@
       <div class="login-logo">
         <img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="130.5px" /> 
           <br>
-        <b>NGG </b>| Nerd
+        <b>Nerd </b>
         <h5>0.1.0</h5>
          
           
