@@ -17,6 +17,8 @@ function index()
     
 function importstock() 
 {
+	$data['currentdate'] = date("d/m/Y");
+
     $data['title'] = "Nerd - Import Stock";
     $this->load->view("TP/warehouse/addstock_view", $data);
 }

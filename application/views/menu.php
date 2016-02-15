@@ -109,7 +109,7 @@
 					   <a href="<?php echo site_url("managestock"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
 					</li>
                     <li>
-                        <a href="<?php echo site_url("warehouse_transfer/importstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าเข้าสต็อก</a>
+                        <a href="<?php echo site_url("warehouse_transfer/importstock"); ?>"><i class="fa fa-circle-o"></i> รับสินค้าเข้าคลัง</a>
                     </li>
 					<li>
                         <a href="<?php echo site_url("managestock/exportstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าออกจากสต็อก</a>

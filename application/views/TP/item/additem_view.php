@@ -22,7 +22,7 @@
 						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
 					
 					?>
-					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
+					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่องที่มี *</strong></div>
 					
                     <div class="panel-body">
                         <div class="row">
@@ -88,7 +88,7 @@
 							</div>
 							<div class="col-md-4">
 									<div class="form-group-sm">
-                                            Short Description *
+                                            Short Description
                                             <input type="text" class="form-control" name="short" id="short" value="<?php echo set_value('short'); ?>">
 											<p class="help-block"><?php echo form_error('short'); ?></p>
                                     </div>
@@ -128,7 +128,7 @@
 						<div class="row">
 							<div class="col-md-8">
 									<div class="form-group">
-                                            Long Description *
+                                            Long Description
 											<textarea class="form-control" name="long" id="long" rows="3"><?php echo set_value('long'); ?></textarea>
 											<p class="help-block"><?php echo form_error('long'); ?></p>
                                     </div>
