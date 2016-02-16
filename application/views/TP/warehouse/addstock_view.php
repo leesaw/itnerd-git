@@ -27,49 +27,25 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <form action="#">
+                                <form action="<?php echo site_url("warehouse_transfer/save_importstock"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
                                             วันที่รับเข้า
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>
                             <div class="col-md-2">
-                                    <div class="form-group-sm">
-                                            รหัสสินค้า *
-                                            <input type="text" class="form-control" name="itcode" id="itcode" value="<?php echo set_value('itcode'); ?>">
-											<p class="help-block"><?php echo form_error('itcode'); ?></p>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
 									<div class="form-group-sm">
                                         ประเภท *
-                                        <select class="form-control" name="catid" id="catid">
-										<?php 	if(is_array($cat_array)) {
-												foreach($cat_array as $loop){
-													echo "<option value='".$loop->itc_id."'>".$loop->itc_name."</option>";
+                                        <select class="form-control" name="whid" id="whid">
+										<?php 	if(is_array($wh_array)) {
+												foreach($wh_array as $loop){
+													echo "<option value='".$loop->wh_id."'>".$loop->wh_code."-".$loop->wh_name."</option>";
 										 } } ?>
                                         </select>
-                                    </div>
-							</div>
-							<div class="col-md-2">
-									<div class="form-group-sm">
-                                        ยี่ห้อ *
-                                        <select class="form-control" name="brandid" id="brandid">
-										<?php 	if(is_array($brand_array)) {
-												foreach($brand_array as $loop){
-													echo "<option value='".$loop->br_id."'>".$loop->br_code." - ".$loop->br_name."</option>";
-										 } } ?>
-                                        </select>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
-                                            รุ่นสินค้า *
-                                            <input type="text" class="form-control" name="model" id="model" value="<?php echo set_value('model'); ?>">
-											<p class="help-block"><?php echo form_error('model'); ?></p>
                                     </div>
 							</div>
 						</div>
+						<br>
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
@@ -103,7 +79,7 @@
 						</div>	
                         <div class="row">
 							<div class="col-md-6">
-									<button type="button" class="btn btn-success"><i class='fa fa-save'></i>  บันทึก </button>
+									<button type="button" class="btn btn-success" onClick="submitform();"><i class='fa fa-save'></i>  บันทึก </button>
 							</div>
 						</div>
 						</form>
@@ -156,6 +132,8 @@ function check_product_code(refcode_input)
                     var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                     $('table tbody').append(element);
                     count_enter_form_input_product++;
+                }else{
+                	alert("ไม่พบ Ref. Code ที่ต้องการ");
                 }
 			}
 		});
@@ -172,6 +150,11 @@ function get_datepicker(id)
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 
+}
+
+function submitform()
+{
+	document.getElementById("form1").submit();
 }
 </script>
 </body>
