@@ -23,5 +23,7 @@ function importstock()
     $this->load->view("TP/warehouse/addstock_view", $data);
 }
     
+
+    
 }
 ?>

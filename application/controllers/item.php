@@ -206,6 +206,19 @@ function viewproduct()
     $data['title'] = "NGG| Nerd - View Product";
     $this->load->view('TP/item/viewitem_view',$data);
 }    
+    
+    
+function getRefcode()
+{
+    $refcode = $this->input->post("refcode");
+    $sql = "it_refcode = '".$refcode."'";
+    $result = $this->tp_item_model->getItem($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='it_id[]' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->it_name."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='text' name='it_quantity[]' value='1' width='20'></td><td>".$loop->it_uom."</td>";
+    }
+    echo $output;
+}
 
 
 function viewSelectedCat() {
