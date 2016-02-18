@@ -49,11 +49,11 @@
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group-sm col-xs-4">
+									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Code ที่รับเข้าคลัง">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
-                                        </div>
+                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -61,7 +61,6 @@
 				                                <thead>
 				                                    <tr>
 				                                        <th>Ref. Code</th>
-														<th>ชื่อ</th>
                                                         <th>ยี่ห้อ</th>
                                                         <th>รุ่น</th>
 														<th width="80">จำนวน</th>
@@ -79,7 +78,7 @@
 						</div>	
                         <div class="row">
 							<div class="col-md-6">
-									<button type="button" class="btn btn-success" onClick="submitform();"><i class='fa fa-save'></i>  บันทึก </button>
+									<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>
 							</div>
 						</div>
 						</form>
@@ -100,6 +99,7 @@ $(".alert-message").alert();
 window.setTimeout(function() { $(".alert-message").alert('close'); }, 5000);
 
 var count_enter_form_input_product = 0;
+var count_list = 0;
 
 $(document).ready(function()
 {    
@@ -116,6 +116,7 @@ $(document).ready(function()
             $(this).val('');
 		}
 	});
+    
 
 });
 function check_product_code(refcode_input)
@@ -130,8 +131,10 @@ function check_product_code(refcode_input)
 				if(data != "")
 				{
                     var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                    $('table tbody').append(element);
+                    $('table > tbody').append(element);
                     count_enter_form_input_product++;
+                    count_list++;
+                    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
                 }else{
                 	alert("ไม่พบ Ref. Code ที่ต้องการ");
                 }
@@ -142,6 +145,8 @@ function check_product_code(refcode_input)
 
 function delete_item_row(row1)
 {
+    count_list--;
+    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
     $('#row'+row1).remove();
 }
     
@@ -149,13 +154,35 @@ function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
-
 }
 
 function submitform()
 {
-	document.getElementById("form1").submit();
+    document.getElementById("savebtn").disabled = true;
+    
+    var datein = document.getElementById("datein").value;
+    var whid = document.getElementById('whid').value;
+    var it_id = document.getElementsByName('it_id');
+    var it_quantity = document.getElementsByName('it_quantity');
+    var it_array = new Array();
+    
+    for(var i=0; i<it_id.length; i++){
+        it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
+    }
+    
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("warehouse_transfer/importstock_save"); ?>" ,
+        data : {datein: datein, whid: whid, item: it_array} ,
+        success : function(data) {
+            alert("ทำการบันทึกเรียบร้อยแล้ว");
+            location.reload();
+        }
+    });
+    
+    
 }
+    
 </script>
 </body>
 </html>

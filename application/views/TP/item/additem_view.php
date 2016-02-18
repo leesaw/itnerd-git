@@ -26,23 +26,16 @@
 					
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <?php echo form_open('item/save'); ?>
-                                    <div class="form-group-sm">
-                                            Ref Code. *
+                                    <div class="form-group">
+                                            Ref. Number *
                                             <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo set_value('refcode'); ?>">
 											<p class="help-block"><?php echo form_error('refcode'); ?></p>
                                     </div>
 							</div>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
-                                            รหัสสินค้า *
-                                            <input type="text" class="form-control" name="itcode" id="itcode" value="<?php echo set_value('itcode'); ?>">
-											<p class="help-block"><?php echo form_error('itcode'); ?></p>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+                            <div class="col-md-3">
+									<div class="form-group">
                                         ประเภท *
                                         <select class="form-control" name="catid" id="catid">
 										<?php 	if(is_array($cat_array)) {
@@ -52,8 +45,8 @@
                                         </select>
                                     </div>
 							</div>
-							<div class="col-md-2">
-									<div class="form-group-sm">
+							<div class="col-md-3">
+									<div class="form-group">
                                         ยี่ห้อ *
                                         <select class="form-control" name="brandid" id="brandid">
 										<?php 	if(is_array($brand_array)) {
@@ -63,8 +56,8 @@
                                         </select>
                                     </div>
 							</div>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
+                            <div class="col-md-3">
+                                    <div class="form-group">
                                             รุ่นสินค้า *
                                             <input type="text" class="form-control" name="model" id="model" value="<?php echo set_value('model'); ?>">
 											<p class="help-block"><?php echo form_error('model'); ?></p>
@@ -72,61 +65,46 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4">
-									<div class="form-group-sm">
-                                            ชื่อสินค้า *
-                                            <input type="text" class="form-control" name="name" id="name" value="<?php echo set_value('name'); ?>">
-											<p class="help-block"><?php echo form_error('name'); ?></p>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+                            <div class="col-md-3">
+									<div class="form-group">
                                             หน่วยนับ *
                                             <input type="text" class="form-control" name="uom" id="uom" value="<?php echo set_value('uom'); ?>">
 											<p class="help-block"><?php echo form_error('uom'); ?></p>
                                     </div>
 							</div>
-							<div class="col-md-4">
-									<div class="form-group-sm">
-                                            Short Description
-                                            <input type="text" class="form-control" name="short" id="short" value="<?php echo set_value('short'); ?>">
-											<p class="help-block"><?php echo form_error('short'); ?></p>
-                                    </div>
-							</div>
-                            <!--
                             <div class="col-md-3">
-								<div class="form-group">
-                                  <label for="picfile">แนบรูปภาพ
-                                  <input type="file" id="picfile" name="picfile">
-                                </div>
-							</div>
-                            -->
-						</div>
-						<div class="row">
-                            <div class="col-md-2">
-									<div class="form-group-sm">
-                                            ราคาทุน *
-                                            <input type="text" class="form-control" name="cost" id="cost" onChange="numberWithCommas(this);" value="<?php echo set_value('cost'); ?>">
-											<p class="help-block"><?php echo form_error('cost'); ?></p>
-                                    </div>
-							</div>
-							<div class="col-md-2">
-									<div class="form-group-sm">
-                                            ราคาขาย *
-                                            <input type="text" class="form-control" name="srp" id="srp" onChange="numberWithCommas(this);" value="<?php echo set_value('srp'); ?>">
-											<p class="help-block"><?php echo form_error('srp'); ?></p>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+									<div class="form-group">
                                             จำนวนเตือนขั้นต่ำ *
                                             <input type="text" class="form-control" name="minstock" id="minstock" value="<?php echo set_value('minstock'); ?>">
 											<p class="help-block"><?php echo form_error('minstock'); ?></p>
                                     </div>
 							</div>
+							<div class="col-md-6">
+									<div class="form-group">
+                                            Short Description
+                                            <input type="text" class="form-control" name="short" id="short" value="<?php echo set_value('short'); ?>">
+											<p class="help-block"><?php echo form_error('short'); ?></p>
+                                    </div>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-8">
+                            <div class="col-md-3">
+									<div class="form-group">
+                                            ราคาทุน *
+                                            <input type="text" class="form-control" name="cost" id="cost" onChange="numberWithCommas(this);" value="<?php echo set_value('cost'); ?>">
+											<p class="help-block"><?php echo form_error('cost'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+                                            ราคาขาย *
+                                            <input type="text" class="form-control" name="srp" id="srp" onChange="numberWithCommas(this);" value="<?php echo set_value('srp'); ?>">
+											<p class="help-block"><?php echo form_error('srp'); ?></p>
+                                    </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
 									<div class="form-group">
                                             Long Description
 											<textarea class="form-control" name="long" id="long" rows="3"><?php echo set_value('long'); ?></textarea>

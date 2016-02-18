@@ -3,7 +3,7 @@ Class Tp_item_model extends CI_Model
 {
  function getItem($where)
  {
-	$this->db->select("it_id, it_code, it_name, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_original, it_cost_transfer, it_cost_baht, it_picture, it_min_stock, itc_name, br_name, br_code, bc_name");
+	$this->db->select("it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, itc_name, br_name, br_code, bc_name");
 	$this->db->from('tp_item');
 	$this->db->join('tp_item_category', 'it_category_id = itc_id','left');		
     $this->db->join('tp_brand', 'it_brand_id = br_id','left');	
@@ -47,6 +47,12 @@ Class Tp_item_model extends CI_Model
  function addItem($insert=NULL)
  {		
 	$this->db->insert('tp_item', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addItem_log($insert=NULL)
+ {		
+	$this->db->insert('log_item', $insert);
 	return $this->db->insert_id();			
  }
     

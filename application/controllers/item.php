@@ -33,7 +33,7 @@ function manage()
 		$data['cat_array'] = array();
 	}
     
-    $data['title'] = "NGG| Nerd";
+    $data['title'] = "NGG| Nerd - All Product";
     $this->load->view('TP/item/allitem_view',$data);
 }
     
@@ -80,13 +80,13 @@ function id_validate($id)
     $query = $this->db->get('tp_item');
     return $query->num_rows();
 }
-	
-function barcode_is_exist($id)
+
+function number_is_money($str)
 {
     
-    if($this->barcode_validate($id)>0)
+    if(!$this->is_money($str))
     {
-		$this->form_validation->set_message('barcode_is_exist', 'รหัสสินค้านี้มีอยู่ในระบบแล้ว');
+		$this->form_validation->set_message('number_is_money', 'กรุณาใส่จำนวนเงินเท่านั้น');
         return FALSE;
     }
     else {
@@ -94,36 +94,31 @@ function barcode_is_exist($id)
     }
 }
 
-function barcode_validate()
-{
-    $this->db->where('it_code', $this->input->post('itcode'));
-    $query = $this->db->get('tp_item');
-    return $query->num_rows();
-}
-
 function is_money($str)
 {
 	return (bool) preg_match('/^[\-+]?[0-9]+[\.,][0-9]+$/', $str);
+    //return preg_match('/^[0-9,]+$/', $str);
 }
 
 function save()
 {
     $this->form_validation->set_rules('refcode', 'refcode', 'trim|xss_clean|required|callback_refcode_is_exist');
-    $this->form_validation->set_rules('itcode', 'itcode', 'trim|xss_clean|required|callback_itcode_is_exist');
-    $this->form_validation->set_rules('name', 'Name', 'trim|xss_clean|required');
+    //$this->form_validation->set_rules('name', 'Name', 'trim|xss_clean|required');
     $this->form_validation->set_rules('model', 'model', 'trim|xss_clean|required');
-    $this->form_validation->set_rules('cost', 'cost', 'trim|xss_clean|required|call_is_money');
-    $this->form_validation->set_rules('srp', 'srp', 'trim|xss_clean|required|call_is_money');
+    $this->form_validation->set_rules('cost', 'cost', 'trim|xss_clean|required|callback_number_is_money');
+    $this->form_validation->set_rules('srp', 'srp', 'trim|xss_clean|required|callback_number_is_money');
     $this->form_validation->set_rules('minstock', 'minstock', 'trim|xss_clean|required|numeric');
     $this->form_validation->set_rules('uom', 'uom', 'trim|xss_clean|required');
+    $this->form_validation->set_rules('short', 'short', 'xss_clean');
+    $this->form_validation->set_rules('long', 'long', 'aaxss_clean');
     $this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
     $this->form_validation->set_message('numeric', 'กรุณาใส่เฉพาะตัวเลขเท่านั้น');
     $this->form_validation->set_error_delimiters('<code>', '</code>');
 
     if($this->form_validation->run() == TRUE) {
         $refcode= ($this->input->post('refcode'));
-        $itcode= ($this->input->post('itcode'));
-        $name= ($this->input->post('name'));
+        //$itcode= ($this->input->post('itcode'));
+        //$name= ($this->input->post('name'));
         $catid= ($this->input->post('catid'));
         $brandid= ($this->input->post('brandid'));
         $uom= ($this->input->post('uom'));
@@ -136,8 +131,8 @@ function save()
 
         $product = array(
             'it_refcode' => $refcode,
-            'it_code' => $itcode,
-            'it_name' => $name,
+            //'it_code' => $itcode,
+            //'it_name' => $name,
             'it_category_id' => $catid,
             'it_brand_id' => $brandid,
             'it_uom' => $uom,
@@ -150,6 +145,17 @@ function save()
         );
 
         $result = $this->tp_item_model->addItem($product);
+        
+        $currentdate = date("Y-m-d H:i:s");
+        
+        $temp = array('it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
+        
+        $product = array_merge($product, $temp);
+        
+        $result_log = $this->tp_item_model->addItem_log($product);
+        
+        array_push($product);
+            
         if ($result) 
             $this->session->set_flashdata('showresult', 'success');
         else
@@ -181,7 +187,7 @@ public function ajaxViewAllItem()
 {
     $this->load->library('Datatables');
     $this->datatables
-    ->select("it_code, it_refcode, it_name, br_name, it_model, it_srp, itc_name, it_id")
+    ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
     ->from('tp_item')
     ->join('tp_item_category', 'it_category_id = itc_id','left')		
     ->join('tp_brand', 'it_brand_id = br_id','left')
@@ -215,7 +221,7 @@ function getRefcode()
     $result = $this->tp_item_model->getItem($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id[]' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->it_name."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='text' name='it_quantity[]' value='1' width='20'></td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1' width='20'></td><td>".$loop->it_uom."</td>";
     }
     echo $output;
 }

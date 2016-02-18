@@ -68,9 +68,7 @@
                             <table class="table table-bordered table-striped" id="itemtable" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>รหัสสินค้า</th>
-										<th>Ref. Code</th>
-										<th>ชื่อ</th>
+										<th>Ref. No.</th>
                                         <th>ยี่ห้อ</th>
                                         <th>รุ่น</th>
                                         <th>ราคา</th>

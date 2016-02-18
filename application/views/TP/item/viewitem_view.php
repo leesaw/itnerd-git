@@ -23,87 +23,67 @@
                     <div class="panel-body">
                         <div class="row">
                         <?php foreach($product_array as $loop) { ?>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
+                            <div class="col-md-3">
+                                    <div class="form-group">
                                             Ref Code.
                                             <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo $loop->it_refcode; ?>" readonly>
                                     </div>
 							</div>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
-                                            รหัสสินค้า
-                                            <input type="text" class="form-control" name="itcode" id="itcode" value="<?php echo $loop->it_code; ?>" readonly>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+                            <div class="col-md-3">
+									<div class="form-group">
                                         ประเภท
                                         <input type="text" class="form-control" name="catname" id="catname" value="<?php echo $loop->itc_name; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-md-2">
-									<div class="form-group-sm">
+							<div class="col-md-3">
+									<div class="form-group">
                                         ยี่ห้อ
                                         <input type="text" class="form-control" name="itcode" id="itcode" value="<?php echo $loop->br_code."-".$loop->br_name; ?>" readonly>
                                     </div>
 							</div>
-                            <div class="col-md-2">
-                                    <div class="form-group-sm">
+                            <div class="col-md-3">
+                                    <div class="form-group">
                                             รุ่นสินค้า
                                             <input type="text" class="form-control" name="model" id="model" value="<?php echo $loop->it_model; ?>" readonly>
                                     </div>
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-4">
-									<div class="form-group-sm">
-                                            ชื่อสินค้า
-                                            <input type="text" class="form-control" name="name" id="name" value="<?php echo $loop->it_name; ?>" readonly>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+                            <div class="col-md-3">
+									<div class="form-group">
                                             หน่วยนับ
                                             <input type="text" class="form-control" name="uom" id="uom" value="<?php echo $loop->it_uom; ?>" readonly>
                                     </div>
 							</div>
-							<div class="col-md-4">
-									<div class="form-group-sm">
-                                            Short Description
-                                            <input type="text" class="form-control" name="short" id="short" value="<?php echo $loop->it_short_description; ?>" readonly>
-                                    </div>
-							</div>
-                            <!--
                             <div class="col-md-3">
-								<div class="form-group">
-                                  <label for="picfile">แนบรูปภาพ
-                                  <input type="file" id="picfile" name="picfile">
-                                </div>
-							</div>
-                            -->
-						</div>
-						<div class="row">
-                            <div class="col-md-2">
-									<div class="form-group-sm">
-                                            ราคาทุน
-                                            <input type="text" class="form-control" name="cost" id="cost" value="<?php echo number_format($loop->it_cost_baht,2,'.',','); ?>" readonly>
-                                    </div>
-							</div>
-							<div class="col-md-2">
-									<div class="form-group-sm">
-                                            ราคาขาย
-                                            <input type="text" class="form-control" name="srp" id="srp" value="<?php echo number_format($loop->it_srp,2,'.',','); ?>" readonly>
-                                    </div>
-							</div>
-                            <div class="col-md-2">
-									<div class="form-group-sm">
+									<div class="form-group">
                                             จำนวนเตือนขั้นต่ำ
                                             <input type="text" class="form-control" name="minstock" id="minstock" value="<?php echo $loop->it_min_stock; ?>" readonly>
                                     </div>
 							</div>
+							<div class="col-md-6">
+									<div class="form-group">
+                                            Short Description
+                                            <input type="text" class="form-control" name="short" id="short" value="<?php echo $loop->it_short_description; ?>" readonly>
+                                    </div>
+							</div>
 						</div>
 						<div class="row">
-							<div class="col-md-8">
+                            <div class="col-md-3">
+									<div class="form-group">
+                                            ราคาทุน
+                                            <input type="text" class="form-control" name="cost" id="cost" value="<?php echo number_format($loop->it_cost_baht,2,'.',','); ?>" readonly>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+                                            ราคาขาย
+                                            <input type="text" class="form-control" name="srp" id="srp" value="<?php echo number_format($loop->it_srp,2,'.',','); ?>" readonly>
+                                    </div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
 									<div class="form-group">
                                             Long Description
 											<textarea class="form-control" name="long" id="long" rows="3" readonly><?php echo $loop->it_long_description; ?></textarea>
