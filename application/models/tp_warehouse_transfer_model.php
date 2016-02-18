@@ -1,5 +1,5 @@
 <?php
-Class Tp_warehouse_model extends CI_Model
+Class Tp_warehouse_transfer_model extends CI_Model
 {
  function getWarehouse_transfer($where)
  {

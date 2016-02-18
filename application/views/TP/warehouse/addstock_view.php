@@ -104,6 +104,7 @@ var count_list = 0;
 $(document).ready(function()
 {    
     get_datepicker("#datein");
+    document.getElementById("savebtn").disabled = false;
     
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
@@ -172,7 +173,7 @@ function submitform()
     
     $.ajax({
         type : "POST" ,
-        url : "<?php echo site_url("warehouse_transfer/importstock_save"); ?>" ,
+        url : "<?php echo site_url("warehouse_transfer/importstock_confirm"); ?>" ,
         data : {datein: datein, whid: whid, item: it_array} ,
         success : function(data) {
             alert("ทำการบันทึกเรียบร้อยแล้ว");
