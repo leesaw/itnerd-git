@@ -35,8 +35,9 @@
 							</div>
                             <div class="col-md-2">
 									<div class="form-group-sm">
-                                        ประเภท *
+                                        เข้าคลัง *
                                         <select class="form-control" name="whid" id="whid">
+                                            <option value='-1'>-- เลือกคลังสินค้า --</option>
 										<?php 	if(is_array($wh_array)) {
 												foreach($wh_array as $loop){
 													echo "<option value='".$loop->wh_id."'>".$loop->wh_code."-".$loop->wh_name."</option>";
@@ -89,11 +90,11 @@
             </div></section>
 	</div>
 </div>
+<?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
-<script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
-<?php $this->load->view('js_footer'); ?>
+<script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 $(".alert-message").alert();
 window.setTimeout(function() { $(".alert-message").alert('close'); }, 5000);
@@ -159,28 +160,50 @@ function get_datepicker(id)
 
 function submitform()
 {
-    document.getElementById("savebtn").disabled = true;
-    
-    var datein = document.getElementById("datein").value;
-    var whid = document.getElementById('whid').value;
-    var it_id = document.getElementsByName('it_id');
-    var it_quantity = document.getElementsByName('it_quantity');
-    var it_array = new Array();
-    
-    for(var i=0; i<it_id.length; i++){
-        it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
-    }
-    
-    $.ajax({
-        type : "POST" ,
-        url : "<?php echo site_url("warehouse_transfer/importstock_confirm"); ?>" ,
-        data : {datein: datein, whid: whid, item: it_array} ,
-        success : function(data) {
-            alert("ทำการบันทึกเรียบร้อยแล้ว");
-            location.reload();
+    if (document.getElementById('whid').value < 0) {
+        alert("กรุณาเลือกคลังสินค้า");
+        document.getElementById('whid').focus();
+    }else if (document.getElementById('datein').value == "") {
+        alert("กรุณาเลือกวันที่รับเข้า");
+        document.getElementById('datein').focus();
+    }else{
+        document.getElementById("savebtn").disabled = true;
+
+        var datein = document.getElementById("datein").value;
+        var whid = document.getElementById('whid').value;
+        var it_id = document.getElementsByName('it_id');
+        var it_quantity = document.getElementsByName('it_quantity');
+        var it_array = new Array();
+
+        for(var i=0; i<it_id.length; i++){
+            it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
         }
-    });
-    
+
+        $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("warehouse_transfer/importstock_save"); ?>" ,
+            data : {datein: datein, whid: whid, item: it_array} ,
+            dataType: 'json',
+            success : function(data) {
+                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
+                bootbox.confirm(message, function(result) {
+                        var currentForm = this;
+                        if (result) {
+                            window.open("<?php echo site_url("warehouse_transfer/importstock_print"); ?>"+"/"+data.b, "_blank");
+                            location.reload();
+                        }else{
+                            location.reload();
+                        }
+
+                });
+                
+                
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+    }
     
 }
     

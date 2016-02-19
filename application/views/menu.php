@@ -115,10 +115,7 @@
                         <a href="<?php echo site_url("managestock/exportstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าออกจากสต็อก</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("managestock/returnstock"); ?>"><i class="fa fa-circle-o"></i> คืนสินค้า</a>
-                    </li>
-					<li>
-                        <a href="<?php echo site_url("managestock/historyimportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าสต็อก</a>
+                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าคลัง</a>
                     </li>
 					<li>
                         <a href="<?php echo site_url("managestock/historyexportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าออกจากสต็อก</a>
