@@ -112,7 +112,7 @@
                         <a href="<?php echo site_url("warehouse_transfer/importstock"); ?>"><i class="fa fa-circle-o"></i> รับสินค้าเข้าคลัง</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("managestock/exportstock"); ?>"><i class="fa fa-circle-o"></i> สินค้าออกจากสต็อก</a>
+                        <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
                     </li>
 					<li>
                         <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าคลัง</a>

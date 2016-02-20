@@ -213,19 +213,41 @@ function viewproduct()
     $this->load->view('TP/item/viewitem_view',$data);
 }    
     
-    
 function getRefcode()
 {
     $refcode = $this->input->post("refcode");
+    $luxury = $this->input->post("luxury");
+    
     $sql = "it_refcode = '".$refcode."'";
     $result = $this->tp_item_model->getItem($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1' width='20'></td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>";
+        if ($luxury == 0) {
+            $output .= "<input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+        }else{
+            $output .= "1</td><td>".$loop->it_uom."</td>";
+            $output .= "<td><input type='text' name='it_code' id='it_code' value='' style='width: 200px;'></td>";
+        }
     }
     echo $output;
 }
-
+    
+function getCaseback()
+{
+    $refcode = $this->input->post("refcode");
+    $luxury = $this->input->post("luxury");
+    
+    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1";
+    $result = $this->tp_item_model->getItem_caseback($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='caseback_id' id='caseback_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>";
+        $output .= "1</td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+    }
+    echo $output;
+}
 
 function viewSelectedCat() {
     $catid = $this->uri->segment(3);
