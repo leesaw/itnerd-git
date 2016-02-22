@@ -68,6 +68,7 @@
 				                                        <th>Ref. Code</th>
                                                         <th>ยี่ห้อ</th>
                                                         <th>รุ่น</th>
+                                                        <th>ราคาขาย</th>
 														<th width="80">จำนวน</th>
 														<th>หน่วย</th>
                                                         <?php if ($remark==1) { ?>
@@ -172,8 +173,8 @@ function get_datepicker(id)
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 }
-
-function submitform(luxury)
+    
+function submitform(x)
 {
     if (document.getElementById('whid').value < 0) {
         alert("กรุณาเลือกคลังสินค้า");
@@ -181,7 +182,17 @@ function submitform(luxury)
     }else if (document.getElementById('datein').value == "") {
         alert("กรุณาเลือกวันที่รับเข้า");
         document.getElementById('datein').focus();
-    }else if (luxury==1) {
+    }else{
+        var r = confirm("ยืนยันการรับสินค้าเข้าคลัง !!");
+        if (r == true) {
+            confirmform(x);
+        }
+    }
+}
+
+function confirmform(luxury)
+{
+    if (luxury==1) {
         var datein = document.getElementById("datein").value;
         var whid = document.getElementById('whid').value;
         var it_id = document.getElementsByName('it_id');
@@ -195,31 +206,33 @@ function submitform(luxury)
             it_array[i] = {id: it_id[i].value, qty: 1, code: it_code[i].value};
         }
         document.getElementById("savebtn").disabled = true;
+        if(it_id.length>0) {
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("warehouse_transfer/importstock_save/1"); ?>" ,
+                data : {datein: datein, whid: whid, item: it_array} ,
+                dataType: 'json',
+                success : function(data) {
+                    var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
+                    bootbox.confirm(message, function(result) {
+                            var currentForm = this;
+                            if (result) {
+                                window.open("<?php echo site_url("warehouse_transfer/importstock_serial_print"); ?>"+"/"+data.b, "_blank");
+                                location.reload();
+                            }else{
+                                location.reload();
+                            }
 
-        $.ajax({
-            type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/importstock_save/1"); ?>" ,
-            data : {datein: datein, whid: whid, item: it_array} ,
-            dataType: 'json',
-            success : function(data) {
-                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
-                bootbox.confirm(message, function(result) {
-                        var currentForm = this;
-                        if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/importstock_print"); ?>"+"/"+data.b, "_blank");
-                            location.reload();
-                        }else{
-                            location.reload();
-                        }
+                    });
 
-                });
-                
-                
-            },
-            error: function (textStatus, errorThrown) {
-                alert("เกิดความผิดพลาด !!!");
-            }
-        });
+
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("เกิดความผิดพลาด !!!");
+                    document.getElementById("savebtn").disabled = false;
+                }
+            });
+        }
     }else if (luxury==0){
         document.getElementById("savebtn").disabled = true;
 
@@ -232,31 +245,34 @@ function submitform(luxury)
         for(var i=0; i<it_id.length; i++){
             it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
         }
+        if(it_id.length>0) {
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("warehouse_transfer/importstock_save/0"); ?>" ,
+                data : {datein: datein, whid: whid, item: it_array} ,
+                dataType: 'json',
+                success : function(data) {
+                    var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
+                    bootbox.confirm(message, function(result) {
+                            var currentForm = this;
+                            if (result) {
+                                window.open("<?php echo site_url("warehouse_transfer/importstock_print"); ?>"+"/"+data.b, "_blank");
+                                location.reload();
+                            }else{
+                                location.reload();
+                            }
 
-        $.ajax({
-            type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/importstock_save/0"); ?>" ,
-            data : {datein: datein, whid: whid, item: it_array} ,
-            dataType: 'json',
-            success : function(data) {
-                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
-                bootbox.confirm(message, function(result) {
-                        var currentForm = this;
-                        if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/importstock_print"); ?>"+"/"+data.b, "_blank");
-                            location.reload();
-                        }else{
-                            location.reload();
-                        }
+                    });
 
-                });
-                
-                
-            },
-            error: function (textStatus, errorThrown) {
-                alert("เกิดความผิดพลาด !!!");
-            }
-        });
+
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("เกิดความผิดพลาด !!!");
+                    document.getElementById("savebtn").disabled = false;
+
+                }
+            });
+        }
     }
     
 }

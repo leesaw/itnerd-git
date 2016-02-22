@@ -27,7 +27,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <?php echo form_open('item/save'); ?>
+                                <form name="form1" id="form1" action="<?php echo site_url('item/save'); ?>" method="post">
                                     <div class="form-group">
                                             Ref. Number *
                                             <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo set_value('refcode'); ?>">
@@ -115,7 +115,7 @@
 
 						<div class="row">
 							<div class="col-md-6">
-									<button type="submit" class="btn btn-primary">  เพิ่มข้อมูลสินค้า  </button>
+									<button type="button" name="savebtn" id="savebtn"  class="btn btn-primary" onclick="disablebutton()">  เพิ่มข้อมูลสินค้า  </button>
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("item/manage"); ?>'"> ยกเลิก </button>
 							</div>
 						</div>
@@ -132,10 +132,14 @@
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <?php $this->load->view('js_footer'); ?>
 <script>
+$(document).ready(function()
+{    
+    //document.getElementById("savebtn").disabled = false;
+
+});
 $(".alert-message").alert();
 window.setTimeout(function() { $(".alert-message").alert('close'); }, 5000);
-</script>
-<script>
+
 function numberWithCommas(obj) {
 	var x=$(obj).val();
     var parts = x.toString().split(".");
@@ -146,6 +150,11 @@ function numberWithCommas(obj) {
 function autobarcode(obj) {
 	var input=$(obj).val();
 	$('#barcode').val(input);
+}
+function disablebutton() {
+    document.getElementById("savebtn").disabled = true;
+    
+    document.getElementById("form1").submit();
 }
 </script>
 </body>
