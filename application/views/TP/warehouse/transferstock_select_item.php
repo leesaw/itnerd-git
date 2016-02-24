@@ -46,9 +46,6 @@
                                         <input type="text" class="form-control" name="whname_in" id="whname_in" value="<?php echo $whname_in; ?>" readonly>
                                     </div>
 							</div>
-                            <div class="col-md-4">
-                                <?php echo $caseback_label; ?>
-                            </div>
 						</div>
 						<br>
 						<div class="row">
@@ -188,6 +185,7 @@ function submitform(x)
     var whid_out = <?php echo $whid_out; ?>;
     var whid_in = <?php echo $whid_in; ?>;
     var datein = "<?php echo $datein; ?>";
+    var it_code = document.getElementsByName('it_code');
     if (whid_out < 0) {
         alert("กรุณาเลือกคลังสินค้า");
     }else if (whid_in < 0) {
@@ -197,9 +195,22 @@ function submitform(x)
     }else if (whid_out == whid_in) {
         alert("ไม่สามารถย้ายคลังเดียวกันได้");
     }else{
-        var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-        if (r == true) {
-            confirmform(x);
+        var duplicate = 0;
+        for(var i=0; i<it_code.length; i++){
+            for(var j=i+1; j<it_code.length; j++){
+                if (it_code[i].value==it_code[j].value) {
+                    it_code[j].className += " text-red";
+                    duplicate++;
+                }
+            }
+        }
+        if (duplicate > 0) {
+            alert("Caseback ซ้ำกัน");
+        }else{
+            var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+            if (r == true) {
+                confirmform(x);
+            }
         }
     }
 }

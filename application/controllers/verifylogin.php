@@ -54,6 +54,7 @@ class VerifyLogin extends CI_Controller {
          'sessusername' => $row->username,
 		 'sessfirstname' => $row->firstname,
 		 'sesslastname' => $row->lastname,
+         'sessrolex' => $row->is_rolex,
 		 'sessstatus' => $row->status
        );
         

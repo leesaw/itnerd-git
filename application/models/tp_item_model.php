@@ -56,6 +56,16 @@ Class Tp_item_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function checkAvailable_caseback($caseback)
+ {
+    $this->db->select("itse_id");
+    $this->db->from("tp_item_serial");
+    $this->db->where("itse_serial_number", $caseback);
+    $this->db->where("itse_enable", 1);
+    $query = $this->db->get();		
+	return $query->num_rows();
+ }
 
  function addItem($insert=NULL)
  {		

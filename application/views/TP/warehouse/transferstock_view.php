@@ -60,10 +60,6 @@
                                         </select>
                                     </div>
 							</div>
-                            <div class="col-md-4">
-                                <input type="radio" name="caseback" id="caseback" value="0" checked> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-              <input type="radio" name="caseback" id="caseback" value="1"> <label class="text-red"> Caseback</label>
-                            </div>
 						</div>
                         <br>
                         <div name="submit1" class="row">

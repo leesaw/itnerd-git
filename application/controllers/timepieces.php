@@ -22,6 +22,12 @@ function main()
     $this->load->view('TP/main',$data);
 }
   
+function main_rolex()
+{   
+    
+    $data['title'] = "NGG| Rolex";
+    $this->load->view('TP/main_rolex',$data);
+}
     
 }
 ?>

@@ -70,7 +70,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
     
  function getWarehouse_transfer_between_serial($where)
  {
-	$this->db->select("stot_number, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, wh1.wh_name as wh_out_name, wh1.wh_code as wh_out_code, wh2.wh_name as wh_in_name, wh2.wh_code as wh_in_code, SUM(log_stots_qty_want) as qty_update, MIN(log_stots_old_qty) as qty_old, stot_datein, firstname, lastname, stot_status, it_id");
+	$this->db->select("stot_number, log_stots_item_serial_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, wh1.wh_id as wh_out_id, wh1.wh_name as wh_out_name, wh1.wh_code as wh_out_code, wh2.wh_id as wh_in_id, wh2.wh_name as wh_in_name, wh2.wh_code as wh_in_code, SUM(log_stots_qty_want) as qty_update, MIN(log_stots_old_qty) as qty_old, stot_datein, firstname, lastname, stot_status, it_id, log_stots_id");
 	$this->db->from('log_stock_transfer_serial');
     $this->db->join('tp_item_serial', 'itse_id = log_stots_item_serial_id','left');
     $this->db->join('tp_item', 'it_id = itse_item_id','left');
@@ -87,7 +87,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
     
  function getWarehouse_transfer_between_serial_one($where)
  {
-	$this->db->select("itse_item_id, itse_serial_number");
+	$this->db->select("itse_item_id, itse_serial_number, log_stots_id, log_stots_item_serial_id");
 	$this->db->from('log_stock_transfer_serial');
     $this->db->join('tp_item_serial', 'itse_id = log_stots_item_serial_id','left');
 	$this->db->join('tp_stock_transfer', 'stot_id = log_stots_transfer_id','left');	
@@ -96,7 +96,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	return $query->result();
  }
     
- function getMaxNumber_transfer_in($month)
+ function getMaxNumber_transfer_in($month, $rolex)
  {
     $start = $month."-01 00:00:00";
     $end = $month."-31 23:59:59";
@@ -104,11 +104,12 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	$this->db->from('tp_stock_in');
     $this->db->where("stoi_datein >=",$start);
     $this->db->where("stoi_datein <=",$end);
+    $this->db->where("stoi_is_rolex", $rolex);
 	$query = $this->db->get();		
 	return $query->num_rows();
  }
     
- function getMaxNumber_transfer_between($month)
+ function getMaxNumber_transfer_between($month, $rolex)
  {
     $start = $month."-01 00:00:00";
     $end = $month."-31 23:59:59";
@@ -116,6 +117,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	$this->db->from('tp_stock_transfer');
     $this->db->where("stot_datein >=",$start);
     $this->db->where("stot_datein <=",$end);
+    $this->db->where("stot_is_rolex", $rolex);
 	$query = $this->db->get();		
 	return $query->num_rows();
  }

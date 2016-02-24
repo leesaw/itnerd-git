@@ -2,6 +2,8 @@
 
 class Warehouse extends CI_Controller {
 
+public $no_rolex = "";
+    
 function __construct()
 {
      parent::__construct();
@@ -11,6 +13,9 @@ function __construct()
      $this->load->model('tp_item_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
+    
+     if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
+     else $this->no_rolex = "br_id = 888";
 }
 
 function index()
@@ -20,9 +25,9 @@ function index()
     
 function getBalance()
 {   
-    $sql = "";
+    $sql = $this->no_rolex;
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
-    
+    $sql = "";
     $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
     $data['title'] = "NGG| Nerd - Search Stock";
@@ -36,17 +41,17 @@ function showBalance()
     $warehouse = $this->input->post("warehouse");
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
-    $sql = "";
+    $sql = $this->no_rolex;
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($refcode!="") {
             $keyword = explode(" ",$refcode);
             if (count($keyword) < 2) { 
-                $sql .= "it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
+                $sql .= " and it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
                     if ($i != 0) $sql .= " and ";
-                    $sql .= "it_short_description like '%".$refcode."%'";
+                    $sql .= " and it_short_description like '%".$refcode."%'";
                 }
             }
         }
@@ -54,15 +59,15 @@ function showBalance()
         if ($refcode!="") {
             $keyword = explode(" ",$refcode);
             if (count($keyword) < 2) { 
-                $sql .= "it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
+                $sql .= " and it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
                     if ($i != 0) $sql .= " and ";
-                    $sql .= "it_short_description like '%".$refcode."%'";
+                    $sql .= " and it_short_description like '%".$refcode."%'";
                 }
             }
         }else{
-            $sql .= "it_refcode like '%%'";
+            $sql .= " and it_refcode like '%%'";
         }
         
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
@@ -77,7 +82,6 @@ function showBalance()
         if (($maxprice !="") && ($maxprice>=0)) $sql .= "it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
-            
     $data['stock_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
     
     $data['refcode'] = $refcode;

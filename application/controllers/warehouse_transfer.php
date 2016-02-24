@@ -2,6 +2,8 @@
 
 class Warehouse_transfer extends CI_Controller {
 
+public $no_rolex = "";
+    
 function __construct()
 {
      parent::__construct();
@@ -10,6 +12,9 @@ function __construct()
      $this->load->model('tp_log_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
+    
+     if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
+     else $this->no_rolex = "br_id = 888";
 }
 
 function index()
@@ -32,6 +37,8 @@ function importstock()
         $remark = 0;
     }
 
+    $data['sessrolex'] = $this->session->userdata('sessrolex');
+    if ($this->session->userdata('sessrolex') ==1) $remark=1;
     $data['remark'] = $remark;
     $data['title'] = "Nerd - Transfer In";
     $this->load->view("TP/warehouse/addstock_view", $data);
@@ -43,6 +50,7 @@ function transferstock()
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['currentdate'] = date("d/m/Y");
 
+    $data['sessrolex'] = $this->session->userdata('sessrolex');
     $data['title'] = "Nerd - Transfer Stock";
     $this->load->view("TP/warehouse/transferstock_view", $data);
 }
@@ -107,10 +115,21 @@ function importstock_serial_print()
     
 function importstock_save()
 {
+    
     $luxury = $this->uri->segment(3);
 	$datein = $this->input->post("datein");
 	$wh_id = $this->input->post("whid");
     $it_array = $this->input->post("item");
+    
+    $this->load->model('tp_item_model','',TRUE);
+    for($i=0; $i<count($it_array); $i++){
+        $check_caseback = $this->tp_item_model->checkAvailable_caseback($it_array[$i]["code"]);
+        if ($check_caseback > 0) {
+            $result = array("a" => $i, "b" => 0);
+            echo json_encode($result);
+            exit();
+        }
+    }
     
     $currentdate = date("Y-m-d H:i:s");
     
@@ -121,15 +140,22 @@ function importstock_save()
     $month = date("Y-m");
     $month_array = explode('-',date("y-m"));
     
-    $number = $this->tp_warehouse_transfer_model->getMaxNumber_transfer_in($month);
+    $number = $this->tp_warehouse_transfer_model->getMaxNumber_transfer_in($month,$this->session->userdata('sessrolex'));
     $number++;
-    $number = "TR".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    
+    if ($this->session->userdata('sessrolex') == 0) {
+        $number = "TR".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    }else{
+        $number = "Ro/TR".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
     
     $stock = array( 'stoi_number' => $number,
                     'stoi_datein' => $datein,
+                    'stoi_is_rolex' => $this->session->userdata('sessrolex'),
                     'stoi_dateadd' => $currentdate,
                     'stoi_dateadd_by' => $this->session->userdata('sessid')
             );
+    
     $last_id = $this->tp_warehouse_transfer_model->addWarehouse_transfer_in($stock);
     
     for($i=0; $i<count($it_array); $i++){
@@ -193,7 +219,9 @@ function transferstock_select_item()
     $datein = $this->input->post("datein");
     $whid_out = $this->input->post("whid_out");
     $whid_in = $this->input->post("whid_in");
-    $caseback = $this->input->post("caseback");
+    
+    if ($this->session->userdata('sessrolex') == 0) $caseback = 0;
+    else $caseback = 1;
     
     $whout_array = explode('#', $whid_out);
     $whname_out = $whout_array[1];
@@ -202,17 +230,13 @@ function transferstock_select_item()
     $whin_array = explode('#', $whid_in);
     $whname_in = $whin_array[1];
     $whid_in = $whin_array[0];
-    
-    if ($caseback==0) $caseback_label = "<label class='text-green'> No Caseback</label>";
-    else $caseback_label = "<label class='text-red'> Caseback</label>";
-    
+
     $data['datein'] = $datein;
     $data['whid_out'] = $whid_out;
     $data['whname_out'] = $whname_out;
     $data['whid_in'] = $whid_in;
     $data['whname_in'] = $whname_in;
     $data['remark'] = $caseback;
-    $data['caseback_label'] = $caseback_label;
     
     $data['title'] = "Nerd - Transfer Stock";
     $this->load->view("TP/warehouse/transferstock_select_item", $data);
@@ -235,9 +259,14 @@ function transferstock_save()
     $month = date("Y-m");
     $month_array = explode('-',date("y-m"));
     
-    $number = $this->tp_warehouse_transfer_model->getMaxNumber_transfer_between($month);
+    $number = $this->tp_warehouse_transfer_model->getMaxNumber_transfer_between($month, $this->session->userdata('sessrolex'));
     $number++;
-    $number = "TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    
+    if ($this->session->userdata('sessrolex') == 0) {
+        $number = "TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    }else{
+        $number = "Ro/TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
     
     $stock = array( 'stot_number' => $number,
                     'stot_datein' => $datein,
@@ -246,6 +275,7 @@ function transferstock_save()
                     'stot_warehouse_in_id' => $whid_in,
                     'stot_status' => 1,
                     'stot_has_serial' => $luxury,
+                    'stot_is_rolex' => $this->session->userdata('sessrolex'),
                     'stot_dateadd_by' => $this->session->userdata('sessid')
             );
     $last_id = $this->tp_warehouse_transfer_model->addWarehouse_transfer_between($stock);
@@ -348,7 +378,7 @@ function checkStock_transfer_caseback()
     $refcode = $this->input->post("refcode");
     $whid_out = $this->input->post("whid_out");
     
-    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and itse_warehouse_id = '".$whid_out."'";
+    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and itse_warehouse_id = '".$whid_out."' and ".$this->no_rolex;
 
     $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
     $output = "";
@@ -363,6 +393,7 @@ function checkStock_transfer_caseback()
 function report_transferstock()
 {
     $sql = "stot_status = 1 and stot_enable = 1";
+    $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
     $data['transfer_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
     
     $data['title'] = "Nerd - Report Transfer Stock";

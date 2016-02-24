@@ -46,7 +46,9 @@
                                     </div>
 							</div>
                             <div class="col-md-4">
+                                <?php if ($sessrolex != 1) { ?>
                                 <input type="radio" name="watch_fashion" id="watch_fashion" value="1" <?php if(($remark=='0') || (!isset($remark))) echo "checked"; ?>> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <?php } ?>
               <input type="radio" name="watch_luxury" id="watch_luxury" value="1" <?php if ($remark=='1') echo "checked"; ?>> <label class="text-red"> Caseback</label>
                             </div>
 						</div>
@@ -183,9 +185,29 @@ function submitform(x)
         alert("กรุณาเลือกวันที่รับเข้า");
         document.getElementById('datein').focus();
     }else{
-        var r = confirm("ยืนยันการรับสินค้าเข้าคลัง !!");
-        if (r == true) {
-            confirmform(x);
+        if (x==1) {
+            var duplicate = 0;
+            for(var i=0; i<it_code.length; i++){
+                for(var j=i+1; j<it_code.length; j++){
+                    if (it_code[i].value==it_code[j].value) {
+                        it_code[j].value = "";
+                        duplicate++;
+                    }
+                }
+            }
+            if (duplicate > 0) {
+                alert("Caseback ซ้ำกัน");
+            }else{
+                var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+                if (r == true) {
+                    confirmform(x);
+                }
+            }
+        }else{
+            var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+            if (r == true) {
+                confirmform(x);
+            }
         }
     }
 }
@@ -206,6 +228,7 @@ function confirmform(luxury)
             it_array[i] = {id: it_id[i].value, qty: 1, code: it_code[i].value};
         }
         document.getElementById("savebtn").disabled = true;
+        
         if(it_id.length>0) {
             $.ajax({
                 type : "POST" ,
@@ -213,18 +236,23 @@ function confirmform(luxury)
                 data : {datein: datein, whid: whid, item: it_array} ,
                 dataType: 'json',
                 success : function(data) {
-                    var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
-                    bootbox.confirm(message, function(result) {
-                            var currentForm = this;
-                            if (result) {
-                                window.open("<?php echo site_url("warehouse_transfer/importstock_serial_print"); ?>"+"/"+data.b, "_blank");
-                                location.reload();
-                            }else{
-                                location.reload();
-                            }
+                    if (data.b == 0) {
+                        alert("Caseback ซ้ำกับที่มีอยู่แล้ว");
+                        it_code[data.a].value = "";
+                        document.getElementById("savebtn").disabled = false;
+                    }else{
+                        var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";
+                        bootbox.confirm(message, function(result) {
+                                var currentForm = this;
+                                if (result) {
+                                    window.open("<?php echo site_url("warehouse_transfer/importstock_serial_print"); ?>"+"/"+data.b, "_blank");
+                                    location.reload();
+                                }else{
+                                    location.reload();
+                                }
 
-                    });
-
+                        });
+                    }
 
                 },
                 error: function (textStatus, errorThrown) {
