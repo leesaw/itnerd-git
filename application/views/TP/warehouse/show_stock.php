@@ -14,7 +14,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงสินค้า Ref. Number/Caseback หรือ Description : <B><U><?php echo $refcode; ?></U></B> ทั้งหมดในคลัง
+            แสดงสินค้า Ref. Number หรือ Description : <B><U><?php echo $refcode; ?></U></B> ทั้งหมดในคลัง
         </h1>
     </section>
 	
@@ -50,6 +50,7 @@
 										<th width="50">Qty</th>
                                         <th>SRP</th>
                                         <th width="200">Short Description</th>
+                                        <th width="50">Caseback</th>
                                     </tr>
                                 </thead>
                                 
@@ -63,6 +64,9 @@
                                         <td><?php echo $loop->stob_qty; ?></td>
                                         <td><?php echo number_format($loop->it_srp); ?></td>
                                         <td><?php echo $loop->it_short_description; ?></td>
+                                        <td><?php if($loop->has_serial>0) { ?>
+                                        <a id="fancyboxall" href="<?php echo site_url("warehouse/view_serial")."/".$loop->stob_id; ?>" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a> 
+                                        <?php } ?></td>
                                     </tr>
                                     <?php } ?>
 								</tbody>
@@ -154,18 +158,14 @@ $(document).ready(function()
     });
     
     $('#fancyboxall').fancybox({ 
-    'width': '40%',
-    'height': '70%', 
+    'width': '30%',
+    'height': '80%', 
     'autoScale':false,
     'transitionIn':'none', 
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    $('.pop').on('click', function() {
-			$('.imagepreview').attr('src', $(this).find('img').attr('src'));
-			$('#imagemodal').modal('show');   
-		});	
-    
+
 });
     
 

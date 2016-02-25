@@ -32,7 +32,7 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; if(isset($stock_array)) { foreach($stock_array as $loop) { ?>
+<?php $no=1; $sum=0; $sum_in=0; if(isset($stock_array)) { foreach($stock_array as $loop) { ?>
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode."&nbsp; / &nbsp;".$loop->br_name." ".$loop->it_model; ?>   
 </td>
@@ -40,7 +40,7 @@
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_update." &nbsp; ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo ($loop->qty_old+$loop->qty_update)." &nbsp; ".$loop->it_uom; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->qty_update*$loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $loop->qty_update*$loop->it_srp; ?></td>
+<td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->qty_update*$loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $loop->qty_update*$loop->it_srp; $sum_in += $loop->qty_update; ?></td>
 </tr>
 <?php
 // print serial number
@@ -62,7 +62,7 @@ if(isset($serial_array)) {
 }
 ?> 
 <?php $no++; } } ?> 
-<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">รวมเงิน</td><td align="right" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td></tr>
+<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_in; ?></td><td style="border-left:1px solid black;border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black;">รวมเงิน</td><td align="right" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td></tr>
 
 </tbody>
 </table>

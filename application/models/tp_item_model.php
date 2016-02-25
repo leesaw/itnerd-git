@@ -57,6 +57,16 @@ Class Tp_item_model extends CI_Model
 	return $query->result();
  }
     
+ function getCaseback_stock($where)
+ {
+	$this->db->select("itse_serial_number");
+    $this->db->from('tp_stock_balance');
+    $this->db->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function checkAvailable_caseback($caseback)
  {
     $this->db->select("itse_id");
@@ -156,6 +166,14 @@ Class Tp_item_model extends CI_Model
 	$this->db->where('bc_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_brand_category', $edit); 	
+	return $query;
+ }
+    
+ function editItemSerial($edit=NULL)
+ {
+	$this->db->where('itse_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_item_serial', $edit); 	
 	return $query;
  }
 

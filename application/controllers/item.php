@@ -102,7 +102,7 @@ function number_is_money($str)
 function is_money($str)
 {
 	//return (bool) preg_match('/^[\-+]?[0-9]+[\.,][0-9]+$/', $str);
-    return (bool) preg_match('/^[0-9,]+$/', $str);
+    return (bool) preg_match('/^[0-9,.]+$/', $str);
 }
 
 function save()

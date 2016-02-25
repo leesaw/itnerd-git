@@ -55,12 +55,6 @@ function transferstock()
     $this->load->view("TP/warehouse/transferstock_view", $data);
 }
     
-function importstock_history()
-{
-    $data['title'] = "Nerd - Transfer In History";
-    $this->load->view("TP/warehouse/stockin_history", $data);
-}
-    
 function importstock_print()
 {
 		$id = $this->uri->segment(3);
@@ -146,10 +140,11 @@ function importstock_save()
     if ($this->session->userdata('sessrolex') == 0) {
         $number = "TR".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
     }else{
-        $number = "Ro/TR".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+        $number = "TR-Ro".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
     }
     
     $stock = array( 'stoi_number' => $number,
+                    'stoi_warehouse_id' => $wh_id,
                     'stoi_datein' => $datein,
                     'stoi_is_rolex' => $this->session->userdata('sessrolex'),
                     'stoi_dateadd' => $currentdate,
@@ -190,7 +185,6 @@ function importstock_save()
         
         $stock = array( 'log_stob_transfer_id' => $last_id,
                         'log_stob_status' => 'I',
-                        'log_stob_warehouse_id' => $wh_id,
                         'log_stob_qty_update' => $it_array[$i]["qty"],
                         'log_stob_old_qty' => $old_qty,
                         'log_stob_item_id' => $it_array[$i]["id"],
@@ -265,7 +259,7 @@ function transferstock_save()
     if ($this->session->userdata('sessrolex') == 0) {
         $number = "TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
     }else{
-        $number = "Ro/TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+        $number = "TB-Ro".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
     }
     
     $stock = array( 'stot_number' => $number,
@@ -396,6 +390,20 @@ function report_transferstock()
     $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
     $data['transfer_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
     
+    $currentdate = date("Y-m");
+    
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "stot_status >= 2 and stot_status <= 3";
+    $sql .= " and stot_dateadd >= '".$start."' and stot_dateadd <= '".$end."'";
+    $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
+    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    
     $data['title'] = "Nerd - Report Transfer Stock";
     $this->load->view("TP/warehouse/report_transferstock_item", $data);
 }
@@ -445,15 +453,17 @@ function transferstock_save_confirm()
 {
     $luxury = $this->uri->segment(3);
     $it_array = $this->input->post("item");
+    $it_cancel_array = $this->input->post("cancel_item");
     $stot_id = $this->input->post("stot_id");
     $wh_out_id = $this->input->post("wh_out_id");
     $wh_in_id = $this->input->post("wh_in_id");
     $datein = $this->input->post("datein");
+    $currentdate = date("Y-m-d H:i:s");
     
-    $stock = array("id" => $stot_id, "stot_status" => 2);
+    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,
+                                "stot_confirm_by" => $this->session->userdata('sessid'));
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
     
-    $currentdate = date("Y-m-d H:i:s");
     
     $count = 0;
     for($i=0; $i<count($it_array); $i++){
@@ -462,10 +472,17 @@ function transferstock_save_confirm()
         $sql = "stob_item_id = '".$it_array[$i]["item_id"]."' and stob_warehouse_id = '".$wh_out_id."'";
         $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
         
+        if ($luxury==0) {
+            $qty_update = $it_array[$i]["qty_final"];
+        }else{
+            $qty_update = 1;
+        }
+        
         if (!empty($query)) {
             foreach($query as $loop) {
                 $stock_id = $loop->stob_id;
-                $qty_new = $loop->stob_qty - $it_array[$i]["qty_final"];
+
+                $qty_new = $loop->stob_qty - $qty_update;
                 $stock = array( 'id' => $loop->stob_id,
                                 'stob_qty' => $qty_new,
                                 'stob_lastupdate' => $currentdate,
@@ -483,7 +500,8 @@ function transferstock_save_confirm()
         if (!empty($query)) {
             foreach($query as $loop) {
                 $stock_id = $loop->stob_id;
-                $qty_new = $loop->stob_qty + $it_array[$i]["qty_final"];
+                
+                $qty_new = $loop->stob_qty + $qty_update;
                 $stock = array( 'id' => $loop->stob_id,
                                 'stob_qty' => $qty_new,
                                 'stob_lastupdate' => $currentdate,
@@ -493,7 +511,7 @@ function transferstock_save_confirm()
                 break;
             }
         }else{
-            $stock = array( 'stob_qty' => $it_array[$i]["qty_final"],
+            $stock = array( 'stob_qty' => $qty_update,
                             'stob_lastupdate' => $currentdate,
                             'stob_lastupdate_by' => $this->session->userdata('sessid'),
                             'stob_warehouse_id' => $wh_in_id,
@@ -503,6 +521,9 @@ function transferstock_save_confirm()
             
         }
         
+        $this->load->model('tp_item_model','',TRUE);
+        $serial = array("id" => $it_array[$i]["item_serial"], "itse_warehouse_id" => $wh_in_id);
+        $query = $this->tp_item_model->editItemSerial($serial);
         
         if ($luxury==0) {
             
@@ -513,14 +534,18 @@ function transferstock_save_confirm()
             $query = $this->tp_log_model->editWarehouse_transfer_between($stock);
             
             $count += $it_array[$i]["qty_final"];
-        }else if ($luxury==1){
-            $stock = array( 'log_stots_transfer_id' => $last_id,
-                            'log_stots_old_qty' => $it_array[$i]["old_qty"],
-                            'log_stots_item_serial_id' => $it_array[$i]["id"]
-            );
-            $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
-            $count++;
         }
+    }
+    if ($luxury == 1) {
+        for($i=0; $i<count($it_cancel_array); $i++){
+            $stock = array( 'id' => $it_cancel_array[$i]["id"],
+                            'log_stots_qty_final' => 0,
+                            'log_stots_enable' => 0
+            );
+
+            $query = $this->tp_log_model->editWarehouse_transfer_between_serial($stock);
+        }
+        $count = count($it_array);
     }
 
     $result = array("a" => $count, "b" => $stot_id);
@@ -550,5 +575,131 @@ function transferstock_final_print()
         $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_transfer2_print", $data, TRUE));
         $mpdf->Output();
 }
+    
+function transferstock_final_print_serial()
+{
+		$id = $this->uri->segment(3);
+		
+		$this->load->library('mpdf/mpdf');                
+        $mpdf= new mPDF('th','A4','0', 'thsaraban');
+		$stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+		
+        $sql = "stot_id = '".$id."'";
+		$query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial($sql);
+		if($query){
+			$data['stock_array'] =  $query;
+		}else{
+			$data['stock_array'] = array();
+		}
+    
+        $sql = "stot_id = '".$id."' and log_stots_enable = '1'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+        if($query){
+            $data['serial_array'] =  $query;
+        }else{
+            $data['serial_array'] = array();
+        }   
+		
+		//echo $html;
+        $mpdf->SetJS('this.print();');
+		$mpdf->WriteHTML($stylesheet,1);
+        $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_transfer2_print", $data, TRUE));
+        $mpdf->Output();
+}
+    
+function disable_transfer_between()
+{
+    $id = $this->uri->segment(3);
+    
+    $sql = "stot_id = '".$id."'";
+    $query = $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+    if($query){
+        $data['stock_array'] =  $query;
+    }else{
+        $data['stock_array'] = array();
+    }
+    
+    $data['stot_id'] = $id;
+    $data['title'] = "Nerd - Confirm Transfer Stock";
+    $this->load->view("TP/warehouse/disable_transferstock_item", $data);
+}
+    
+function disable_transfer_between_serial()
+{
+    $id = $this->uri->segment(3);
+    
+    $sql = "stot_id = '".$id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial($sql);
+    if($query){
+        $data['stock_array'] =  $query;
+    }else{
+        $data['stock_array'] = array();
+    }
+
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    $data['stot_id'] = $id;
+    $data['title'] = "Nerd - Confirm Transfer Stock";
+    $this->load->view("TP/warehouse/disable_transferstock_item_serial", $data);
+}
+    
+function transferstock_disable_confirm()
+{
+    $stot_id = $this->input->post("stot_id");
+    $stock = array("id" => $stot_id, "stot_status" => 3, "stot_enable" => 0);
+    $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
+    
+    if ($query) {
+        $result = "OK";
+    }else{
+        $result = "ERROR";
+    }
+    
+    echo json_encode($result);
+    exit();
+}
+
+function importstock_history()
+{
+    $currentdate = date("Y-m");
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "stoi_is_rolex = ".$this->session->userdata('sessrolex');
+    $sql .= " and stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);
+    
+    $data['title'] = "Nerd - Report Transfer In";
+    $this->load->view("TP/warehouse/report_stockin_item", $data);
+}
+    
+function transferstock_history()
+{
+    $currentdate = date("Y-m");
+    
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "stot_dateadd >= '".$start."' and stot_dateadd <= '".$end."'";
+    $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
+    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    
+    $data['title'] = "Nerd - Report Transfer Stock";
+    $this->load->view("TP/warehouse/report_transfer_item", $data);
+}
+    
 }
 ?>

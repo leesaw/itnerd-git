@@ -119,13 +119,10 @@
                         <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าคลัง</a>
+                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติรับสินค้าเข้าคลัง</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("managestock/historyexportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าออกจากสต็อก</a>
-                    </li>
-					<li>
-                        <a href="<?php echo site_url("managestock/historyreturnstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติคืนสินค้า</a>
+                        <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติย้ายคลังสินค้า</a>
                     </li>
                 </ul>
 
@@ -165,13 +162,10 @@
                         <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าเข้าคลัง</a>
+                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติรับสินค้าเข้าคลัง</a>
                     </li>
 					<li>
-                        <a href="<?php echo site_url("managestock/historyexportstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติสินค้าออกจากสต็อก</a>
-                    </li>
-					<li>
-                        <a href="<?php echo site_url("managestock/historyreturnstock"); ?>"><i class="fa fa-circle-o"></i> ประวัติคืนสินค้า</a>
+                        <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติย้ายคลังสินค้า</a>
                     </li>
                 </ul>
 

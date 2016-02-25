@@ -60,7 +60,7 @@
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
                                         <div class="input-group-btn">
-                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ<?php if ($status==2) echo "&nbsp;&nbsp; ทำการยืนยันแล้ว"; ?></label> 
+                                        </div> <label id="count_all" class="text-red pull-left">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -77,7 +77,8 @@
 				                                    </tr>
 				                                </thead>
 												<tbody>
-                                                    <?php foreach($stock_array as $loop) { ?>
+                                                    <?php $row_caseback=1;
+                                                    foreach($stock_array as $loop) { ?>
                                                     <tr>
                                                     
                                                     <td><?php echo $loop->it_refcode; ?></td>
@@ -92,14 +93,9 @@
                                                     if ($loop->it_id==$loop2->itse_item_id) { 
                                                     ?>
                                                     <tr>
-                                                    <input type='hidden' name='itse_id' id='itse_id' value=" <?php echo $loop2->log_stots_item_serial_id; ?>">
-                                                    <input type='hidden' name='log_id' id='log_id' value=" <?php echo $loop2->log_stots_id; ?>">
-                                                    <td> </td>
-                                                    <td><input type="checkbox" name="log_id" value=" <?php echo $loop2->log_stots_id; ?>" checked> ส่งได้</td>
-                                                    <td><input type='text' name='serial' id='serial' value='<?php echo $loop2->itse_serial_number; ?>' style='width: 200px;'  readonly></td>
-                                                    <td colspan="4"></td>
+                                                    <td colspan="7"><b><?php echo $row_caseback; ?>. Caseback Number : </b><input type='text' name='serial' id='serial' class="text-red" value='<?php echo $loop2->itse_serial_number; ?>' style='width: 200px; text-align:center' readonly> <input type="checkbox" name="log_id" value=" <?php echo $loop2->log_stots_id; ?>" checked> ส่งได้ <input type='hidden' name='itse_id' id='itse_id' value=" <?php echo $loop2->log_stots_item_serial_id; ?>"><input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop2->itse_item_id; ?>"></td>
                                                     </tr>
-                                                    <?php } } } ?>
+                                                    <?php $row_caseback++; } } } ?>
 												</tbody>
 											</table>
 										</div>
@@ -109,7 +105,8 @@
 						</div>	
                         <div class="row">
 							<div class="col-md-6">
-								<button type="button" class="btn btn-success <?php if ($status==2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
+								<button type="button" class="btn btn-success <?php if ($status>=2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary" name="returnbtn" id="returnbtn" onclick="returnform()"><i class='fa fa-save'></i>  กลับไปหน้ารายการ-ย้ายคลังสินค้า </button>
 							</div>
 						</div>
 
@@ -132,19 +129,24 @@ $(document).ready(function()
     document.getElementById("savebtn").disabled = false;
 
 });
-
+    
+function returnform()
+{
+    window.location = "<?php echo site_url("warehouse_transfer/report_transferstock"); ?>";
+}
     
 function submitform()
 {
-    var it_final = document.getElementsByName('it_final');
-    for(var i=0; i<it_final.length; i++){
-        if (it_final[i].value == "") {
-            alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
-            return;
-        }
+    var log_id = document.getElementsByName("log_id");
+    var count = 0;
+
+    for (var i=0; i<log_id.length; i++) {       
+       if (log_id[i].type == "checkbox" && log_id[i].checked == true){
+          count++;
+       }
     }
 
-    var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+    var r = confirm("ยืนยันการย้ายคลังสินค้า จำนวน "+count+" ชิ้น !!");
     if (r == true) {
         confirmform();
     }
@@ -153,29 +155,40 @@ function submitform()
 function confirmform()
 {
     document.getElementById("savebtn").disabled = true;
-    var it_final = document.getElementsByName('it_final');
     var log_id = document.getElementsByName('log_id');
+    var itse_id = document.getElementsByName('itse_id');
     var item_id = document.getElementsByName('it_id');
     var stot_id = <?php echo $stot_id; ?>;
     var wh_out_id = document.getElementById("wh_out_id").value; 
     var wh_in_id = document.getElementById("wh_in_id").value; 
     var datein = document.getElementById("datein").value;
-    var item_array = new Array();
-    for(var i=0; i<log_id.length; i++){
-        item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
+    var item_ok_array = new Array();
+    var item_cancel_array = new Array();
+    var index_ok = 0;
+    var index_cancel = 0;
+    
+    for (var i=0; i<log_id.length; i++) {
+       if (log_id[i].checked == true){
+          item_ok_array[index_ok] = {id: log_id[i].value, item_serial: itse_id[i].value, item_id: item_id[i].value};
+          index_ok++;
+       }else if(log_id[i].checked == false) {
+          item_cancel_array[index_cancel] = {id: log_id[i].value, item_serial: itse_id[i].value, item_id: item_id[i].value};
+          
+          index_cancel++;
+       }
     }
     
     $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/0"); ?>" ,
-            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein} ,
+            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/1"); ?>" ,
+            data : {item: item_ok_array, cancel_item: item_cancel_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein} ,
             dataType: 'json',
             success : function(data) {
                 var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบส่งของ ใช่หรือไม่";
                 bootbox.confirm(message, function(result) {
                         var currentForm = this;
                         if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print"); ?>"+"/"+data.b, "_blank");
+                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print_serial"); ?>"+"/"+data.b, "_blank");
                             location.reload();
                         }else{
                             location.reload();

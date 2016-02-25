@@ -11,7 +11,7 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ยืนยันการย้ายคลังสินค้า</h1>
+            <h1>ยกเลิกการย้ายคลังสินค้า</h1>
         </section>
             
 		<section class="content">
@@ -60,7 +60,7 @@
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
                                         <div class="input-group-btn">
-                                        </div> <label id="count_all" class="text-red pull-left">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
+                                        </div> <label id="count_all" class="text-red pull-left">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ<?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?></label> 
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -73,7 +73,6 @@
                                                         <th>ราคาขาย</th>
                                                         <th>จำนวนคงเหลือ</th>
 														<th width="105">จำนวนที่ต้องการ</th>
-                                                        <th width="105">จำนวนที่ส่งได้</th>
 														<th>หน่วย</th>
 				                                    </tr>
 				                                </thead>
@@ -88,7 +87,6 @@
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><?php echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
-                                                    <td><input type='text' name='it_final' id='it_final' value='<?php echo $loop->qty_update; ?>' style='width: 50px;' <?php if ($status==2) echo "readonly"; ?>></td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     <?php } ?>
 												</tbody>
@@ -100,7 +98,7 @@
 						</div>	
                         <div class="row">
 							<div class="col-md-6">
-								<button type="button" class="btn btn-success <?php if ($status==2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
+								<button type="button" class="btn btn-danger <?php if ($status>=2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  ยกเลิกการย้ายคลัง </button>&nbsp;&nbsp;
                                 <button type="button" class="btn btn-primary" name="returnbtn" id="returnbtn" onclick="returnform()"><i class='fa fa-save'></i>  กลับไปหน้ารายการ-ย้ายคลังสินค้า </button>
 							</div>
 						</div>
@@ -125,68 +123,36 @@ $(document).ready(function()
 
 });
 
+function submitform()
+{
+    var r = confirm("ยืนยันการยกเลิกการย้ายคลัง !!");
+    if (r == true) {
+        confirmform();
+    }
+}
+    
 function returnform()
 {
     window.location = "<?php echo site_url("warehouse_transfer/report_transferstock"); ?>";
 }
     
-function submitform()
-{
-    var it_final = document.getElementsByName('it_final');
-    for(var i=0; i<it_final.length; i++){
-        if (it_final[i].value == "") {
-            alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
-            return;
-        }
-    }
-
-    var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-    if (r == true) {
-        confirmform();
-    }
-}
-
 function confirmform()
 {
     document.getElementById("savebtn").disabled = true;
-    var it_final = document.getElementsByName('it_final');
-    var log_id = document.getElementsByName('log_id');
-    var item_id = document.getElementsByName('it_id');
     var stot_id = <?php echo $stot_id; ?>;
-    var wh_out_id = document.getElementById("wh_out_id").value; 
-    var wh_in_id = document.getElementById("wh_in_id").value; 
-    var datein = document.getElementById("datein").value;
-    var item_array = new Array();
-    for(var i=0; i<log_id.length; i++){
-        item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
-    }
-    
     $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/0"); ?>" ,
-            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein} ,
+            url : "<?php echo site_url("warehouse_transfer/transferstock_disable_confirm"); ?>" ,
+            data : {stot_id: stot_id} ,
             dataType: 'json',
             success : function(data) {
-                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบส่งของ ใช่หรือไม่";
-                bootbox.confirm(message, function(result) {
-                        var currentForm = this;
-                        if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print"); ?>"+"/"+data.b, "_blank");
-                            location.reload();
-                        }else{
-                            location.reload();
-                        }
-
-                });
-                
-                
+                location.reload(); 
             },
             error: function (textStatus, errorThrown) {
                 alert("เกิดความผิดพลาด !!!");
                 document.getElementById("savebtn").disabled = false;
             }
         });
-
 }
     
 </script>

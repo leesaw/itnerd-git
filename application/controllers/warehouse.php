@@ -47,11 +47,10 @@ function showBalance()
         if ($refcode!="") {
             $keyword = explode(" ",$refcode);
             if (count($keyword) < 2) { 
-                $sql .= " and it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
-                    if ($i != 0) $sql .= " and ";
-                    $sql .= " and it_short_description like '%".$refcode."%'";
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
                 }
             }
         }
@@ -59,11 +58,10 @@ function showBalance()
         if ($refcode!="") {
             $keyword = explode(" ",$refcode);
             if (count($keyword) < 2) { 
-                $sql .= " and it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%'";
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
-                    if ($i != 0) $sql .= " and ";
-                    $sql .= " and it_short_description like '%".$refcode."%'";
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
                 }
             }
         }else{
@@ -82,7 +80,7 @@ function showBalance()
         if (($maxprice !="") && ($maxprice>=0)) $sql .= "it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
-    $data['stock_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+    $data['stock_array'] = $this->tp_warehouse_model->getWarehouse_balance($sql);
     
     $data['refcode'] = $refcode;
     $data['brand'] = $brand;
@@ -90,8 +88,18 @@ function showBalance()
     $data['minprice'] = $minprice;
     $data['maxprice'] = $maxprice;
 
-    $data['title'] = "NGG|IT Nerd - Ref Code";
+    $data['title'] = "NGG| Nerd - Ref Code";
     $this->load->view('TP/warehouse/show_stock',$data);
+}
+    
+function view_serial()
+{
+    $stob_id = $this->uri->segment(3);
+    $sql = "stob_id = '".$stob_id."'";
+    $data['serial_array'] = $this->tp_item_model->getCaseback_stock($sql);
+    
+    $data['title'] = "NGG| Nerd - Caseback";
+    $this->load->view('TP/item/show_serial',$data);
 }
 
 }
