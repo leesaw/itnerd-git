@@ -127,6 +127,24 @@
                 </ul>
 
             </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+				    <li>
+					   <a href="<?php echo site_url("sale/saleOrder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
+					</li>
+					<li>
+                        <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
+                    </li>
+					<li>
+                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติรับสินค้าเข้าคลัง</a>
+                    </li>
+                </ul>
+
+            </li>
             <?php }else{ ?>
             <li class="header">ROLEX</li>
             <li>
@@ -170,6 +188,11 @@
                 </ul>
 
             </li>
+            <li>
+              <a href="<?php echo site_url("sale/saleOrder_POS"); ?>">
+                <i class="fa fa-usd"></i><span>ออกใบกำกับภาษี/ใบส่งสินค้า/<br>ใบเสร็จรับเงิน</span>
+              </a>
+            </li>
     
             <?php } ?>
             <li class="treeview">
@@ -185,11 +208,7 @@
                 </ul>
 
             </li>
-            <li>
-              <a href="<?php echo site_url("TP/main"); ?>">
-                <i class="fa fa-usd"></i><span>ออกใบกำกับภาษี/ใบส่งสินค้า/<br>ใบเสร็จรับเงิน</span>
-              </a>
-            </li>
+            
             <?php  } ?>
           </ul>
         </section>

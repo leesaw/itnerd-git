@@ -80,31 +80,31 @@ function importstock_print()
     
 function importstock_serial_print()
 {
-		$id = $this->uri->segment(3);
-		
-		$this->load->library('mpdf/mpdf');                
-        $mpdf= new mPDF('th','A4','0', 'thsaraban');
-		$stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
-		
-        $sql = "stoi_id = '".$id."'";
-		$query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
-		if($query){
-			$data['stock_array'] =  $query;
-		}else{
-			$data['stock_array'] = array();
-		}
-    
-		$query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in_serial($sql);
-		if($query){
-			$data['serial_array'] =  $query;
-		}else{
-			$data['serial_array'] = array();
-		}
-		//echo $html;
-        $mpdf->SetJS('this.print();');
-		$mpdf->WriteHTML($stylesheet,1);
-        $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_in_print", $data, TRUE));
-        $mpdf->Output();
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+    $sql = "stoi_id = '".$id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
+    if($query){
+        $data['stock_array'] =  $query;
+    }else{
+        $data['stock_array'] = array();
+    }
+
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in_serial($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_in_print", $data, TRUE));
+    $mpdf->Output();
 }
     
 function importstock_save()
@@ -115,13 +115,16 @@ function importstock_save()
 	$wh_id = $this->input->post("whid");
     $it_array = $this->input->post("item");
     
-    $this->load->model('tp_item_model','',TRUE);
-    for($i=0; $i<count($it_array); $i++){
-        $check_caseback = $this->tp_item_model->checkAvailable_caseback($it_array[$i]["code"]);
-        if ($check_caseback > 0) {
-            $result = array("a" => $i, "b" => 0);
-            echo json_encode($result);
-            exit();
+    if ($luxury == 1) {
+        $this->load->model('tp_item_model','',TRUE);
+        for($i=0; $i<count($it_array); $i++){
+            $check_caseback = $this->tp_item_model->checkAvailable_caseback($it_array[$i]["code"]);
+            if ($check_caseback > 0) {
+                $result = array("a" => $i, "b" => 0);
+                echo json_encode($result);
+                exit();
+            }
+            
         }
     }
     
@@ -147,6 +150,7 @@ function importstock_save()
                     'stoi_warehouse_id' => $wh_id,
                     'stoi_datein' => $datein,
                     'stoi_is_rolex' => $this->session->userdata('sessrolex'),
+                    'stoi_has_serial' => $luxury,
                     'stoi_dateadd' => $currentdate,
                     'stoi_dateadd_by' => $this->session->userdata('sessid')
             );
@@ -186,6 +190,7 @@ function importstock_save()
         $stock = array( 'log_stob_transfer_id' => $last_id,
                         'log_stob_status' => 'I',
                         'log_stob_qty_update' => $it_array[$i]["qty"],
+                        'log_stob_warehouse_id' => $wh_id,
                         'log_stob_old_qty' => $old_qty,
                         'log_stob_item_id' => $it_array[$i]["id"],
                         'log_stob_stock_balance_id' => $stock_id
@@ -203,7 +208,9 @@ function importstock_save()
             $query = $this->tp_log_model->addLogStockBalance_serial($itcode);
         }
     }
+    
     $result = array("a" => $count, "b" => $last_id);
+    //$result = array("a" => 1, "b" => 2);
     echo json_encode($result);
     exit();
 }
@@ -436,7 +443,7 @@ function confirm_transfer_between_serial()
     }else{
         $data['stock_array'] = array();
     }
-
+    
     $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
     if($query){
         $data['serial_array'] =  $query;
@@ -521,10 +528,6 @@ function transferstock_save_confirm()
             
         }
         
-        $this->load->model('tp_item_model','',TRUE);
-        $serial = array("id" => $it_array[$i]["item_serial"], "itse_warehouse_id" => $wh_in_id);
-        $query = $this->tp_item_model->editItemSerial($serial);
-        
         if ($luxury==0) {
             
             $stock = array( 'id' => $it_array[$i]["id"],
@@ -534,6 +537,10 @@ function transferstock_save_confirm()
             $query = $this->tp_log_model->editWarehouse_transfer_between($stock);
             
             $count += $it_array[$i]["qty_final"];
+        }else if ($luxury==1) {
+            $this->load->model('tp_item_model','',TRUE);
+            $serial = array("id" => $it_array[$i]["item_serial"], "itse_warehouse_id" => $wh_in_id);
+            $query = $this->tp_item_model->editItemSerial($serial);
         }
     }
     if ($luxury == 1) {

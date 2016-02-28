@@ -198,13 +198,14 @@ function submitform(x)
             if (duplicate > 0) {
                 alert("Caseback ซ้ำกัน");
             }else{
-                var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+                var r = confirm("ยืนยันการรับสินค้าเข้าคลัง !!");
                 if (r == true) {
                     confirmform(x);
                 }
             }
         }else{
-            var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+
+            var r = confirm("ยืนยันการรับสินค้าเข้าคลัง !!");
             if (r == true) {
                 confirmform(x);
             }
@@ -262,17 +263,22 @@ function confirmform(luxury)
             });
         }
     }else if (luxury==0){
-        document.getElementById("savebtn").disabled = true;
-
         var datein = document.getElementById("datein").value;
         var whid = document.getElementById('whid').value;
         var it_id = document.getElementsByName('it_id');
         var it_quantity = document.getElementsByName('it_quantity');
         var it_array = new Array();
-
-        for(var i=0; i<it_id.length; i++){
+        
+        for(var i=0; i<it_quantity.length; i++){
+            if (it_quantity[i].value % 1 != 0 || it_quantity[i].value == "") {
+                alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
+                it_quantity[i].value = '';
+                return;
+            }
             it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
         }
+        document.getElementById("savebtn").disabled = true;
+        
         if(it_id.length>0) {
             $.ajax({
                 type : "POST" ,

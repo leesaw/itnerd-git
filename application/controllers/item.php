@@ -225,6 +225,7 @@ function getRefcode()
     $luxury = $this->input->post("luxury");
     
     $sql = "it_refcode = '".$refcode."' and ".$this->no_rolex;
+    $sql .= " and br_has_serial = '".$luxury."'";
     $result = $this->tp_item_model->getItem($sql);
     $output = "";
     foreach ($result as $loop) {
@@ -252,6 +253,26 @@ function getCaseback()
         $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
     }
     echo $output;
+}
+    
+function getCaseback_warehouse()
+{
+    $refcode = $this->input->post("caseback");
+    
+    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and ".$this->no_rolex;
+    $result = $this->tp_item_model->getItem_caseback($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='caseback_id' id='caseback_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td><td>";
+        $output .= "1</td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+    }
+    echo $output;
+}
+    
+function getRefcode_caseback_warehouse()
+{
+    
 }
 
     

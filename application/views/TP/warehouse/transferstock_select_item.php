@@ -258,8 +258,6 @@ function confirmform(luxury)
             }
         });
     }else if (luxury==0){
-        document.getElementById("savebtn").disabled = true;
-
         var whid_out = <?php echo $whid_out; ?>;
         var whid_in = <?php echo $whid_in; ?>;
         var datein = "<?php echo $datein; ?>";
@@ -269,6 +267,17 @@ function confirmform(luxury)
         var it_array = new Array();
         var checked = 0;
         var index = 0;
+        
+        for(var i=0; i<it_quantity.length; i++){
+            if (it_quantity[i].value % 1 != 0 || it_quantity[i].value == "") {
+                alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
+                it_quantity[i].value = '';
+                return;
+            }
+
+        }
+        document.getElementById("savebtn").disabled = true;
+        
         for(var i=0; i<it_id.length; i++){
             
             for(var j=0; j<index; j++) {
@@ -298,9 +307,9 @@ function confirmform(luxury)
                         var currentForm = this;
                         if (result) {
                             window.open("<?php echo site_url("warehouse_transfer/transferstock_print"); ?>"+"/"+data.b, "_blank");
-                            location.reload();
+                            window.location = "<?php echo site_url("warehouse_transfer/transferstock"); ?>";
                         }else{
-                            location.reload();
+                            window.location = "<?php echo site_url("warehouse_transfer/transferstock"); ?>";
                         }
 
                 });

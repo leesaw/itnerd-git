@@ -32,6 +32,28 @@ Class Tp_shop_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getItem_refcode($where)
+ {
+    $this->db->select("it_id, it_refcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, br_name, br_id, br_code, stob_id, stob_qty, sh_group_id");
+    $this->db->from('tp_stock_balance');
+	$this->db->join('tp_shop', "sh_warehouse_id = stob_warehouse_id", "left");
+    $this->db->join('tp_item', 'it_id = stob_item_id', 'left');
+    $this->db->join('tp_brand', 'it_brand_id = br_id','left');	
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function getBarcode_shop_group($where)
+ {
+    $this->db->select("sb_id, sb_number, sb_discount_percent, sb_gp, sb_brand_name");
+	$this->db->from('tp_sale_barcode');	
+    if ($where != "") $this->db->where($where);
+    $this->db->order_by("sb_number", "asc");
+	$query = $this->db->get();		
+	return $query->result();
+ }
 
  function addShop($insert=NULL)
  {		

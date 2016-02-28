@@ -79,17 +79,27 @@
 				                                </thead>
 												<tbody>
                                                     <?php foreach($stock_array as $loop) { ?>
-                                                    <tr>
+                                                    <tr<?php if ($loop->br_has_serial==1) echo " class='danger'"; ?>>
                                                     <input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop->log_stot_item_id; ?>">
-                                                    <input type='hidden' name='log_id' id='log_id' value=" <?php echo $loop->log_stot_id; ?>">
+                                                    <input type='hidden' name='log_id' id='log_id' value="<?php echo $loop->log_stot_id; ?>">
                                                     <td><?php echo $loop->it_refcode; ?></td>
                                                     <td><?php echo $loop->br_name; ?></td>
                                                     <td><?php echo $loop->it_model; ?></td>
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><?php echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
-                                                    <td><input type='text' name='it_final' id='it_final' value='<?php echo $loop->qty_update; ?>' style='width: 50px;' <?php if ($status==2) echo "readonly"; ?>></td>
+                                                    <td><input type='text' name='it_final' id='it_final' value='<?php if ($loop->br_has_serial==0) echo $loop->qty_update; ?>' style='width: 50px;' <?php if ($status==2 || $loop->br_has_serial==1) echo "readonly"; ?>></td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
+                                                    
+                                                    <?php // if has serial
+                                                    
+                                                    if ($loop->br_has_serial==1) {
+                                                        for($i=1; $i<=$loop->qty_update; $i++) {
+                                                    ?>
+                                                    <tr>
+                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial' class="text-blue" value='' style='width: 200px; text-align:center'><input type="hidden" name="serial_log_id" id="serial_log_id" value="<?php echo $loop->log_stot_id; ?>"></td>
+                                                    </tr>
+                                                    <?php } } ?>
                                                     <?php } ?>
 												</tbody>
 											</table>
@@ -129,7 +139,7 @@ function returnform()
 {
     window.location = "<?php echo site_url("warehouse_transfer/report_transferstock"); ?>";
 }
-    
+
 function submitform()
 {
     var it_final = document.getElementsByName('it_final');
@@ -145,10 +155,15 @@ function submitform()
         confirmform();
     }
 }
+    
+function checkCaseback()
+{
+        
+}
 
 function confirmform()
 {
-    document.getElementById("savebtn").disabled = true;
+   
     var it_final = document.getElementsByName('it_final');
     var log_id = document.getElementsByName('log_id');
     var item_id = document.getElementsByName('it_id');
@@ -156,11 +171,34 @@ function confirmform()
     var wh_out_id = document.getElementById("wh_out_id").value; 
     var wh_in_id = document.getElementById("wh_in_id").value; 
     var datein = document.getElementById("datein").value;
-    var item_array = new Array();
-    for(var i=0; i<log_id.length; i++){
-        item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
+    
+    // serial item
+    var serial = document.getElementsByName('serial');
+    var serial_log_id = document.getElementsByName('serial_log_id');
+    
+    var serial_array = new Array();
+    var index_serial = 0;
+    for(var i=0; i<serial_log_id.length; i++) {
+        if (serial[i].value != "") {
+            serial_array[index_serial] = {serial_log_id: serial_log_id[i].value, serial: serial[i].value};
+            index_serial++;
+        }
     }
     
+    
+    
+    var item_array = new Array();
+    for(var i=0; i<log_id.length; i++){
+        
+        if (it_final[i].value % 1 != 0 || it_quantity[i].value == "") {
+            alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
+            it_final[i].value = '';
+            return;
+        }
+        
+        item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
+    }
+    document.getElementById("savebtn").disabled = true;
     $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/0"); ?>" ,
@@ -188,6 +226,7 @@ function confirmform()
         });
 
 }
+
     
 </script>
 </body>
