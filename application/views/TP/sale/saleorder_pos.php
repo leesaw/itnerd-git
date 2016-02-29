@@ -65,6 +65,21 @@
                                     <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
                                 </div>
 							</div>
+                            <div class="col-md-2">
+                                <div class="form-group-sm">
+                                    ชำระเงิน
+                                    <select class="form-control" name="payment" id="payment">
+                                        <option value="C">เงินสด</option>
+                                        <option value="D">บัตรเครดิต</option>
+                                    </select>
+                                </div>
+							</div> 
+                            <div class="col-md-2">
+                                <div class="form-group-sm">
+                                    <div id="text1">จำนวนเงินที่จ่าย</div>
+                                    <input type="text" class="form-control" name="payment_value" id="payment_value" value="" onchange="numberWithCommas(this);" >
+                                </div>
+							</div> 
                         </div>
 						<br>
 						<div class="row">
@@ -95,6 +110,12 @@
 				                                </thead>
 												<tbody>
 												</tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th colspan="7" style="text-align:right">ยอดรวม:</th>
+                                                        <th><div id="summary"></div></th>
+                                                    </tr>
+                                                </tfoot>
 											</table>
 										</div>
 									</div>
@@ -138,10 +159,33 @@ $(document).ready(function()
 			}
             
             $(this).val('');
+            document.getElementById("summary").innerHTML = calSummary();
 		}
 	});
+    
+    $("#payment").change(function() {
+        var val = document.getElementById("payment").value;
+        if (val == 'C') {
+            document.getElementById("text1").innerHTML = "จำนวนเงินที่จ่าย";
+            document.getElementById("payment_value").value = "";
+        }else{
+            document.getElementById("text1").innerHTML = "บัตรธนาคาร";
+            document.getElementById("payment_value").value = "";
+        }
+    });
 
 });
+
+    
+function calSummary() {
+    var sum = 0;
+    var srp = document.getElementsByName('it_srp');
+    var dc = document.getElementsByName('dc_thb');
+    for(var i=0; i<srp.length; i++) {
+        sum = sum + parseInt(srp[i].value) - parseInt(dc[i].value);
+    }
+    document.getElementById("summary").innerHTML = sum;
+}
     
 function numberWithCommas(obj) {
 	var x=$(obj).val();
@@ -176,6 +220,7 @@ function check_product_code(refcode_input, shop_id)
             }
         });
 	}
+
 }
 
 function delete_item_row(row1)
@@ -210,7 +255,6 @@ function submitform()
 function confirmform()
 {
     var itse_id = document.getElementsByName('itse_id');
-    var it_id = document.getElementsByName('it_id');
     var stob_id = document.getElementsByName('stob_id');
     var it_array = new Array();
     var checked = 0;
