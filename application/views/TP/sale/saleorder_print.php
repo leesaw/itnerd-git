@@ -37,7 +37,7 @@
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->br_name." ".$loop->it_model; ?></td>
-<td align="center" style="border-left:1px solid black;"><?php echo $loop->soi_qty; ?></td>
+<td align="center" style="border-left:1px solid black;"><?php echo $loop->soi_qty." ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->sb_number; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; ?></td>

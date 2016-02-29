@@ -1,5 +1,5 @@
     <header class="main-header">
-        <a href="#" class="logo"><b>NGG | </b><?php if ($this->session->userdata('sessrolex') == 0) echo "Nerd"; else echo "ROLEX"; ?> </a>
+        <a href="#" class="logo"><b>NGG | </b><?php if ($this->session->userdata('sessrolex') == 0) echo "Nerd"; else echo "ROLEX"; if ($this->session->userdata('sessstatus') == 8) echo " POS"; ?> </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
           <!-- Sidebar toggle button-->
@@ -12,29 +12,6 @@
             
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
-            <?php if ($this->session->userdata('sessstatus') != 1) { ?>
-            <!-- Notifications: style can be found in dropdown.less -->
-              <li class="dropdown notifications-menu">
-                <a href="<?php echo site_url("task/ringshow"); ?>">
-                  <i class="fa fa-bell-o"></i>
-                  <span class="label label-warning"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
-                </a>
-              </li>
-            
-              <li class="dropdown notifications-menu">
-                <a href="<?php echo site_url("task/notification"); ?>">
-                  <i class="fa fa-bullhorn"></i>
-                  <span class="label label-danger"><?php if (isset($numstatus5) && ($numstatus5>0)) { echo $numstatus5; } ?></span>
-                </a>
-              </li>
-            <?php }elseif($this->session->userdata('sessstatus') == 1) { ?>
-              <li class="dropdown notifications-menu">
-                <a href="<?php echo site_url("task/completedtask"); ?>">
-                  <i class="fa fa-check-square-o"></i>
-                  <span class="label label-success"><?php if (isset($numring) && ($numring>0)) { echo $numring; } ?></span>
-                </a>
-              </li>
-            <?php } ?>
               <!-- User Account: style can be found in dropdown.less -->
               <li class="dropdown user user-menu">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -131,16 +108,10 @@
                 <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
 				    <li>
-					   <a href="<?php echo site_url("sale/saleOrder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
+					   <a href="<?php echo site_url("sale/saleorder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
 					</li>
 					<li>
-                        <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
-                    </li>
-                    <li>
-                        <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
-                    </li>
-					<li>
-                        <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติรับสินค้าเข้าคลัง</a>
+                        <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติการสั่งขาย</a>
                     </li>
                 </ul>
 
@@ -188,13 +159,6 @@
                 </ul>
 
             </li>
-            <li>
-              <a href="<?php echo site_url("sale/saleOrder_POS"); ?>">
-                <i class="fa fa-usd"></i><span>ออกใบกำกับภาษี/ใบส่งสินค้า/<br>ใบเสร็จรับเงิน</span>
-              </a>
-            </li>
-    
-            <?php } ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-shopping-cart"></i> <span>ข้อมูลลูกค้า (Customer)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
@@ -210,6 +174,18 @@
             </li>
             
             <?php  } ?>
+            <?php } ?>
+            
+            <?php if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) { ?>
+            <li class="header">ROLEX POS</li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS"); ?>">
+                <span>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</span>
+              </a>
+            </li>
+            <?php } ?>
+            
+            
           </ul>
         </section>
         <!-- /.sidebar -->

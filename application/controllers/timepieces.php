@@ -17,14 +17,16 @@ function index()
     
 function main()
 {   
-    
+    if ($this->session->userdata('sessrolex') == 1) {
+        redirect('timepieces/main_rolex', 'refresh');
+    }
     $data['title'] = "NGG| Nerd";
     $this->load->view('TP/main',$data);
 }
   
 function main_rolex()
 {   
-    
+    $data['sessstatus'] = $this->session->userdata('sessstatus');
     $data['title'] = "NGG| Rolex";
     $this->load->view('TP/main_rolex',$data);
 }

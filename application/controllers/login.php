@@ -22,14 +22,12 @@ class Login extends CI_Controller {
              'sessusername' => $row->username,
              'sessfirstname' => $row->firstname,
              'sesslastname' => $row->lastname,
-             'sessstatus' => $row->status
+             'sessstatus' => $row->status,
+             'sessrolex' => $row->is_rolex
            );
         }
         $this->session->set_userdata($sess_array); 
-        if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 99)) {
-            redirect('main', 'refresh');
-        }
-        //redirect('main', 'refresh');
+        redirect('timepieces/main', 'refresh');
 
    }else{
         $data['title'] = "NGG| Nerd";
