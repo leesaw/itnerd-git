@@ -33,7 +33,7 @@
 									<div class="form-group-sm">
                                         สาขาที่ขาย *
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php foreach($shop_array as $loop) {  echo $loop->sh_name; $shop_id = $loop->sh_id; } ?>" readonly>
-                                        <input type="hidden" name="shop_id" value="<?php echo $shop_id; ?>">
+                                        <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
                                     </div>
 							</div>
 						</div>
@@ -75,9 +75,9 @@
                                 </div>
 							</div> 
                             <div class="col-md-2">
-                                <div class="form-group-sm">
+                                <div class="form-group-lg">
                                     <div id="text1">จำนวนเงินที่จ่าย</div>
-                                    <input type="text" class="form-control" name="payment_value" id="payment_value" value="" onchange="numberWithCommas(this);" >
+                                    <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="" onchange="numberWithCommas(this);" >
                                 </div>
 							</div> 
                         </div>
@@ -111,8 +111,8 @@
 												<tbody>
 												</tbody>
                                                 <tfoot>
-                                                    <tr>
-                                                        <th colspan="7" style="text-align:right">ยอดรวม:</th>
+                                                    <tr style="font-size:200%;" class="text-red">
+                                                        <th colspan="7" style="text-align:right;"><label>ยอดรวม:</th>
                                                         <th><div id="summary"></div></th>
                                                     </tr>
                                                 </tfoot>
@@ -122,7 +122,15 @@
 								</div>
 							</div>	
 						</div>	
-                        
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group-sm">
+                                    Remark
+                                    <input type="text" class="form-control" name="remark" id="remark" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  ชำระเงิน </button>&nbsp;&nbsp;
@@ -153,13 +161,18 @@ $(document).ready(function()
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
+            var shop_id = document.getElementById("shop_id").value;
             if(product_code_value != "")
 			{
-                check_product_code(product_code_value);
+                check_product_code(product_code_value,shop_id);
 			}
             
             $(this).val('');
-            document.getElementById("summary").innerHTML = calSummary();
+            
+            setTimeout(function(){
+                calSummary();
+            },50);
+            //calSummary();
 		}
 	});
     
@@ -173,7 +186,7 @@ $(document).ready(function()
             document.getElementById("payment_value").value = "";
         }
     });
-
+    
 });
 
     
@@ -182,10 +195,11 @@ function calSummary() {
     var srp = document.getElementsByName('it_srp');
     var dc = document.getElementsByName('dc_thb');
     for(var i=0; i<srp.length; i++) {
-        sum = sum + parseInt(srp[i].value) - parseInt(dc[i].value);
+        if (dc[i].value == "") dc[i].value = 0; 
+        sum += parseInt(srp[i].value) - parseInt((dc[i].value).replace(/,/g, ''));
     }
-    document.getElementById("summary").innerHTML = sum;
-}
+    document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+} 
     
 function numberWithCommas(obj) {
 	var x=$(obj).val();
@@ -202,11 +216,11 @@ function check_product_code(refcode_input, shop_id)
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("sale/check_rolex_serial"); ?>" ,
-            data : {refcode: refcode_input },
+            data : {refcode: refcode_input, shop_id: shop_id},
             success : function(data) {
                 if(data != "")
                 {
-                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><input type="text" name="dc_thb" id="dc_thb" value="0" onChange="numberWithCommas(this);"></td><td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><input type="text" name="dc_thb" id="dc_thb" value="0" onChange="numberWithCommas(this); calSummary();"></td><td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                     $('table > tbody').append(element);
                     count_enter_form_input_product++;
                     count_list++;
@@ -228,6 +242,9 @@ function delete_item_row(row1)
     count_list--;
     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
     $('#row'+row1).remove();
+    setTimeout(function(){
+        calSummary();
+    },50);
 }
     
 function submitform()
@@ -254,36 +271,75 @@ function submitform()
 
 function confirmform()
 {
+    
+    var cusname = document.getElementById('cusname').value;
+    var cusaddress = document.getElementById('cusaddress').value;
+    var custax_id = document.getElementById('custax_id').value;
+    var custelephone = document.getElementById('custelephone').value;
+    var payment = document.getElementById('payment').value;
+    var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
+    var remark = document.getElementById('remark').value;
+    
+    var shop_id = document.getElementById('shop_id').value;
+    var datein = document.getElementById('datein').value;
+    
     var itse_id = document.getElementsByName('itse_id');
     var stob_id = document.getElementsByName('stob_id');
+    var it_id = document.getElementsByName('it_id');
+    var it_srp = document.getElementsByName('it_srp');
+    var dc_thb = document.getElementsByName('dc_thb');
     var it_array = new Array();
     var checked = 0;
     var index = 0;
-    
+
     for(var i=0; i<it_id.length; i++){
         for(var j=0; j<index; j++) {
             if (it_id[i].value == it_array[j]['id']) {
-                it_array[j]['qty'] = parseInt(it_array[j]['qty']) + 1;
+                //it_array[j]['qty'] = parseInt(it_array[j]['qty']) + 1;
                 
                 if (itse_id[i].value == it_array[j]['itse_id']) {
                     alert("Serial ซ้ำกัน");
                     return;
                 }
-                checked++;
+                //checked++;
             }
 
         }
         if (checked==0) {
-            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value};
+            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, dc_thb:(dc_thb[i].value).replace(/,/g, ''), it_srp:it_srp[i].value};
             index++;
         }else{
             checked = 0;
         }
     }
-
+    
     document.getElementById("savebtn").disabled = true;
     
-    document.getElementById("form1").submit();
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("sale/saleorder_rolex_save"); ?>" ,
+        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, custelephone: custelephone, payment: payment, payment_value: payment_value, remark: remark} ,
+        dataType: 'json',
+        success : function(data) {
+            var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
+            bootbox.confirm(message, function(result) {
+                    var currentForm = this;
+                    if (result) {
+                        window.open("<?php echo site_url("sale/saleorder_rolex_print"); ?>"+"/"+data.b, "_blank");
+                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                    }else{
+                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                    }
+
+            });
+
+
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+            document.getElementById("savebtn").disabled = false;
+        }
+    });
     
 }
 </script>

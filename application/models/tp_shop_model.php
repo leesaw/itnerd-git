@@ -45,6 +45,19 @@ Class Tp_shop_model extends CI_Model
 	return $query->result();
  }
     
+ function getItem_serial($where)
+ {
+    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, itse_warehouse_id, stob_qty, stob_id");
+    $this->db->from('tp_item_serial');
+	$this->db->join('tp_item', 'itse_item_id = it_id', 'left');
+    $this->db->join('tp_stock_balance', 'stob_warehouse_id=itse_warehouse_id and stob_item_id=itse_item_id', 'left');
+	$this->db->join('tp_shop', "sh_warehouse_id = stob_warehouse_id", "left");
+    $this->db->join('tp_brand', 'it_brand_id = br_id','left');	
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function getBarcode_shop_group($where)
  {
     $this->db->select("sb_id, sb_number, sb_discount_percent, sb_gp, sb_brand_name");

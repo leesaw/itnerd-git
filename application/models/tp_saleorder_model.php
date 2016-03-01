@@ -46,6 +46,43 @@ Class Tp_saleorder_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->num_rows();
  }
+    
+ function getMaxNumber_rolex_shop($month, $shop_id)
+ {
+    $start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    $this->db->select("posro_id");
+	$this->db->from('tp_pos_rolex');
+    $this->db->where("posro_issuedate >=",$start);
+    $this->db->where("posro_issuedate <=",$end);
+    $this->db->where("posro_shop_id", $shop_id);
+	$query = $this->db->get();		
+	return $query->num_rows();
+ }
+    
+ function getPOS_rolex($where)
+ {
+	$this->db->select("posro_id, posro_number, posro_issuedate, posro_ontop_percent, posro_ontop_baht, posro_status, posro_shop_id, sh_name, sh_code, posro_dateadd, posro_sale_person_id, posro_customer_name, posro_customer_address, posro_customer_taxid, posro_customer_tel, posro_payment, posro_payment_value, posro_remark, firstname, lastname");
+	$this->db->from('tp_pos_rolex');
+	//$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
+    $this->db->join('tp_shop', 'sh_id = posro_shop_id', 'left');
+    $this->db->join('nerd_users', 'id = posro_sale_person_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function getPOS_rolex_item($where)
+ {
+	$this->db->select("posroi_id, posroi_pos_rolex_id, posroi_item_id, posroi_item_serial_number_id, posroi_item_srp, posroi_qty, posroi_dc_percent, posroi_dc_baht, posroi_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description");
+	$this->db->from('tp_pos_rolex_item');	
+    $this->db->join('tp_item', 'it_id = posroi_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posroi_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ } 
 
  function addSaleOrder($insert=NULL)
  {		
@@ -62,6 +99,18 @@ Class Tp_saleorder_model extends CI_Model
  function addSaleBarcode($insert=NULL)
  {		
 	$this->db->insert('tp_sale_barcode', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex_item($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex_item', $insert);
 	return $this->db->insert_id();			
  }
  
