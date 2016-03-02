@@ -21,7 +21,7 @@
     <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบกำกับภาษี/ ใบส่งสินค้า/ ใบเสร็จรับเงิน</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php echo $cusaddress; ?><br><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>
@@ -200,7 +200,7 @@ return $rstring;
     <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบกำกับภาษี/ ใบส่งสินค้า/ ใบเสร็จรับเงิน</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php echo $cusaddress; ?><br><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>

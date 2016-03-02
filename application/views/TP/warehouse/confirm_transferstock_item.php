@@ -185,12 +185,10 @@ function confirmform()
         }
     }
     
-    
-    
     var item_array = new Array();
     for(var i=0; i<log_id.length; i++){
         
-        if (it_final[i].value % 1 != 0 || it_quantity[i].value == "") {
+        if (it_final[i].value % 1 != 0 || it_final[i].value == "") {
             alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
             it_final[i].value = '';
             return;
@@ -198,7 +196,9 @@ function confirmform()
         
         item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
     }
+    
     document.getElementById("savebtn").disabled = true;
+
     $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/0"); ?>" ,

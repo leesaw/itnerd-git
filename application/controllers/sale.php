@@ -316,7 +316,7 @@ function saleorder_rolex_print()
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th','A4','0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
-    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.1, array(140,100), array(35,90));
+    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
     $mpdf->showWatermarkImage = true;
 
     $sql = "posro_id = '".$id."'";

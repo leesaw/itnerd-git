@@ -71,6 +71,7 @@
                                     <select class="form-control" name="payment" id="payment">
                                         <option value="C">เงินสด</option>
                                         <option value="D">บัตรเครดิต</option>
+                                        <option value="Q">เช็ค</option>
                                     </select>
                                 </div>
 							</div> 
@@ -146,7 +147,7 @@
 </div>
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
-<script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
+<script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>></script>
 <script type="text/javascript">
 
 var count_enter_form_input_product = 0;
@@ -181,14 +182,16 @@ $(document).ready(function()
         if (val == 'C') {
             document.getElementById("text1").innerHTML = "จำนวนเงินที่จ่าย";
             document.getElementById("payment_value").value = "";
-        }else{
+        }else if (val == 'D'){
             document.getElementById("text1").innerHTML = "บัตรธนาคาร";
+            document.getElementById("payment_value").value = "";
+        }else if (val == 'Q'){
+            document.getElementById("text1").innerHTML = "เลขที่";
             document.getElementById("payment_value").value = "";
         }
     });
     
 });
-
     
 function calSummary() {
     var sum = 0;
@@ -253,7 +256,10 @@ function submitform()
     var cusaddress = document.getElementById('cusaddress').value;
     var custax_id = document.getElementById('custax_id').value;
     var custelephone = document.getElementById('custelephone').value;
-    if (cusname == "") {
+    var datein = document.getElementById('datein').value;
+    if (datein == "") {
+        alert("กรุณาใส่วันที่ขาย");
+    }else if (cusname == "") {
         alert("กรุณาใส่ชื่อลูกค้า");
     }else if (cusaddress == "") {
         alert("กรุณาใส่ที่อยู่ลูกค้า");

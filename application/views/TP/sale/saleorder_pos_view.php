@@ -72,12 +72,12 @@
                             <div class="col-md-2">
                                 <div class="form-group-sm has-success">
                                     <label class="control-label" for="inputSuccess">ชำระเงิน</label>
-                                    <input type="text" class="form-control" name="payment" id="payment" value="<?php if ($loop->posro_payment=='C') echo "เงินสด"; if ($loop->posro_payment=='D') echo "บัตรเครดิต"; ?>" readonly>
+                                    <input type="text" class="form-control" name="payment" id="payment" value="<?php if ($loop->posro_payment=='C') echo "เงินสด"; if ($loop->posro_payment=='D') echo "บัตรเครดิต"; if ($loop->posro_payment=='Q') echo "เช็ค"; ?>" readonly>
                                 </div>
 							</div> 
                             <div class="col-md-3">
                                 <div class="form-group-lg has-success">
-                                    <label class="control-label" for="inputSuccess">จำนวนเงินที่จ่าย / บัตรเครดิตธนาคาร</label>
+                                    <label class="control-label" for="inputSuccess"><?php if ($loop->posro_payment=='C') echo "จำนวนเงินที่จ่าย"; if ($loop->posro_payment=='D') echo "บัตรเครดิตธนาคาร"; if ($loop->posro_payment=='Q') echo "เลขที่"; ?></label>
                                     <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="<?php echo number_format($loop->posro_payment_value); ?>" readonly>
                                 </div>
 							</div> 
