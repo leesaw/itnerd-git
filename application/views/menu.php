@@ -179,8 +179,28 @@
             <?php if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) { ?>
             <li class="header">ROLEX POS</li>
             <li>
+              <a href="<?php echo site_url("timepieces/main_rolex"); ?>">
+                <i class="fa fa-home"></i> <span>หน้าหลัก</span>
+              </a>
+            </li>
+            <li>
               <a href="<?php echo site_url("sale/saleorder_POS"); ?>">
                 <span>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
+                <span>แสดงใบกำกับภาษีของวันนี้</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_temp"); ?>">
+                <span>ออกใบส่งของชั่วคราว</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>">
+                <span>แสดงใบส่งของชั่วคราวของวันนี้</span>
               </a>
             </li>
             <?php } ?>

@@ -267,7 +267,7 @@ function saleorder_rolex_save()
     $month = date("Y-m");
     $month_array = explode('-',date("y-m"));
     
-    $number = $this->tp_saleorder_model->getMaxNumber_saleorder_shop($month, $shop_id);
+    $number = $this->tp_saleorder_model->getMaxNumber_rolex_shop($month, $shop_id);
     $number++;
     
     $number = "NGGTP".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
@@ -390,6 +390,11 @@ function saleorder_rolex_pos_last()
     $this->load->view("TP/sale/saleorder_pos_view", $data);
 }
     
+function saleorder_rolex_void_pos()
+{
+    $id = $this->uri->segment(3);
+}
+    
 function saleorder_rolex_pos_history()
 {
     $currentdate = date("Y-m");
@@ -406,6 +411,202 @@ function saleorder_rolex_pos_history()
     
     $data['title'] = "Nerd - Report Transfer In";
     $this->load->view("TP/warehouse/report_stockin_item", $data);
+}
+    
+function saleorder_POS_today()
+{
+    $currentdate = date("Y-m-d");
+    //$start = $currentdate." 00:00:00";
+    //$end = $currentdate." 23:59:59";
+    
+    $sql = "posro_issuedate = '".$currentdate."' and posro_shop_id = '888'";
+    $query = $this->tp_saleorder_model->getPOS_rolex($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/sale/report_saleorder_POS_today", $data);
+}
+    
+function saleorder_POS_temp()
+{
+    $datein = date("d/m/Y");
+    
+    // shop rolex
+    $sql = "sh_id = '888'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($sql);
+
+    $data['datein'] = $datein;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/sale/saleorder_pos_temp", $data);
+}
+    
+function saleorder_rolex_temp_save()
+{
+    $cusname = $this->input->post("cusname");
+    $cusaddress = $this->input->post("cusaddress");
+    $custelephone = $this->input->post("custelephone");
+    $payment = $this->input->post("payment");
+    $payment_value = $this->input->post("payment_value");
+    $remark = $this->input->post("remark");
+    
+    $shop_id = $this->input->post("shop_id");
+    $saleperson_code = $this->input->post("saleperson_code");
+    $it_array = $this->input->post("item");
+    $datein = $this->input->post("datein");
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $datein = explode('/', $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+    $month = date("Y-m");
+    $month_array = explode('-',date("y-m"));
+    
+    $number = $this->tp_saleorder_model->getMaxNumber_rolex_temp_shop($month, $shop_id);
+    $number++;
+    
+    $number = "NGGTP-TD".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+
+    $sale = array( 'posrot_number' => $number,
+                    'posrot_issuedate' => $datein,
+                    'posrot_dateadd' => $currentdate,
+                    'posrot_shop_id' => $shop_id,
+                    'posrot_customer_name' => $cusname,
+                    'posrot_customer_address' => $cusaddress,
+                    'posrot_customer_tel' => $custelephone,
+                    'posrot_sale_person_id' => $saleperson_code,
+                    'posrot_payment' => $payment,
+                    'posrot_payment_value' => $payment_value,
+                    'posrot_remark' => $remark,
+                    'posrot_dateadd_by' => $this->session->userdata('sessid')
+            );
+    $last_id = $this->tp_saleorder_model->addPOS_rolex_temp($sale);
+    $count = 0;
+    for($i=0; $i<count($it_array); $i++){
+        // add item to so
+        $net = $it_array[$i]["it_srp"]-$it_array[$i]["dc_thb"];
+        $sale = array(  'posroit_pos_rolex_temp_id' => $last_id,
+                        'posroit_item_id' => $it_array[$i]["id"],
+                        'posroit_qty' => $it_array[$i]["qty"],
+                        'posroit_item_serial_number_id' => $it_array[$i]["itse_id"],
+                        'posroit_item_srp' => $it_array[$i]["it_srp"],
+                        'posroit_dc_baht' => $it_array[$i]["dc_thb"],
+                        'posroit_netprice' => $net
+            );
+        $query = $this->tp_saleorder_model->addPOS_rolex_item_temp($sale);
+        $count += $it_array[$i]["qty"];
+        // decrease stock warehouse out
+        $this->load->model('tp_warehouse_transfer_model','',TRUE);
+        $sql = "stob_id = '".$it_array[$i]["stob_id"]."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        $qty_update = $it_array[$i]["qty"];
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $qty_new = $loop->stob_qty - $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 0, "itse_dateadd" => $currentdate);
+        
+        $this->load->model('tp_item_model','',TRUE);
+        $query = $this->tp_item_model->editItemSerial($serial);
+    }
+
+    $result = array("a" => $count, "b" => $last_id);
+    echo json_encode($result);
+    exit();
+}
+    
+function saleorder_rolex_temp_print()
+{
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    $mpdf->showWatermarkImage = true;
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/sale/bill_temp_rolex_print", $data, TRUE));
+    $mpdf->Output();
+}
+    
+function saleorder_rolex_pos_temp_last()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+    
+    $data['pos_rolex_id'] = $id;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/sale/saleorder_pos_temp_view", $data);
+}
+    
+function saleorder_POS_temp_today()
+{
+    $currentdate = date("Y-m-d");
+    //$start = $currentdate." 00:00:00";
+    //$end = $currentdate." 23:59:59";
+    
+    $sql = "posrot_issuedate = '".$currentdate."' and posrot_shop_id = '888'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/sale/report_saleorder_POS_temp_today", $data);
 }
     
 }

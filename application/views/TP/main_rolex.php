@@ -29,6 +29,23 @@
                                     <a href="<?php echo site_url("sale/saleorder_POS"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</h4></button></a>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>"><button type="button" class="btn btn-primary btn-lg btn-block"><h4>แสดงใบกำกับภาษีของวันนี้</h4></button></a>
+                                </div>
+                            </div>
+						</div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("sale/saleorder_POS_temp"); ?>"><button type="button" class="btn btn-info btn-lg btn-block"><h4>ออกใบส่งของชั่วคราว</h4></button></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>"><button type="button" class="btn btn-warning btn-lg btn-block"><h4>แสดงใบส่งของชั่วคราวของวันนี้</h4></button></a>
+                                </div>
+                            </div>
 						</div>
 					</div>
                     <div class="box-footer">

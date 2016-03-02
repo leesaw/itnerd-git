@@ -11,13 +11,13 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</h1>
+            <h1>ออกใบส่งของชั่วคราว</h1>
         </section>
             
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
-                <div class="panel panel-success">
+                <div class="panel panel-info">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
 					
                     <div class="panel-body">
@@ -26,7 +26,7 @@
                                 <form action="<?php echo site_url("sale/saleorder_rolex_payment"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
                                             วันที่ขาย
-                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>" readonly>
+                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
                                     </div>
 							</div>
                             <div class="col-md-2">
@@ -53,12 +53,6 @@
 							</div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group-sm">
-                                    เลขประจำตัวผู้เสียภาษี *
-                                    <input type="text" class="form-control" name="custax_id" id="custax_id" value="">
-                                </div>
-							</div>
                             <div class="col-md-3">
                                 <div class="form-group-sm">
                                     เบอร์ติดต่อ *
@@ -161,6 +155,8 @@
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>></script>
+<script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
+<script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script type="text/javascript">
 
 var count_enter_form_input_product = 0;
@@ -168,6 +164,7 @@ var count_list = 0;
 
 $(document).ready(function()
 {    
+    get_datepicker("#datein");
     $("#refcode").focus();
     
     document.getElementById("savebtn").disabled = false;
@@ -217,6 +214,12 @@ $(document).ready(function()
     });
     
 });
+    
+function get_datepicker(id)
+{
+    $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
+}
     
 function calSummary() {
     var sum = 0;
@@ -305,7 +308,6 @@ function submitform()
 {
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress').value;
-    var custax_id = document.getElementById('custax_id').value;
     var custelephone = document.getElementById('custelephone').value;
     var datein = document.getElementById('datein').value;
     var saleperson_name = document.getElementById('salename').value;
@@ -319,8 +321,6 @@ function submitform()
         alert("กรุณาใส่ชื่อลูกค้า");
     }else if (cusaddress == "") {
         alert("กรุณาใส่ที่อยู่ลูกค้า");
-    }else if (custax_id == "") {
-        alert("กรุณาใส่เลขประจำตัวผู้เสียภาษีลูกค้า");
     }else if (custelephone == "") {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า");
     }else if (saleperson_name == "" || saleperson_code =="") {
@@ -338,7 +338,6 @@ function confirmform()
     
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress').value;
-    var custax_id = document.getElementById('custax_id').value;
     var custelephone = document.getElementById('custelephone').value;
     var payment = document.getElementById('payment').value;
     var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
@@ -382,18 +381,18 @@ function confirmform()
     
     $.ajax({
         type : "POST" ,
-        url : "<?php echo site_url("sale/saleorder_rolex_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
+        url : "<?php echo site_url("sale/saleorder_rolex_temp_save"); ?>" ,
+        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
             bootbox.confirm(message, function(result) {
                     var currentForm = this;
                     if (result) {
-                        window.open("<?php echo site_url("sale/saleorder_rolex_print"); ?>"+"/"+data.b, "_blank");
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                        window.open("<?php echo site_url("sale/saleorder_rolex_temp_print"); ?>"+"/"+data.b, "_blank");
+                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_temp_last"); ?>/"+data.b;
                     }else{
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_temp_last"); ?>/"+data.b;
                     }
 
             });

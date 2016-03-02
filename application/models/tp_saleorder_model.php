@@ -60,9 +60,22 @@ Class Tp_saleorder_model extends CI_Model
 	return $query->num_rows();
  }
     
+ function getMaxNumber_rolex_temp_shop($month, $shop_id)
+ {
+    $start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    $this->db->select("posrot_id");
+	$this->db->from('tp_pos_rolex_temp');
+    $this->db->where("posrot_issuedate >=",$start);
+    $this->db->where("posrot_issuedate <=",$end);
+    $this->db->where("posrot_shop_id", $shop_id);
+	$query = $this->db->get();		
+	return $query->num_rows();
+ }
+    
  function getPOS_rolex($where)
  {
-	$this->db->select("posro_id, posro_number, posro_issuedate, posro_ontop_percent, posro_ontop_baht, posro_status, posro_shop_id, sh_name, sh_code, posro_dateadd, posro_sale_person_id, posro_customer_name, posro_customer_address, posro_customer_taxid, posro_customer_tel, posro_payment, posro_payment_value, posro_remark, sp_firstname as firstname, sp_lastname as lastname");
+	$this->db->select("posro_id, posro_number, posro_issuedate, posro_ontop_percent, posro_ontop_baht, posro_status, posro_shop_id, sh_name, sh_code, posro_dateadd, posro_sale_person_id, posro_customer_name, posro_customer_address, posro_customer_taxid, posro_customer_tel, posro_payment, posro_payment_value, posro_remark, sp_firstname as firstname, sp_lastname as lastname, sp_barcode");
 	$this->db->from('tp_pos_rolex');
 	//$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
     $this->db->join('tp_shop', 'sh_id = posro_shop_id', 'left');
@@ -78,6 +91,30 @@ Class Tp_saleorder_model extends CI_Model
 	$this->db->from('tp_pos_rolex_item');	
     $this->db->join('tp_item', 'it_id = posroi_item_id','left');	
     $this->db->join('tp_item_serial', 'itse_id = posroi_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ } 
+    
+ function getPOS_rolex_temp($where)
+ {
+	$this->db->select("posrot_id, posrot_number, posrot_issuedate, posrot_ontop_percent, posrot_ontop_baht, posrot_status, posrot_shop_id, sh_name, sh_code, posrot_dateadd, posrot_sale_person_id, posrot_customer_name, posrot_customer_address, posrot_customer_tel, posrot_payment, posrot_payment_value, posrot_remark, sp_firstname as firstname, sp_lastname as lastname, sp_barcode");
+	$this->db->from('tp_pos_rolex_temp');
+	//$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
+    $this->db->join('tp_shop', 'sh_id = posrot_shop_id', 'left');
+    $this->db->join('tp_sale_person', 'sp_id = posrot_sale_person_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function getPOS_rolex_temp_item($where)
+ {
+	$this->db->select("posroit_id, posroit_pos_rolex_temp_id, posroit_item_id, posroit_item_serial_number_id, posroit_item_srp, posroit_qty, posroit_dc_percent, posroit_dc_baht, posroit_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description");
+	$this->db->from('tp_pos_rolex_temp_item');	
+    $this->db->join('tp_item', 'it_id = posroit_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posroit_item_serial_number_id','left');	
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
@@ -111,6 +148,18 @@ Class Tp_saleorder_model extends CI_Model
  function addPOS_rolex_item($insert=NULL)
  {		
 	$this->db->insert('tp_pos_rolex_item', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex_temp($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex_temp', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex_item_temp($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex_temp_item', $insert);
 	return $this->db->insert_id();			
  }
  
