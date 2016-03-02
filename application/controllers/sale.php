@@ -223,6 +223,28 @@ function check_rolex_serial()
     echo $output;
 }
     
+function check_saleperson_rolex()
+{
+    $saleperson_id = $this->input->post("saleperson_id");
+    $shop_id = $this->input->post("shop_id");
+    
+    $output = "";
+    $sql = "sp_barcode = '".$saleperson_id."' and sp_shop_id = '".$shop_id."' and sp_enable = '1'";
+    
+    $this->load->model('tp_saleperson_model','',TRUE);
+    $result = $this->tp_saleperson_model->getSalePerson($sql);
+    
+    if (count($result) >0) {
+        foreach($result as $loop) {
+            $output .= $loop->sp_firstname." ".$loop->sp_lastname;
+            $saleperson_id = $loop->sp_id;
+        }
+    }
+    
+    $result = array("a" => $output, "b" => $saleperson_id);
+    echo json_encode($result);
+}
+    
 function saleorder_rolex_save()
 {
     $cusname = $this->input->post("cusname");
@@ -234,6 +256,7 @@ function saleorder_rolex_save()
     $remark = $this->input->post("remark");
     
     $shop_id = $this->input->post("shop_id");
+    $saleperson_code = $this->input->post("saleperson_code");
     $it_array = $this->input->post("item");
     $datein = $this->input->post("datein");
     
@@ -257,7 +280,7 @@ function saleorder_rolex_save()
                     'posro_customer_address' => $cusaddress,
                     'posro_customer_taxid' => $custax_id,
                     'posro_customer_tel' => $custelephone,
-                    'posro_sale_person_id' => $this->session->userdata('sessid'),
+                    'posro_sale_person_id' => $saleperson_code,
                     'posro_payment' => $payment,
                     'posro_payment_value' => $payment_value,
                     'posro_remark' => $remark,

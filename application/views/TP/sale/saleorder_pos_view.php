@@ -134,6 +134,12 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm">
+                                    ชื่อ-นามสกุลพนักงานขาย
+                                    <input type="text" class="form-control" name="salename" id="salename" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
                                     Remark
                                     <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $remark; ?>">
                                 </div>

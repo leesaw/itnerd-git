@@ -124,7 +124,20 @@
 							</div>	
 						</div>	
                         <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group-sm">
+                                    รหัสพนักงานขาย
+                                    <input type="text" class="form-control" name="salepersonid" id="salepersonid" value="">
+                                </div>
+                            </div>
                             <div class="col-md-3">
+                                <div class="form-group-sm">
+                                    ชื่อ-นามสกุลพนักงานขาย
+                                    <input type="hidden" name="saleperson_code" id="saleperson_code" value="">
+                                    <input type="text" class="form-control" name="salename" id="salename" value="" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <div class="form-group-sm">
                                     Remark
                                     <input type="text" class="form-control" name="remark" id="remark" value="">
@@ -172,7 +185,19 @@ $(document).ready(function()
             
             setTimeout(function(){
                 calSummary();
-            },50);
+            },100);
+            //calSummary();
+		}
+	});
+    
+    $('#salepersonid').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var person_id = $.trim($(this).val());
+            var shop_id = document.getElementById("shop_id").value;
+            if(person_id != "")
+			{
+                check_saleperson_code(person_id,shop_id);
+			}
             //calSummary();
 		}
 	});
@@ -239,6 +264,32 @@ function check_product_code(refcode_input, shop_id)
 	}
 
 }
+    
+function check_saleperson_code(saleperson_id, shop_id)
+{
+	if(saleperson_id != "")
+	{
+        $.ajax({
+            type : "POST" ,
+            dataType: 'json',
+            url : "<?php echo site_url("sale/check_saleperson_rolex"); ?>" ,
+            data : {saleperson_id: saleperson_id, shop_id: shop_id},
+            success : function(data) {
+                if(data.a != "")
+                {
+                    document.getElementById("salename").value = data.a;
+                    document.getElementById("saleperson_code").value = data.b;
+                }else{
+                    alert("ไม่พบรหัสพนักงาน");
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+	}
+
+}
 
 function delete_item_row(row1)
 {
@@ -257,6 +308,8 @@ function submitform()
     var custax_id = document.getElementById('custax_id').value;
     var custelephone = document.getElementById('custelephone').value;
     var datein = document.getElementById('datein').value;
+    var saleperson_name = document.getElementById('salename').value;
+    var saleperson_code = document.getElementById('saleperson_code').value;
     if (datein == "") {
         alert("กรุณาใส่วันที่ขาย");
     }else if (cusname == "") {
@@ -267,6 +320,8 @@ function submitform()
         alert("กรุณาใส่เลขประจำตัวผู้เสียภาษีลูกค้า");
     }else if (custelephone == "") {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า");
+    }else if (saleperson_name == "" || saleperson_code =="") {
+        alert("กรุณาใส่รหัสพนักงานขาย");
     }else{
         var r = confirm("ยืนยันการขาย !!");
         if (r == true) {
@@ -288,6 +343,7 @@ function confirmform()
     
     var shop_id = document.getElementById('shop_id').value;
     var datein = document.getElementById('datein').value;
+    var saleperson_code = document.getElementById('saleperson_code').value;
     
     var itse_id = document.getElementsByName('itse_id');
     var stob_id = document.getElementsByName('stob_id');
@@ -324,7 +380,7 @@ function confirmform()
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("sale/saleorder_rolex_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, custelephone: custelephone, payment: payment, payment_value: payment_value, remark: remark} ,
+        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
