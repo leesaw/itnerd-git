@@ -17,12 +17,7 @@
         </h1>
     </section>
 	
-	<section class="content">
-        <div class="row">
-            <div class="col-md-10">
-                <div class="box box-primary">
-                        
-        <div class="box-body">
+	<section class="content">        
 		<div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
@@ -31,7 +26,7 @@
         <div class="box-body">
             <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-success">
+                <div class="panel panel-primary">
 					<div class="panel-heading">
                         <h4>รายการใบส่งของชั่วคราวของวันที่ <?php echo $currentdate; ?></h4>
                     </div>
@@ -51,12 +46,12 @@
 								<tbody>
                                     <?php foreach($pos_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->posrot_number; ?></td>
+                                        <td><?php echo $loop->posrot_number; if ($loop->posrot_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
                                         <td><?php echo $loop->posrot_customer_name; ?></td>
                                         <td><?php echo $loop->posrot_customer_tel; ?></td>
-                                        <td><?php if ($loop->posrot_payment=='C') echo "เงินสด";  ?></td>
+                                        <td><?php if ($loop->posrot_payment=='C') echo "เงินสด"; if ($loop->posrot_payment=='D') echo "บัตรเครดิต"; if ($loop->posrot_payment=='Q') echo "เช็ค"; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posrot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
+                                        <td><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posrot_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -74,7 +69,7 @@
 					</div>
                 </div>
             </div>
-        </div>
+            </div>
         </section>
 		</div>
     

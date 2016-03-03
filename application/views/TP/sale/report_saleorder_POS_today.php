@@ -19,14 +19,8 @@
 	
 	<section class="content">
         <div class="row">
-            <div class="col-md-10">
-                <div class="box box-primary">
-                        
-        <div class="box-body">
-		<div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
-
                         
         <div class="box-body">
             <div class="row">
@@ -51,12 +45,12 @@
 								<tbody>
                                     <?php foreach($pos_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->posro_number; ?></td>
+                                        <td><?php echo $loop->posro_number; if ($loop->posro_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
                                         <td><?php echo $loop->posro_customer_name; ?></td>
                                         <td><?php echo $loop->posro_customer_tel; ?></td>
-                                        <td><?php if ($loop->posro_payment=='C') echo "เงินสด";  ?></td>
+                                        <td><?php if ($loop->posro_payment=='C') echo "เงินสด"; if ($loop->posro_payment=='D') echo "บัตรเครดิต"; if ($loop->posro_payment=='Q') echo "เช็ค";  ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php echo site_url("sale/saleorder_rolex_pos_last")."/".$loop->posro_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
+                                        <td><a href="<?php echo site_url("sale/saleorder_rolex_pos_last")."/".$loop->posro_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
                                         </td>
                                     </tr>
                                     <?php } ?>

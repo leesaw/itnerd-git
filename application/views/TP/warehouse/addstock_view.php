@@ -176,9 +176,22 @@ function get_datepicker(id)
     $(this).datepicker('hide'); });
 }
     
+function alphanumeric(inputtxt)  
+{   
+    var letters = /^[0-9a-zA-Z]+$/;  
+    if(inputtxt.match(letters))  
+    {
+        return true;  
+    }else{  
+        return false;  
+    }  
+}  
+    
 function submitform(x)
 {
-    if (document.getElementById('whid').value < 0) {
+    if (document.getElementsByName('it_id').length < 1) {
+        alert("กรุณาเลือกสินค้าที่ต้องการรับเข้าคลัง");
+    }else if (document.getElementById('whid').value < 0) {
         alert("กรุณาเลือกคลังสินค้า");
         document.getElementById('whid').focus();
     }else if (document.getElementById('datein').value == "") {
@@ -186,8 +199,17 @@ function submitform(x)
         document.getElementById('datein').focus();
     }else{
         if (x==1) {
+            var it_code = document.getElementsByName('it_code');
             var duplicate = 0;
             for(var i=0; i<it_code.length; i++){
+                
+                if (!alphanumeric(it_code[i].value))
+                {
+                    alert("กรุณาใส่เฉพาะตัวเลขหรือตัวอักษรเท่านั้นในช่อง Caseback");
+                    it_code[i].value = "";
+                    return;
+                }
+                
                 for(var j=i+1; j<it_code.length; j++){
                     if (it_code[i].value==it_code[j].value) {
                         it_code[j].value = "";

@@ -95,7 +95,7 @@ function showBalance()
 function view_serial()
 {
     $stob_id = $this->uri->segment(3);
-    $sql = "stob_id = '".$stob_id."'";
+    $sql = "stob_id = '".$stob_id."' and itse_enable = '1'";
     $data['serial_array'] = $this->tp_item_model->getCaseback_stock($sql);
     
     $data['title'] = "NGG| Nerd - Caseback";

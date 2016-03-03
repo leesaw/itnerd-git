@@ -87,7 +87,7 @@ Class Tp_saleorder_model extends CI_Model
     
  function getPOS_rolex_item($where)
  {
-	$this->db->select("posroi_id, posroi_pos_rolex_id, posroi_item_id, posroi_item_serial_number_id, posroi_item_srp, posroi_qty, posroi_dc_percent, posroi_dc_baht, posroi_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description");
+	$this->db->select("posroi_id, posroi_pos_rolex_id, posroi_item_id, posroi_item_serial_number_id, posroi_item_srp, posroi_qty, posroi_dc_percent, posroi_dc_baht, posroi_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description, posroi_stock_balance_id");
 	$this->db->from('tp_pos_rolex_item');	
     $this->db->join('tp_item', 'it_id = posroi_item_id','left');	
     $this->db->join('tp_item_serial', 'itse_id = posroi_item_serial_number_id','left');	
@@ -111,7 +111,7 @@ Class Tp_saleorder_model extends CI_Model
     
  function getPOS_rolex_temp_item($where)
  {
-	$this->db->select("posroit_id, posroit_pos_rolex_temp_id, posroit_item_id, posroit_item_serial_number_id, posroit_item_srp, posroit_qty, posroit_dc_percent, posroit_dc_baht, posroit_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description");
+	$this->db->select("posroit_id, posroit_pos_rolex_temp_id, posroit_item_id, posroit_item_serial_number_id, posroit_item_srp, posroit_qty, posroit_dc_percent, posroit_dc_baht, posroit_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description, posroit_stock_balance_id");
 	$this->db->from('tp_pos_rolex_temp_item');	
     $this->db->join('tp_item', 'it_id = posroit_item_id','left');	
     $this->db->join('tp_item_serial', 'itse_id = posroit_item_serial_number_id','left');	
@@ -202,6 +202,22 @@ Class Tp_saleorder_model extends CI_Model
 	$this->db->where('sb_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_sale_barcode', $edit); 	
+	return $query;
+ }
+    
+ function editPOS_rolex($edit=NULL)
+ {
+	$this->db->where('posro_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_pos_rolex', $edit); 	
+	return $query;
+ }
+    
+ function editPOS_rolex_temp($edit=NULL)
+ {
+	$this->db->where('posrot_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_pos_rolex_temp', $edit); 	
 	return $query;
  }
 

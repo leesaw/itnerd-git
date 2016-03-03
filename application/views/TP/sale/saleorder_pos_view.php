@@ -84,6 +84,7 @@
                         </div>
                         <?php $remark = $loop->posro_remark;
                               $sale_person = $loop->sp_barcode."-".$loop->firstname." ".$loop->lastname;
+                              $pos_status = $loop->posro_status;
                         } ?>
 						<br>
 						<div class="row">
@@ -136,8 +137,7 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm">
-                                    ชื่อ-นามสกุลพนักงานขาย
-                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>">
+                                    ชื่อ-นามสกุลพนักงานขาย                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>">
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -151,9 +151,8 @@
                         <div class="row">
 							<div class="col-md-6">
                                 <a href="<?php echo site_url("sale/saleorder_rolex_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบกำกับภาษี </button></a>&nbsp;&nbsp;
-                                <!--
-                                <a href="<?php echo site_url("sale/saleorder_rolex_void_pos")."/".$pos_rolex_id; ?>"><button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn"><i class='fa fa-close'></i>  ยกเลิกใบกำกับภาษี (Void) </button></a>&nbsp;&nbsp;
-                                -->
+                                <button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบกำกับภาษี (Void) </button>&nbsp;&nbsp;
+                                <form action="<?php echo site_url("sale/saleorder_rolex_void_pos")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
 							</div>
 						</div>
 
@@ -171,7 +170,24 @@ $(document).ready(function()
 {    
     
 });
+    
+function del_confirm() {
+	bootbox.confirm("ต้องการยกเลิกใบกำกับภาษีที่เลือกไว้ใช่หรือไม่ ?", function(result) {
+				var currentForm = this;
+				var myurl = "<?php echo site_url("sale/saleorder_rolex_void_pos")."/".$pos_rolex_id; ?>";
+            	if (result) {
+				    bootbox.prompt("เนื่องจาก..", function(result) {                
+                      if (result === null) {                                             
+                        document.getElementById("form2").submit();                           
+                      } else {
+                        document.getElementById("remarkvoid").value=result;
+                        document.getElementById("form2").submit();                       
+                      }
+                    });
+				}
 
+		});
+}
 </script>
 </body>
 </html>

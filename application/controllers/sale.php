@@ -295,6 +295,7 @@ function saleorder_rolex_save()
                         'posroi_item_id' => $it_array[$i]["id"],
                         'posroi_qty' => $it_array[$i]["qty"],
                         'posroi_item_serial_number_id' => $it_array[$i]["itse_id"],
+                        'posroi_stock_balance_id' => $it_array[$i]["stob_id"],
                         'posroi_item_srp' => $it_array[$i]["it_srp"],
                         'posroi_dc_baht' => $it_array[$i]["dc_thb"],
                         'posroi_netprice' => $net
@@ -388,11 +389,6 @@ function saleorder_rolex_pos_last()
     $data['pos_rolex_id'] = $id;
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/sale/saleorder_pos_view", $data);
-}
-    
-function saleorder_rolex_void_pos()
-{
-    $id = $this->uri->segment(3);
 }
     
 function saleorder_rolex_pos_history()
@@ -494,6 +490,7 @@ function saleorder_rolex_temp_save()
                         'posroit_item_id' => $it_array[$i]["id"],
                         'posroit_qty' => $it_array[$i]["qty"],
                         'posroit_item_serial_number_id' => $it_array[$i]["itse_id"],
+                        'posroit_stock_balance_id' => $it_array[$i]["stob_id"],
                         'posroit_item_srp' => $it_array[$i]["it_srp"],
                         'posroit_dc_baht' => $it_array[$i]["dc_thb"],
                         'posroit_netprice' => $net
@@ -592,10 +589,10 @@ function saleorder_rolex_pos_temp_last()
 function saleorder_POS_temp_today()
 {
     $currentdate = date("Y-m-d");
-    //$start = $currentdate." 00:00:00";
-    //$end = $currentdate." 23:59:59";
+    $start = $currentdate." 00:00:00";
+    $end = $currentdate." 23:59:59";
     
-    $sql = "posrot_issuedate = '".$currentdate."' and posrot_shop_id = '888'";
+    $sql = "posrot_dateadd >= '".$start."' and posrot_dateadd <= '".$end."' and posrot_shop_id = '888'";
     $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
     if($query){
         $data['pos_array'] =  $query;
@@ -607,6 +604,104 @@ function saleorder_POS_temp_today()
     $data["currentdate"] = $currentdate;
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/sale/report_saleorder_POS_temp_today", $data);
+}
+    
+function saleorder_rolex_void_pos()
+{
+    $id = $this->uri->segment(3);
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $sql = "posro_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex($sql);
+    foreach($query as $loop) {
+        $remark = $loop->posro_remark;
+        $shop_id = $loop->posro_shop_id;
+    }
+    $remark .= "##VOID##".$this->input->post("remarkvoid");
+    $pos = array("id" => $id, "posro_status" => 'V', "posro_remark" => $remark,
+                "posro_dateadd" => $currentdate, "posro_dateadd_by" => $this->session->userdata('sessid')
+                );
+    $query = $this->tp_saleorder_model->editPOS_rolex($pos);
+    
+    $sql = "posroi_pos_rolex_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_item($sql);
+    foreach($query as $loop) {
+        // increase stock warehouse out
+        $qty_update = $loop->posroi_qty;
+        $itse_id = $loop->posroi_item_serial_number_id;
+        $this->load->model('tp_warehouse_transfer_model','',TRUE);
+        $sql = "stob_id = '".$loop->posroi_stock_balance_id."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $qty_new = $loop->stob_qty + $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        $serial = array("id" => $itse_id, "itse_enable" => 1, "itse_dateadd" => $currentdate);
+        $this->load->model('tp_item_model','',TRUE);
+        $query = $this->tp_item_model->editItemSerial($serial);
+    }
+		
+    redirect('sale/saleorder_POS_today', 'refresh');
+}
+    
+function saleorder_rolex_void_pos_temp()
+{
+    $id = $this->uri->segment(3);
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    foreach($query as $loop) {
+        $remark = $loop->posrot_remark;
+        $shop_id = $loop->posrot_shop_id;
+    }
+    $remark .= "##VOID##".$this->input->post("remarkvoid");
+    $pos = array("id" => $id, "posrot_status" => 'V', "posrot_remark" => $remark,
+                "posrot_dateadd" => $currentdate, "posrot_dateadd_by" => $this->session->userdata('sessid')
+                );
+    $query = $this->tp_saleorder_model->editPOS_rolex_temp($pos);
+    
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    foreach($query as $loop) {
+        // increase stock warehouse out
+        $qty_update = $loop->posroit_qty;
+        $itse_id = $loop->posroit_item_serial_number_id;
+        $this->load->model('tp_warehouse_transfer_model','',TRUE);
+        $sql = "stob_id = '".$loop->posroit_stock_balance_id."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $qty_new = $loop->stob_qty + $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        $serial = array("id" => $itse_id, "itse_enable" => 1, "itse_dateadd" => $currentdate);
+        $this->load->model('tp_item_model','',TRUE);
+        $query = $this->tp_item_model->editItemSerial($serial);
+    }
+		
+    //redirect('sale/saleorder_POS_today', 'refresh');
 }
     
 }

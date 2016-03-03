@@ -183,24 +183,31 @@
                 <i class="fa fa-home"></i> <span>หน้าหลัก</span>
               </a>
             </li>
+            <li class="header">ออกเอกสาร</li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS"); ?>">
-                <span>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
-                <span>แสดงใบกำกับภาษีของวันนี้</span>
+                <i class="fa fa-circle-o text-red"></i><span>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</span>
               </a>
             </li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_temp"); ?>">
-                <span>ออกใบส่งของชั่วคราว</span>
+                <i class="fa fa-circle-o text-red"></i><span>ออกใบส่งของชั่วคราว</span>
+              </a>
+            </li>
+            <li class="header">รายงาน</li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษีของวันนี้</span>
               </a>
             </li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>">
-                <span>แสดงใบส่งของชั่วคราวของวันนี้</span>
+                <i class="fa fa-circle-o text-red"></i><span>ใบส่งของชั่วคราวของวันนี้</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
               </a>
             </li>
             <?php } ?>
