@@ -26,21 +26,19 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <a href="<?php echo site_url("sale/saleorder_POS"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</h4></button></a>
+                                    <a href="<?php echo site_url("sale/saleorder_POS"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>ออกใบกำกับภาษี</h4></button></a>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <a href="<?php echo site_url("sale/saleorder_POS_temp"); ?>"><button type="button" class="btn btn-primary btn-lg btn-block"><h4>ออกใบส่งของชั่วคราว</h4></button></a>
+                                    <a href="<?php echo site_url("sale/saleorder_POS_temp"); ?>"><button type="button" class="btn btn-primary btn-lg btn-block"><h4>ออกใบเสร็จรับเงิน</h4></button></a>
                                 </div>
                             </div>
-                            <!--
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <a href="<?php echo site_url("sale/saleorder_POS_engage"); ?>"><button type="button" class="btn bg-maroon btn-lg btn-block"><h4>ออกใบจอง / มัดจำ</h4></button></a>
+                                    <a href="<?php echo site_url("pos/stock_rolex_borrow"); ?>"><button type="button" class="btn bg-maroon btn-lg btn-block"><h4>ออกใบส่งของชั่วคราว</h4></button></a>
                                 </div>
                             </div>
-                            -->
 						</div>
                         <br>
                         <hr>
@@ -52,7 +50,12 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>"><button type="button" class="btn btn-warning btn-lg btn-block"><h4>ใบส่งของชั่วคราวของวันนี้</h4></button></a>
+                                    <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>"><button type="button" class="btn btn-warning btn-lg btn-block"><h4>ใบเสร็จรับเงินของวันนี้</h4></button></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>"><button type="button" class="btn btn-info btn-lg btn-block"><h4>ใบส่งของชั่วคราวของวันนี้</h4></button></a>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -63,7 +66,9 @@
 						</div>
 					</div>
                     <div class="box-footer">
-                        
+                        <div class="row">
+                            <div class="col-md-12"><h4>หากพบปัญหาการใช้งาน สามารถติดต่อสอบถาม ได้ที่เบอร์  099-561-5636 </h4></div>
+                        </div>
                     </div>
                 </div>
         <?php } ?>

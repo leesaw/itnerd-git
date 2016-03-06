@@ -11,7 +11,7 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ออกใบเสร็จรับเงิน</h1>
+            <h1>ออกใบส่งของชั่วคราว</h1>
         </section>
             
 		<section class="content">
@@ -25,13 +25,13 @@
                             <div class="col-md-2">
                                 <form action="<?php echo site_url("sale/saleorder_rolex_payment"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
-                                            วันที่ขาย
+                                            วันที่ส่งของ
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
                                     </div>
 							</div>
                             <div class="col-md-2">
 									<div class="form-group-sm">
-                                        สาขาที่ขาย
+                                        สาขา
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php foreach($shop_array as $loop) {  echo $loop->sh_name; $shop_id = $loop->sh_id; } ?>" readonly>
                                         <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
                                     </div>
@@ -41,40 +41,16 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm">
-                                    ชื่อลูกค้า *
-                                    <input type="text" class="form-control" name="cusname" id="cusname" value="">
-                                </div>
-							</div>
-                            <div class="col-md-9">
-                                <div class="form-group-sm">
-                                    ที่อยู่ลูกค้า *
-                                    <input type="text" class="form-control" name="cusaddress" id="cusaddress" value="">
-                                </div>
-							</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group-sm">
-                                    เบอร์ติดต่อ *
-                                    <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
-                                </div>
-							</div>
-                            <div class="col-md-2">
-                                <div class="form-group-sm">
-                                    ชำระเงิน *
-                                    <select class="form-control" name="payment" id="payment">
-                                        <option value="C">เงินสด</option>
-                                        <option value="D">บัตรเครดิต</option>
-                                        <option value="Q">เช็ค</option>
+                                    ชื่อผู้รับของ *
+                                    <select class="form-control" name="borrower" id="borrower">
+                                    <option value="-1">--- เลือกชื่อผู้รับของ ---</option>
+                            <?php foreach($borrower_array as $loop) { ?>
+                            <option value="<?php echo $loop->posbor_name; ?>"><?php echo $loop->posbor_name; ?></option>
+                            <?php } ?>
+                                    
                                     </select>
                                 </div>
-							</div> 
-                            <div class="col-md-2">
-                                <div class="form-group-lg">
-                                    <div id="text1">จำนวนเงินที่จ่าย *</div>
-                                    <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="" onchange="numberWithCommas(this);" >
-                                </div>
-							</div> 
+							</div>
                         </div>
 						<br>
 						<div class="row">
@@ -99,7 +75,6 @@
                                                         <th>Bracelet</th>
 														<th width="105">Quantity</th>
                                                         <th>Retail Price</th>
-                                                        <th>Discount (THB)</th>
 														<th> </th>
 				                                    </tr>
 				                                </thead>
@@ -107,8 +82,9 @@
 												</tbody>
                                                 <tfoot>
                                                     <tr style="font-size:200%;" class="text-red">
-                                                        <th colspan="7" style="text-align:right;"><label>ยอดรวม:</th>
+                                                        <th colspan="5" style="text-align:right;"><label>จำนวนรวม:</th>
                                                         <th><div id="summary"></div></th>
+                                                        <th> </th>
                                                     </tr>
                                                 </tfoot>
 											</table>
@@ -141,7 +117,7 @@
                         <hr>
                         <div class="row">
 							<div class="col-md-6">
-								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  ชำระเงิน </button>&nbsp;&nbsp;
+								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึกใบส่งของชั่วคราว </button>&nbsp;&nbsp;
 							</div>
 						</div>
 						</form>
@@ -182,7 +158,7 @@ $(document).ready(function()
             
             setTimeout(function(){
                 calSummary();
-            },100);
+            },5000);
             //calSummary();
 		}
 	});
@@ -199,20 +175,6 @@ $(document).ready(function()
 		}
 	});
     
-    $("#payment").change(function() {
-        var val = document.getElementById("payment").value;
-        if (val == 'C') {
-            document.getElementById("text1").innerHTML = "จำนวนเงินที่จ่าย";
-            document.getElementById("payment_value").value = "";
-        }else if (val == 'D'){
-            document.getElementById("text1").innerHTML = "บัตรธนาคาร";
-            document.getElementById("payment_value").value = "";
-        }else if (val == 'Q'){
-            document.getElementById("text1").innerHTML = "เลขที่";
-            document.getElementById("payment_value").value = "";
-        }
-    });
-    
 });
     
 function get_datepicker(id)
@@ -223,13 +185,8 @@ function get_datepicker(id)
     
 function calSummary() {
     var sum = 0;
-    var srp = document.getElementsByName('it_srp');
-    var dc = document.getElementsByName('dc_thb');
-    for(var i=0; i<srp.length; i++) {
-        if (dc[i].value == "") dc[i].value = 0; 
-        sum += parseInt(srp[i].value) - parseInt((dc[i].value).replace(/,/g, ''));
-    }
-    document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    var it = document.getElementsByName('it_id');
+    document.getElementById("summary").innerHTML = it.length;
 } 
     
 function numberWithCommas(obj) {
@@ -251,7 +208,7 @@ function check_product_code(refcode_input, shop_id)
             success : function(data) {
                 if(data != "")
                 {
-                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><input type="text" name="dc_thb" id="dc_thb" value="0" onChange="numberWithCommas(this); calSummary();"></td><td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                     $('table > tbody').append(element);
                     count_enter_form_input_product++;
                     count_list++;
@@ -306,27 +263,21 @@ function delete_item_row(row1)
     
 function submitform()
 {
-    var cusname = document.getElementById('cusname').value;
-    var cusaddress = document.getElementById('cusaddress').value;
-    var custelephone = document.getElementById('custelephone').value;
+    var borrower = document.getElementById('borrower').value;
     var datein = document.getElementById('datein').value;
     var saleperson_name = document.getElementById('salename').value;
     var saleperson_code = document.getElementById('saleperson_code').value;
     var itse_id = document.getElementsByName('itse_id');
     if (datein == "") {
-        alert("กรุณาใส่วันที่ขาย");
+        alert("กรุณาใส่วันที่ส่งของ");
     }else if (itse_id.length < 1) {
-        alert("กรุณาใส่สินค้าที่ขาย");
-    }else if (cusname == "") {
-        alert("กรุณาใส่ชื่อลูกค้า");
-    }else if (cusaddress == "") {
-        alert("กรุณาใส่ที่อยู่ลูกค้า");
-    }else if (custelephone == "") {
-        alert("กรุณาใส่เบอร์ติดต่อลูกค้า");
+        alert("กรุณาใส่สินค้าที่ส่ง");
+    }else if (borrower == -1) {
+        alert("กรุณาใส่ชื่อผู้รับของ");
     }else if (saleperson_name == "" || saleperson_code =="") {
         alert("กรุณาใส่รหัสพนักงานขาย");
     }else{
-        var r = confirm("ยืนยันการขาย !!");
+        var r = confirm("ยืนยันการส่งของ !!");
         if (r == true) {
             confirmform();
         }
@@ -335,12 +286,7 @@ function submitform()
 
 function confirmform()
 {
-    
-    var cusname = document.getElementById('cusname').value;
-    var cusaddress = document.getElementById('cusaddress').value;
-    var custelephone = document.getElementById('custelephone').value;
-    var payment = document.getElementById('payment').value;
-    var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
+    var borrower = document.getElementById('borrower').value;
     var remark = document.getElementById('remark').value;
     
     var shop_id = document.getElementById('shop_id').value;
@@ -350,8 +296,6 @@ function confirmform()
     var itse_id = document.getElementsByName('itse_id');
     var stob_id = document.getElementsByName('stob_id');
     var it_id = document.getElementsByName('it_id');
-    var it_srp = document.getElementsByName('it_srp');
-    var dc_thb = document.getElementsByName('dc_thb');
     var it_array = new Array();
     var checked = 0;
     var index = 0;
@@ -370,7 +314,7 @@ function confirmform()
 
         }
         if (checked==0) {
-            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, dc_thb:(dc_thb[i].value).replace(/,/g, ''), it_srp:it_srp[i].value};
+            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value};
             index++;
         }else{
             checked = 0;
@@ -381,18 +325,18 @@ function confirmform()
     
     $.ajax({
         type : "POST" ,
-        url : "<?php echo site_url("sale/saleorder_rolex_temp_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
+        url : "<?php echo site_url("pos/stock_rolex_borrow_save"); ?>" ,
+        data : {datein: datein, shop_id: shop_id, item: it_array, borrower: borrower, saleperson_code:saleperson_code, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
             bootbox.confirm(message, function(result) {
                     var currentForm = this;
                     if (result) {
-                        window.open("<?php echo site_url("sale/saleorder_rolex_temp_print"); ?>"+"/"+data.b, "_blank");
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_temp_last"); ?>/"+data.b;
+                        window.open("<?php echo site_url("pos/stock_rolex_borrow_print"); ?>"+"/"+data.b, "_blank");
+                        window.location = "<?php echo site_url("pos/stock_rolex_pos_borrow_last"); ?>/"+data.b;
                     }else{
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_temp_last"); ?>/"+data.b;
+                        window.location = "<?php echo site_url("pos/stock_rolex_pos_borrow_last"); ?>/"+data.b;
                     }
 
             });

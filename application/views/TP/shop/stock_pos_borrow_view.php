@@ -11,7 +11,7 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ข้อมูลใบเสร็จรับเงิน</h1>
+            <h1>ข้อมูลใบส่งของชั่วคราว</h1>
         </section>
             
 		<section class="content">
@@ -24,19 +24,19 @@
                         <div class="row">
                             <div class="col-md-2">
                                     <div class="form-group-sm has-success">
-                                        <label class="control-label" for="inputSuccess">เลขที่ใบเสร็จ</label>
-                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $loop->posrot_number; ?>" readonly>
+                                        <label class="control-label" for="inputSuccess">เลขที่ใบส่งของ</label>
+                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $loop->posrob_number; ?>" readonly>
                                     </div>
 							</div>
                             <div class="col-md-2">
                                     <div class="form-group-sm has-success">
-                                        <label class="control-label" for="inputSuccess">วันที่ขาย</label>
-                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php $datein =  explode('-',$loop->posrot_issuedate); echo $datein[2]."/".$datein[1]."/".$datein[0]; ?>" readonly>
+                                        <label class="control-label" for="inputSuccess">วันที่ส่งของ</label>
+                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php $datein =  explode('-',$loop->posrob_issuedate); echo $datein[2]."/".$datein[1]."/".$datein[0]; ?>" readonly>
                                     </div>
 							</div>
                             <div class="col-md-2">
 									<div class="form-group-sm has-success">
-                                        <label class="control-label" for="inputSuccess">สาขาที่ขาย</label>
+                                        <label class="control-label" for="inputSuccess">สาขา</label>
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php echo $loop->sh_name; ?>" readonly>
                                     </div>
 							</div>
@@ -45,40 +45,14 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm has-success">
-                                    <label class="control-label" for="inputSuccess">ชื่อลูกค้า</label>
-                                    <input type="text" class="form-control" name="cusname" id="cusname" value="<?php echo $loop->posrot_customer_name; ?>" readonly>
-                                </div>
-							</div>
-                            <div class="col-md-9">
-                                <div class="form-group-sm has-success">
-                                    <label class="control-label" for="inputSuccess">ที่อยู่ลูกค้า</label>
-                                    <input type="text" class="form-control" name="cusaddress" id="cusaddress" value="<?php echo $loop->posrot_customer_address; ?>" readonly>
+                                    <label class="control-label" for="inputSuccess">ชื่อผู้รับของ</label>
+                                    <input type="text" class="form-control" name="cusname" id="cusname" value="<?php echo $loop->posrob_borrower_name; ?>" readonly>
                                 </div>
 							</div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group-sm has-success">
-                                    <label class="control-label" for="inputSuccess">เบอร์ติดต่อ</label>
-                                    <input type="text" class="form-control" name="custelephone" id="custelephone" value="<?php echo $loop->posrot_customer_tel; ?>" readonly>
-                                </div>
-							</div>
-                            <div class="col-md-2">
-                                <div class="form-group-sm has-success">
-                                    <label class="control-label" for="inputSuccess">ชำระเงิน</label>
-                                    <input type="text" class="form-control" name="payment" id="payment" value="<?php if ($loop->posrot_payment=='C') echo "เงินสด"; if ($loop->posrot_payment=='D') echo "บัตรเครดิต"; if ($loop->posrot_payment=='Q') echo "เช็ค"; ?>" readonly>
-                                </div>
-							</div> 
-                            <div class="col-md-3">
-                                <div class="form-group-lg has-success">
-                                    <label class="control-label" for="inputSuccess"><?php if ($loop->posrot_payment=='C') echo "จำนวนเงินที่จ่าย"; if ($loop->posrot_payment=='D') echo "บัตรเครดิตธนาคาร"; if ($loop->posrot_payment=='Q') echo "เลขที่"; ?></label>
-                                    <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="<?php echo number_format($loop->posrot_payment_value); ?>" readonly>
-                                </div>
-							</div> 
-                        </div>
-                        <?php $remark = $loop->posrot_remark;
+                        <?php $remark = $loop->posrob_remark;
                               $sale_person = $loop->sp_barcode."-".$loop->firstname." ".$loop->lastname;
-                              $pos_status = $loop->posrot_status;
+                              $pos_status = $loop->posrob_status;
                         } ?>
 						<br>
 						<div class="row">
@@ -97,8 +71,6 @@
                                                         <th>Bracelet</th>
 														<th width="105">Quantity</th>
                                                         <th>Retail Price</th>
-                                                        <th>Discount (THB)</th>
-                                                        <th>จำนวนเงิน</th>
 				                                    </tr>
 				                                </thead>
 												<tbody>
@@ -109,17 +81,16 @@
                                                 <td><?php echo $loop->it_short_description; ?></td>
                                                 <td><?php echo $loop->it_model; ?></td>
                                                 <td><?php echo $loop->it_remark; ?></td>
-                                                <td><?php echo $loop->posroit_qty." ".$loop->it_uom; ?></td>
-                                                <td><?php echo number_format($loop->posroit_item_srp); ?></td>
-                                                <td><?php echo number_format($loop->posroit_dc_baht); ?></td>
-                                                <td><?php echo number_format($loop->posroit_item_srp - $loop->posroit_dc_baht); ?></td>
+                                                <td><?php echo $loop->posrobi_qty." ".$loop->it_uom; ?></td>
+                                                <td><?php echo number_format($loop->it_srp); ?></td>
                                                 </tr>
-                                                <?php $sum += $loop->posroit_item_srp - $loop->posroit_dc_baht; } ?>
+                                                <?php $sum += $loop->posrobi_qty; } ?>
 												</tbody>
                                                 <tfoot>
                                                     <tr style="font-size:200%;" class="text-red">
-                                                        <th colspan="8" style="text-align:right;"><label>ยอดรวม:</th>
-                                                        <th><?php echo number_format($sum); ?></th>
+                                                        <th colspan="5" style="text-align:right;"><label>จำนวนรวม:</th>
+                                                        <th><?php echo $sum; ?></th>
+                                                        <th> </th>
                                                     </tr>
                                                 </tfoot>
 											</table>
@@ -145,9 +116,9 @@
                         <hr>
                         <div class="row">
 							<div class="col-md-6">
-                                <a href="<?php echo site_url("sale/saleorder_rolex_temp_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบเสร็จรับเงิน </button></a>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบเสร็จรับเงิน (Void) </button>
-                                <form action="<?php echo site_url("sale/saleorder_rolex_void_pos_temp")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
+                                <a href="<?php echo site_url("pos/stock_rolex_borrow_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบส่งของชั่วคราว </button></a>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบส่งของชั่วคราว </button>
+                                <form action="<?php echo site_url("pos/saleorder_rolex_void_pos_borrow")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
 							</div>
 						</div>
 
@@ -168,7 +139,7 @@ $(document).ready(function()
 
     
 function del_confirm() {
-	bootbox.confirm("ต้องการยกเลิกใบเสร็จรับเงินที่เลือกไว้ใช่หรือไม่ ?", function(result) {
+	bootbox.confirm("ต้องการยกเลิกใบส่งของชั่วคราวที่เลือกไว้ใช่หรือไม่ ?", function(result) {
 				var currentForm = this;
             	if (result) {
 				    bootbox.prompt("เนื่องจาก..", function(result) {                

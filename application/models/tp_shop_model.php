@@ -67,6 +67,43 @@ Class Tp_shop_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getMaxNumber_rolex_borrow_shop($month, $shop_id)
+ {
+    $start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    $this->db->select("posrob_id");
+	$this->db->from('tp_pos_rolex_borrow');
+    $this->db->where("posrob_issuedate >=",$start);
+    $this->db->where("posrob_issuedate <=",$end);
+    $this->db->where("posrob_shop_id", $shop_id);
+	$query = $this->db->get();		
+	return $query->num_rows();
+ }
+    
+ function getPOS_rolex_borrow($where)
+ {
+	$this->db->select("posrob_id, posrob_number, posrob_issuedate, posrob_status, posrob_shop_id, sh_name, sh_code, posrob_dateadd, posrob_sale_person_id, posrob_borrower_name, posrob_remark, sp_firstname as firstname, sp_lastname as lastname, sp_barcode");
+	$this->db->from('tp_pos_rolex_borrow');
+	//$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
+    $this->db->join('tp_shop', 'sh_id = posrob_shop_id', 'left');
+    $this->db->join('tp_sale_person', 'sp_id = posrob_sale_person_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function getPOS_rolex_borrow_item($where)
+ {
+	$this->db->select("posrobi_id, posrobi_pos_rolex_borrow_id, posrobi_item_id, posrobi_item_serial_number_id, posrobi_qty,  it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description, posrobi_stock_balance_id");
+	$this->db->from('tp_pos_rolex_borrow_item');	
+    $this->db->join('tp_item', 'it_id = posrobi_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ } 
 
  function addShop($insert=NULL)
  {		
@@ -83,6 +120,18 @@ Class Tp_shop_model extends CI_Model
  function addShopGroup($insert=NULL)
  {		
 	$this->db->insert('tp_shop_group', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex_borrow($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex_borrow', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function addPOS_rolex_borrow_item($insert=NULL)
+ {		
+	$this->db->insert('tp_pos_rolex_borrow_item', $insert);
 	return $this->db->insert_id();			
  }
  
@@ -125,6 +174,14 @@ Class Tp_shop_model extends CI_Model
 	$this->db->where('sg_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_shop_group', $edit); 	
+	return $query;
+ }
+    
+ function editPOS_rolex_borrow($edit=NULL)
+ {
+	$this->db->where('posrob_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_pos_rolex_borrow', $edit); 	
 	return $query;
  }
 

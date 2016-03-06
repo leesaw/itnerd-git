@@ -10,6 +10,14 @@ Class Tp_saleperson_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getBorrowerName()
+ {
+    $this->db->select("posbor_name");
+    $this->db->from("tp_pos_rolex_borrower");
+    $query = $this->db->get();		
+	return $query->result();
+ }
 
  function addSalePerson($insert=NULL)
  {		

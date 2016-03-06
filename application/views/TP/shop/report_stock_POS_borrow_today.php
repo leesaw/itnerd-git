@@ -13,7 +13,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงใบเสร็จรับเงินของวันนี้
+            แสดงใบส่งของชั่วคราวของวันนี้
         </h1>
     </section>
 	
@@ -26,18 +26,16 @@
         <div class="box-body">
             <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-primary">
+                <div class="panel panel-info">
 					<div class="panel-heading">
-                        <h4>รายการใบเสร็จรับเงินของวันที่ <?php echo $currentdate; ?></h4>
+                        <h4>รายการใบส่งของชั่วคราวของวันที่ <?php echo $currentdate; ?></h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablefinal" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>เลขที่ใบเสร็จ</th>
-                                        <th>ชื่อลูกค้า</th>
-                                        <th>เบอร์ติดต่อลูกค้า</th>
-										<th>ชำระโดย</th>
+                                        <th>เลขที่ใบส่งของ</th>
+                                        <th>ชื่อผู้รับ</th>
                                         <th>พนักงานขาย</th>
                                         <th> </th>
                                     </tr>
@@ -46,12 +44,10 @@
 								<tbody>
                                     <?php foreach($pos_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->posrot_number; if ($loop->posrot_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
-                                        <td><?php echo $loop->posrot_customer_name; ?></td>
-                                        <td><?php echo $loop->posrot_customer_tel; ?></td>
-                                        <td><?php if ($loop->posrot_payment=='C') echo "เงินสด"; if ($loop->posrot_payment=='D') echo "บัตรเครดิต"; if ($loop->posrot_payment=='Q') echo "เช็ค"; ?></td>
+                                        <td><?php echo $loop->posrob_number; if ($loop->posrob_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
+                                        <td><?php echo $loop->posrob_borrower_name; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posrot_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
+                                        <td><a href="<?php echo site_url("pos/stock_rolex_pos_borrow_last")."/".$loop->posrob_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
                                         </td>
                                     </tr>
                                     <?php } ?>

@@ -11,7 +11,7 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ออกใบกำกับภาษี / ใบส่งสินค้า / ใบเสร็จรับเงิน</h1>
+            <h1>ออกใบกำกับภาษี</h1>
         </section>
             
 		<section class="content">

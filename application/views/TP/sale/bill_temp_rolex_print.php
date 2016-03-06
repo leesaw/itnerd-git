@@ -18,10 +18,10 @@
  $GGdate=substr($datetime,8,2); 
 ?>
 <td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบส่งของชั่วคราว</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
+    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบเสร็จรับเงิน</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบส่งของชั่วคราว: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบเสร็จ: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>
@@ -197,10 +197,10 @@ return $rstring;
  $GGdate=substr($datetime,8,2); 
 ?>
 <td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบส่งของชั่วคราว</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
+    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบเสร็จรับเงิน</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบส่งของชั่วคราว: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบเสร็จ: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>

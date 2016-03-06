@@ -466,7 +466,7 @@ function saleorder_rolex_temp_save()
     $number = $this->tp_saleorder_model->getMaxNumber_rolex_temp_shop($month, $shop_id);
     $number++;
     
-    $number = "NGGTP-TD".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+    $number = "NGGTP-B".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
 
     $sale = array( 'posrot_number' => $number,
                     'posrot_issuedate' => $datein,
@@ -701,7 +701,7 @@ function saleorder_rolex_void_pos_temp()
         $query = $this->tp_item_model->editItemSerial($serial);
     }
 		
-    //redirect('sale/saleorder_POS_today', 'refresh');
+    redirect('sale/saleorder_POS_temp_today', 'refresh');
 }
     
 }
