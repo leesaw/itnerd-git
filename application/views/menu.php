@@ -176,7 +176,9 @@
             <?php  } ?>
             <?php } ?>
             
-            <?php if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) { ?>
+            <?php 
+              // only POS user
+              if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) { ?>
             <li class="header">ROLEX POS</li>
             <li>
               <a href="<?php echo site_url("timepieces/main_rolex"); ?>">
@@ -200,6 +202,32 @@
               </a>
             </li>
             <li class="header">รายงาน</li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษีของวันนี้</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ใบเสร็จรับเงินของวันนี้</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ใบส่งของชั่วคราวของวันนี้</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
+              </a>
+            </li>
+            <?php } ?>
+              
+            <?php 
+              // only HATA
+              if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) { ?>
+            <li class="header">รายงาน ROLEX</li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษีของวันนี้</span>

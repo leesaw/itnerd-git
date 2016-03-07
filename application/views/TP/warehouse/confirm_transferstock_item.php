@@ -88,7 +88,8 @@
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><?php echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
-                                                    <td><input type='text' name='it_final' id='it_final' value='<?php if ($loop->br_has_serial==0) echo $loop->qty_update; ?>' style='width: 50px;' <?php if ($status==2 || $loop->br_has_serial==1) echo "readonly"; ?>></td>
+                                                    <td><input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php echo $loop->qty_update; ?>' <?php if ($status==2) echo "readonly"; ?>>
+                                                    </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     
                                                     <?php // if has serial
@@ -97,7 +98,7 @@
                                                         for($i=1; $i<=$loop->qty_update; $i++) {
                                                     ?>
                                                     <tr>
-                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial' class="text-blue" value='' style='width: 200px; text-align:center'><input type="hidden" name="serial_log_id" id="serial_log_id" value="<?php echo $loop->log_stot_id; ?>"></td>
+                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial' class="text-blue" value='' style='width: 200px; text-align:center'><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
                                                     </tr>
                                                     <?php } } ?>
                                                     <?php } ?>
@@ -126,9 +127,6 @@
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 
-var count_enter_form_input_product = 0;
-var count_list = 0;
-
 $(document).ready(function()
 {    
     document.getElementById("savebtn").disabled = false;
@@ -149,21 +147,36 @@ function submitform()
             return;
         }
     }
-
-    var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-    if (r == true) {
-        confirmform();
+    // serial item
+    var serial = document.getElementsByName('serial');
+    var serial_wh_id = document.getElementsByName('serial_wh_id');
+    var serial_item_id = document.getElementsByName('serial_item_id');
+    var length = 0;
+    
+    for (var i=0; i<serial.length; i++) {
+        alert(serial[i].value+"/"+serial_wh_id[i].value+"/"+serial_item_id[i].value);
+        $.post("<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>", {
+            serial: serial[i].value, serial_wh_id: serial_wh_id[i].value, serial_item_id: serial_item_id[i].value},
+            function(result) {
+                if (result == "0") {
+                    alert("ไม่พบ Caseback : "+serial[i].value);
+                    serial[i].value="";
+                    return;
+                }
+            });        
+            length++;
+    }
+    
+    if (length==serial.length) {
+        var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+        if (r == true) {
+            confirmform();
+        }
     }
 }
     
-function checkCaseback()
-{
-        
-}
-
 function confirmform()
 {
-   
     var it_final = document.getElementsByName('it_final');
     var log_id = document.getElementsByName('log_id');
     var item_id = document.getElementsByName('it_id');
@@ -174,27 +187,44 @@ function confirmform()
     
     // serial item
     var serial = document.getElementsByName('serial');
-    var serial_log_id = document.getElementsByName('serial_log_id');
+    var serial_wh_id = document.getElementsByName('serial_wh_id');
+    var serial_item_id = document.getElementsByName('serial_item_id');
     
     var serial_array = new Array();
     var index_serial = 0;
-    for(var i=0; i<serial_log_id.length; i++) {
+    
+    for(var i=0; i<serial.length; i++) {
         if (serial[i].value != "") {
-            serial_array[index_serial] = {serial_log_id: serial_log_id[i].value, serial: serial[i].value};
+            serial_array[index_serial] = {serial_wh_id: serial_wh_id[i].value, serial: serial[i].value, serial_item_id: serial_item_id[i].value};
             index_serial++;
         }
+        
     }
     
     var item_array = new Array();
     for(var i=0; i<log_id.length; i++){
-        
         if (it_final[i].value % 1 != 0 || it_final[i].value == "") {
             alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
             it_final[i].value = '';
             return;
         }
-        
         item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
+    }
+    /*
+    for (var i=0; i<serial_array.length; i++) {
+        $.ajax({
+            type : "POST",
+            dataType : 'json',
+            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>",
+            data : {serial: serial_array[i]["serial"], serial_wh_id: serial_array[i]["serial_wh_id"], serial_item_id: serial_array[i]["serial_item_id"], i: i},
+            success : function(data) {
+                if (data.a == "0") {
+                    alert("ไม่พบ Caseback : "+data.c);
+                    serial[data.b].value="";
+                    return;
+                }
+            }        
+        });
     }
     
     document.getElementById("savebtn").disabled = true;
@@ -224,7 +254,7 @@ function confirmform()
                 document.getElementById("savebtn").disabled = false;
             }
         });
-
+    */
 }
 
     

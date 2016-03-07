@@ -73,15 +73,16 @@ Class Tp_item_model extends CI_Model
     $this->db->from("tp_item_serial");
     $this->db->where("itse_serial_number", $caseback);
     $this->db->where("itse_enable", 1);
-    $query = $this->db->get();		
+    $query = $this->db->get();
 	return $query->num_rows();
  }
     
- function checkCaseback_warehouse($caseback, $wh_id) {
+ function checkCaseback_warehouse($caseback, $wh_id, $item_id) {
     $this->db->select("itse_id");
     $this->db->from("tp_item_serial");
     $this->db->where("itse_serial_number", $caseback);
     $this->db->where("itse_warehouse_id", $wh_id);
+    $this->db->where("itse_item_id", $item_id);
     $this->db->where("itse_enable", 1);
     $query = $this->db->get();		
 	return $query->num_rows();

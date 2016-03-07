@@ -708,5 +708,24 @@ function transferstock_history()
     $this->load->view("TP/warehouse/report_transfer_item", $data);
 }
     
+function checkSerial_warehouse()
+{
+    $serial = $this->input->post("serial");
+    $serial_wh_id = $this->input->post("serial_wh_id");
+    $serial_item_id = $this->input->post("serial_item_id");
+    $i = $this->input->post("i");
+    
+    $this->load->model('tp_item_model','',TRUE);
+    $number = $this->tp_item_model->checkCaseback_warehouse($serial, $serial_wh_id, $serial_item_id);
+    
+    echo $number;
+    /*
+    $result = array("a" => $number, "b" => $i, "c" => $serial);
+    echo json_encode($result);
+    exit();
+    */
+}
+    
+    
 }
 ?>
