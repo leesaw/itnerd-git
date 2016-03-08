@@ -263,6 +263,26 @@ function stock_POS_borrow_today()
     $this->load->view("TP/shop/report_stock_POS_borrow_today", $data);
 }
     
+function stock_POS_borrow_history()
+{
+    $currentdate = date("Y-m");
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
+    
+    $sql = "posrob_dateadd >= '".$start."' and posrob_dateadd <= '".$end."' and posrob_shop_id = '888'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/shop/report_stock_POS_borrow_history", $data);
+}
+    
 function saleorder_rolex_void_pos_borrow()
 {
     $id = $this->uri->segment(3);
@@ -310,6 +330,11 @@ function saleorder_rolex_void_pos_borrow()
     }
 		
     redirect('pos/stock_POS_borrow_today', 'refresh');
+}
+    
+function stock_POS_sale_history()
+{
+    
 }
     
 }

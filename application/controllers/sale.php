@@ -429,6 +429,26 @@ function saleorder_POS_today()
     $this->load->view("TP/sale/report_saleorder_POS_today", $data);
 }
     
+function saleorder_POS_history()
+{
+    $currentdate = date("Y-m");
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
+    
+    $sql = "posro_issuedate >= '".$start."' and posro_issuedate <= '".$end."' and posro_shop_id = '888'";
+    $query = $this->tp_saleorder_model->getPOS_rolex($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/sale/report_saleorder_POS_history", $data);
+}
+    
 function saleorder_POS_temp()
 {
     $datein = date("d/m/Y");
@@ -604,6 +624,26 @@ function saleorder_POS_temp_today()
     $data["currentdate"] = $currentdate;
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/sale/report_saleorder_POS_temp_today", $data);
+}
+    
+function saleorder_POS_temp_history()
+{
+    $currentdate = date("Y-m");
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
+    
+    $sql = "posrot_dateadd >= '".$start."' and posrot_dateadd <= '".$end."' and posrot_shop_id = '888'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/sale/report_saleorder_POS_temp_history", $data);
 }
     
 function saleorder_rolex_void_pos()

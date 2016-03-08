@@ -59,8 +59,15 @@
 							<div class="col-md-12">
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
-                                        <div class="input-group-btn">
-                                        </div> <label id="count_all" class="text-red pull-left">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
+                                    <?php $must_serial=0; 
+                                          foreach($stock_array as $loop){ 
+                                              if ($loop->br_has_serial == 1) { $must_serial++; break; } }
+                                        if ($must_serial>0) {
+                                    ?>
+                                            <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Caseback No. ที่ต้องการย้าย"><div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
+                                    <?php } ?>
+                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -78,7 +85,8 @@
 				                                    </tr>
 				                                </thead>
 												<tbody>
-                                                    <?php foreach($stock_array as $loop) { ?>
+                                                    <?php $count=0; 
+                                                    foreach($stock_array as $loop) { ?>
                                                     <tr<?php if ($loop->br_has_serial==1) echo " class='danger'"; ?>>
                                                     <input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop->log_stot_item_id; ?>">
                                                     <input type='hidden' name='log_id' id='log_id' value="<?php echo $loop->log_stot_id; ?>">
@@ -88,7 +96,7 @@
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><?php echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
-                                                    <td><input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php echo $loop->qty_update; ?>' <?php if ($status==2) echo "readonly"; ?>>
+                                                    <td><input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?>>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     
@@ -96,11 +104,12 @@
                                                     
                                                     if ($loop->br_has_serial==1) {
                                                         for($i=1; $i<=$loop->qty_update; $i++) {
+                                                            $count++;
                                                     ?>
                                                     <tr>
-                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial' class="text-blue" value='' style='width: 200px; text-align:center'><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
+                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial<?php echo $count; ?>' class="text-blue" value='' style='width: 200px; text-align:center' readonly><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
                                                     </tr>
-                                                    <?php } } ?>
+                                                    <?php $wh_out_id = $loop->stot_warehouse_out_id; } } ?>
                                                     <?php } ?>
 												</tbody>
 											</table>
@@ -131,7 +140,44 @@ $(document).ready(function()
 {    
     document.getElementById("savebtn").disabled = false;
 
+    $('#refcode').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var product_code_value = $.trim($(this).val());
+            var wh_out_id = "<?php echo $wh_out_id; ?>";
+            if(product_code_value != "")
+			{
+                check_product_code(product_code_value, wh_out_id);
+                
+			}
+            
+            $(this).val('');
+		}
+	});
 });
+    
+function check_product_code(refcode_input, wh_id)
+{
+	if(refcode_input != "")
+	{
+        $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
+            data : {refcode: refcode_input, serial_wh_id: wh_id},
+            success : function(data) {
+                if(data > 0)
+                {
+                    
+                }else{
+                    alert("ไม่พบ Caseback ที่ต้องการในคลัง");
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+	}
+
+}
 
 function returnform()
 {

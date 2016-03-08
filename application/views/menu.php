@@ -229,18 +229,23 @@
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) { ?>
             <li class="header">รายงาน ROLEX</li>
             <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษีของวันนี้</span>
+              <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบกำกับภาษี</span>
               </a>
             </li>
             <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_temp_today"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ใบเสร็จรับเงินของวันนี้</span>
+              <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบเสร็จรับเงิน</span>
               </a>
             </li>
             <li>
-              <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ใบส่งของชั่วคราวของวันนี้</span>
+              <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของชั่วคราว</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("pos/stock_POS_sale_history"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>สินค้าที่ขายแล้ว</span>
               </a>
             </li>
             <li>

@@ -72,7 +72,7 @@
                             <div class="col-md-3">
                                 <div class="form-group-lg has-success">
                                     <label class="control-label" for="inputSuccess"><?php if ($loop->posrot_payment=='C') echo "จำนวนเงินที่จ่าย"; if ($loop->posrot_payment=='D') echo "บัตรเครดิตธนาคาร"; if ($loop->posrot_payment=='Q') echo "เลขที่"; ?></label>
-                                    <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="<?php echo number_format($loop->posrot_payment_value); ?>" readonly>
+                                    <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="<?php echo $loop->posrot_payment_value; ?>" readonly>
                                 </div>
 							</div> 
                         </div>
