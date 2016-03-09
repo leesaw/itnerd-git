@@ -58,6 +58,19 @@ Class Tp_shop_model extends CI_Model
 	return $query->result();
  }
     
+ function getItem_borrow_serial($where)
+ {
+    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, posrob_borrower_name, posrobi_stock_balance_id, posrobi_id");
+    $this->db->from('tp_pos_rolex_borrow_item');
+    $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
+    $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id', 'left');
+	$this->db->join('tp_item', 'itse_item_id = it_id', 'left');
+    $this->db->join('tp_brand', 'it_brand_id = br_id','left');	
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function getBarcode_shop_group($where)
  {
     $this->db->select("sb_id, sb_number, sb_discount_percent, sb_gp, sb_brand_name");
@@ -97,6 +110,19 @@ Class Tp_shop_model extends CI_Model
  {
 	$this->db->select("posrobi_id, posrobi_pos_rolex_borrow_id, posrobi_item_id, posrobi_item_serial_number_id, posrobi_qty,  it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description, posrobi_stock_balance_id");
 	$this->db->from('tp_pos_rolex_borrow_item');	
+    $this->db->join('tp_item', 'it_id = posrobi_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ } 
+    
+ function getPOS_rolex_borrow_return_item($where)
+ {
+	$this->db->select("posrobi_id, posrobi_pos_rolex_borrow_id, posrobi_item_id, posrobi_item_serial_number_id, posrobi_qty,  it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description, posrobi_stock_balance_id, posrob_borrower_name");
+	$this->db->from('tp_pos_rolex_borrow_item');
+    $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
     $this->db->join('tp_item', 'it_id = posrobi_item_id','left');	
     $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id','left');	
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
@@ -182,6 +208,14 @@ Class Tp_shop_model extends CI_Model
 	$this->db->where('posrob_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_pos_rolex_borrow', $edit); 	
+	return $query;
+ }
+    
+ function editPOS_rolex_borrow_item($edit=NULL)
+ {
+	$this->db->where('posrobi_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_pos_rolex_borrow_item', $edit); 	
 	return $query;
  }
 

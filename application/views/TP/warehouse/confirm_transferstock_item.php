@@ -85,7 +85,7 @@
 				                                    </tr>
 				                                </thead>
 												<tbody>
-                                                    <?php $count=0; 
+                                                    <?php 
                                                     foreach($stock_array as $loop) { ?>
                                                     <tr<?php if ($loop->br_has_serial==1) echo " class='danger'"; ?>>
                                                     <input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop->log_stot_item_id; ?>">
@@ -103,11 +103,12 @@
                                                     <?php // if has serial
                                                     
                                                     if ($loop->br_has_serial==1) {
+                                                        $count=0; 
                                                         for($i=1; $i<=$loop->qty_update; $i++) {
                                                             $count++;
                                                     ?>
                                                     <tr>
-                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial' id='serial<?php echo $count; ?>' class="text-blue" value='' style='width: 200px; text-align:center' readonly><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
+                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial<?php echo $loop->log_stot_item_id; ?>' id='serial<?php echo $loop->log_stot_item_id."-".$count; ?>' class="text-blue" value='' style='width: 200px; text-align:center' readonly><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
                                                     </tr>
                                                     <?php $wh_out_id = $loop->stot_warehouse_out_id; } } ?>
                                                     <?php } ?>
@@ -162,11 +163,19 @@ function check_product_code(refcode_input, wh_id)
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
-            data : {refcode: refcode_input, serial_wh_id: wh_id},
+            data : {serial: refcode_input, serial_wh_id: wh_id},
             success : function(data) {
                 if(data > 0)
                 {
-                    
+                    var ind = "serial"+data;
+                    var serial_array = document.getElementsByName(ind);
+                    for (var i=0; i<serial_array.length; i++) {
+                        
+                        if (serial_array[i].value == "") {
+                            serial_array[i].value = refcode_input;
+                            break;
+                        }
+                    }
                 }else{
                     alert("ไม่พบ Caseback ที่ต้องการในคลัง");
                 }
@@ -194,6 +203,7 @@ function submitform()
         }
     }
     // serial item
+    /*
     var serial = document.getElementsByName('serial');
     var serial_wh_id = document.getElementsByName('serial_wh_id');
     var serial_item_id = document.getElementsByName('serial_item_id');
@@ -212,7 +222,7 @@ function submitform()
             });        
             length++;
     }
-    
+    */
     if (length==serial.length) {
         var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
         if (r == true) {

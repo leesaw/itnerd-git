@@ -337,5 +337,169 @@ function stock_POS_sale_history()
     
 }
     
+function stock_rolex_borrow_return()
+{
+    $datein = date("d/m/Y");
+    
+    // shop rolex
+    $sql = "sh_id = '888'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($sql);
+
+    $data['datein'] = $datein;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/shop/pos_borrow_return", $data);
+}
+    
+function check_rolex_borrow_serial()
+{
+    $refcode = $this->input->post("refcode");
+    $shop_id = $this->input->post("shop_id");
+    
+    $output = "";
+    $sql = "itse_serial_number = '".$refcode."' and posrobi_enable = '1' and posrob_status != 'V'";
+    
+    $result = $this->tp_shop_model->getItem_borrow_serial($sql);
+    
+    if (count($result) >0) {
+        foreach($result as $loop) {
+            $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->posrobi_stock_balance_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='posrobi_id' id='posrobi_id' value='".$loop->posrobi_id."'>".$loop->it_refcode."</td><td>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1 ".$loop->it_uom."' style='width: 50px;' readonly></td><td>".number_format($loop->it_srp)."</td><td>".$loop->posrob_borrower_name."</td>";
+        }
+    }
+    
+    
+    echo $output;
+}
+    
+function stock_rolex_borrow_return_save()
+{
+    $remark = $this->input->post("remark");
+    
+    $shop_id = $this->input->post("shop_id");
+    $saleperson_code = $this->input->post("saleperson_code");
+    $it_array = $this->input->post("item");
+    $datein = $this->input->post("datein");
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $datein = explode('/', $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+    $month = date("Y-m");
+    $month_array = explode('-',date("y-m"));
+    
+    $number = $this->tp_shop_model->getMaxNumber_rolex_borrow_shop($month, $shop_id);
+    
+    $number++;
+    
+    $number = "NGGTP-TD".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+
+    $sale = array( 'posrob_number' => $number,
+                    'posrob_issuedate' => $datein,
+                    'posrob_dateadd' => $currentdate,
+                    'posrob_shop_id' => $shop_id,
+                    'posrob_status' => 'R',
+                    'posrob_sale_person_id' => $saleperson_code,
+                    'posrob_remark' => $remark,
+                    'posrob_dateadd_by' => $this->session->userdata('sessid')
+            );
+    
+    $last_id = $this->tp_shop_model->addPOS_rolex_borrow($sale);
+    $count = 0;
+    for($i=0; $i<count($it_array); $i++){
+        // add item to so
+        $sale = array(  'id' => $it_array[$i]["posrobi_id"],
+                        'posrobi_return_id' => $last_id,
+                        'posrobi_enable' => 0
+            );
+        $query = $this->tp_shop_model->editPOS_rolex_borrow_item($sale);
+        $count += $it_array[$i]["qty"];
+        // decrease stock warehouse out
+        $this->load->model('tp_warehouse_transfer_model','',TRUE);
+        $sql = "stob_id = '".$it_array[$i]["stob_id"]."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        $qty_update = $it_array[$i]["qty"];
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $qty_new = $loop->stob_qty + $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 1, "itse_dateadd" => $currentdate);
+        
+        $this->load->model('tp_item_model','',TRUE);
+        $query = $this->tp_item_model->editItemSerial($serial);
+    }
+    $result = array("a" => $count, "b" => $last_id);
+    //$result = array("a" => $shop_id, "b" => $month);
+    echo json_encode($result);
+    exit();
+}
+    
+function stock_rolex_borrow_return_print()
+{
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    $mpdf->showWatermarkImage = true;
+
+    $sql = "posrob_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posrobi_return_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/shop/bill_borrow_return_rolex_print", $data, TRUE));
+    $mpdf->Output();
+}
+    
+function stock_rolex_pos_borrow_return_last()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "posrob_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posrobi_return_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+    
+    $data['pos_rolex_id'] = $id;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/shop/stock_pos_borrow_return_view", $data);
+}
+    
 }
 ?>

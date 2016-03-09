@@ -41,6 +41,20 @@
                             </div>
 						</div>
                         <br>
+                        <div class="row">
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-4">
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/stock_rolex_borrow_return"); ?>"><button type="button" class="btn btn-danger btn-lg btn-block"><h4>ออกใบรับสินค้าคืน</h4></button></a>
+                                </div>
+                            </div>
+						</div>
+                        <br>
                         <hr>
                         <div class="row">
                             <div class="col-md-4">

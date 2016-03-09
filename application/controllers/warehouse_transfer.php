@@ -712,13 +712,16 @@ function checkSerial_warehouse()
 {
     $serial = $this->input->post("serial");
     $serial_wh_id = $this->input->post("serial_wh_id");
-    $serial_item_id = $this->input->post("serial_item_id");
+    //$serial_item_id = $this->input->post("serial_item_id");
     $i = $this->input->post("i");
     
     $this->load->model('tp_item_model','',TRUE);
-    $number = $this->tp_item_model->checkCaseback_warehouse($serial, $serial_wh_id, $serial_item_id);
-    
-    echo $number;
+    $number = $this->tp_item_model->checkCaseback_warehouse($serial, $serial_wh_id);
+    $result = 0;
+    foreach($number as $loop) {
+        $result = $loop->itse_item_id;
+    }
+    echo $result;
     /*
     $result = array("a" => $number, "b" => $i, "c" => $serial);
     echo json_encode($result);

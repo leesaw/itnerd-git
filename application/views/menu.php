@@ -201,6 +201,11 @@
                 <i class="fa fa-circle-o text-red"></i><span>ออกใบส่งของชั่วคราว</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("pos/stock_rolex_borrow_return"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ออกใบรับสินค้าคืน</span>
+              </a>
+            </li>
             <li class="header">รายงาน</li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
