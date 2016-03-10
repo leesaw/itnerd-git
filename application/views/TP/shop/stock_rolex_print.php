@@ -25,19 +25,20 @@
 <table style="border:1px solid black; border-spacing:0px 0px;">
 <thead>
 	<tr>
-		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">RMC</th><th width="60" style="border-left:1px solid black;border-bottom:1px solid black;">Brand</th><th width="170" style="border-left:1px solid black;border-bottom:1px solid black;">Description</th><th width="120" style="border-left:1px solid black;border-bottom:1px solid black;">Family</th><th width="60" style="border-left:1px solid black;border-bottom:1px solid black;">Bracelet</th><th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">ราคาขาย</th>
+		<th width="30">No.</th><th width="80" style="border-left:1px solid black;">Product Code</th><th width="60" style="border-left:1px solid black;">Serial</th><th width="50" style="border-left:1px solid black;">Brand</th><th width="170" style="border-left:1px solid black;">Description</th><th width="120" style="border-left:1px solid black;">Family</th><th width="60" style="border-left:1px solid black;">Bracelet</th><th width="50" style="border-left:1px solid black;">จำนวน</th><th width="70" style="border-left:1px solid black;">ราคาขาย</th>
 	</tr>
 </thead>
 <tbody>
 <?php $no=1; $sum=0; if(isset($item_array)) { foreach($item_array as $loop) { ?>
-<tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
-<td style="border-left:1px solid black;" align="center"><?php echo $loop->br_name; ?></td>
-<td style="border-left:1px solid black;"><?php echo $loop->it_short_description; ?></td>
-<td style="border-left:1px solid black;"><?php echo $loop->it_model; ?></td>
-<td style="border-left:1px solid black;" align="center"><?php echo $loop->it_remark; ?></td>
-<td align="center" style="border-left:1px solid black;"><?php echo $loop->stob_qty." &nbsp; ".$loop->it_uom; $sum += $loop->stob_qty; ?></td>
-<td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<tr style="border:1px solid black; border-top:1px solid black;"><td align="center"><?php echo $no; ?></td>
+<td style="border-left:1px solid black; border-top:1px solid black;"><?php echo $loop->it_refcode; ?></td>
+<td style="border-left:1px solid black; border-top:1px solid black;"></td>
+<td style="border-left:1px solid black; border-top:1px solid black;" align="center"><?php echo $loop->br_name; ?></td>
+<td style="border-left:1px solid black; border-top:1px solid black;"><?php echo $loop->it_short_description; ?></td>
+<td style="border-left:1px solid black; border-top:1px solid black;"><?php echo $loop->it_model; ?></td>
+<td style="border-left:1px solid black; border-top:1px solid black;" align="center"><?php echo $loop->it_remark; ?></td>
+<td align="center" style="border-left:1px solid black; border-top:1px solid black;"><?php echo $loop->stob_qty." &nbsp; ".$loop->it_uom; $sum += $loop->stob_qty; ?></td>
+<td align="right" style="border-left:1px solid black; border-top:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <?php
 // print serial number
@@ -46,9 +47,9 @@ if(isset($serial_array)) {
         if ($loop->stob_item_id==$loop2->it_id) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
+<td align="center" style="border-left:1px solid black;"><?php echo $loop2->itse_serial_number; ?></td>
 <td align="center" style="border-left:1px solid black;"></td>
-<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; ?>
-</td>
+<td style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"></td>
@@ -60,7 +61,7 @@ if(isset($serial_array)) {
 }
 ?> 
 <?php $no++; } } ?> 
-<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum; ?></td><td style="border-top:1px solid black; border-left:1px solid black;">&nbsp;</td></tr>
+<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum; ?></td><td style="border-top:1px solid black; border-left:1px solid black;">&nbsp;</td></tr>
 
 </tbody>
 </table>
