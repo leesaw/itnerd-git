@@ -78,13 +78,22 @@ function stock_rolex_print()
     $data['item_array'] = $result;
     
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result .= " and itse_enable = '1'";
+    //$sql_result .= " and itse_enable = '1'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
     if($query){
         $data['serial_array'] =  $query;
     }else{
         $data['serial_array'] = array();
     }
+    
+    $sql = "";
+    $query_sold_tax = $this->tp_saleorder_model->getPOS_rolex_item($sql);
+    $query_sold_bill = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    $data['sold_array'] = array_merge($query_sold_tax,$query_sold_bill);
+    
+    $sql = "";
+    $data['borrow_array'] = $this->tp_shop_model->getItem_borrow_serial($sql);
+    
     //echo $html;
     $mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);

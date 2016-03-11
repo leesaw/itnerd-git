@@ -9,7 +9,7 @@
 <tr>
 <td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
 <td width="320">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div>
 </td> 
 <?php foreach($pos_array as $loop) { $datetime = $loop->posrot_issuedate; $so_id = $loop->posrot_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posrot_customer_name; $cusaddress = $loop->posrot_customer_address; break; } 
 
@@ -18,10 +18,10 @@
  $GGdate=substr($datetime,8,2); 
 ?>
 <td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบเสร็จรับเงิน/ ใบกำกับภาษีอย่างย่อ</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
+    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบส่งของ</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบเสร็จ: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบส่งของ: <?php echo $so_id; ?><br>สาขา : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>
@@ -40,8 +40,8 @@
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroit_qty." ".$loop->it_uom; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_netprice, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_netprice; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
+<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_item_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_item_srp; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
 </tr>
 <?php $no++; } } ?> 
 
@@ -219,8 +219,8 @@ return $rstring;
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroit_qty." ".$loop->it_uom; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_netprice, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_netprice; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
+<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_item_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_item_srp; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
 </tr>
 <?php $no++; } } ?> 
 

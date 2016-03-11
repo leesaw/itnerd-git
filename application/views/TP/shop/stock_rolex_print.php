@@ -48,8 +48,26 @@ if(isset($serial_array)) {
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop2->itse_serial_number; ?></td>
+<?php if ($loop2->itse_enable ==0) { 
+    $message = "";
+    foreach($sold_array as $loop_sold) {
+        if ($loop_sold->itse_serial_number == $loop2->itse_serial_number) {
+            $message = "(ขายแล้ว)"; break;
+        }
+    }
+    if ($message == "") {
+        foreach($borrow_array as $loop_borrow) {
+            if ($loop_borrow->itse_serial_number == $loop2->itse_serial_number) {
+            $message = "(ถูกส่งไปให้ ".$loop_borrow->posrob_borrower_name." )"; break;
+        }
+        }
+    }
+?>
+<td align="left" colspan="2"><?php echo $message; ?></td>
+<?php }else{ ?>
 <td align="center" style="border-left:1px solid black;"></td>
 <td style="border-left:1px solid black;"></td>
+<?php } ?>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="center" style="border-left:1px solid black;"></td>
