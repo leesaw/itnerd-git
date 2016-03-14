@@ -239,7 +239,13 @@ function stock_rolex_pos_borrow_last()
         $data['pos_array'] = array();
     }
 
-    $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
+    foreach($query as $loop) {
+        if ($loop->posrob_status =='R') {
+            $sql = "posrobi_return_id = '".$id."'";;
+        }else{
+            $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
+        }
+    }
     $query = $this->tp_shop_model->getPOS_rolex_borrow_item($sql);
     if($query){
         $data['item_array'] =  $query;
@@ -343,6 +349,10 @@ function saleorder_rolex_void_pos_borrow()
     
 function stock_POS_sale_history()
 {
+    $month = date("Y-m");
+    $start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    
     
 }
     
@@ -508,6 +518,26 @@ function stock_rolex_pos_borrow_return_last()
     $data['pos_rolex_id'] = $id;
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/shop/stock_pos_borrow_return_view", $data);
+}
+    
+function stock_POS_borrow_return_today()
+{
+    $currentdate = date("Y-m-d");
+    $start = $currentdate." 00:00:00";
+    $end = $currentdate." 23:59:59";
+    
+    $sql = "posrob_dateadd >= '".$start."' and posrob_dateadd <= '".$end."' and posrob_shop_id = '888'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "Nerd - Report";
+    $this->load->view("TP/shop/report_stock_POS_borrow_today", $data);
 }
     
 }

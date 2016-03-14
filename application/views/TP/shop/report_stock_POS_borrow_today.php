@@ -45,9 +45,19 @@
                                     <?php foreach($pos_array as $loop) { ?>
                                     <tr>
                                         <td><?php echo $loop->posrob_number; if ($loop->posrob_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
-                                        <td><?php echo $loop->posrob_borrower_name; ?></td>
+                                        <td><?php 
+                                        if ($loop->posrob_status == 'R')
+                                            echo "<div class='text-blue'>รับสินค้าคืน</div>";
+                                        else echo $loop->posrob_borrower_name; 
+                                        ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php echo site_url("pos/stock_rolex_pos_borrow_last")."/".$loop->posrob_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
+                                        <td><a href="<?php 
+                                        if ($loop->posrob_status == 'R') {
+                                            echo site_url("pos/stock_rolex_pos_borrow_return_last")."/".$loop->posrob_id; 
+                                        }else{
+                                            echo site_url("pos/stock_rolex_pos_borrow_last")."/".$loop->posrob_id; 
+                                        }
+                                        ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
                                         </td>
                                     </tr>
                                     <?php } ?>

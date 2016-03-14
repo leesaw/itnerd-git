@@ -1701,4 +1701,95 @@ class Scriptjes extends CI_Controller {
         
         if ($message) echo "completed(Shop) "; else echo "error(Shop) ";
 	}
+    
+    public function stock_balance()
+	{
+        
+        $db_jes = $this->load->database('db3',TRUE);
+		//$db1->empty_table('Shop'); 
+        
+		$db_nerd = $this->load->database('db',TRUE);
+        
+		$db_nerd->select("wh_code");
+		$db_nerd->from("tp_warehouse");
+        $db_nerd->where("wh_enable",1);
+		$query = $db_nerd->get();
+		$numrows = $query->num_rows(); 
+        $startlimit = 0;
+        $end = ceil($numrows / 1000);
+        $count = 1;
+        while ($count <= $end) {
+            $db2->select("SHCode,
+                            SHDesc1,
+                            SHDesc2,
+                            SHAddress,
+                            SHPhone,
+                            SHWarehouse,
+                            SHCurrency,
+                            SHRegion,
+                            SHCountry,
+                            Expired,
+                            WTCode,
+                            SHFGWH,
+                            SHRSWH");
+		    $db2->from("[JES_NGG].[dbo].[Shop]");
+            
+            $endlimit = $count * 1000;
+            //echo $startlimit." / ".$endlimit."+";
+            $db2->order_by("SHCode");
+            $db2->limit($startlimit, $endlimit);
+		    $query = $db2->get();
+            $numrows = $query->num_rows();
+            $result = $query->result();
+            //if ($result) echo "yes"; else echo "no";
+            $i = 1;
+            $sql2 = "INSERT INTO Shop(SHCode,
+                            SHDesc1,
+                            SHDesc2,
+                            SHAddress,
+                            SHPhone,
+                            SHWarehouse,
+                            SHCurrency,
+                            SHRegion,
+                            SHCountry,
+                            Expired,
+                            WTCode,
+                            SHFGWH,
+                            SHRSWH) VALUES";
+            $query2 = $sql2;
+
+            foreach($result as $loop) {
+                $query2 .= "('".mysql_real_escape_string($loop->SHCode).
+                  "','".mysql_real_escape_string($loop->SHDesc1).
+                  "','".mysql_real_escape_string($loop->SHDesc2).
+                  "','".mysql_real_escape_string($loop->SHAddress).
+                  "','".mysql_real_escape_string($loop->SHPhone).
+                  "','".mysql_real_escape_string($loop->SHWarehouse).
+                  "','".mysql_real_escape_string($loop->SHCurrency).
+                  "','".mysql_real_escape_string($loop->SHRegion).
+                  "','".mysql_real_escape_string($loop->SHCountry).
+                  "','".mysql_real_escape_string($loop->Expired).
+                  "','".mysql_real_escape_string($loop->WTCode).
+                  "','".mysql_real_escape_string($loop->SHFGWH).
+                  "','".mysql_real_escape_string($loop->SHRSWH);
+                
+                if ($i!=$numrows) {
+                    $query2 .= "'),";
+                }else{
+                    $query2 .= "')";
+                    //$db1->query($query2);
+                    //$query2 = $sql2;
+                }
+                $i++;
+            }
+            //echo $query2;
+            $message = $db1->query($query2);
+            $count++;
+            $startlimit = $endlimit + 1;
+            //echo $endlimit;
+            
+        }
+        
+        if ($message) echo "completed(Shop) "; else echo "error(Shop) ";
+	}
 }

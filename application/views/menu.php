@@ -219,7 +219,7 @@
             </li>
             <li>
               <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ใบส่งของชั่วคราวของวันนี้</span>
+                <i class="fa fa-circle-o text-red"></i><span>ใบส่งของ/รับคืนของวันนี้</span>
               </a>
             </li>
             <li>
@@ -245,7 +245,7 @@
             </li>
             <li>
               <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของชั่วคราว</span>
+                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของ/รับคืน</span>
               </a>
             </li>
             <li>

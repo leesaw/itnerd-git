@@ -69,7 +69,7 @@
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>"><button type="button" class="btn btn-info btn-lg btn-block"><h4>ใบส่งของชั่วคราวของวันนี้</h4></button></a>
+                                    <a href="<?php echo site_url("pos/stock_POS_borrow_today"); ?>"><button type="button" class="btn btn-info btn-lg btn-block"><h4>ใบส่งของ/รับคืน ของวันนี้</h4></button></a>
                                 </div>
                             </div>
                             <div class="col-md-4">

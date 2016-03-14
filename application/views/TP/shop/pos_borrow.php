@@ -57,7 +57,7 @@
 							<div class="col-md-12">
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-lg col-lg-6">
-                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Serial ที่ขาย">
+                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Serial ที่ต้องการ">
                                         <div class="input-group-btn">
 
                                         </div>

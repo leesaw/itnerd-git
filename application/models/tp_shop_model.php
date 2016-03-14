@@ -130,6 +130,19 @@ Class Tp_shop_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  } 
+    
+ function getPOS_rolex_sold_tax_item($where)
+ {
+    $this->db->select('posroi_id, posroi_pos_rolex_id, posroi_item_id, posroi_item_serial_number_id, posroi_item_srp, posroi_dc_baht, posroi_netprice, posro_number, posro_issuedate, posro_shop_id, posro_payment, posro_remark, posro_status, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description');
+    $this->db->from('tp_pos_rolex_item');
+    $this->db->join('tp_pos_rolex', 'posro_id = posroi_pos_rolex_id', 'left');
+    $this->db->join('tp_item', 'it_id = posroi_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posroi_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
 
  function addShop($insert=NULL)
  {		
