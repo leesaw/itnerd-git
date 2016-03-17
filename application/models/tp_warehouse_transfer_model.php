@@ -100,10 +100,10 @@ Class Tp_warehouse_transfer_model extends CI_Model
     
  function getWarehouse_transfer_between_serial_one($where)
  {
-	$this->db->select("itse_item_id, itse_serial_number, log_stots_id, log_stots_item_serial_id");
+	$this->db->select("log_stots_item_serial_id, itse_serial_number, itse_item_id, log_stots_id");
 	$this->db->from('log_stock_transfer_serial');
+    $this->db->join('log_stock_transfer', 'log_stot_id = log_stots_stot_id','left');
     $this->db->join('tp_item_serial', 'itse_id = log_stots_item_serial_id','left');
-	$this->db->join('tp_stock_transfer', 'stot_id = log_stots_transfer_id','left');	
     if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
 	return $query->result();

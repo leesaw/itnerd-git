@@ -40,6 +40,7 @@
                                         ออกจากคลัง *
                                         <input type="hidden" name="wh_out_id" id="wh_out_id" value="<?php echo $loop->wh_out_id; ?>">
                                         <input type="text" class="form-control" name="whname_out" id="whname_out" value="<?php echo $loop->wh_out_code."-".$loop->wh_out_name; ?>" readonly>
+                                        <?php $wh_out_id = $loop->wh_out_id; ?>
                                     </div>
 							</div>
                             <div class="col-md-1">
@@ -86,6 +87,7 @@
 				                                </thead>
 												<tbody>
                                                     <?php 
+                                                    $count=0;
                                                     foreach($stock_array as $loop) { ?>
                                                     <tr<?php if ($loop->br_has_serial==1) echo " class='danger'"; ?>>
                                                     <input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop->log_stot_item_id; ?>">
@@ -96,21 +98,24 @@
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><?php echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
-                                                    <td><input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?>>
+                                                    <td>
+                                                        <?php if ($loop->br_has_serial==1) { ?>
+                                                        <input type="hidden" name="count_serial_<?php echo $loop->log_stot_item_id; ?>" id="count_serial_<?php echo $loop->log_stot_item_id; ?>" value="<?php echo $count; ?>">
+                                                        <?php } ?>
+                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?>>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     
                                                     <?php // if has serial
-                                                    
+                                                    $count_serial = 0;
                                                     if ($loop->br_has_serial==1) {
-                                                        $count=0; 
                                                         for($i=1; $i<=$loop->qty_update; $i++) {
-                                                            $count++;
+                                                            $count_serial++;
                                                     ?>
                                                     <tr>
-                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial<?php echo $loop->log_stot_item_id; ?>' id='serial<?php echo $loop->log_stot_item_id."-".$count; ?>' class="text-blue" value='' style='width: 200px; text-align:center' readonly><input type="hidden" name="serial_wh_id" id="serial_wh_id" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id" id="serial_item_id" value="<?php echo $loop->log_stot_item_id; ?>"></td>
+                                                    <td colspan="8"><b><?php echo $i; ?>. Caseback Number : </b><input type='text' name='serial<?php echo $loop->log_stot_item_id; ?>' id='serial<?php echo $loop->log_stot_item_id; ?>' class="text-blue" value='' style='width: 200px; text-align:center' readonly><input type="hidden" name="serial_wh_id<?php echo $loop->log_stot_item_id; ?>" id="serial_wh_id<?php echo $loop->log_stot_item_id; ?>" value="<?php echo $loop->stot_warehouse_out_id; ?>"><input type="hidden" name="serial_item_id<?php echo $loop->log_stot_item_id; ?>" id="serial_item_id<?php echo $loop->log_stot_item_id; ?>" value=""></td>
                                                     </tr>
-                                                    <?php $wh_out_id = $loop->stot_warehouse_out_id; } } ?>
+                                                    <?php  } } $count++; ?>
                                                     <?php } ?>
 												</tbody>
 											</table>
@@ -162,17 +167,23 @@ function check_product_code(refcode_input, wh_id)
 	{
         $.ajax({
             type : "POST" ,
+            dataType: "json",
             url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
             data : {serial: refcode_input, serial_wh_id: wh_id},
             success : function(data) {
-                if(data > 0)
+                if(data.a > 0)
                 {
-                    var ind = "serial"+data;
+                    var ind = "serial"+data.a;
+                    var serial = document.getElementById("count_serial_"+data.a).value;
                     var serial_array = document.getElementsByName(ind);
+                    var serial_id = document.getElementsByName("serial_item_id"+data.a);
+                    var it_final = document.getElementsByName("it_final");
                     for (var i=0; i<serial_array.length; i++) {
                         
                         if (serial_array[i].value == "") {
-                            serial_array[i].value = refcode_input;
+                            serial_array[i].value = data.b;
+                            serial_id[i].value = data.c;
+                            it_final[serial].value = parseInt(it_final[serial].value) + 1;
                             break;
                         }
                     }
@@ -202,32 +213,10 @@ function submitform()
             return;
         }
     }
-    // serial item
-    /*
-    var serial = document.getElementsByName('serial');
-    var serial_wh_id = document.getElementsByName('serial_wh_id');
-    var serial_item_id = document.getElementsByName('serial_item_id');
-    var length = 0;
     
-    for (var i=0; i<serial.length; i++) {
-        alert(serial[i].value+"/"+serial_wh_id[i].value+"/"+serial_item_id[i].value);
-        $.post("<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>", {
-            serial: serial[i].value, serial_wh_id: serial_wh_id[i].value, serial_item_id: serial_item_id[i].value},
-            function(result) {
-                if (result == "0") {
-                    alert("ไม่พบ Caseback : "+serial[i].value);
-                    serial[i].value="";
-                    return;
-                }
-            });        
-            length++;
-    }
-    */
-    if (length==serial.length) {
-        var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-        if (r == true) {
-            confirmform();
-        }
+    var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+    if (r == true) {
+        confirmform();
     }
 }
     
@@ -241,21 +230,8 @@ function confirmform()
     var wh_in_id = document.getElementById("wh_in_id").value; 
     var datein = document.getElementById("datein").value;
     
-    // serial item
-    var serial = document.getElementsByName('serial');
-    var serial_wh_id = document.getElementsByName('serial_wh_id');
-    var serial_item_id = document.getElementsByName('serial_item_id');
-    
     var serial_array = new Array();
     var index_serial = 0;
-    
-    for(var i=0; i<serial.length; i++) {
-        if (serial[i].value != "") {
-            serial_array[index_serial] = {serial_wh_id: serial_wh_id[i].value, serial: serial[i].value, serial_item_id: serial_item_id[i].value};
-            index_serial++;
-        }
-        
-    }
     
     var item_array = new Array();
     for(var i=0; i<log_id.length; i++){
@@ -265,30 +241,26 @@ function confirmform()
             return;
         }
         item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
-    }
-    /*
-    for (var i=0; i<serial_array.length; i++) {
-        $.ajax({
-            type : "POST",
-            dataType : 'json',
-            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>",
-            data : {serial: serial_array[i]["serial"], serial_wh_id: serial_array[i]["serial_wh_id"], serial_item_id: serial_array[i]["serial_item_id"], i: i},
-            success : function(data) {
-                if (data.a == "0") {
-                    alert("ไม่พบ Caseback : "+data.c);
-                    serial[data.b].value="";
-                    return;
-                }
-            }        
-        });
+        
+        var serial = document.getElementsByName('serial'+item_id[i].value.replace(/\s+/g, ''));
+        var serial_wh_id = document.getElementsByName('serial_wh_id'+item_id[i].value.replace(/\s+/g, ''));
+        var serial_item_id = document.getElementsByName('serial_item_id'+item_id[i].value.replace(/\s+/g, ''));
+        for(var j=0; j<serial.length; j++) {
+            
+            if (serial[j].value != "") {
+                serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[j].value};
+                index_serial++;
+            }
+
+        }
     }
     
     document.getElementById("savebtn").disabled = true;
 
     $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm/0"); ?>" ,
-            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein} ,
+            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm"); ?>" ,
+            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein, serial_array: serial_array} ,
             dataType: 'json',
             success : function(data) {
                 var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบส่งของ ใช่หรือไม่";
@@ -310,7 +282,7 @@ function confirmform()
                 document.getElementById("savebtn").disabled = false;
             }
         });
-    */
+
 }
 
     

@@ -44,9 +44,10 @@ if ($loop->qty_final > 0) {
 </tr>
 <?php
 // print serial number
+
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
-        if ($loop->it_id==$loop2->itse_item_id) { ?>
+        if ($loop->log_stot_item_id==$loop2->itse_item_id) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; ?>   

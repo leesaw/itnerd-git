@@ -459,16 +459,16 @@ function confirm_transfer_between_serial()
 function transferstock_save_confirm()
 {
     $luxury = $this->uri->segment(3);
+    $serial_array = $this->input->post("serial_array");
     $it_array = $this->input->post("item");
-    $it_cancel_array = $this->input->post("cancel_item");
+    //$it_cancel_array = $this->input->post("cancel_item");
     $stot_id = $this->input->post("stot_id");
     $wh_out_id = $this->input->post("wh_out_id");
     $wh_in_id = $this->input->post("wh_in_id");
     $datein = $this->input->post("datein");
     $currentdate = date("Y-m-d H:i:s");
     
-    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,
-                                "stot_confirm_by" => $this->session->userdata('sessid'));
+    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'));
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
     
     
@@ -479,11 +479,7 @@ function transferstock_save_confirm()
         $sql = "stob_item_id = '".$it_array[$i]["item_id"]."' and stob_warehouse_id = '".$wh_out_id."'";
         $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
         
-        if ($luxury==0) {
-            $qty_update = $it_array[$i]["qty_final"];
-        }else{
-            $qty_update = 1;
-        }
+        $qty_update = $it_array[$i]["qty_final"];
         
         if (!empty($query)) {
             foreach($query as $loop) {
@@ -528,32 +524,29 @@ function transferstock_save_confirm()
             
         }
         
-        if ($luxury==0) {
-            
-            $stock = array( 'id' => $it_array[$i]["id"],
+        $stock = array( 'id' => $it_array[$i]["id"],
                             'log_stot_qty_final' => $it_array[$i]["qty_final"]
-            );
+                        );
             
-            $query = $this->tp_log_model->editWarehouse_transfer_between($stock);
+        $query = $this->tp_log_model->editWarehouse_transfer_between($stock);
             
-            $count += $it_array[$i]["qty_final"];
-        }else if ($luxury==1) {
-            $this->load->model('tp_item_model','',TRUE);
-            $serial = array("id" => $it_array[$i]["item_serial"], "itse_warehouse_id" => $wh_in_id);
-            $query = $this->tp_item_model->editItemSerial($serial);
-        }
+        $count += $it_array[$i]["qty_final"];
     }
-    if ($luxury == 1) {
-        for($i=0; $i<count($it_cancel_array); $i++){
-            $stock = array( 'id' => $it_cancel_array[$i]["id"],
-                            'log_stots_qty_final' => 0,
-                            'log_stots_enable' => 0
-            );
+    
+    if ($serial_array != "") {
+    for($i=0; $i<count($serial_array); $i++){
+        $stock = array( 'log_stots_stot_id' => $serial_array[$i]["serial_log_id"],
+                        'log_stots_item_serial_id' => $serial_array[$i]["serial_item_id"]
+        );
 
-            $query = $this->tp_log_model->editWarehouse_transfer_between_serial($stock);
-        }
-        $count = count($it_array);
-    }
+        $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+        $this->load->model('tp_item_model','',TRUE);
+        $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
+                            'itse_warehouse_id' => $wh_in_id
+                        );
+        $query = $this->tp_item_model->editItemSerial($serial_item);
+
+    } }
 
     $result = array("a" => $count, "b" => $stot_id);
     echo json_encode($result);
@@ -575,6 +568,14 @@ function transferstock_final_print()
 		}else{
 			$data['stock_array'] = array();
 		}
+    
+        $sql = "log_stot_transfer_id = '".$id."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+        if($query){
+            $data['serial_array'] =  $query;
+        }else{
+            $data['serial_array'] = array();
+        }   
 		
 		//echo $html;
         $mpdf->SetJS('this.print();');
@@ -712,21 +713,21 @@ function checkSerial_warehouse()
 {
     $serial = $this->input->post("serial");
     $serial_wh_id = $this->input->post("serial_wh_id");
-    //$serial_item_id = $this->input->post("serial_item_id");
-    $i = $this->input->post("i");
     
     $this->load->model('tp_item_model','',TRUE);
     $number = $this->tp_item_model->checkCaseback_warehouse($serial, $serial_wh_id);
-    $result = 0;
+    $result1 = 0;
+    $result2 = "";
+    $result3 = 0;
     foreach($number as $loop) {
-        $result = $loop->itse_item_id;
+        $result1 = $loop->itse_item_id;
+        $result2 = $loop->itse_serial_number;
+        $result3 = $loop->itse_id;
     }
-    echo $result;
-    /*
-    $result = array("a" => $number, "b" => $i, "c" => $serial);
+
+    $result = array("a" => $result1, "b" => $result2, "c" => $result3);
     echo json_encode($result);
     exit();
-    */
 }
     
     
