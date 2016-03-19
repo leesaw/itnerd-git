@@ -70,7 +70,7 @@
                                     <tr>
 										<th>Ref. No.</th>
                                         <th>ยี่ห้อ</th>
-                                        <th>รุ่น</th>
+                                        <th>Family</th>
                                         <th>ราคาขาย</th>
 										<th>ประเภท</th>
 										<th width="80">จัดการ</th>

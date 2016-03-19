@@ -58,7 +58,7 @@
 							</div>
                             <div class="col-md-3">
                                     <div class="form-group">
-                                            รุ่นสินค้า *
+                                            Family *
                                             <input type="text" class="form-control" name="model" id="model" value="<?php echo set_value('model'); ?>">
 											<p class="help-block"><?php echo form_error('model'); ?></p>
                                     </div>

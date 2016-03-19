@@ -219,6 +219,19 @@ function viewproduct()
     $this->load->view('TP/item/viewitem_view',$data);
 }    
     
+function viewproduct()
+{
+    $id = $this->uri->segment(3);
+    $sql = "it_id = '".$id."' and ".$this->no_rolex;
+    $query = $this->tp_item_model->getItem($sql);
+    if($query){
+        $data['product_array'] =  $query;
+    }
+
+    $data['title'] = "NGG| Nerd - View Product";
+    $this->load->view('TP/item/viewitem_view',$data);
+}
+    
 function getRefcode()
 {
     $refcode = $this->input->post("refcode");
