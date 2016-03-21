@@ -219,7 +219,7 @@ function viewproduct()
     $this->load->view('TP/item/viewitem_view',$data);
 }    
     
-function viewproduct()
+function editproduct()
 {
     $id = $this->uri->segment(3);
     $sql = "it_id = '".$id."' and ".$this->no_rolex;
@@ -286,6 +286,32 @@ function getCaseback_warehouse()
 function getRefcode_caseback_warehouse()
 {
     
+}
+    
+function rolex_barcode_print()
+{
+    $id = $this->uri->segment(3);
+    
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    $sql_result = "br_id = '888' and itse_enable = '1'";
+    //$sql_result .= " and itse_serial_number = '63S0J540'";
+    $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/barcode_print", $data, TRUE));
+    $mpdf->Output();
 }
 
     

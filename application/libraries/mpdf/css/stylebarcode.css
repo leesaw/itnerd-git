@@ -1,18 +1,17 @@
 body {
-	font-family: sans-serif;
-	font-size: 8px;
+    font-family:  sans-serif;
+	font-size: 10px;
 }
 @page {
     margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .barcode {
-    padding: 1.5mm;
-    margin: 1;
-    vertical-align: top;
-    color: #000044;
+    padding: 0.5mm;
+    color: #000000;
+    text-align: left;
 }
 .barcodecell {
     text-align: left;
