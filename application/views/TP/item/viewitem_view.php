@@ -25,7 +25,7 @@
                         <?php foreach($product_array as $loop) { ?>
                             <div class="col-md-3">
                                     <div class="form-group">
-                                            Ref Code.
+                                            Ref. Number
                                             <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo $loop->it_refcode; ?>" readonly>
                                     </div>
 							</div>
@@ -43,7 +43,7 @@
 							</div>
                             <div class="col-md-3">
                                     <div class="form-group">
-                                            รุ่นสินค้า
+                                            Family
                                             <input type="text" class="form-control" name="model" id="model" value="<?php echo $loop->it_model; ?>" readonly>
                                     </div>
 							</div>

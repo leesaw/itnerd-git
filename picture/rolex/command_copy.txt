@@ -1,0 +1,2 @@
+for d in */; do cp M114060-0002/1.png "$d"; done
+mkdir -p $(cat rolex.csv)

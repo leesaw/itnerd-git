@@ -14,7 +14,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงสินค้า Ref. Number หรือ Description : <B><U><?php echo $refcode; ?></U></B> ทั้งหมดในคลัง
+            แสดงสินค้า Ref. Number หรือ Description : <B><U><?php if ($refcode !="NULL") echo $refcode; ?></U></B> ทั้งหมดในคลัง
         </h1>
     </section>
 	
@@ -50,12 +50,12 @@
 										<th width="50">Qty</th>
                                         <th>SRP</th>
                                         <th width="200">Short Description</th>
-                                        <th width="50">Caseback</th>
+                                        <!-- <th width="50">Caseback</th> -->
                                     </tr>
                                 </thead>
                                 
 								<tbody>
-                                    <?php foreach($stock_array as $loop) { ?>
+                                    <?php /* foreach($stock_array as $loop) { ?>
                                     <tr>
                                         <td><?php echo $loop->it_refcode; ?></td>
                                         <td><?php echo $loop->br_name; ?></td>
@@ -68,7 +68,7 @@
                                         <a id="fancyboxall" href="<?php echo site_url("warehouse/view_serial")."/".$loop->stob_id; ?>" class="btn btn-primary btn-xs"><i class="fa fa-eye"></i></a> 
                                         <?php } ?></td>
                                     </tr>
-                                    <?php } ?>
+                                    <?php } */?>
 								</tbody>
                                 <tfoot>
                                     <tr>
@@ -123,6 +123,20 @@
 $(document).ready(function()
 {    
     var oTable = $('#tablebarcode').DataTable({
+        "bProcessing": true,
+        'bServerSide'    : false,
+        "bDeferRender": true,
+        'sAjaxSource'    : '<?php echo site_url("warehouse/ajaxViewStock")."/".$refcode."/".$brand."/".$warehouse."/".$minprice."/".$maxprice; ?>',
+        "fnServerData": function ( sSource, aoData, fnCallback ) {
+            $.ajax( {
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success":fnCallback
+
+            });
+        },
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  

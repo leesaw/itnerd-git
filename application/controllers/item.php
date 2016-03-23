@@ -188,6 +188,94 @@ function save()
 	$this->load->view('TP/item/additem_view',$data);
 }
     
+function edit_save()
+{
+    $this->form_validation->set_rules('refcode', 'refcode', 'trim|xss_clean|required');
+    $this->form_validation->set_rules('model', 'model', 'trim|xss_clean|required');
+    $this->form_validation->set_rules('cost', 'cost', 'trim|xss_clean|required|callback_number_is_money');
+    $this->form_validation->set_rules('srp', 'srp', 'trim|xss_clean|required|callback_number_is_money');
+    $this->form_validation->set_rules('minstock', 'minstock', 'trim|xss_clean|required|numeric');
+    $this->form_validation->set_rules('uom', 'uom', 'trim|xss_clean|required');
+    $this->form_validation->set_rules('short', 'short', 'xss_clean');
+    $this->form_validation->set_rules('long', 'long', 'aaxss_clean');
+    $this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
+    $this->form_validation->set_message('numeric', 'กรุณาใส่เฉพาะตัวเลขเท่านั้น');
+    $this->form_validation->set_error_delimiters('<code>', '</code>');
+
+    $it_id= $this->input->post('it_id');
+    
+    if($this->form_validation->run() == TRUE) {
+        $refcode= ($this->input->post('refcode'));
+        $catid= ($this->input->post('catid'));
+        $brandid= ($this->input->post('brandid'));
+        $uom= ($this->input->post('uom'));
+        $model= ($this->input->post('model'));
+        $minstock= ($this->input->post('minstock'));
+        $cost= str_replace(",", "", ($this->input->post('cost')));
+        $srp= str_replace(",", "", ($this->input->post('srp')));
+        $short= ($this->input->post('short'));
+        $long= ($this->input->post('long'));
+
+        $product = array(
+            'id' => $it_id,
+            'it_refcode' => $refcode,
+            'it_category_id' => $catid,
+            'it_brand_id' => $brandid,
+            'it_uom' => $uom,
+            'it_model' => $model,
+            'it_srp' => $srp,
+            'it_cost_baht' => $cost,
+            'it_short_description' => $short,
+            'it_long_description' => $long,
+            'it_min_stock' => $minstock
+        );
+
+        $item_id = $this->tp_item_model->editItem($product);
+        
+        $currentdate = date("Y-m-d H:i:s");
+        
+        unset($product['id']);
+        $temp = array('it_id' => $it_id, 'it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
+        
+        $product = array_merge($product, $temp);
+        
+        $result_log = $this->tp_item_model->addItem_log($product);
+            
+        if ($item_id)
+            $this->session->set_flashdata('showresult', 'success');
+        else
+            $this->session->set_flashdata('showresult', 'fail');
+        
+        
+        redirect('item/editproduct/'.$it_id, 'refresh');
+    }
+
+    $sql = "it_id = '".$it_id."' and ".$this->no_rolex;
+    $query = $this->tp_item_model->getItem($sql);
+    if($query){
+        $data['product_array'] =  $query;
+    }
+    
+    $sql = "itc_enable = 1";
+	$query = $this->tp_item_model->getItemCategory($sql);
+	if($query){
+		$data['cat_array'] =  $query;
+	}else{
+		$data['cat_array'] = array();
+	}
+    
+    $sql = "br_enable = 1 and ".$this->no_rolex;
+    $query = $this->tp_item_model->getBrand($sql);
+	if($query){
+		$data['brand_array'] =  $query;
+	}else{
+		$data['brand_array'] = array();
+	}
+
+    $data['title'] = "NGG| Nerd - Edit Product";
+	$this->load->view('TP/item/edititem_view',$data);
+}
+//  AJAX DATATABLE
 public function ajaxViewAllItem()
 {
     $this->load->library('Datatables');
@@ -200,12 +288,55 @@ public function ajaxViewAllItem()
     ->where($this->no_rolex)
 
     ->edit_column("it_id",'<div class="tooltip-demo">
-<a href="'.site_url("item/viewproduct/$1").'" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+<a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 <a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
 </div>',"it_id");
     echo $this->datatables->generate(); 
 }
     
+public function ajaxViewFilterItem()
+{
+    $refcode = $this->uri->segment(3);
+    $keyword = explode("%20", $refcode);
+    $brandid = $this->uri->segment(4);
+    $catid = $this->uri->segment(5);
+    
+    $where = "";
+    
+    if ($keyword[0] != "NULL") {
+        if (count($keyword) > 1) { 
+            for($i=0; $i<count($keyword); $i++) {
+                if ($i != 0) $where .= " or it_short_description like '%".$keyword[$i]."%'";
+                else if ($keyword[$i] != "") $where .= "( it_short_description like '%".$keyword[$i]."%'";
+                if ($i == (count($keyword)-1)) $where .= " )";
+            }
+        }else{
+            $where .= "( it_refcode like '%".$keyword[0]."%' or it_short_description like '%".$keyword[0]."%' )";
+        }
+        
+        $where .= " and ";
+    }
+    if (($brandid != 0) && ($catid != 0)) $where .= "it_brand_id = '".$brandid."' and it_category_id = '".$catid."' and ";
+    else if (($brandid != 0) && ($catid == 0)) $where .= "it_brand_id = '".$brandid."' and ";
+    else if (($brandid == 0) && ($catid != 0)) $where .= "it_category_id = '".$catid."' and ";
+    $where .= $this->no_rolex;
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
+    ->from('tp_item')
+    ->join('tp_item_category', 'it_category_id = itc_id','left')		
+    ->join('tp_brand', 'it_brand_id = br_id','left')
+    ->where('it_enable',1)
+    ->where($where)
+
+    ->edit_column("it_id",'<div class="tooltip-demo">
+<a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+<a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+</div>',"it_id");
+    echo $this->datatables->generate(); 
+}
+
 function viewproduct()
 {
     $id = $this->uri->segment(3);
@@ -227,9 +358,25 @@ function editproduct()
     if($query){
         $data['product_array'] =  $query;
     }
+    
+    $sql = "itc_enable = 1";
+	$query = $this->tp_item_model->getItemCategory($sql);
+	if($query){
+		$data['cat_array'] =  $query;
+	}else{
+		$data['cat_array'] = array();
+	}
+    
+    $sql = "br_enable = 1 and ".$this->no_rolex;
+    $query = $this->tp_item_model->getBrand($sql);
+	if($query){
+		$data['brand_array'] =  $query;
+	}else{
+		$data['brand_array'] = array();
+	}
 
-    $data['title'] = "NGG| Nerd - View Product";
-    $this->load->view('TP/item/viewitem_view',$data);
+    $data['title'] = "NGG| Nerd - Edit Product";
+    $this->load->view('TP/item/edititem_view',$data);
 }
     
 function getRefcode()
@@ -312,6 +459,34 @@ function rolex_barcode_print()
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/item/barcode_print", $data, TRUE));
     $mpdf->Output();
+}
+    
+function filter_item()
+{
+    $refcode = $this->input->post("refcode");
+    if ($refcode == "") $refcode = "NULL";
+    $data['refcode'] = $refcode;
+    $data['brandid'] = $this->input->post("brandid");
+    $data['catid'] = $this->input->post("catid");
+
+    $sql = "br_enable = 1 and ".$this->no_rolex;
+    $query = $this->tp_item_model->getBrand($sql);
+	if($query){
+		$data['brand_array'] =  $query;
+	}else{
+		$data['brand_array'] = array();
+	}
+    
+    $sql = "itc_enable = 1";
+	$query = $this->tp_item_model->getItemCategory($sql);
+	if($query){
+		$data['cat_array'] =  $query;
+	}else{
+		$data['cat_array'] = array();
+	}
+    
+    $data['title'] = "NGG| Nerd - All Product";
+    $this->load->view('TP/item/filteritem_view',$data);
 }
 
     

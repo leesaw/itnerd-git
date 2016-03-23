@@ -3,7 +3,7 @@ Class Tp_warehouse_model extends CI_Model
 {
  function getWarehouse($where)
  {
-	$this->db->select("wh_id, wh_name, wh_code, wc_category_name, wg_name, wg_code");
+	$this->db->select("wh_id, wh_name, wh_code, wc_category_name, wg_id, wg_name, wg_code, wh_enable");
 	$this->db->from('tp_warehouse');
 	$this->db->join('tp_warehouse_category', 'wh_category_id = wc_id','left');	
     $this->db->join('tp_warehouse_group', 'wh_group_id = wg_id','left');	

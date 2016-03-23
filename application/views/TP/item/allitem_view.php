@@ -24,8 +24,8 @@
         <div class="row">
             <form action="<?php echo site_url("item/filter_item"); ?>" method="post">
             <div class="col-xs-4 col-md-4">
-                ค้นหา Refcode/Description
-                <input type="text" class="form-control-sm" name="refcode" id="refcode">
+                ค้นหา Ref. Number/Description
+                <input type="text" class="form-control-sm" name="refcode" id="refcode" value="">
             </div>
             <div class="col-xs-3 col-md-3">
                 เลือกยี่ห้อ
@@ -33,7 +33,8 @@
                         <option value='0'>เลือกทั้งหมด</option>
                     <?php 	if(is_array($brand_array)) {
                                 foreach($brand_array as $loop){
-                                    echo "<option value='".$loop->br_id."'>".$loop->br_code." - ".$loop->br_name."</option>";
+                                    echo "<option value='".$loop->br_id."'";
+                                    echo ">".$loop->br_code." - ".$loop->br_name."</option>";
                             } } ?>
                     </select>
             </div>
@@ -43,7 +44,8 @@
                         <option value='0'>เลือกทั้งหมด</option>
                         <?php 	if(is_array($cat_array)) {
 								    foreach($cat_array as $loop){
-								        echo "<option value='".$loop->itc_id."'>".$loop->itc_name."</option>";
+								        echo "<option value='".$loop->itc_id."'";
+                                        echo ">".$loop->itc_name."</option>";
 								} } ?>
                     </select>
             </div>
