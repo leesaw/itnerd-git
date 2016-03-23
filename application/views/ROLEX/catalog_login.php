@@ -49,7 +49,7 @@
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
     
-    <center>Rolex Nerd 2016 - All rights reserved</center>
+    <center>Nerd 2016 - All rights reserved</center>
 
     <?php $this->load->view('js_footer'); ?>
     <script>

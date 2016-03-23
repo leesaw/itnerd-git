@@ -21,26 +21,28 @@
             <form action="<?php echo site_url("rolex/filter_item"); ?>" method="post">
             <div class="col-md-4 col-sm-4">
                 Product Code/Serial Number
-                <input type="text" class="form-control" name="refcode" id="refcode" value="">
+                <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo $refcode; ?>">
             </div>
             <div class="col-sm-3 col-md-3">
                 Family
-                    <select class="form-control" name="brandid" id="brandid">
+                    <select class="form-control" name="model" id="model">
                         <option value='0'>เลือกทั้งหมด</option>
                     <?php 	if(is_array($collection_array)) {
                                 foreach($collection_array as $loop){
                                     echo "<option value='".$loop->it_model."'";
+                                    if ($loop->it_model == $model) echo " selected";
                                     echo ">".$loop->it_model."</option>";
                             } } ?>
                     </select>
             </div>
             <div class="col-sm-3 col-md-3">
                 Bracelet
-                    <select class="form-control" name="catid" id="catid">
+                    <select class="form-control" name="remark" id="remark">
                         <option value='0'>เลือกทั้งหมด</option>
                         <?php 	if(is_array($bracelet_array)) {
 								    foreach($bracelet_array as $loop){
 								        echo "<option value='".$loop->it_remark."'";
+                                        if ($loop->it_remark == $bracelet) echo " selected";
                                         echo ">".$loop->it_remark."</option>";
 								} } ?>
                     </select>
@@ -65,13 +67,13 @@
         foreach($item_array as $loop) { ?>
            <?php if ($count % 3 == 1) { echo '<div class="row" style="text-align:center">'; } ?>
 	       <div class="col-md-4 col-sm-4 portfolio-item">
-                <a href="http://ngg.link/tp">
+                <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>" target="blank">
                     <img class="img-responsive" src="<?php echo base_url()."picture/rolex/".$loop->it_refcode."/1.png"; ?>" alt="<?php echo $loop->it_refcode; ?>">
                 </a>
-                <a href="http://ngg.link/tp"><span class="text-black"><?php echo $loop->it_refcode; ?></span></a>
+                <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>"><span class="text-black"><?php echo $loop->it_refcode."<br><b>".$loop->it_model."</b>"; ?></span></a>
             </div>
         <?php if ($count % 3 == 0) { echo "</div><br><br>"; } ?>
-        <?php $count++; } ?>
+        <?php $count++; if ($count>30) break; } ?>
         <!-- /.row -->
     </section>
     </div>
