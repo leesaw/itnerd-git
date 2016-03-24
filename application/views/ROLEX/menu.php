@@ -16,7 +16,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Family <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <?php foreach($collection_array as $loop) { ?>
-                <li><a href="#"><?php echo $loop->it_model; ?></a></li>
+                <li><a href="<?php echo site_url("rolex/view_collection")."/".$loop->it_model; ?>"><?php echo $loop->it_model; ?></a></li>
                 <?php } ?>
               </ul>
             </li>

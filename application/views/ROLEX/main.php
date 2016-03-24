@@ -26,7 +26,7 @@
             <div class="col-sm-3 col-md-3">
                 Family
                     <select class="form-control" name="model" id="model">
-                        <option value='0'>เลือกทั้งหมด</option>
+                        <option value='0' <?php if ($model == "0") echo " selected"; ?>>เลือกทั้งหมด</option>
                     <?php 	if(is_array($collection_array)) {
                                 foreach($collection_array as $loop){
                                     echo "<option value='".$loop->it_model."'";
@@ -38,7 +38,7 @@
             <div class="col-sm-3 col-md-3">
                 Bracelet
                     <select class="form-control" name="remark" id="remark">
-                        <option value='0'>เลือกทั้งหมด</option>
+                        <option value='0' <?php if ($bracelet == "0") echo " selected"; ?>>เลือกทั้งหมด</option>
                         <?php 	if(is_array($bracelet_array)) {
 								    foreach($bracelet_array as $loop){
 								        echo "<option value='".$loop->it_remark."'";
@@ -73,7 +73,7 @@
                 <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>"><span class="text-black"><?php echo $loop->it_refcode."<br><b>".$loop->it_model."</b>"; ?></span></a>
             </div>
         <?php if ($count % 3 == 0) { echo "</div><br><br>"; } ?>
-        <?php $count++; if ($count>30) break; } ?>
+        <?php $count++; /* if ($count>15) break; */ } ?>
         <!-- /.row -->
     </section>
     </div>

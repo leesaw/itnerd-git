@@ -11,7 +11,7 @@ function __construct()
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('catalog', 'refresh');
     
-     if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
+     if ($this->session->userdata('sessrolex') != 1) redirect('catalog/logout', 'refresh'); 
      else $this->no_rolex = "br_id = 888";
 }
 
@@ -31,8 +31,8 @@ function main()
     $data['item_array'] = $this->rolex_model->getItem($sql, $orderby);
     
     $data['refcode'] = "";
-    $data['model'] = 0;
-    $data['bracelet'] = 0;
+    $data['model'] = "0";
+    $data['bracelet'] = "0";
     $data['title'] = "Rolex Catalog";
     $this->load->view('ROLEX/main',$data);
 }
@@ -80,11 +80,42 @@ function filter_item()
     $this->load->view('ROLEX/main',$data);
 }
     
+function view_collection()
+{
+    $sql = "it_brand_id = '888'";
+    $data['collection_array'] = $this->rolex_model->getCollection($sql);
+    
+    $data['bracelet_array'] = $this->rolex_model->getBracelet($sql);
+    
+    $model = $this->uri->segment(3);
+    $model = str_replace("%20", " ", $model);
+
+    $where = "";
+
+    $where .= "it_model = '".$model."' and ";
+    $where .= $this->no_rolex;
+    
+    $orderby = "it_srp desc";
+    
+    $data['item_array'] = $this->rolex_model->getFilter($where, $orderby);
+    $data['refcode'] = "";
+    $data['model'] = $model;
+    $data['bracelet'] = "0";
+    
+    $data['title'] = "Rolex Catalog";
+    $this->load->view('ROLEX/main',$data);
+}
+    
 function view()
 {
     $it_id = $this->uri->segment(3);
     
+    $sql = "it_id = '".$it_id."'";
+    $orderby = "";
+    $data['item_array'] = $this->rolex_model->getItem($sql, $orderby);
     
+    $data['title'] = "Rolex Catalog";
+    $this->load->view('ROLEX/view',$data);
 }
 
 }

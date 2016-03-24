@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+session_start(); 
 
 class Catalog extends CI_Controller {
 
@@ -148,7 +149,7 @@ class Catalog extends CI_Controller {
 	   $this->session->unset_userdata('sessfirstname');
 	   $this->session->unset_userdata('sesslastname');
 	   $this->session->unset_userdata('sessstatus');
-	   //session_destroy();
+	   session_destroy();
         
        $this->load->helper('cookie');
        delete_cookie('itnerd_rolex_userid');
