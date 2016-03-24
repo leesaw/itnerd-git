@@ -73,7 +73,7 @@
                 <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>"><span class="text-black"><?php echo $loop->it_refcode."<br><b>".$loop->it_model."</b>"; ?></span></a>
             </div>
         <?php if ($count % 3 == 0) { echo "</div><br><br>"; } ?>
-        <?php $count++; /* if ($count>15) break; */ } ?>
+        <?php $count++; if ($count>15) break;  } ?>
         <!-- /.row -->
     </section>
     </div>
