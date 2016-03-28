@@ -44,6 +44,7 @@ Class Rolex_model extends CI_Model
     $this->db->join('tp_brand_category', 'br_category_id = bc_id','left');		
     if ($where != "") $this->db->where($where);
     if ($orderby != "") $this->db->order_by($orderby);
+    $this->db->group_by('it_id');
 	$query = $this->db->get();		
 	return $query->result();
  }
