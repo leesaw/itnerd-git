@@ -461,6 +461,32 @@ function rolex_barcode_print()
     $mpdf->Output();
 }
     
+function item_barcode_print()
+{
+    $id = $this->uri->segment(3);
+    
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(104,17),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    $sql_result = "br_id = '888' and itse_enable = '1'";
+    //$sql_result .= " and itse_serial_number = '63S0J540'";
+    $query = $this->tp_item_model->getItem_caseback($sql_result);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print", $data, TRUE));
+    $mpdf->Output();
+}
+    
 function filter_item()
 {
     $refcode = $this->input->post("refcode");
