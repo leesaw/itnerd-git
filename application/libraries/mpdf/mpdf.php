@@ -30858,7 +30858,7 @@ function WriteBarcode($code, $showtext=1, $x='', $y='', $size=1, $border=0, $pad
 				$charLO = substr($code,0,1); // Left Outer
 				$charLI = substr($code,1,6); // Left Inner
 				$charRI = substr($code,7,6); // Right Inner
-				if (!$supplement) $charRO = '>'; // Right Outer
+				if (!$supplement) $charRO = ''; // Right Outer
 			}
 			else if ($btype=='UPCA') {
 				$outerfontsize = 2.3;	// Inner fontsize = 3
