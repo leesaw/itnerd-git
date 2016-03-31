@@ -261,11 +261,13 @@
                 <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของ/รับคืน</span>
               </a>
             </li>
+            <!--
             <li>
               <a href="<?php echo site_url("pos/stock_POS_sale_history"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>สินค้าที่ขายแล้ว</span>
               </a>
             </li>
+            -->
             <li>
               <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>

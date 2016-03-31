@@ -9,6 +9,7 @@ Class Tp_shop_model extends CI_Model
     $this->db->join('tp_shop_group', 'sh_group_id = sg_id','left');	
     $this->db->join('tp_warehouse', 'sh_warehouse_id = wh_id','left');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("sh_code", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }

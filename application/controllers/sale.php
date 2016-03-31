@@ -744,5 +744,23 @@ function saleorder_rolex_void_pos_temp()
     redirect('sale/saleorder_POS_temp_today', 'refresh');
 }
     
+function saleorder_history()
+{
+    $currentdate = date("Y-m");
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = $this->shop_rolex;
+    //$sql .= " and stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    $data['final_array'] = $this->tp_saleorder_model->getSaleOrder($sql);
+    
+    $data['title'] = "Nerd - Report Sale Order";
+    $this->load->view("TP/sale/report_sale_order_list", $data);
+}
+    
 }
 ?>

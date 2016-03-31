@@ -8,6 +8,7 @@ Class Tp_warehouse_model extends CI_Model
 	$this->db->join('tp_warehouse_category', 'wh_category_id = wc_id','left');	
     $this->db->join('tp_warehouse_group', 'wh_group_id = wg_id','left');	
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("wh_code", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
