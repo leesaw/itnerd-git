@@ -113,7 +113,6 @@ $(document).ready(function()
 });
 function check_product_code(refcode_input, shop_id)
 {
-    //alert(refcode_input+"/"+shop_id);
 	if(refcode_input != "")
 	{
         $.ajax({
@@ -129,7 +128,7 @@ function check_product_code(refcode_input, shop_id)
                     count_list++;
                     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
                 }else{
-                    alert("ไม่พบ Ref. Code ที่ต้องการในคลัง "+whname_out);
+                    alert("ไม่พบ Ref. Code ที่ต้องการในสาขา");
                 }
             },
             error: function (textStatus, errorThrown) {
@@ -144,6 +143,9 @@ function delete_item_row(row1)
     count_list--;
     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
     $('#row'+row1).remove();
+    setTimeout(function(){
+        calSummary();
+    },50);
 }
 
 function submitform()

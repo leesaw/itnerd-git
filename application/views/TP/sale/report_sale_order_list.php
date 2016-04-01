@@ -38,6 +38,7 @@
                                         <th>วันที่</th>
                                         <th>สาขาที่ขาย</th>
                                         <th>ผู้ทำรายการ</th>
+                                        <th>วันเวลาทำรายการ</th>
                                         <th> </th>
                                     </tr>
                                 </thead>
@@ -49,6 +50,7 @@
                                         <td><?php echo $loop->so_issuedate; ?></td>
                                         <td><?php echo $loop->sh_code."-".$loop->sh_name; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
+                                        <td><?php echo $loop->so_dateadd; ?></td>
                                         <td><a href="<?php echo site_url("sale/saleorder_print")."/".$loop->so_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
                                         </td>
                                     </tr>

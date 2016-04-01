@@ -65,11 +65,11 @@ function check_code()
 {
     $refcode = $this->input->post("refcode");
     $shop_id = $this->input->post("shop_id");
-    
+
     $output = "";
-    $sql = "it_refcode = '".$refcode."' and sh_id = '".$shop_id."'".$qty_limit;
+    $sql = "it_enable = '1' and it_refcode = '".$refcode."' and sh_id = '".$shop_id."'".$this->qty_limit;
     $result = $this->tp_shop_model->getItem_refcode($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->stob_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td>";
@@ -89,7 +89,7 @@ function check_code()
             $output .= "</td>";
         }
     }
-    
+
     
     echo $output;
 }
@@ -431,7 +431,14 @@ function saleorder_POS_today()
     
 function saleorder_POS_history()
 {
-    $currentdate = date("Y-m");
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
+    
     $start = $currentdate."-01 00:00:00";
     $end = $currentdate."-31 23:59:59";
     
@@ -628,7 +635,14 @@ function saleorder_POS_temp_today()
     
 function saleorder_POS_temp_history()
 {
-    $currentdate = date("Y-m");
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
+
     $start = $currentdate."-01 00:00:00";
     $end = $currentdate."-31 23:59:59";
     
@@ -746,9 +760,17 @@ function saleorder_rolex_void_pos_temp()
     
 function saleorder_history()
 {
-    $currentdate = date("Y-m");
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
+    
     $currentdate = explode('-', $currentdate);
     $currentmonth = $currentdate[1]."/".$currentdate[0];
+    
     $data['month'] = $currentmonth;
     
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
@@ -756,6 +778,7 @@ function saleorder_history()
     
     $sql = $this->shop_rolex;
     //$sql .= " and stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    $sql .= " and so_enable = '1'";
     $data['final_array'] = $this->tp_saleorder_model->getSaleOrder($sql);
     
     $data['title'] = "Nerd - Report Sale Order";

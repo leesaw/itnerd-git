@@ -40,8 +40,8 @@ Class Tp_saleorder_model extends CI_Model
     $end = $month."-31 23:59:59";
     $this->db->select("so_id");
 	$this->db->from('tp_saleorder');
-    $this->db->where("so_issuedate >=",$start);
-    $this->db->where("so_issuedate <=",$end);
+    $this->db->where("so_dateadd >=",$start);
+    $this->db->where("so_dateadd <=",$end);
     $this->db->where("so_shop_id", $shop_id);
 	$query = $this->db->get();		
 	return $query->num_rows();

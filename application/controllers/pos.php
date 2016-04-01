@@ -280,7 +280,13 @@ function stock_POS_borrow_today()
     
 function stock_POS_borrow_history()
 {
-    $currentdate = date("Y-m");
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
     $start = $currentdate."-01 00:00:00";
     $end = $currentdate."-31 23:59:59";
     

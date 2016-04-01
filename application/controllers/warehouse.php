@@ -232,7 +232,7 @@ function ajaxViewStock()
         if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
         else $sql .= " and it_srp >=0";
             
-        if (($maxprice >"0") && ($maxprice>=0)) $sql .= "it_srp <= '".$maxprice."'";
+        if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
     

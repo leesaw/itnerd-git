@@ -19,6 +19,19 @@
 	
 	<section class="content">
         <div class="row">
+                <div class="col-md-6">
+                    <form action="<?php echo site_url("sale/saleorder_POS_history"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
+                        <div class="form-group-sm">
+                                <label class="col-sm-2 control-label">เลือกเดือน</label>
+                            <div class="col-sm-3">
+                                <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>" onChange="submitform();" autocomplete="off" readonly>
+                            </div>  
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+        <div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
                         
@@ -81,9 +94,13 @@
 <?php $this->load->view('js_footer'); ?>
 <script src="<?php echo base_url(); ?>plugins/datatables/jquery.dataTables2.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.js"></script>
+<script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
+<script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
 {    
+    get_datepicker("#datein");
+    
     var oTable = $('#tablefinal').DataTable();
     $('#fancyboxall').fancybox({ 
     'width': '40%',
@@ -95,7 +112,17 @@ $(document).ready(function()
     
 });
     
-
+function get_datepicker(id)
+{
+    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
+    minViewMode: "months" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
+}
+    
+function submitform()
+{
+    document.getElementById("form1").submit();
+}
 </script>
 </body>
 </html>
