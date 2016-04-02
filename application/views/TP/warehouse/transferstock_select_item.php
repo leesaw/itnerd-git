@@ -79,12 +79,29 @@
 				                                </thead>
 												<tbody>
 												</tbody>
+                                                <tfoot>
+                                                    <tr style="font-size:120%;" class="text-red">
+                                                        <th colspan="3" style="text-align:right;"><label>ราคารวม:</th>
+                                                        <th><div id="summary"></div></th>
+                                                        <th style="text-align:right;"><label>จำนวนรวม:</th>
+                                                        <th><div id="allcount"></div></th>
+                                                    </tr>
+                                                </tfoot>
 											</table>
 										</div>
 									</div>
 								</div>
 							</div>	
 						</div>	
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    Remark
+                                    <input type="text" class="form-control" name="stotremark" id="stotremark" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $remark; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
@@ -125,10 +142,29 @@ $(document).ready(function()
 			}
             
             $(this).val('');
+            
+            setTimeout(function(){
+                calculate();
+            },3000);
 		}
 	});
 
 });
+    
+function calculate() {
+    var count = 0;
+    var sum = 0;
+    var srp = document.getElementsByName('it_srp');
+    var qty = document.getElementsByName('it_quantity');
+    for(var i=0; i<qty.length; i++) {
+        if (qty[i].value == "") qty[i].value = 0; 
+        count += parseInt(qty[i].value);
+        sum += parseInt(qty[i].value)*parseInt(srp[i].value);
+    }
+    document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+} 
+    
 function check_product_code(refcode_input, whid_out, whname_out, luxury)
 {
 	if(refcode_input != "")
@@ -178,6 +214,9 @@ function delete_item_row(row1)
     count_list--;
     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
     $('#row'+row1).remove();
+    setTimeout(function(){
+        calculate();
+    },3000);
 }
     
 function submitform(x)
@@ -224,6 +263,7 @@ function confirmform(luxury)
         var it_id = document.getElementsByName('it_id');
         var it_quantity = document.getElementsByName('it_quantity');
         var it_old_qty = document.getElementsByName('old_qty');
+        var stot_remark =  document.getElementById("stotremark").value;
         var it_array = new Array();
         
         var it_code = document.getElementsByName('it_code');
@@ -235,7 +275,7 @@ function confirmform(luxury)
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save/1"); ?>" ,
-            data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array} ,
+            data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array, stot_remark: stot_remark} ,
             dataType: 'json',
             success : function(data) {
                 var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบย้ายคลังชั่วคราว ใช่หรือไม่";
@@ -264,6 +304,7 @@ function confirmform(luxury)
         var it_id = document.getElementsByName('it_id');
         var it_quantity = document.getElementsByName('it_quantity');
         var it_old_qty = document.getElementsByName('old_qty');
+        var stot_remark =  document.getElementById("stotremark").value;
         var it_array = new Array();
         var checked = 0;
         var index = 0;
@@ -299,7 +340,7 @@ function confirmform(luxury)
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save/0"); ?>" ,
-            data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array} ,
+            data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array, stot_remark: stot_remark} ,
             dataType: 'json',
             success : function(data) {
                 var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบย้ายคลังชั่วคราว ใช่หรือไม่";

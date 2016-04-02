@@ -250,6 +250,7 @@ function transferstock_save()
 	$whid_out = $this->input->post("whid_out");
     $whid_in = $this->input->post("whid_in");
     $it_array = $this->input->post("item");
+    $stot_remark = $this->input->post("stot_remark");
     
     $currentdate = date("Y-m-d H:i:s");
     
@@ -277,7 +278,8 @@ function transferstock_save()
                     'stot_status' => 1,
                     'stot_has_serial' => $luxury,
                     'stot_is_rolex' => $this->session->userdata('sessrolex'),
-                    'stot_dateadd_by' => $this->session->userdata('sessid')
+                    'stot_dateadd_by' => $this->session->userdata('sessid'),
+                    'stot_remark' => $stot_remark
             );
     $last_id = $this->tp_warehouse_transfer_model->addWarehouse_transfer_between($stock);
     
@@ -367,9 +369,9 @@ function checkStock_transfer()
     $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td>";
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
         $output .= "<td style='width: 120px;'><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
-        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
     }
     echo $output;
 }
@@ -384,8 +386,8 @@ function checkStock_transfer_caseback()
     $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td>";
-        $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>1</td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
         $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
     }
     echo $output;
@@ -466,9 +468,11 @@ function transferstock_save_confirm()
     $wh_out_id = $this->input->post("wh_out_id");
     $wh_in_id = $this->input->post("wh_in_id");
     $datein = $this->input->post("datein");
+    $stot_remark = $this->input->post("stot_remark");
+    
     $currentdate = date("Y-m-d H:i:s");
     
-    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'));
+    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'), "stot_remark" => $stot_remark);
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
     
     

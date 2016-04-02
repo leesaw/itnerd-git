@@ -10,7 +10,7 @@
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td> 
-<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; break; } 
+<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; break; } 
 
  $GGyear=substr($datetime,0,4); 
  $GGmonth=substr($datetime,5,2); 
@@ -20,7 +20,7 @@
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
 </tr>
 <tr>
-    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>
@@ -32,9 +32,38 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($stock_array)) { foreach($stock_array as $loop) { 
+<?php $no=1; $sum=0; $sum_qty=0; $count_row=0; if(isset($stock_array)) { foreach($stock_array as $loop) { 
 if ($loop->qty_final > 0) {    
 ?>
+<?php if (($count_row !=0) && (($count_row%38) == 0)) { ?></tbody></table><pagebreak /><table border="0">
+<tbody>
+<tr>
+<td width="450">
+<div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
+</td> 
+<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; break; } 
+
+ $GGyear=substr($datetime,0,4); 
+ $GGmonth=substr($datetime,5,2); 
+ $GGdate=substr($datetime,8,2); 
+?>
+<td width="50"> </td>
+<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
+</tr>
+<tr>
+    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    </td>
+</tr>
+</tbody>
+</table>
+<table style="border:1px solid black; border-spacing:0px 0px;">
+<thead>
+	<tr>
+		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="150" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="250" style="border-left:1px solid black;border-bottom:1px solid black;">รายละเอียดสินค้า</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">หน่วยละ</th><th width="140" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวนเงิน</th>
+	</tr>
+</thead>
+<tbody>
+<?php } ?>
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->br_name." ".$loop->it_model; ?></td>
@@ -44,7 +73,7 @@ if ($loop->qty_final > 0) {
 </tr>
 <?php
 // print serial number
-
+$count_row++;
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
         if ($loop->log_stot_item_id==$loop2->itse_item_id) { ?>
@@ -57,7 +86,7 @@ if(isset($serial_array)) {
 <td align="right" style="border-left:1px solid black;"></td>
 </tr>
     <?php
-        }
+       $count_row++; }
     }
 }
 ?> 

@@ -62,6 +62,7 @@
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
                                     <?php $must_serial=0; 
                                           foreach($stock_array as $loop){ 
+                                              $stot_remark = $loop->stot_remark;
                                               if ($loop->br_has_serial == 1) { $must_serial++; break; } }
                                         if ($must_serial>0) {
                                     ?>
@@ -102,7 +103,7 @@
                                                         <?php if ($loop->br_has_serial==1) { ?>
                                                         <input type="hidden" name="count_serial_<?php echo $loop->log_stot_item_id; ?>" id="count_serial_<?php echo $loop->log_stot_item_id; ?>" value="<?php echo $count; ?>">
                                                         <?php } ?>
-                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?>>
+                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?> onChange='calculate();'>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     
@@ -118,12 +119,27 @@
                                                     <?php  } } $count++; ?>
                                                     <?php } ?>
 												</tbody>
+                                                <tfoot>
+                                                    <tr style="font-size:120%;" class="text-red">
+                                                        <th colspan="6" style="text-align:right;"><label>จำนวนรวม:</th>
+                                                        <th><div id="allcount"></div></th>
+                                                    </tr>
+                                                </tfoot>
 											</table>
 										</div>
 									</div>
 								</div>
 							</div>	
 						</div>	
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    Remark
+                                    <input type="text" class="form-control" name="stotremark" id="stotremark" value="<?php echo $stot_remark; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success <?php if ($status==2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
@@ -145,6 +161,10 @@
 $(document).ready(function()
 {    
     document.getElementById("savebtn").disabled = false;
+    
+    setTimeout(function(){
+                calculate();
+            },3000);
 
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
@@ -157,6 +177,10 @@ $(document).ready(function()
 			}
             
             $(this).val('');
+            
+            setTimeout(function(){
+                calculate();
+            },3000);
 		}
 	});
 });
@@ -220,6 +244,16 @@ function submitform()
     }
 }
     
+function calculate() {
+    var count = 0;
+    var qty = document.getElementsByName('it_final');
+    for(var i=0; i<qty.length; i++) {
+        if (qty[i].value == "") qty[i].value = 0; 
+        count += parseInt(qty[i].value);
+    }
+    document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+} 
+    
 function confirmform()
 {
     var it_final = document.getElementsByName('it_final');
@@ -229,6 +263,7 @@ function confirmform()
     var wh_out_id = document.getElementById("wh_out_id").value; 
     var wh_in_id = document.getElementById("wh_in_id").value; 
     var datein = document.getElementById("datein").value;
+    var stot_remark =  document.getElementById("stotremark").value;
     
     var serial_array = new Array();
     var index_serial = 0;
@@ -260,7 +295,7 @@ function confirmform()
     $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm"); ?>" ,
-            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein, serial_array: serial_array} ,
+            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein, serial_array: serial_array, stot_remark: stot_remark} ,
             dataType: 'json',
             success : function(data) {
                 var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบส่งของ ใช่หรือไม่";
