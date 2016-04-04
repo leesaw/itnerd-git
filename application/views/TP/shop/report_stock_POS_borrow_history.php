@@ -26,7 +26,7 @@
         <div class="box-body">
             <div class="row">
                 <div class="col-md-6">
-                    <form action="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
+                    <form action="<?php echo site_url("pos/stock_POS_borrow_history"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
                         <div class="form-group-sm">
                                 <label class="col-sm-2 control-label">เลือกเดือน</label>
                             <div class="col-sm-3">
