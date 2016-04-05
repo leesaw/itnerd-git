@@ -212,7 +212,7 @@ function ajaxViewStock()
     }else {
         if ($keyword[0]!="NULL") {
             $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -247,6 +247,96 @@ function ajaxViewStock()
     ->where('it_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 
+}
+    
+function exportExcel_stock_itemlist()
+{
+    $refcode = $this->input->post("refcode");
+    $keyword = explode(" ", $refcode);
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+    $minprice = $this->input->post("minprice");
+    $maxprice = $this->input->post("maxprice");
+    
+    $sql = $this->no_rolex;
+    
+    if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
+        else $sql .= " and wh_id != '0'";
+
+        if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
+        else $sql .= " and it_srp >=0";
+            
+        if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
+        else $sql .= " and it_srp >=0";
+    }
+    
+    $item_array = $this->tp_warehouse_model->getWarehouse_balance($sql);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_Balance');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'คลังสินค้า');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'จำนวน (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'ราคาป้าย');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'รายละเอียด');
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->br_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code." (".$loop->wh_name.")");
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->stob_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
+        $row++;
+    }
+    
+
+    $filename='timepieces_search.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 

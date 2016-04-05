@@ -30,7 +30,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        <form action="<?php echo '#';//echo site_url("warehouse/exportExcel_search"); ?>" method="post">
+                        <form action="<?php echo site_url("warehouse/exportExcel_stock_itemlist"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand; ?>">

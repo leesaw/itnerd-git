@@ -81,6 +81,14 @@
 				                                </thead>
 												<tbody>
 												</tbody>
+                                                <tfoot>
+                                                    <tr style="font-size:120%;" class="text-red">
+                                                        <th colspan="3" style="text-align:right;"><label>รวม:</th>
+                                                        <th><div id="summary"></div></th>
+                                                        <th><div id="allcount"></div></th>
+                                                        <th></label></th>
+                                                    </tr>
+                                                </tfoot>
 											</table>
 										</div>
 									</div>
@@ -127,6 +135,10 @@ $(document).ready(function()
                 
 			}
             $(this).val('');
+            
+            setTimeout(function(){
+                calculate();
+            },3000);
 		}
 	});
     
@@ -168,7 +180,24 @@ function delete_item_row(row1)
     count_list--;
     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
     $('#row'+row1).remove();
+    setTimeout(function(){
+        calculate();
+    },3000);
 }
+    
+function calculate() {
+    var count = 0;
+    var sum = 0;
+    var srp = document.getElementsByName('it_srp');
+    var qty = document.getElementsByName('it_quantity');
+    for(var i=0; i<qty.length; i++) {
+        if (qty[i].value == "") qty[i].value = 0; 
+        count += parseInt(qty[i].value);
+        sum += parseInt(qty[i].value)*parseInt(srp[i].value);
+    }
+    document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+} 
     
 function get_datepicker(id)
 {

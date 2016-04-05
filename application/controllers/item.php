@@ -389,11 +389,11 @@ function getRefcode()
     $result = $this->tp_item_model->getItem($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td><td>";
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
         if ($luxury == 0) {
-            $output .= "<input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+            $output .= "<input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
         }else{
-            $output .= "1</td><td>".$loop->it_uom."</td>";
+            $output .= "<input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
             $output .= "<td><input type='text' name='it_code' id='it_code' value='' style='width: 200px;'></td>";
         }
     }
