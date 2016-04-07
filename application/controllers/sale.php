@@ -44,6 +44,7 @@ function saleorder_select_item()
 {
     $datein = $this->input->post("datein");
     $shop_id = $this->input->post("shopid");
+    $caseback = $this->input->post("caseback");
     
     $shop_id = explode('#', $shop_id);
     $shop_name = $shop_id[1];
@@ -56,6 +57,7 @@ function saleorder_select_item()
     $data['shop_id'] = $shop_id;
     $data['shop_name'] = $shop_name;
     $data['shop_code'] = $shop_code;
+    $data['caseback'] = $caseback;
     
     $data['title'] = "Nerd - Sale Order";
     $this->load->view("TP/sale/saleorder_select_item", $data);
@@ -65,15 +67,31 @@ function check_code()
 {
     $refcode = $this->input->post("refcode");
     $shop_id = $this->input->post("shop_id");
+    $caseback = $this->input->post("caseback");
 
     $output = "";
-    $sql = "it_enable = '1' and it_refcode = '".$refcode."' and sh_id = '".$shop_id."'".$this->qty_limit;
-    $result = $this->tp_shop_model->getItem_refcode($sql);
+    
+    if ($caseback == 0) {
+        $sql = "it_enable = '1' and it_refcode = '".$refcode."' and sh_id = '".$shop_id."'".$this->qty_limit;
+        $sql .= " and it_has_caseback = '".$caseback."'";
+        $result = $this->tp_shop_model->getItem_refcode($sql);
+    }else{
+        $sql = "it_enable = '1' and itse_serial_number = '".$refcode."' and itse_enable = '1' and sh_id = '".$shop_id."'".$this->qty_limit;
+        $result = $this->tp_shop_model->getItem_serial($sql);
+    }
+    
+    
 
     if (count($result) >0) {
         foreach($result as $loop) {
             $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->stob_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td>";
-            $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+            
+            if ($loop->it_has_caseback != '1') {
+                $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td>";
+            }else{
+                $output .= "<td><input type='hidden' name='it_quantity' id='it_quantity' value='1'><input type='text' name='it_serial' id='it_serial' value='".$loop->itse_serial_number."' style='width: 150px;' readonly></td>";
+            }
+            $output .= "<td>".$loop->it_uom."</td>";
             
             $sql = "sb_item_brand_id = '".$loop->br_id."' and sb_shop_group_id = '".$loop->sh_group_id."' and sb_enable = '1'";
             $barcode = $this->tp_shop_model->getBarcode_shop_group($sql);
@@ -104,6 +122,8 @@ function saleorder_save()
     $shop_id = $this->input->post("shop_id");
     $shop_code = $this->input->post("shop_code");
     $datein = $this->input->post("datein");
+    $serial_array = $this->input->post("serial");
+    $caseback = $this->input->post("caseback");
     $currentdate = date("Y-m-d H:i:s");
     
     $datein = explode('/', $datein);
@@ -156,6 +176,22 @@ function saleorder_save()
             }
         }
         
+    }
+    
+    if ($caseback == 1) {
+        for($i=0; $i<count($serial_array); $i++){
+            $stock = array( 'log_stots_stot_id' => $serial_array[$i]["serial_log_id"],
+                            'log_stots_item_serial_id' => $serial_array[$i]["serial_item_id"]
+            );
+
+            $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+            $this->load->model('tp_item_model','',TRUE);
+            $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
+                                'itse_warehouse_id' => $wh_in_id
+                            );
+            $query = $this->tp_item_model->editItemSerial($serial_item);
+
+        }
     }
 
     $result = array("a" => $count, "b" => $last_id);

@@ -182,7 +182,7 @@ function delete_item_row(row1)
     $('#row'+row1).remove();
     setTimeout(function(){
         calculate();
-    },3000);
+    },50);
 }
     
 function calculate() {
