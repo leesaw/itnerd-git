@@ -50,7 +50,7 @@
 							<div class="col-md-12">
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
-                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Code ที่ขาย">
+                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if ($caseback==0) echo "Ref. Code ที่ขาย"; else echo "Caseback ที่ขาย"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
@@ -168,7 +168,7 @@ function submitform(x)
     var datein = "<?php echo $datein; ?>";
     var it_quantity = document.getElementsByName('it_quantity');
     var barcode_id = document.getElementsByName('barcode_id');
-    var it_serial = document.getElementsByName('it_serial');
+    var it_serial = document.getElementsByName('serial_id');
     if (shopid < 0) {
         alert("กรุณาเลือกสาขาที่ขาย");
     }else if (datein == "") {
@@ -190,7 +190,7 @@ function submitform(x)
                 }
                 for(var j=i+1; j<it_serial.length; j++){
                     if (it_serial[i].value==it_serial[j].value) {
-                        it_serial[j].value = "";
+                        //it_serial[j].value = "";
                         duplicate++;
                     }
                 }
@@ -220,7 +220,7 @@ function confirmform(caseback)
     var shop_id = "<?php echo $shop_id; ?>";
     var shop_code = "<?php echo $shop_code; ?>";
     var datein = "<?php echo $datein; ?>";
-    if (caseback==1) var it_serial = document.getElementsByName('it_serial');
+    if (caseback==1) var it_serial = document.getElementsByName('serial_id');
     var it_quantity = document.getElementsByName('it_quantity');
     var barcode_id = document.getElementsByName('barcode_id');
     var it_id = document.getElementsByName('it_id');

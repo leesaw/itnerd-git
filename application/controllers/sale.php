@@ -89,7 +89,7 @@ function check_code()
             if ($loop->it_has_caseback != '1') {
                 $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td>";
             }else{
-                $output .= "<td><input type='hidden' name='it_quantity' id='it_quantity' value='1'><input type='text' name='it_serial' id='it_serial' value='".$loop->itse_serial_number."' style='width: 150px;' readonly></td>";
+                $output .= "<td><input type='hidden' name='it_quantity' id='it_quantity' value='1'><input type='hidden' name='serial_id' id='serial_id' value='".$loop->itse_id."'><input type='text' name='it_serial' id='it_serial' value='".$loop->itse_serial_number."' style='width: 150px;' readonly></td>";
             }
             $output .= "<td>".$loop->it_uom."</td>";
             
@@ -180,14 +180,14 @@ function saleorder_save()
     
     if ($caseback == 1) {
         for($i=0; $i<count($serial_array); $i++){
-            $stock = array( 'log_stots_stot_id' => $serial_array[$i]["serial_log_id"],
-                            'log_stots_item_serial_id' => $serial_array[$i]["serial_item_id"]
+            $stock = array( 'sos_saleorder_id' => $last_id,
+                            'sos_item_serial_id' => $serial_array[$i]["serial"]
             );
 
-            $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+            $query = $this->tp_saleorder_model->addSaleOrder_serial($stock);
             $this->load->model('tp_item_model','',TRUE);
-            $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
-                                'itse_warehouse_id' => $wh_in_id
+            $serial_item = array( 'id' => $serial_array[$i]["serial"],
+                                 'itse_enable' => 0
                             );
             $query = $this->tp_item_model->editItemSerial($serial_item);
 

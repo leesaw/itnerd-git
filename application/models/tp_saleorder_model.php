@@ -133,6 +133,12 @@ Class Tp_saleorder_model extends CI_Model
 	return $this->db->insert_id();			
  }
     
+function addSaleOrder_serial($insert=NULL)
+{
+    $this->db->insert('tp_saleorder_serial', $insert);
+	return $this->db->insert_id();	
+}
+    
  function addSaleBarcode($insert=NULL)
  {		
 	$this->db->insert('tp_sale_barcode', $insert);
