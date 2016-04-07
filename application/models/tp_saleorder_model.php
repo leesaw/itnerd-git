@@ -25,6 +25,16 @@ Class Tp_saleorder_model extends CI_Model
 	return $query->result();
  } 
     
+ function getSaleSerial($where)
+ {
+	$this->db->select("sos_saleorder_id, sos_item_id, sos_item_serial_id, sos_enable, itse_serial_number");
+	$this->db->from('tp_saleorder_serial');	
+    $this->db->join('tp_item_serial', 'itse_id=sos_item_serial_id', 'left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ } 
+    
  function getSaleBarcode($where)
  {
 	$this->db->select("sb_id, sb_number, sb_item_brand_id, sb_brand_name, sb_discount_percent, sb_gp");

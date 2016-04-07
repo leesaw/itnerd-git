@@ -181,6 +181,7 @@ function saleorder_save()
     if ($caseback == 1) {
         for($i=0; $i<count($serial_array); $i++){
             $stock = array( 'sos_saleorder_id' => $last_id,
+                            'sos_item_id' => $serial_array[$i]["id"],
                             'sos_item_serial_id' => $serial_array[$i]["serial"]
             );
 
@@ -221,6 +222,14 @@ function saleorder_print()
         $data['item_array'] =  $query;
     }else{
         $data['item_array'] = array();
+    }
+    
+    $sql = "sos_saleorder_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getSaleSerial($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
     }
 
     //echo $html;
