@@ -12,7 +12,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            NGG | Nerd <small>Current version 0.1.0</small>
+            NGG | Nerd <small>Timepieces</small>
         </h1>
     </section>
 	<!-- Main content -->

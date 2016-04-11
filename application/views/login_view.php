@@ -6,10 +6,10 @@
 <body class="login-page">
     <div class="login-box">
       <div class="login-logo">
-        <img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="130.5px" /> 
+        <img src="<?php echo base_url(); ?>dist/img/happienesssuccess.png" /> 
           <br>
-        <b>Nerd </b>
-        <h5>0.1.0</h5>
+        <b>Nerd</b>
+        <h5>1.1</h5>
          
           
       </div><!-- /.login-logo -->

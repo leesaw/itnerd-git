@@ -13,14 +13,16 @@
 <td width="50"> </td>
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบรายการสินค้ารับเข้าคลัง</div></td>
 </tr>
-<?php foreach($stock_array as $loop) { $datetime = $loop->stoi_datein; $si_id = $loop->stoi_number; $editor = $loop->firstname." ".$loop->lastname; $stock_name = $loop->wh_code."-".$loop->wh_name; break; } 
+<?php foreach($stock_array as $loop) { $datetime = $loop->stoi_datein; $si_id = $loop->stoi_number; $editor = $loop->firstname." ".$loop->lastname; $stock_name = $loop->wh_code."-".$loop->wh_name; $dateadd = $loop->stoi_dateadd; break; } 
 
  $GGyear=substr($datetime,0,4); 
  $GGmonth=substr($datetime,5,2); 
  $GGdate=substr($datetime,8,2); 
+    
+ $dateadd = substr($dateadd,8,2)."/".substr($dateadd,5,2)."/".substr($dateadd,0,4)." ".substr($dateadd,11,8);
 ?>
 <tr>
-    <td>เลขที่ <?php echo $si_id; ?><br>คลังที่รับเข้า : <?php echo $stock_name; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td>เลขที่ <?php echo $si_id; ?><br>คลังที่รับเข้า : <?php echo $stock_name; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่บันทึก : <?php echo $dateadd; ?>
     </td>
 </tr>
 </tbody>

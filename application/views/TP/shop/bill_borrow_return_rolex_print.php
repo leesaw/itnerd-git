@@ -52,7 +52,7 @@
 <table style="border-bottom:1px solid black; border-spacing:0px 0px;">
 <tbody>
 <tr>
-<td width="340" align="center" style="border-left:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
+<td width="340" align="center" style="border-left:1px solid black;"> </td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td>
 </tr>
 <tr>
 <td height="50" align="center" style="border-left:1px solid black;">&nbsp;</td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
@@ -119,7 +119,7 @@
 <table style="border-bottom:1px solid black; border-spacing:0px 0px;">
 <tbody>
 <tr>
-<td width="340" align="center" style="border-left:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
+<td width="340" align="center" style="border-left:1px solid black;"> </td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td>
 </tr>
 <tr>
 <td height="50" align="center" style="border-left:1px solid black;">&nbsp;</td><td width="340" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
