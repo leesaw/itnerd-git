@@ -48,7 +48,7 @@ Class Tp_shop_model extends CI_Model
     
  function getItem_serial($where)
  {
-    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, itse_warehouse_id, stob_qty, stob_id, it_has_caseback");
+    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_id, br_name, br_code, itse_warehouse_id, stob_qty, stob_id, it_has_caseback, sh_group_id");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_item', 'itse_item_id = it_id', 'left');
     $this->db->join('tp_stock_balance', 'stob_warehouse_id=itse_warehouse_id and stob_item_id=itse_item_id', 'left');

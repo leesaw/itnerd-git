@@ -3,7 +3,7 @@ Class Tp_saleorder_model extends CI_Model
 {
  function getSaleOrder($where)
  {
-	$this->db->select("so_id, so_number, so_issuedate, so_ontop_percent, so_ontop_baht, so_status, so_shop_id, sh_name, sh_code, so_dateadd, so_sale_person_id, so_customer_id, so_payment, so_creditcard_type, so_creditcard_number, firstname, lastname");
+	$this->db->select("so_id, so_number, so_issuedate, so_ontop_percent, so_ontop_baht, so_status, so_shop_id, sh_name, sh_code, so_dateadd, so_sale_person_id, so_customer_id, so_payment, so_creditcard_type, so_creditcard_number, so_remark, firstname, lastname");
 	$this->db->from('tp_saleorder');
 	$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
     $this->db->join('tp_shop', 'sh_id = so_shop_id', 'left');

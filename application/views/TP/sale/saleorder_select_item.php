@@ -67,10 +67,10 @@
                                                         <?php if ($caseback ==0) { ?>
 														<th width="105">จำนวน</th>
                                                         <?php }else{ ?>
-                                                        <th width="200">Caseback</th>
+                                                        <th width="100">Caseback</th>
                                                         <?php } ?>
 														<th>หน่วย</th>
-                                                        <th>Barcode</th>
+                                                        <th width="500">Barcode</th>
 														<th>จัดการ</th>
 				                                    </tr>
 				                                </thead>
@@ -82,6 +82,15 @@
 								</div>
 							</div>	
 						</div>	
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    Remark
+                                    <input type="text" class="form-control" name="saleorder_remark" id="saleorder_remark" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $caseback; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
@@ -167,7 +176,12 @@ function submitform(x)
     var shopid = "<?php echo $shop_id; ?>";
     var datein = "<?php echo $datein; ?>";
     var it_quantity = document.getElementsByName('it_quantity');
+    
     var barcode_id = document.getElementsByName('barcode_id');
+    var discount_value = document.getElementsByName('discount_value');
+    var discount_baht = document.getElementsByName('discount_baht');
+    var gp_value = document.getElementsByName('gp_value');
+    
     var it_serial = document.getElementsByName('serial_id');
     if (shopid < 0) {
         alert("กรุณาเลือกสาขาที่ขาย");
@@ -199,11 +213,25 @@ function submitform(x)
                     return;
                 }
             }
-            if (barcode_id[i].value < 0) {
+            if (barcode_id[i].value == -10) {
                 alert("กรุณาเลือกบาร์โค้ดห้าง");
                 return;
             }
-
+            
+            if (barcode_id[i].value == -1) {
+                if (discount_value[i].value =="") {
+                    alert("กรุณาใส่ Discount(%)");
+                    return;
+                }
+                if (discount_baht[i].value =="") {
+                    alert("กรุณาใส่ Discount(บาท)");
+                    return;
+                }
+                if (gp_value[i].value =="") {
+                    alert("กรุณาใส่ GP(%)");
+                    return;
+                }
+            }
         }
         
         
@@ -222,42 +250,52 @@ function confirmform(caseback)
     var datein = "<?php echo $datein; ?>";
     if (caseback==1) var it_serial = document.getElementsByName('serial_id');
     var it_quantity = document.getElementsByName('it_quantity');
+    
+    // Barcode Discount GP
     var barcode_id = document.getElementsByName('barcode_id');
+    var discount_value = document.getElementsByName('discount_value');
+    var discount_baht = document.getElementsByName('discount_baht');
+    var gp_value = document.getElementsByName('gp_value');
+    
     var it_id = document.getElementsByName('it_id');
     var stob_id = document.getElementsByName('stob_id');
+    
+    var saleorder_remark =  document.getElementById("saleorder_remark").value;
+    
     var it_array = new Array();
     var serial_array = new Array();
     var checked = 0;
     var index = 0;
 
     document.getElementById("savebtn").disabled = true;
-
+    
     for(var i=0; i<it_id.length; i++){
-
+        /*
         for(var j=0; j<index; j++) {
-            if (it_id[i].value == it_array[j]['id']) {
+            if ((it_id[i].value == it_array[j]['id']) && (i)) {
                 it_array[j]['qty'] = parseInt(it_array[j]['qty']) + parseInt(it_quantity[i].value);
 
                 checked++;
             }
         }
-        if (checked==0) {
+        */
+        //if (checked==0) {
             
-            it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, barcode_id: barcode_id[i].value, stob_id: stob_id[i].value};
-            index++;
-        }else{
-            checked = 0;
-        }
+        it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, barcode_id: barcode_id[i].value, discount_value: discount_value[i].value, discount_baht: discount_baht[i].value, gp_value: gp_value[i].value, stob_id: stob_id[i].value};
+        
+        index++;
+        //}else{
+        //    checked = 0;
+        //}
         
         if (caseback==1) {
             serial_array[i] = {id: it_id[i].value, stob_id: stob_id[i].value, serial: it_serial[i].value};
         }
     }
-
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("sale/saleorder_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, shop_code: shop_code, item: it_array, serial: serial_array, caseback: caseback} ,
+        data : {datein: datein, shop_id: shop_id, shop_code: shop_code, item: it_array, serial: serial_array, caseback: caseback, saleorder_remark: saleorder_remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบสั่งขาย ใช่หรือไม่";

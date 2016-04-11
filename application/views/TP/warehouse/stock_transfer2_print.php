@@ -99,12 +99,12 @@ if(isset($serial_array)) {
 </table>
 <table style="border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td width="350" align="center">ผู้ดูแลคลังสินค้า</td><td width="350" align="center">ผู้อนุมัติ</td>
+<tr><td width="350" align="center">ผู้ส่งสินค้า</td><td width="350" align="center">ผู้รับสินค้า</td>
 </tr>
 <tr><td> </td><td>&nbsp;</td></tr>
 <tr><td align="center">..........................................................</td><td align="center">  &nbsp;&nbsp;&nbsp; ..........................................................</td>
 </tr>
-<tr><td align="center"><?php echo $confirm; ?></td><td> &nbsp;</td></tr>
+<tr><td align="center"> &nbsp;</td><td> &nbsp;</td></tr>
 <tbody>
 </table>
 </body>

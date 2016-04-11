@@ -98,15 +98,16 @@ function check_code()
             
             $output .= "<td>";
             if (count($barcode) > 0) {
-                $output .= "<select name='barcode_id' id ='barcode_id'><option value='-1'>-- เลือกบาร์โค้ดห้าง --</option>";
+                $output .= "<select name='barcode_id' id ='barcode_id'><option value='-10'>-- เลือกบาร์โค้ดห้าง --</option>";
                 $output .= "<option value='0'>ไม่มีบาร์โค้ดห้าง</option>";
                 foreach($barcode as $loop_barcode) {
                     $output .= "<option value = '".$loop_barcode->sb_id."'>".$loop_barcode->sb_number."(ลด".$loop_barcode->sb_discount_percent."% GP".$loop_barcode->sb_gp."%)</option>";
                 }
                 $output .= "</select>";
+                $output .= "<input type='hidden' name='discount_value' id='discount_value' value='0'><input type='hidden' name='discount_baht' id='discount_baht' value='0'><input type='hidden' name='gp_value' id='gp_value' value='0'>";
             }else{
-                $output .= "<select name='barcode_id' id ='barcode_id'><option value='0'>ไม่มีบาร์โค้ดห้าง</option>";
-                $output .= "</select>";
+                $output .= "<label class='text-blue'>Discount(%) <input type='text' name='discount_value' id='discount_value' value='' style='width: 50px;'></label> <label class='text-green'>GP(%) <input type='text' name='gp_value' id='gp_value' value='' style='width: 50px;'></label> &nbsp;&nbsp;&nbsp;&nbsp;<label class='text-red'>Discount(บาท) <input type='text' name='discount_baht' id='discount_baht' value='0' style='width: 100px;'></label>";
+                $output .= "<input type='hidden' name='barcode_id' id='barcode_id' value='-1'>";
             }
             $output .= "</td>";
         }
@@ -124,6 +125,7 @@ function saleorder_save()
     $datein = $this->input->post("datein");
     $serial_array = $this->input->post("serial");
     $caseback = $this->input->post("caseback");
+    $saleorder_remark = $this->input->post("saleorder_remark");
     $currentdate = date("Y-m-d H:i:s");
     
     $datein = explode('/', $datein);
@@ -143,6 +145,7 @@ function saleorder_save()
                     'so_issuedate' => $datein,
                     'so_dateadd' => $currentdate,
                     'so_shop_id' => $shop_id,
+                    'so_remark' => $saleorder_remark,
                     'so_dateadd_by' => $this->session->userdata('sessid')
             );
     $last_id = $this->tp_saleorder_model->addSaleOrder($sale);
@@ -152,7 +155,10 @@ function saleorder_save()
         $sale = array(  'soi_saleorder_id' => $last_id,
                         'soi_item_id' => $it_array[$i]["id"],
                         'soi_qty' => $it_array[$i]["qty"],
-                        'soi_sale_barcode_id' => $it_array[$i]["barcode_id"]
+                        'soi_sale_barcode_id' => $it_array[$i]["barcode_id"],
+                        'soi_dc_percent' => $it_array[$i]["discount_value"],
+                        'soi_dc_baht' => $it_array[$i]["discount_baht"],
+                        'soi_gp' => $it_array[$i]["gp_value"]
             );
         $query = $this->tp_saleorder_model->addSaleItem($sale);
         $count += $it_array[$i]["qty"];

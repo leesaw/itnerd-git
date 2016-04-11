@@ -26,6 +26,18 @@ Class Tp_warehouse_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getWarehouse_balance_caseback($where)
+ {
+	$this->db->select("it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_code, itse_serial_number");
+    $this->db->from('tp_item_serial');
+	$this->db->join('tp_warehouse', 'itse_warehouse_id = wh_id','left');
+    $this->db->join('tp_item', 'it_id = itse_item_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
  
  function getWarehouseCategory($where)
  {

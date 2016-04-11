@@ -30,14 +30,23 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        <form action="<?php echo site_url("warehouse/exportExcel_stock_itemlist"); ?>" method="post">
+                        <form name="exportexcel" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand; ?>">
                         <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
                         <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
                         <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
+                        <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Caseback</button>
                         </form>
+                        <form name="exportcaseback" id="exportcaseback" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist_caseback"); ?>" method="post">
+                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
+                        <input type="hidden" name="brand" value="<?php echo $brand; ?>">
+                        <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
+                        <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
+                        <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
+                        </form>
+                        
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
@@ -182,7 +191,29 @@ $(document).ready(function()
 
 });
     
+function showcaseback()
+{
+    /*
+    var refcode = "<?php echo $refcode; ?>";
+    var brand = "<?php echo $brand; ?>";
+    var warehouse = "<?php echo $warehouse; ?>";
+    var minprice = "<?php echo $minprice; ?>";
+    var maxprice = "<?php echo $maxprice; ?>";
 
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("warehouse/exportExcel_stock_itemlist_caseback"); ?>" ,
+        data : {refcode: refcode, brand: brand, warehouse: warehouse, minprice: minprice, maxprice: maxprice} ,
+        success : function(data) {
+            alert(data);
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+        }
+    });
+    */
+    document.getElementById("exportcaseback").submit();
+}
 </script>
 </body>
 </html>

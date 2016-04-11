@@ -10,7 +10,7 @@
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td> 
-<?php foreach($so_array as $loop) { $datetime = $loop->so_issuedate; $so_id = $loop->so_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_code."-".$loop->sh_name; break; } 
+<?php foreach($so_array as $loop) { $datetime = $loop->so_issuedate; $so_id = $loop->so_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_code."-".$loop->sh_name; $dateadd = $loop->so_dateadd; $so_remark = $loop->so_remark; break; } 
 
  $GGyear=substr($datetime,0,4); 
  $GGmonth=substr($datetime,5,2); 
@@ -20,7 +20,7 @@
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบสั่งขาย</div></td>
 </tr>
 <tr>
-    <td>เลขที่ <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td>เลขที่ <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>Remark: <?php echo $so_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่บันทึก : <?php echo $dateadd; ?>
     </td>
 </tr>
 </tbody>
@@ -28,7 +28,7 @@
 <table style="border:1px solid black; border-spacing:0px 0px;">
 <thead>
 	<tr>
-		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="150" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="250" style="border-left:1px solid black;border-bottom:1px solid black;">รายละเอียดสินค้า</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">หน่วยละ</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Barcode</th><th width="140" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวนเงิน</th>
+		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="120" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="230" style="border-left:1px solid black;border-bottom:1px solid black;">รายละเอียดสินค้า</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">หน่วยละ</th><th width="150" style="border-left:1px solid black;border-bottom:1px solid black;">Discount/GP</th><th width="140" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวนเงิน</th>
 	</tr>
 </thead>
 <tbody>
@@ -39,8 +39,18 @@
 <td style="border-left:1px solid black;"><?php echo $loop->br_name." ".$loop->it_model; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->soi_qty." ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="center" style="border-left:1px solid black;"><?php echo $loop->sb_number; ?></td>
-<td align="right" style="border-left:1px solid black;"><?php $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; ?></td>
+<td align="center" style="border-left:1px solid black;">
+<?php 
+if ($loop->soi_sale_barcode_id > 0) echo "Discount".$loop->sb_discount_percent."% GP".$loop->sb_gp."%(".$loop->sb_number.")"; 
+else if ($loop->soi_sale_barcode_id == 0) echo "ไม่มีบาร์โค้ดห้าง";
+else if ($loop->soi_sale_barcode_id == -1) echo "Discount".$loop->soi_dc_percent."% GP".$loop->soi_gp."% Discount".$loop->soi_dc_baht."บาท"; 
+?>
+</td>
+<td align="right" style="border-left:1px solid black;">
+<?php 
+if ($loop->soi_sale_barcode_id > -1) { $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
+else if ($loop->soi_sale_barcode_id == -1) { $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->soi_dc_percent)/100)*((100-$loop->soi_gp)/100) - $loop->soi_dc_baht; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
+?></td>
 </tr>
 <?php
 // print serial number
