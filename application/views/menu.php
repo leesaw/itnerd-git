@@ -55,7 +55,7 @@
               </a>
             </li>
             <?php } ?>
-            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 3)) { ?>
+            <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 4)) { ?>
             <?php if ($this->session->userdata('sessrolex') == 0) { ?>
             <li class="header">MAIN NAVIGATION</li>
             <li>
@@ -63,7 +63,7 @@
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
-            <?php if ($this->session->userdata('sessstatus') != 3) { ?>
+            <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
@@ -88,7 +88,7 @@
 				    <li>
 					   <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
 					</li>
-                    <?php if ($this->session->userdata('sessstatus') != 3) { ?>
+                    <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
                     <li>
                         <a href="<?php echo site_url("warehouse_transfer/importstock"); ?>"><i class="fa fa-circle-o"></i> รับสินค้าเข้าคลัง</a>
                     </li>
@@ -96,7 +96,7 @@
                         <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
                     </li>
                     <?php } ?>
-                    <?php if ($this->session->userdata('sessstatus') != 2) { ?>
+                    <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 3)) { ?>
                     <li>
                         <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
                     </li>
@@ -107,7 +107,7 @@
 					<li>
                         <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
                     </li>
-                    <?php if ($this->session->userdata('sessstatus') != 3) { ?>
+                    <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
                     <li>
 					   <a href="<?php echo site_url("warehouse/manage"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลคลังสินค้า</a>
 					</li>
@@ -119,9 +119,11 @@
             <li class="treeview">
                 <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
+                    <?php if ($this->session->userdata('sessstatus') != 4) { ?>
 				    <li>
 					   <a href="<?php echo site_url("sale/saleorder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
 					</li>
+                    <?php } ?>
 					<li>
                         <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> ประวัติการสั่งขาย</a>
                     </li>

@@ -280,13 +280,14 @@ function confirmform()
         var serial = document.getElementsByName('serial'+item_id[i].value.replace(/\s+/g, ''));
         var serial_wh_id = document.getElementsByName('serial_wh_id'+item_id[i].value.replace(/\s+/g, ''));
         var serial_item_id = document.getElementsByName('serial_item_id'+item_id[i].value.replace(/\s+/g, ''));
+        
         for(var j=0; j<serial.length; j++) {
-            
             if (serial[j].value != "") {
-                serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[j].value};
+                serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
                 index_serial++;
+                
             }
-
+            
         }
     }
     
