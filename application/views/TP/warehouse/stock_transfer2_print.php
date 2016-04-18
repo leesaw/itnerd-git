@@ -37,18 +37,12 @@
 <?php $no=1; $sum=0; $sum_qty=0; $count_row=0; if(isset($stock_array)) { foreach($stock_array as $loop) { 
 if ($loop->qty_final > 0) {    
 ?>
-<?php if (($count_row !=0) && (($count_row%38) == 0)) { ?></tbody></table><pagebreak /><table border="0">
+<?php if (($count_row !=0) && (($count_row%36) == 0)) { ?></tbody></table><pagebreak /><table border="0">
 <tbody>
 <tr>
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td> 
-<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; break; } 
-
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
-?>
 <td width="50"> </td>
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
 </tr>
