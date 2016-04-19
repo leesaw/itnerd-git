@@ -60,7 +60,9 @@
 <?php  } ?>
     
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;"><?php echo $loop->it_refcode."&nbsp; / &nbsp;".$loop->br_name." ".$loop->it_model; ?></td>
+<td style="border-left:1px solid black;"><?php echo $loop->it_refcode."&nbsp; / &nbsp;";
+if ($loop->br_id != '896') echo $loop->br_name." ".$loop->it_model;
+else echo $loop->br_name." ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_old." &nbsp; ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_update." &nbsp; ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo ($loop->qty_old-$loop->qty_update)." &nbsp; ".$loop->it_uom; ?></td>

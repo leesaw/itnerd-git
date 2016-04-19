@@ -62,7 +62,9 @@ if ($loop->qty_final > 0) {
 <?php } ?>
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
-<td style="border-left:1px solid black;"><?php echo $loop->br_name." ".$loop->it_model; ?></td>
+<td style="border-left:1px solid black;"><?php 
+if ($loop->br_id != '896') echo $loop->br_name." ".$loop->it_model;
+else echo $loop->br_name." ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_final." &nbsp; ".$loop->it_uom; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->qty_final*$loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $loop->qty_final*$loop->it_srp; $sum_qty += $loop->qty_final; ?></td>
