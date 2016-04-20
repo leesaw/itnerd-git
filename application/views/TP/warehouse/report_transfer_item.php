@@ -107,7 +107,7 @@
 										<th>เข้าคลัง</th>
                                         <th>ผู้ทำรายการ</th>
                                         <th>สถานะ</th>
-                                        <th>ใบส่งของ</th>
+                                        <th width="80">ใบส่งของ</th>
                                     </tr>
                                 </thead>
                                 
@@ -125,6 +125,8 @@
                                         <td>
                                         <?php if ($loop->stot_status==2) { ?>
                                         <a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_final_print")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_final_print_serial")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        &nbsp;
+                                        <a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_final_excel")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_final_print_excel")."/".$loop->stot_id; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
                                         <?php } ?>
                                         </td>
                                     </tr>

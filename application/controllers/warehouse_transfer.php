@@ -588,6 +588,84 @@ function transferstock_final_print()
         $mpdf->Output();
 }
     
+function transferstock_final_excel()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "stot_id = '".$id."'";
+    $query1 = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+
+    $sql = "log_stot_transfer_id = '".$id."'";
+    $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+		
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Transfer');
+    
+    foreach($query1 as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; break; } 
+    $GGyear=substr($datetime,0,4); 
+     $GGmonth=substr($datetime,5,2); 
+     $GGdate=substr($datetime,8,2);
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'ใบส่งของ เลขที่');
+    $this->excel->getActiveSheet()->setCellValue('B1', $si_id);
+
+    $this->excel->getActiveSheet()->setCellValue('A2', 'ย้ายคลังจาก');
+    $this->excel->getActiveSheet()->setCellValue('B2', $stock_out);
+    $this->excel->getActiveSheet()->setCellValue('C2', 'ไปยัง');
+    $this->excel->getActiveSheet()->setCellValue('D2', $stock_in);
+    
+    $this->excel->getActiveSheet()->setCellValue('D1', 'วันที่');
+    $this->excel->getActiveSheet()->setCellValue('E1', $GGdate."/".$GGmonth."/".$GGyear);
+    
+    
+    $this->excel->getActiveSheet()->setCellValue('A4', 'No.');
+    $this->excel->getActiveSheet()->setCellValue('B4', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('C4', 'รายละเอียดสินค้า');
+    $this->excel->getActiveSheet()->setCellValue('D4', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('E4', 'หน่วย');
+    $this->excel->getActiveSheet()->setCellValue('F4', 'หน่วยละ');
+    $this->excel->getActiveSheet()->setCellValue('G4', 'จำนวนเงิน');
+    
+    $row = 5;
+    $no = 1;
+    $sum = 0;
+    $sum_qty = 0;
+    foreach($query1 as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name." ".$loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->qty_final);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_uom);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->qty_final*$loop->it_srp, 2, '.', ','));
+        $row++;
+        $no++;
+        $sum += $loop->qty_final*$loop->it_srp; 
+        $sum_qty += $loop->qty_final;
+    }
+    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, "รวมจำนวน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, "รวมเงิน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($sum, 2, '.', ','));
+    
+
+    $filename='nerd_transfer.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
+    
 function transferstock_final_print_serial()
 {
 		$id = $this->uri->segment(3);
@@ -686,13 +764,18 @@ function importstock_history()
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
     
-    $sql = "stoi_is_rolex = ".$this->session->userdata('sessrolex');
-    $sql .= " and stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    $sql = "";
+    $sql .= "stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= " and stoi_is_rolex = ".$this->session->userdata('sessrolex');
+    }
+    
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);
     
     $data['title'] = "Nerd - Report Transfer In";
     $this->load->view("TP/warehouse/report_stockin_item", $data);
 }
+    
     
 function transferstock_history()
 {
@@ -706,11 +789,33 @@ function transferstock_history()
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
     
     $sql = "stot_dateadd >= '".$start."' and stot_dateadd <= '".$end."'";
-    $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
+    }
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
     
     $data['title'] = "Nerd - Report Transfer Stock";
     $this->load->view("TP/warehouse/report_transfer_item", $data);
+}
+    
+function transferstock_history_all()
+{
+    if ($this->session->userdata('sessstatus') == '88') {
+    $currentdate = date("Y-m");
+    
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "stot_dateadd >= '".$start."' and stot_dateadd <= '".$end."'";
+    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    
+    $data['title'] = "Nerd - Report Transfer Stock";
+    $this->load->view("TP/warehouse/report_transfer_item", $data);
+    }
 }
     
 function checkSerial_warehouse()

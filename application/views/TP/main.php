@@ -17,7 +17,23 @@
     </section>
 	<!-- Main content -->
     <section class="content">
-        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <i class="fa fa-warning"></i>
+
+                      <h3 class="box-title">NERD version 1.2 noted</h3>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            <li>เพิ่มเมนู "รายงาน-การขาย" สำหรับ Sale และ Accounting สำหรับเรียกดูรายงานการขาย โดยสามารถ Filter ตาม Ref. Number, Brand, Shop และเฉพาะช่วงวันที่ รวมทั้งสามารถ Export เป็น Excel ได้</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </section>
 </div>
 </div>

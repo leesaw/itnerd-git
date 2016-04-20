@@ -9,7 +9,7 @@
           <center><img src="<?php echo base_url(); ?>dist/img/happienesssuccess.png" /></center>
           <br>
         <b>Nerd</b>
-        <h5>1.1</h5>
+        <h5>1.2</h5>
          
           
       </div><!-- /.login-logo -->

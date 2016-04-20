@@ -49,7 +49,7 @@ else if ($loop->soi_sale_barcode_id == -1) echo "Discount".$loop->soi_dc_percent
 <td align="right" style="border-left:1px solid black;">
 <?php 
 if ($loop->soi_sale_barcode_id > -1) { $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
-else if ($loop->soi_sale_barcode_id == -1) { $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->soi_dc_percent)/100)*((100-$loop->soi_gp)/100) - $loop->soi_dc_baht; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
+else if ($loop->soi_sale_barcode_id == -1) { $cal = (($loop->soi_qty*$loop->it_srp)*((100-$loop->soi_dc_percent)/100)- $loop->soi_dc_baht)*((100-$loop->soi_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
 ?></td>
 </tr>
 <?php

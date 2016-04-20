@@ -128,7 +128,7 @@
                         <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>
                     </li>
                     <li>
-                        <a href="<?php echo site_url("sale/report_sale"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
+                        <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
                     </li>
                 </ul>
 
@@ -277,6 +277,19 @@
               <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
               </a>
+            </li>
+            <li class="header">NGG Timepieces Office</li>
+            <li>
+                <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
+            </li>
+            <li>
+                <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
+            </li>
+            <li>
+                <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>
+            </li>
+            <li>
+                <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
             </li>
             <?php } ?>
             
