@@ -19,9 +19,9 @@ function index()
     
 }
  
-function main()
+function add_newcert()
 {
-
+    
 }
     
 

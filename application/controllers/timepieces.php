@@ -19,8 +19,10 @@ function main()
 {   
     if ($this->session->userdata('sessrolex') == 1) {
         redirect('timepieces/main_rolex', 'refresh');
+    }else if (($this->session->userdata('sessstatus') >= 50) && ($this->session->userdata('sessstatus') <= 59)) {
+        redirect('sesto/main', 'refresh');
     }
-    $data['title'] = "NGG| Nerd";
+    $data['title'] = "NGG| NERD";
     $this->load->view('TP/main',$data);
 }
   
@@ -29,6 +31,13 @@ function main_rolex()
     $data['sessstatus'] = $this->session->userdata('sessstatus');
     $data['title'] = "NGG| Rolex";
     $this->load->view('TP/main_rolex',$data);
+}
+    
+function main_certificate()
+{
+    $data['sessstatus'] = $this->session->userdata('sessstatus');
+    $data['title'] = "NGG| NERD";
+    $this->load->view('SS/main',$data);
 }
     
 }

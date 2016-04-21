@@ -101,6 +101,94 @@ function stock_rolex_print()
     $mpdf->Output();
 }
     
+function stock_rolex_excel()
+{
+    /*$remark = $this->uri->segment(3);
+    if ($remark=="all") { $stock = ""; $detail = "สินค้าทั้งหมด"; }
+    else if ($remark=="have") { $stock = " and stob_qty > 0"; $detail = "เฉพาะสินค้าที่มีของ(จำนวน > 0)"; }
+    else if ($remark=="no") { $stock = " and stob_qty <= 0"; $detail = "เฉพาะสินค้าที่หมด(จำนวน = 0)"; }
+	*/	
+    $stock = " and stob_qty > 0";
+    $sql = $this->shop_rolex;
+    $query = $this->tp_shop_model->getShop($sql);
+    foreach($query as $loop) {
+        $shopname = $loop->sh_name;
+        $sql_result = "stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
+        $result = $this->tp_warehouse_model->getWarehouse_balance($sql_result);
+    }
+
+    $item_array = $result;
+    $sql_result .= " and itse_enable = 1";
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    //$sql_result .= " and itse_enable = '1'";
+    $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
+    $serial_array = $query;
+    
+    $sql = "";
+    $query_sold_tax = $this->tp_saleorder_model->getPOS_rolex_item($sql);
+    $query_sold_bill = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    $sold_array = array_merge($query_sold_tax,$query_sold_bill);
+    
+    $sql = "";
+    $borrow_array = $this->tp_shop_model->getItem_borrow_serial($sql);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_Balance');
+    $this->excel->getActiveSheet()->setCellValue('A1', '** จำนวนยอดคงเหลือ เฉพาะที่อยู่ใน Shop Rolex Central Udonthani เท่านั้น');
+    
+    $this->excel->getActiveSheet()->setCellValue('A2', 'No.');
+    $this->excel->getActiveSheet()->setCellValue('B2', 'Product Code');
+    $this->excel->getActiveSheet()->setCellValue('C2', 'Brand');
+    $this->excel->getActiveSheet()->setCellValue('D2', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('E2', 'Family');
+    $this->excel->getActiveSheet()->setCellValue('F2', 'Bracelet');
+    $this->excel->getActiveSheet()->setCellValue('G2', 'จำนวน (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('H2', 'ราคาป้าย');
+    $this->excel->getActiveSheet()->setCellValue('I2', 'Serial');
+    
+    $row = 3;
+    $no = 1;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_srp, 2, '.', ','));
+        
+        $serial_temp = "";
+        $count = 0;
+        foreach ($serial_array as $loop2) {
+            if ($loop->stob_item_id==$loop2->it_id) {
+                if ($count != 0) $serial_temp .= " , ";
+                $serial_temp .= $loop2->itse_serial_number;
+                $count++;
+            }
+        }
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $serial_temp);
+        $row++;
+        $no++;
+    }
+    
+
+    $filename='rolex_stock_shoponly.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
+    
 function stock_rolex_borrow()
 {
     $datein = date("d/m/Y");

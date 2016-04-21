@@ -34,7 +34,7 @@
               <input type="radio" name="show_no" id="show_no" value="1" <?php if ($remark=='no') echo "checked"; ?>> <label class="text-red"> เฉพาะของหมด(จำนวน = 0)</label></div>
                     <div class="col-md-3" style="text-align:right"><a href="<?php echo site_url("pos/stock_rolex_print")."/".$remark; ?>" target="_blank"><button type="button" class="btn btn-success" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์รายการสินค้า </button></a>
                         
-                    <a href="<?php echo site_url("item/rolex_barcode_print/0"); ?>" target="_blank"><button type="button" class="btn btn-primary" name="barcodebtn" id="barcodebtn"><i class='fa fa-barcode'></i>  พิมพ์ Barcode </button></a>
+                    <a href="<?php echo site_url("pos/stock_rolex_excel"); ?>" target="_blank"><button type="button" class="btn btn-primary" name="barcodebtn" id="barcodebtn"><i class='fa fa-download'></i> Excel</button></a>
                         
                     </div>
                     </div></div>
