@@ -637,7 +637,7 @@ function transferstock_final_excel()
     foreach($query1 as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, strtoupper($loop->br_name));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->qty_final);  
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_uom);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));

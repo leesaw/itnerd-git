@@ -6,7 +6,7 @@
 
 <body class="skin-red">
 <div class="wrapper">
-	<?php $this->load->view('SS/menu'); ?>
+	<?php $this->load->view('menu'); ?>
 	
 <div class="content-wrapper">
         <!-- Content Header (Page header) -->

@@ -294,34 +294,17 @@
             <?php } ?>
             
             <?php 
-              // only Certificate
-              if ($this->session->userdata('sessstatus')==51) { ?>
-            <li class="header">Certificate</li>
+              // only Sesto
+              if (($this->session->userdata('sessstatus') >= 50) && ($this->session->userdata('sessstatus') <= 59)) { ?>
+            <li class="header">Certificate Menu</li>
             <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบกำกับภาษี</span>
+              <a href="<?php echo site_url("sesto/main"); ?>">
+                <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
             <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบเสร็จรับเงิน</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของ/รับคืน</span>
-              </a>
-            </li>
-            <!--
-            <li>
-              <a href="<?php echo site_url("pos/stock_POS_sale_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>สินค้าที่ขายแล้ว</span>
-              </a>
-            </li>
-            -->
-            <li>
-              <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
+              <a href="<?php echo site_url("ss_certificate/add_newcert"); ?>">
+                <i class="fa fa-circle-o"></i> <span>Add New Certificate</span>
               </a>
             </li>
             <?php } ?>
