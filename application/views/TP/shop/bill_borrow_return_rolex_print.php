@@ -18,7 +18,7 @@
  $GGdate=substr($datetime,8,2); 
 ?>
 <td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบรับสินค้าคืน</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
+    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;  color: red;">ใบรับสินค้าคืน</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
 </tr>
 <tr>
     <td width="300" colspan="2">สาขา : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br></td><td> </td><td colspan="2">เลขที่ใบรับคืน: <?php echo $so_id; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
@@ -85,7 +85,7 @@
  $GGdate=substr($datetime,8,2); 
 ?>
 <td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบรับสินค้าคืน</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
+    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt; color: red;">ใบรับสินค้าคืน</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
 </tr>
 <tr>
     <td width="300" colspan="2">สาขา : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br></td><td> </td><td colspan="2">เลขที่ใบรับคืน: <?php echo $so_id; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>

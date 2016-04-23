@@ -29,6 +29,39 @@ function index()
 {
     
 }
+    
+function formSerial_detail_shop()
+{
+    $data['title'] = "NGG| Nerd - Search Serial";
+    $this->load->view('TP/shop/search_serial',$data);
+}
+    
+function getSerial_detail_shop()
+{
+    $serial = $this->input->post("serial");
+    
+    $serial = preg_replace('/\s+/', '', $serial);
+    
+    $where = "itse_serial_number = '".$serial."'";
+    $where .= " and ".$this->no_rolex;
+    
+    $query = $this->tp_shop_model->getPOS_rolex_sold_temp_item($where." and posrot_enable=1");
+    $data["temp_array"] = $query;
+    
+    $query = $this->tp_shop_model->getPOS_rolex_sold_tax_item($where." and posro_enable=1");
+    $data["tax_array"] = $query;
+    
+    $query = $this->tp_shop_model->getItem_serial($where." and itse_enable=1");
+    $data["udon_array"] = $query;
+    
+    $query = $this->tp_shop_model->getItem_borrow_serial($where." and posrobi_enable=1");
+    $data["borrow_array"] = $query;
+    
+    $data["serial"] = $serial;
+    
+    $data['title'] = "NGG| Nerd - Search Serial";
+    $this->load->view('TP/shop/report_serial',$data);
+}
 
 function getBalance_shop()
 {

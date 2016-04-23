@@ -245,6 +245,11 @@
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
+              </a>
+            </li>
             <?php } ?>
               
             <?php 
@@ -276,6 +281,11 @@
             <li>
               <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
               </a>
             </li>
             <li class="header">NGG Timepieces Office</li>

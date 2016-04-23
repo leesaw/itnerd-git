@@ -77,6 +77,11 @@
                                     <a href="<?php echo site_url("pos/getBalance_shop"); ?>"><button type="button" class="btn bg-navy btn-lg btn-block"><h4>ตรวจสอบสินค้าในร้าน</h4></button></a>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>"><button type="button" class="btn bg-olive btn-lg btn-block"><h4>ตรวจสอบ Serial</h4></button></a>
+                                </div>
+                            </div>
 						</div>
 					</div>
                     <div class="box-footer">
