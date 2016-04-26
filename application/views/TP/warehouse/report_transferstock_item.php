@@ -97,8 +97,13 @@
                                         <td><?php echo $loop->wh_out_code."-".$loop->wh_out_name; ?></td>
                                         <td><?php echo $loop->wh_in_code."-".$loop->wh_in_name; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><?php if($loop->stot_status==2) echo "<button class='btn btn-xs btn-success'>ย้ายสินค้าเรียบร้อยแล้ว</button>"; if($loop->stot_status==3) echo "<button class='btn btn-xs btn-warning'>ยกเลิกแล้ว</button>"; ?></td>
-                                        <td><a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_final_print")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_final_print_serial")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        <td><?php if($loop->stot_status==1) { echo "<a href='";
+                                        if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_print")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_print_serial")."/".$loop->stot_id;
+                                        echo "' target='blank'><button class='btn btn-xs btn-danger'>รอยืนยันจำนวนสินค้า</button></a>"; } if($loop->stot_status==2) echo "<button class='btn btn-xs btn-success'>ย้ายสินค้าเรียบร้อยแล้ว</button>"; if($loop->stot_status==3) echo "<button class='btn btn-xs btn-warning'>ยกเลิกแล้ว</button>"; ?></td>
+                                        <td>
+                                        <?php if ($loop->stot_status==2) { ?>
+                                        <a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_final_print")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_final_print_serial")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        <?php } ?>
                                         </td>
                                     </tr>
                                     <?php } ?>

@@ -370,7 +370,13 @@ function checkStock_transfer()
     $output = "";
     foreach ($result as $loop) {
         $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
-        $output .= "<td style='width: 120px;'><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+        
+        if ($loop->stob_qty > 0) { 
+            $output .= "<td style='width: 120px;'>";
+        }else{
+            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+        }
+        $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
         $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
     }
     echo $output;
@@ -740,8 +746,11 @@ function disable_transfer_between_serial()
     
 function transferstock_disable_confirm()
 {
+    $currentdate = date("Y-m-d H:i:s");
+    
+    
     $stot_id = $this->input->post("stot_id");
-    $stock = array("id" => $stot_id, "stot_status" => 3, "stot_enable" => 0);
+    $stock = array("id" => $stot_id, "stot_status" => 3, "stot_enable" => 0, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'));
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
     
     if ($query) {
