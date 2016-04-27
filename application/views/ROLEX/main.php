@@ -67,10 +67,12 @@
         foreach($item_array as $loop) { ?>
            <?php if ($count % 3 == 1) { echo '<div class="row" style="text-align:center">'; } ?>
 	       <div class="col-md-4 col-sm-4 portfolio-item">
+               <center>
                 <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>" target="blank">
-                    <img class="img-responsive" src="<?php echo base_url()."picture/rolex/".$loop->it_refcode."/1.png"; ?>" alt="<?php echo $loop->it_refcode; ?>">
+                    <img class="img-responsive" src="<?php echo base_url()."picture/rolex/".$loop->it_refcode."/1.png"; ?>" alt="<?php echo $loop->it_refcode; ?>" style="max-height: 350px;">
                 </a>
                 <a href="<?php echo site_url("rolex/view")."/".$loop->it_id; ?>"><span class="text-black"><?php echo $loop->it_refcode."<br><b>".$loop->it_model."</b>"; ?></span></a>
+                </center>
             </div>
         <?php if ($count % 3 == 0) { echo "</div><br><br>"; } ?>
         <?php $count++; if ($count>15) break;  } ?>

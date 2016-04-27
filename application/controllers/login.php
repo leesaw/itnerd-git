@@ -15,19 +15,30 @@ class Login extends CI_Controller {
    $userid = get_cookie("itnerd_userid");
    if(isset($userid) && ($userid > 0)) {
         
-        $query = $this->user->getOneUser($userid);
-        foreach($query as $row) {
-           $sess_array = array(
-             'sessid' => $row->id,
-             'sessusername' => $row->username,
-             'sessfirstname' => $row->firstname,
-             'sesslastname' => $row->lastname,
-             'sessstatus' => $row->status,
-             'sessrolex' => $row->is_rolex
+       $query = $this->user->getOneUser($userid);
+       foreach($query as $row) {
+          $sess_array = array(
+            'sessid' => $row->id,
+            'sessusername' => $row->username,
+            'sessfirstname' => $row->firstname,
+            'sesslastname' => $row->lastname,
+            'sessstatus' => $row->status,
+            'sessrolex' => $row->is_rolex
+          );
+           
+          $log_array = array(
+           'userid' => $row->id,
+           'username' => $row->username,
+           'ip_address' => $this->input->ip_address(),
+           'dateadd' => date('Y-m-d H:i:s')
            );
-        }
-        $this->session->set_userdata($sess_array); 
-        redirect('timepieces/main', 'refresh');
+           $this->user->addLogLogin($log_array);
+       }
+       
+       
+       
+       $this->session->set_userdata($sess_array); 
+       redirect('timepieces/main', 'refresh');
 
    }else{
         $data['title'] = "NGG| Nerd";
