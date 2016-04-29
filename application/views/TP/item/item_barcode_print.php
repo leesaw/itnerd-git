@@ -11,15 +11,13 @@ foreach($serial_array as $loop) { ?>
 <table border="0">
 <tbody>
 <tr>
-<td style="text-align: top;" width="180"><b><?php echo $loop->br_name; ?></b>
+<td style="text-align: top;" width="240"><b style="font-size:16"><?php echo $loop->br_name; ?></b>
 <br/>
-<b><?php echo $loop->it_refcode; ?></b>
+<b style="font-size:16"><?php echo $loop->it_refcode; ?></b>
 <br/>
-<b><?php echo $loop->itse_serial_number; ?></b>
+<b style="font-size:16"><?php echo $loop->itse_serial_number; ?></b>
 <br/>
-<b><?php echo $loop->it_model." ".$loop->it_remark; ?></b>
-<br/>
-<b><?php echo $loop->it_short_description; ?></b>
+<b style="font-size:16"><?php echo $loop->it_short_description; ?></b>
 </td>
 <td style="text-align: top;" width="500">
 <b style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>

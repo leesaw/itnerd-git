@@ -22,6 +22,18 @@ Class Ss_certificate_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function get_maxnumber_certificate($month)
+ {
+    $start = $month." 00:00:00";
+    $end = $month." 23:59:59";
+    $this->db->select("cer_id");
+	$this->db->from('ss_certificate');
+    $this->db->where("cer_dateadd >=",$start);
+    $this->db->where("cer_dateadd <=",$end);
+	$query = $this->db->get();		
+	return $query->num_rows();
+ }
 
  function add_certificate($insert=NULL)
  {		

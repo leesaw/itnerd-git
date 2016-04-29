@@ -159,7 +159,7 @@ function save()
         
         $result_log = $this->tp_item_model->addItem_log($product);
         
-        array_push($product);
+        //array_push($product);
             
         if ($item_id) 
             $this->session->set_flashdata('showresult', 'success');
@@ -469,8 +469,9 @@ function item_barcode_print()
     $mpdf= new mPDF('th',array(104,17),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
     
+    $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '896' and itse_id > 890 and itse_enable = '1'";
+    $sql_result = "br_id = '896' and itse_dateadd >= '".$currentdate." 00:00:00' and itse_dateadd <= '".$currentdate." 23:59:59' and itse_enable = '1'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_item_model->getItem_caseback($sql_result);
     if($query){

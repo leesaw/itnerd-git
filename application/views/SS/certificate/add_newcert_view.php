@@ -191,8 +191,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* TOTAL SIZE %</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="totalsize" id="totalsize" value="<?php echo set_value('totalsize'); ?>">
+				                    <p class="help-block"><?php echo form_error('totalsize'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -202,8 +202,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* CROWN HEIGHT %</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="crownheight" id="crownheight" value="<?php echo set_value('crownheight'); ?>">
+				                    <p class="help-block"><?php echo form_error('crownheight'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -211,8 +211,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* CROWN ANGLE &deg;</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="crownangle" id="crownangle" value="<?php echo set_value('crownangle'); ?>">
+				                    <p class="help-block"><?php echo form_error('crownangle'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -222,8 +222,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* STAR LENGTH %</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="starlength" id="starlength" value="<?php echo set_value('starlength'); ?>">
+				                    <p class="help-block"><?php echo form_error('starlength'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -231,8 +231,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* PAVILION DEPTH %</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="paviliondepth" id="paviliondepth" value="<?php echo set_value('paviliondepth'); ?>">
+				                    <p class="help-block"><?php echo form_error('paviliondepth'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -242,8 +242,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* PAVILION ANGLE &deg;</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="pavilionangle" id="pavilionangle" value="<?php echo set_value('pavilionangle'); ?>">
+				                    <p class="help-block"><?php echo form_error('pavilionangle'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -251,8 +251,8 @@
                                 <div class="form-group row">
                                     <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* LOWER HALF-LENGTH %</label>
                                     <div class="col-lg-4">
-                                    <input type="text" class="form-control" name="totaldepth" id="totaldepth" value="<?php echo set_value('totaldepth'); ?>">
-				                    <p class="help-block"><?php echo form_error('totaldepth'); ?></p>
+                                    <input type="text" class="form-control" name="lowerhalflength" id="lowerhalflength" value="<?php echo set_value('lowerhalflength'); ?>">
+				                    <p class="help-block"><?php echo form_error('lowerhalflength'); ?></p>
                                     </div>
                                 </div>
 							</div>
@@ -266,8 +266,8 @@
             
             <div class="row">
 							<div class="col-md-6">
-									<button type="button" name="savebtn" id="savebtn"  class="btn btn-primary" onclick="disablebutton()">  เพิ่มข้อมูลสินค้า  </button>
-									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("item/manage"); ?>'"> ยกเลิก </button>
+									<button type="button" name="savebtn" id="savebtn"  class="btn btn-primary" onclick="disablebutton()"><i class='fa fa-save'></i>  บันทึก </button>
+									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("sesto/main"); ?>'"> ยกเลิก </button>
 							</div>
 						</div>
 								
@@ -302,9 +302,100 @@ function autobarcode(obj) {
 	$('#barcode').val(input);
 }
 function disablebutton() {
-    document.getElementById("savebtn").disabled = true;
     
-    document.getElementById("form1").submit();
+    
+    if (document.getElementById('shape').value < 1) {
+        alert("กรุณาเลือก SHAPE");
+        document.getElementById('shape').focus();
+    }else if (document.getElementById('cuttingstyle').value < 1) {
+        alert("กรุณาเลือก CUTTING STYLE");
+        document.getElementById('cuttingstyle').focus();
+    }else if (document.getElementById('measurement').value == "") {
+        alert("กรุณาป้อนค่า MEASUREMENT");
+        document.getElementById('measurement').focus();
+    }else if (document.getElementById('carat').value == "") {
+        alert("กรุณาป้อนค่า CARAT WEIGHT");
+        document.getElementById('carat').focus();
+    }else if ((document.getElementById('carat').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า CARAT WEIGHT ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('carat').focus();
+    }else if (document.getElementById('color').value < 1) {
+        alert("กรุณาเลือก COLOR GRADE");
+        document.getElementById('color').focus();
+    }else if (document.getElementById('clarity').value < 1) {
+        alert("กรุณาเลือก CLARITY GRADE");
+        document.getElementById('clarity').focus();
+    }else if (document.getElementById('girdleinscription').value < 1) {
+        alert("กรุณาเลือก GIRDLE INSCRIPTION");
+        document.getElementById('girdleinscription').focus();
+    }else if (document.getElementById('fluorescence').value < 1) {
+        alert("กรุณาเลือก FLUORESCENCE");
+        document.getElementById('fluorescence').focus();
+    }else if (document.getElementById('proportion').value < 1) {
+        alert("กรุณาเลือก PROPORTION");
+        document.getElementById('proportion').focus();
+    }else if (document.getElementById('symmetry').value < 1) {
+        alert("กรุณาเลือก SYMMETRY");
+        document.getElementById('symmetry').focus();
+    }else if (document.getElementById('polish').value < 1) {
+        alert("กรุณาเลือก POLISH");
+        document.getElementById('polish').focus();
+    }else if (document.getElementById('totaldepth').value == "") {
+        alert("กรุณาป้อนค่า TOTAL DEPTH");
+        document.getElementById('totaldepth').focus();
+    }else if ((document.getElementById('totaldepth').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า TOTAL DEPTH ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('totaldepth').focus();
+    }else if (document.getElementById('totalsize').value == "") {
+        alert("กรุณาป้อนค่า TOTAL SIZE");
+        document.getElementById('totalsize').focus();
+    }else if ((document.getElementById('totalsize').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า TOTAL SIZE ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('totalsize').focus();
+    }else if (document.getElementById('crownheight').value == "") {
+        alert("กรุณาป้อนค่า CROWN HEIGHT");
+        document.getElementById('crownheight').focus();
+    }else if ((document.getElementById('crownheight').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า CROWN HEIGHT ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('crownheight').focus();
+    }else if (document.getElementById('crownangle').value == "") {
+        alert("กรุณาป้อนค่า CROWN ANGLE");
+        document.getElementById('crownangle').focus();
+    }else if ((document.getElementById('crownangle').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า CROWN ANGLE ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('crownangle').focus();
+    }else if (document.getElementById('starlength').value == "") {
+        alert("กรุณาป้อนค่า STAR LENGTH");
+        document.getElementById('starlength').focus();
+    }else if ((document.getElementById('starlength').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า STAR LENGTH ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('starlength').focus();
+    }else if (document.getElementById('paviliondepth').value == "") {
+        alert("กรุณาป้อนค่า PAVILION DEPTH");
+        document.getElementById('paviliondepth').focus();
+    }else if ((document.getElementById('paviliondepth').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า PAVILION DEPTH ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('paviliondepth').focus();
+    }else if (document.getElementById('pavilionangle').value == "") {
+        alert("กรุณาป้อนค่า PAVILION ANGLE");
+        document.getElementById('pavilionangle').focus();
+    }else if ((document.getElementById('pavilionangle').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า PAVILION ANGLE ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('pavilionangle').focus();
+    }else if (document.getElementById('lowerhalflength').value == "") {
+        alert("กรุณาป้อนค่า LOWER HALF-LENGTH");
+        document.getElementById('lowerhalflength').focus();
+    }else if ((document.getElementById('lowerhalflength').value*1000) % 1 != 0) {
+        alert("กรุณาป้อนค่า LOWER HALF-LENGTH ที่เป็นตัวเลขเท่านั้น");
+        document.getElementById('lowerhalflength').focus();
+    }else{
+        var r = confirm("ยืนยันการบันทึก !!");
+        if (r == true) {
+            document.getElementById("savebtn").disabled = true;
+            document.getElementById("form1").submit();
+        }
+        
+    }
 }
 </script>
 </body>

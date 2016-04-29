@@ -121,7 +121,81 @@ function add_newcert()
     
 function save()
 {
+    $shape= ($this->input->post('shape'));
+    $cuttingstyle= ($this->input->post('cuttingstyle'));
+    $measurement= ($this->input->post('measurement'));
+    $carat= ($this->input->post('carat'));
+    $color= ($this->input->post('color'));
+    $clarity= ($this->input->post('clarity'));
+    $girdleinscription= ($this->input->post('girdleinscription'));
+    $fluorescence= ($this->input->post('fluorescence'));
+    $proportion= ($this->input->post('proportion'));
+    $symmetry= ($this->input->post('symmetry'));
+    $polish= ($this->input->post('polish'));
+    $totaldepth= ($this->input->post('totaldepth'));
+    $totalsize= ($this->input->post('totalsize'));
+    $crownheight= ($this->input->post('crownheight'));
+    $crownangle= ($this->input->post('crownangle'));
+    $starlength= ($this->input->post('starlength'));
+    $paviliondepth= ($this->input->post('paviliondepth'));
+    $pavilionangle= ($this->input->post('pavilionangle'));
+    $lowerhalflength= ($this->input->post('lowerhalflength'));
     
+    $currentdate = date("Y-m-d");
+    
+    $number = $this->ss_certificate_model->get_maxnumber_certificate($currentdate);
+
+    $product = array(
+        'shape' => $shape,
+        'cuttingstyle' => $cuttingstyle,
+        'measurement' => $measurement,
+        'it_category_id' => $catid,
+        'it_brand_id' => $brandid,
+        'it_uom' => $uom,
+        'it_model' => $model,
+        'it_srp' => $srp,
+        'it_cost_baht' => $cost,
+        'it_short_description' => $short,
+        'it_long_description' => $long,
+        'it_min_stock' => $minstock
+    );
+
+    $item_id = $this->tp_item_model->addItem($product);
+
+    $currentdate = date("Y-m-d H:i:s");
+
+    $temp = array('it_id' => $item_id, 'it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
+
+    $product = array_merge($product, $temp);
+
+    $result_log = $this->tp_item_model->addItem_log($product);
+
+    //array_push($product);
+
+    if ($item_id) 
+        $this->session->set_flashdata('showresult', 'success');
+    else
+        $this->session->set_flashdata('showresult', 'fail');
+    redirect(current_url());
+
+    $sql = "itc_enable = 1";
+	$query = $this->tp_item_model->getItemCategory($sql);
+	if($query){
+		$data['cat_array'] =  $query;
+	}else{
+		$data['cat_array'] = array();
+	}
+    
+    $sql = "br_enable = 1 and ".$this->no_rolex;
+    $query = $this->tp_item_model->getBrand($sql);
+	if($query){
+		$data['brand_array'] =  $query;
+	}else{
+		$data['brand_array'] = array();
+	}
+
+    $data['title'] = "NGG| Nerd - Add Product";
+	$this->load->view('TP/item/additem_view',$data);
 }
     
 
