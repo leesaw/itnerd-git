@@ -34,6 +34,16 @@ Class Rolex_model extends CI_Model
 	return $query->result();
  }
     
+ function getAvailable($where)
+ {
+    $this->db->select("itse_id");
+	$this->db->from('tp_item_serial');
+    $this->db->join('tp_item', 'itse_item_id = it_id', 'left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function getFilter($where, $orderby)
  {
 	$this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_category_id, itc_name, it_brand_id, br_name, br_code, bc_name");

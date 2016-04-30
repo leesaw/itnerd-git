@@ -114,6 +114,9 @@ function view()
     $orderby = "";
     $data['item_array'] = $this->rolex_model->getItem($sql, $orderby);
     
+    $sql .= " and itse_enable = 1";
+    $data['available_array'] = $this->rolex_model->getAvailable($sql);
+    
     $data['title'] = "Rolex Catalog";
     $this->load->view('ROLEX/view',$data);
 }

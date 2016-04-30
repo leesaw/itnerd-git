@@ -263,7 +263,7 @@
                 </div>
             </div>
             </div>
-            
+            <hr>
             <div class="row">
 							<div class="col-md-6">
 									<button type="button" name="savebtn" id="savebtn"  class="btn btn-primary" onclick="disablebutton()"><i class='fa fa-save'></i>  บันทึก </button>

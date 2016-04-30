@@ -34,6 +34,16 @@
                     <tr><th><i>Bracelet</i></th><td style="text-align:center"><?php echo $loop->it_remark; ?></td></tr>
                     <tr><th><i>Description</i></th><td style="text-align:center"><?php echo $loop->it_short_description; ?></td></tr>
                     <tr><th><i>Retail Price</i></th><td style="text-align:center"><?php echo number_format($loop->it_srp)." THB"; ?></td></tr>
+                    <tr><th><i>Status</i></th><td style="text-align:center">
+                    <?php 
+                        $count = 0;
+                        foreach($available_array as $loop2) {
+                            $count++;
+                        }
+                        if ($count > 0) echo "<button class='btn btn-success'>มีสินค้า</button>";
+                        else echo "<button class='btn btn-warning'>สั่งจองสินค้า</button>";
+                    ?>
+                    </td></tr>
                 </tbody>
                 </table>
             </div>
