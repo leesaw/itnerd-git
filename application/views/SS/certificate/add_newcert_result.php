@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <div class="box box-primary color-palette-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">กรุณาใส่ข้อมูลให้ครบทุกช่องที่มี *</h3>
+                  <h3 class="box-title">กรุณาอัพโหลดรูปภาพสำหรับ Certificate นี้</h3>
                 </div>
                 <div class="box-body">
         <?php if ($this->session->flashdata('showresult') == 'true') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; 
@@ -115,7 +115,7 @@
                         <div class="row">
                             <div id="my-dropzone" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>228px x 90px
                                 </div>
                             </div>
 						</div>
@@ -131,7 +131,7 @@
                         <div class="row">
                             <div id="my-dropzone2" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 135px
                                 </div>
                             </div>
 						</div>
@@ -276,7 +276,7 @@
                         <div class="row">
                             <div id="my-dropzone3" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 210px
                                 </div>
                             </div>
 						</div>
@@ -289,7 +289,7 @@
             <hr>
             <div class="row">
 							<div class="col-md-6">
-									<button type="button" name="savebtn" id="savebtn"  class="btn btn-primary" onclick="disablebutton()"><i class='fa fa-save'></i>  บันทึก </button>
+									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf/".$cer_id); ?>" target="blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-primary"><i class='fa fa-diamond'></i> Preview </button></a>
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("sesto/main"); ?>'"> ยกเลิก </button>
 							</div>
 						</div>
@@ -323,11 +323,6 @@ function autobarcode(obj) {
 	var input=$(obj).val();
 	$('#barcode').val(input);
 }
-function disablebutton() {
-    
-    
-
-}
     
 Dropzone.autoDiscover = false;
 var myDropzone = new Dropzone("#my-dropzone", {
@@ -354,10 +349,10 @@ var myDropzone = new Dropzone("#my-dropzone", {
             if (data.length > 0) {
                 $.each(data, function(key, value) {
                     var mockFile = value;
+                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
                     me.emit("addedfile", mockFile);
-                    me.emit("thumbnail", mockFile, value.name);
+                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
                     me.emit("complete", mockFile);
-                    console.log(value);
                 });
             }
         });
@@ -365,7 +360,7 @@ var myDropzone = new Dropzone("#my-dropzone", {
 });
 
 var myDropzone2 = new Dropzone("#my-dropzone2", {
-    url: "<?php echo site_url("ss_certificate/upload_picture_proportion") ?>",
+    url: "<?php echo site_url("ss_certificate/upload_picture_proportion/".$cer_id) ?>",
     acceptedFiles: "image/*",
     addRemoveLinks: true,
     removedfile: function(file) {
@@ -373,7 +368,7 @@ var myDropzone2 = new Dropzone("#my-dropzone2", {
 
         $.ajax({
             type: "post",
-            url: "<?php echo site_url("ss_certificate/remove_picture_proportion") ?>",
+            url: "<?php echo site_url("ss_certificate/remove_picture_proportion/".$cer_id) ?>",
             data: { file: name },
             dataType: 'html'
         });
@@ -384,13 +379,14 @@ var myDropzone2 = new Dropzone("#my-dropzone2", {
     },
     init: function() {
         var me = this;
-        $.get("<?php echo site_url("ss_certificate/list_picture_proportion") ?>", function(data) {
+        $.get("<?php echo site_url("ss_certificate/list_picture_proportion/".$cer_id) ?>", function(data) {
             // if any files already in server show all here
             if (data.length > 0) {
                 $.each(data, function(key, value) {
                     var mockFile = value;
+                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
                     me.emit("addedfile", mockFile);
-                    me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>" + value.name);
+                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
                     me.emit("complete", mockFile);
                 });
             }
@@ -399,7 +395,7 @@ var myDropzone2 = new Dropzone("#my-dropzone2", {
 });
     
 var myDropzone3 = new Dropzone("#my-dropzone3", {
-    url: "<?php echo site_url("ss_certificate/upload_picture_clarity") ?>",
+    url: "<?php echo site_url("ss_certificate/upload_picture_clarity/".$cer_id) ?>",
     acceptedFiles: "image/*",
     addRemoveLinks: true,
     removedfile: function(file) {
@@ -407,7 +403,7 @@ var myDropzone3 = new Dropzone("#my-dropzone3", {
 
         $.ajax({
             type: "post",
-            url: "<?php echo site_url("ss_certificate/remove_picture_clarity") ?>",
+            url: "<?php echo site_url("ss_certificate/remove_picture_clarity/".$cer_id) ?>",
             data: { file: name },
             dataType: 'html'
         });
@@ -418,13 +414,14 @@ var myDropzone3 = new Dropzone("#my-dropzone3", {
     },
     init: function() {
         var me = this;
-        $.get("<?php echo site_url("ss_certificate/list_picture_clarity") ?>", function(data) {
+        $.get("<?php echo site_url("ss_certificate/list_picture_clarity/".$cer_id) ?>", function(data) {
             // if any files already in server show all here
             if (data.length > 0) {
                 $.each(data, function(key, value) {
                     var mockFile = value;
+                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
                     me.emit("addedfile", mockFile);
-                    me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>" + value.name);
+                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
                     me.emit("complete", mockFile);
                 });
             }

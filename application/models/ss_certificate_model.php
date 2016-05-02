@@ -34,6 +34,33 @@ Class Ss_certificate_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->num_rows();
  }
+    
+ function get_picture_result($where)
+ {
+    $this->db->select("pre_value");
+	$this->db->from('ss_picture_result');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function get_picture_proportion($where)
+ {
+    $this->db->select("ppr_value");
+	$this->db->from('ss_picture_proportion');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
+ function get_picture_clarity($where)
+ {
+    $this->db->select("pcl_value");
+	$this->db->from('ss_picture_clarityplot');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
 
  function add_certificate($insert=NULL)
  {		
@@ -73,22 +100,25 @@ Class Ss_certificate_model extends CI_Model
 	return $query;
  }
     
- function delete_upload_picture_result($id=NULL)
+ function delete_upload_picture_result($picture=NULL)
  {
-	$this->db->where('pre_value', $id);
+	$this->db->where('pre_value', $picture['pre_value']);
+    $this->db->where('pre_certificate_id', $picture['pre_certificate_id']);
 	$this->db->delete('ss_picture_result');
  }
     
- function delete_upload_picture_proportion($id=NULL)
+ function delete_upload_picture_proportion($picture=NULL)
  {
-	$this->db->where('ppr_value', $id);
-	$this->db->delete('ss_picture_result'); 
+	$this->db->where('ppr_value', $picture['ppr_value']);
+    $this->db->where('ppr_certificate_id', $picture['ppr_certificate_id']);
+	$this->db->delete('ss_picture_proportion'); 
  }
     
- function delete_upload_picture_clarity($id=NULL)
+ function delete_upload_picture_clarity($picture=NULL)
  {
-	$this->db->where('pcl_value', $id);
-	$this->db->delete('ss_picture_result'); 
+	$this->db->where('pcl_value', $picture['pcl_value']);
+    $this->db->where('pcl_certificate_id', $picture['pcl_certificate_id']);
+	$this->db->delete('ss_picture_clarityplot'); 
  }
     
 }

@@ -243,6 +243,11 @@ public function upload_picture_result()
             if(!$dir_exist)
                 rmdir($this->upload_path_result."/".$cer_id);
             echo "failed to upload file(s)";
+        }else{
+            $upload_data = $this->upload->data(); 
+            $file_name =   $upload_data['file_name'];
+            $picture = array("pre_certificate_id" => $cer_id, "pre_value" => $file_name);
+            $this->ss_certificate_model->add_upload_picture_result($picture);
         }
     }
 }
@@ -253,6 +258,8 @@ public function remove_picture_result()
     $file = $this->input->post("file");
     if ($file && file_exists($this->upload_path_result."/".$cer_id . "/" . $file)) {
         unlink($this->upload_path_result."/".$cer_id . "/" . $file);
+        $picture = array("pre_certificate_id" => $cer_id, "pre_value" => $file);
+        $this->ss_certificate_model->delete_upload_picture_result($picture);
     }
 }
 
@@ -265,7 +272,8 @@ public function list_picture_result()
     foreach ($files as &$file) {
         $file = array(
             'name' => $file,
-            'size' => filesize($this->upload_path_result."/".$cer_id . "/" . $file)
+            'size' => filesize($this->upload_path_result."/".$cer_id . "/" . $file),
+            'path' => substr($this->upload_path_result, 1)."/".$cer_id . "/" . $file
         );
     }
 
@@ -276,35 +284,56 @@ public function list_picture_result()
    
 public function upload_picture_proportion()
 {
+    $cer_id = $this->uri->segment(3);
+    
     if ( ! empty($_FILES)) 
     {
-        $config["upload_path"]   = $this->upload_path_proportion;
+        $config["upload_path"]   = $this->upload_path_proportion."/".$cer_id;
         $config["allowed_types"] = "gif|jpg|png";
         $this->load->library('upload', $config);
 
+        $dir_exist = true; // flag for checking the directory exist or not
+        if (!is_dir($this->upload_path_proportion."/".$cer_id))
+        {
+            mkdir($this->upload_path_proportion."/".$cer_id, 0777, true);
+            $dir_exist = false; // dir not exist
+        }
+
         if ( ! $this->upload->do_upload("file")) {
+            if(!$dir_exist)
+                rmdir($this->upload_path_proportion."/".$cer_id);
             echo "failed to upload file(s)";
+        }else{
+            $upload_data = $this->upload->data(); 
+            $file_name =   $upload_data['file_name'];
+            $picture = array("ppr_certificate_id" => $cer_id, "ppr_value" => $file_name);
+            $this->ss_certificate_model->add_upload_picture_proportion($picture);
         }
     }
 }
 
 public function remove_picture_proportion()
 {
+    $cer_id = $this->uri->segment(3);
     $file = $this->input->post("file");
-    if ($file && file_exists($this->upload_path_proportion . "/" . $file)) {
-        unlink($this->upload_path_proportion . "/" . $file);
+    if ($file && file_exists($this->upload_path_proportion."/".$cer_id . "/" . $file)) {
+        unlink($this->upload_path_proportion."/".$cer_id . "/" . $file);
+        $picture = array("ppr_certificate_id" => $cer_id, "ppr_value" => $file);
+        $this->ss_certificate_model->delete_upload_picture_proportion($picture);
     }
 }
 
 public function list_picture_proportion()
 {
+    $cer_id = $this->uri->segment(3);
     $this->load->helper("file");
-    $files = get_filenames($this->upload_path_proportion);
+    $files = get_filenames($this->upload_path_proportion."/".$cer_id );
     // we need name and size for dropzone mockfile
     foreach ($files as &$file) {
         $file = array(
             'name' => $file,
-            'size' => filesize($this->upload_path_proportion . "/" . $file)
+            'size' => filesize($this->upload_path_proportion."/".$cer_id . "/" . $file),
+            'path' => substr($this->upload_path_proportion, 1)."/".$cer_id . "/" . $file
         );
     }
 
@@ -315,41 +344,92 @@ public function list_picture_proportion()
     
 public function upload_picture_clarity()
 {
+    $cer_id = $this->uri->segment(3);
+    
     if ( ! empty($_FILES)) 
     {
-        $config["upload_path"]   = $this->upload_path_clarity;
+        $config["upload_path"]   = $this->upload_path_clarity."/".$cer_id;
         $config["allowed_types"] = "gif|jpg|png";
         $this->load->library('upload', $config);
 
+        $dir_exist = true; // flag for checking the directory exist or not
+        if (!is_dir($this->upload_path_clarity."/".$cer_id))
+        {
+            mkdir($this->upload_path_clarity."/".$cer_id, 0777, true);
+            $dir_exist = false; // dir not exist
+        }
+
         if ( ! $this->upload->do_upload("file")) {
+            if(!$dir_exist)
+                rmdir($this->upload_path_clarity."/".$cer_id);
             echo "failed to upload file(s)";
+        }else{
+            $upload_data = $this->upload->data(); 
+            $file_name =   $upload_data['file_name'];
+            $picture = array("pcl_certificate_id" => $cer_id, "pcl_value" => $file_name);
+            $this->ss_certificate_model->add_upload_picture_clarity($picture);
         }
     }
 }
 
 public function remove_picture_clarity()
 {
+    $cer_id = $this->uri->segment(3);
     $file = $this->input->post("file");
-    if ($file && file_exists($this->upload_path_clarity . "/" . $file)) {
-        unlink($this->upload_path_clarity . "/" . $file);
+    if ($file && file_exists($this->upload_path_clarity."/".$cer_id . "/" . $file)) {
+        unlink($this->upload_path_clarity."/".$cer_id . "/" . $file);
+        $picture = array("pcl_certificate_id" => $cer_id, "pcl_value" => $file);
+        $this->ss_certificate_model->delete_upload_picture_clarity($picture);
     }
 }
 
 public function list_picture_clarity()
 {
+    $cer_id = $this->uri->segment(3);
     $this->load->helper("file");
-    $files = get_filenames($this->upload_path_clarity);
+    $files = get_filenames($this->upload_path_clarity."/".$cer_id );
     // we need name and size for dropzone mockfile
     foreach ($files as &$file) {
         $file = array(
             'name' => $file,
-            'size' => filesize($this->upload_path_clarity . "/" . $file)
+            'size' => filesize($this->upload_path_clarity."/".$cer_id . "/" . $file),
+            'path' => substr($this->upload_path_clarity, 1)."/".$cer_id . "/" . $file
         );
     }
 
     header("Content-type: text/json");
     header("Content-type: application/json");
     echo json_encode($files);
+}
+    
+function view_certificate_pdf()
+{
+    $cer_id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('','A4-L','0', 'helvetica');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate.css');
+
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $where = "pre_certificate_id = '".$cer_id."'";
+    $data["result_array"] = $this->ss_certificate_model->get_picture_result($where);
+    
+    $where = "ppr_certificate_id = '".$cer_id."'";
+    $data["proportion_array"] = $this->ss_certificate_model->get_picture_proportion($where);
+    
+    $where = "pcl_certificate_id = '".$cer_id."'";
+    $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+
+    $data["cer_id"] = $cer_id;
+    $data["path_result"] = $this->upload_path_result;
+    $data["path_proportion"] = $this->upload_path_proportion;
+    $data["path_clarity"] = $this->upload_path_clarity;
+    //echo $html;
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_pdf", $data, TRUE));
+    $mpdf->Output();
 }
 
 }
