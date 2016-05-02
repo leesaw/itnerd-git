@@ -1,7 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Ss_certificate extends CI_Controller {
-
+    private $upload_path_result = "./uploads/certificate/result";
+    private $upload_path_proportion = "./uploads/certificate/proportion";
+    private $upload_path_clarity = "./uploads/certificate/clarity";
     
 function __construct()
 {
@@ -121,6 +123,7 @@ function add_newcert()
     
 function save()
 {
+    $natural= ($this->input->post('natural'));
     $shape= ($this->input->post('shape'));
     $cuttingstyle= ($this->input->post('cuttingstyle'));
     $measurement= ($this->input->post('measurement'));
@@ -140,64 +143,214 @@ function save()
     $paviliondepth= ($this->input->post('paviliondepth'));
     $pavilionangle= ($this->input->post('pavilionangle'));
     $lowerhalflength= ($this->input->post('lowerhalflength'));
+    $girdlethickness= ($this->input->post('girdlethickness'));
+    $girdlefinish= ($this->input->post('girdlefinish'));
+    $culet= ($this->input->post('culet'));
     
     $currentdate = date("Y-m-d");
+    $date_array = explode('-',date("y-m-d"));
     
     $number = $this->ss_certificate_model->get_maxnumber_certificate($currentdate);
+    $number++;
+    $number = $date_array[0].$date_array[1].$date_array[2].str_pad($number, 4, '0', STR_PAD_LEFT);
+    
+    $currentdate = date("Y-m-d H:i:s");
 
-    $product = array(
-        'shape' => $shape,
-        'cuttingstyle' => $cuttingstyle,
-        'measurement' => $measurement,
-        'it_category_id' => $catid,
-        'it_brand_id' => $brandid,
-        'it_uom' => $uom,
-        'it_model' => $model,
-        'it_srp' => $srp,
-        'it_cost_baht' => $cost,
-        'it_short_description' => $short,
-        'it_long_description' => $long,
-        'it_min_stock' => $minstock
+    $certificate = array(
+        'cer_number' => $number,
+        'cer_naturaldiamond_id' => $natural,
+        'cer_shape_id' => $shape,
+        'cer_cuttingstyle_id' => $cuttingstyle,
+        'cer_measurement' => $measurement,
+        'cer_carat' => $carat,
+        'cer_color_id' => $color,
+        'cer_clarity_id' => $clarity,
+        'cer_proportion_id' => $proportion,
+        'cer_symmetry_id' => $symmetry,
+        'cer_polish_id' => $polish,
+        'cer_totaldepth' => $totaldepth,
+        'cer_tablesize' => $totalsize,
+        'cer_crownheight' => $crownheight,
+        'cer_crownangle' => $crownangle,
+        'cer_starlength' => $starlength,
+        'cer_paviliondepth' => $paviliondepth,
+        'cer_pavilionangle' => $pavilionangle,
+        'cer_lowerhalflength' => $lowerhalflength,
+        'cer_girdlethickness_id' => $girdlethickness,
+        'cer_girdlefinish_id' => $girdlefinish,
+        'cer_culet_id' => $culet,
+        'cer_girdleinscription_id' => $girdleinscription,
+        'cer_fluorescence_id' => $fluorescence,
+        'cer_softwareresult' => 1,
+        'cer_dateadd' => $currentdate,
+        'cer_dateadd_by' => $this->session->userdata('sessid'),
+        'cer_status' => 1
     );
 
-    $item_id = $this->tp_item_model->addItem($product);
+    $cer_id = $this->ss_certificate_model->add_certificate($certificate);
 
     $currentdate = date("Y-m-d H:i:s");
 
-    $temp = array('it_id' => $item_id, 'it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
+    $temp = array('cer_certificate_id' => $cer_id);
 
-    $product = array_merge($product, $temp);
+    $certificate = array_merge($certificate, $temp);
 
-    $result_log = $this->tp_item_model->addItem_log($product);
-
-    //array_push($product);
-
-    if ($item_id) 
-        $this->session->set_flashdata('showresult', 'success');
-    else
-        $this->session->set_flashdata('showresult', 'fail');
-    redirect(current_url());
-
-    $sql = "itc_enable = 1";
-	$query = $this->tp_item_model->getItemCategory($sql);
-	if($query){
-		$data['cat_array'] =  $query;
-	}else{
-		$data['cat_array'] = array();
-	}
+    $result_log = $this->ss_certificate_model->add_log_certificate($certificate);
     
-    $sql = "br_enable = 1 and ".$this->no_rolex;
-    $query = $this->tp_item_model->getBrand($sql);
-	if($query){
-		$data['brand_array'] =  $query;
-	}else{
-		$data['brand_array'] = array();
-	}
+    if ($cer_id) {
+        $this->session->set_flashdata('showresult', 'true');
+        
+        redirect('ss_certificate/add_newcert_ok/'.$cer_id, 'refresh');
+        
+    }else{
+        $this->session->set_flashdata('showresult', 'fail');
+        redirect(current_url());
+    }
 
-    $data['title'] = "NGG| Nerd - Add Product";
-	$this->load->view('TP/item/additem_view',$data);
+    
 }
     
+function add_newcert_ok()
+{
+    $cer_id = $this->uri->segment(3);
+    $data["showresult"] = $this->session->flashdata('showresult');
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+
+    $data["cer_id"] = $cer_id;
+    $data['title'] = "NGG| Nerd - Add New Certification";
+    $this->load->view('SS/certificate/add_newcert_result',$data);
+}
+    
+public function upload_picture_result()
+{
+    $cer_id = $this->uri->segment(3);
+    
+    if ( ! empty($_FILES)) 
+    {
+        $config["upload_path"]   = $this->upload_path_result."/".$cer_id;
+        $config["allowed_types"] = "gif|jpg|png";
+        $this->load->library('upload', $config);
+
+        $dir_exist = true; // flag for checking the directory exist or not
+        if (!is_dir($this->upload_path_result."/".$cer_id))
+        {
+            mkdir($this->upload_path_result."/".$cer_id, 0777, true);
+            $dir_exist = false; // dir not exist
+        }
+
+        if ( ! $this->upload->do_upload("file")) {
+            if(!$dir_exist)
+                rmdir($this->upload_path_result."/".$cer_id);
+            echo "failed to upload file(s)";
+        }
+    }
+}
+
+public function remove_picture_result()
+{
+    $cer_id = $this->uri->segment(3);
+    $file = $this->input->post("file");
+    if ($file && file_exists($this->upload_path_result."/".$cer_id . "/" . $file)) {
+        unlink($this->upload_path_result."/".$cer_id . "/" . $file);
+    }
+}
+
+public function list_picture_result()
+{
+    $cer_id = $this->uri->segment(3);
+    $this->load->helper("file");
+    $files = get_filenames($this->upload_path_result."/".$cer_id );
+    // we need name and size for dropzone mockfile
+    foreach ($files as &$file) {
+        $file = array(
+            'name' => $file,
+            'size' => filesize($this->upload_path_result."/".$cer_id . "/" . $file)
+        );
+    }
+
+    header("Content-type: text/json");
+    header("Content-type: application/json");
+    echo json_encode($files);
+}
+   
+public function upload_picture_proportion()
+{
+    if ( ! empty($_FILES)) 
+    {
+        $config["upload_path"]   = $this->upload_path_proportion;
+        $config["allowed_types"] = "gif|jpg|png";
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload("file")) {
+            echo "failed to upload file(s)";
+        }
+    }
+}
+
+public function remove_picture_proportion()
+{
+    $file = $this->input->post("file");
+    if ($file && file_exists($this->upload_path_proportion . "/" . $file)) {
+        unlink($this->upload_path_proportion . "/" . $file);
+    }
+}
+
+public function list_picture_proportion()
+{
+    $this->load->helper("file");
+    $files = get_filenames($this->upload_path_proportion);
+    // we need name and size for dropzone mockfile
+    foreach ($files as &$file) {
+        $file = array(
+            'name' => $file,
+            'size' => filesize($this->upload_path_proportion . "/" . $file)
+        );
+    }
+
+    header("Content-type: text/json");
+    header("Content-type: application/json");
+    echo json_encode($files);
+}
+    
+public function upload_picture_clarity()
+{
+    if ( ! empty($_FILES)) 
+    {
+        $config["upload_path"]   = $this->upload_path_clarity;
+        $config["allowed_types"] = "gif|jpg|png";
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload("file")) {
+            echo "failed to upload file(s)";
+        }
+    }
+}
+
+public function remove_picture_clarity()
+{
+    $file = $this->input->post("file");
+    if ($file && file_exists($this->upload_path_clarity . "/" . $file)) {
+        unlink($this->upload_path_clarity . "/" . $file);
+    }
+}
+
+public function list_picture_clarity()
+{
+    $this->load->helper("file");
+    $files = get_filenames($this->upload_path_clarity);
+    // we need name and size for dropzone mockfile
+    foreach ($files as &$file) {
+        $file = array(
+            'name' => $file,
+            'size' => filesize($this->upload_path_clarity . "/" . $file)
+        );
+    }
+
+    header("Content-type: text/json");
+    header("Content-type: application/json");
+    echo json_encode($files);
+}
 
 }
 ?>

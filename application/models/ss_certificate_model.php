@@ -41,12 +41,54 @@ Class Ss_certificate_model extends CI_Model
 	return $this->db->insert_id();			
  }
     
+ function add_log_certificate($insert=NULL)
+ {		
+	$this->db->insert('ss_log_certificate', $insert);
+	return $this->db->insert_id();			
+ }
+    
+ function add_upload_picture_result($insert)
+ {
+    $this->db->insert("ss_picture_result", $insert);
+    return $this->db->insert_id();
+ }
+    
+ function add_upload_picture_proportion($insert)
+ {
+    $this->db->insert("ss_picture_proportion", $insert);
+    return $this->db->insert_id();
+ }
+    
+ function add_upload_picture_clarity($insert)
+ {
+    $this->db->insert("ss_picture_clarityplot", $insert);
+    return $this->db->insert_id();
+ }
+    
  function edit_certificate($edit=NULL)
  {
 	$this->db->where('cer_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('ss_certificate', $edit); 	
 	return $query;
+ }
+    
+ function delete_upload_picture_result($id=NULL)
+ {
+	$this->db->where('pre_value', $id);
+	$this->db->delete('ss_picture_result');
+ }
+    
+ function delete_upload_picture_proportion($id=NULL)
+ {
+	$this->db->where('ppr_value', $id);
+	$this->db->delete('ss_picture_result'); 
+ }
+    
+ function delete_upload_picture_clarity($id=NULL)
+ {
+	$this->db->where('pcl_value', $id);
+	$this->db->delete('ss_picture_result'); 
  }
     
 }

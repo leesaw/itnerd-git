@@ -28,6 +28,7 @@
         ?>
 		<div class="row">
             <div class="col-xs-6">
+                <div class="row"><div class="col-xs-12">
                 <div class="panel panel-primary">
                     
 					<div class="panel-heading"><strong>Details</strong></div>
@@ -37,14 +38,27 @@
                             <div class="col-md-6">
                                 <form name="form1" id="form1" action="<?php echo site_url('ss_certificate/save'); ?>" method="post">
                                     <div class="form-group">
-                                        <label>SHAPE *</label>
-                                        <select class="form-control" name="shape" id="shape">
-                                            <option value="0" <?php echo set_select('shape', '0', TRUE); ?>>-- เลือก --</option>
-										<?php foreach($shape_array as $loop){
-												echo "<option value='".$loop->id."' ".set_select('shape', $loop->id).">".$loop->value."</option>";
+                                        <label>NATURAL DIAMOND *</label>
+                                        <select class="form-control" name="natural" id="natural">
+                                            <option value="0">-- เลือก --</option>
+										<?php foreach($naturaldiamond_array as $loop){
+												echo "<option value='".$loop->id."'>".$loop->value."</option>";
 										 } ?>
                                         </select>
                                     </div>
+							</div>
+						</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>SHAPE *</label>
+                                    <select class="form-control" name="shape" id="shape">
+                                        <option value="0">-- เลือก --</option>
+                                        <?php foreach($shape_array as $loop){
+                                                echo "<option value='".$loop->id."'>".$loop->value."</option>";
+                                         } ?>
+                                    </select>
+                                </div>
 							</div>
                             <div class="col-md-6">
 									<div class="form-group">
@@ -124,7 +138,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div></div></div>
 			</div>	
             <div class="col-xs-6">
                 <div class="row">
@@ -189,7 +203,7 @@
 							</div>
                             <div class="col-xs-6">
                                 <div class="form-group row">
-                                    <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* TOTAL SIZE %</label>
+                                    <label for="inputKey" class="col-lg-8 control-label" style="text-align:right">* TABLE SIZE %</label>
                                     <div class="col-lg-4">
                                     <input type="text" class="form-control" name="totalsize" id="totalsize" value="<?php echo set_value('totalsize'); ?>">
 				                    <p class="help-block"><?php echo form_error('totalsize'); ?></p>
@@ -257,10 +271,42 @@
                                 </div>
 							</div>
 						</div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label>GIRDLE THICKNESS *</label>
+                                <select class="form-control" name="girdlethickness" id="girdlethickness">
+                                    <option value="0">-- เลือก --</option>
+                                <?php foreach($girdlethickness_array as $loop){
+                                        echo "<option value='".$loop->id."'>".$loop->value."</option>";
+                                 } ?>
+                                </select>
+							</div>
+                            <div class="col-xs-6">
+                                <label>GIRDLE FINISH *</label>
+                                <select class="form-control" name="girdlefinish" id="girdlefinish">
+                                    <option value="0">-- เลือก --</option>
+                                <?php foreach($girdlefinish_array as $loop){
+                                        echo "<option value='".$loop->id."'>".$loop->value."</option>";
+                                 } ?>
+                                </select>
+							</div>
+						</div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <label>CULET *</label>
+                                <select class="form-control" name="culet" id="culet">
+                                    <option value="0">-- เลือก --</option>
+                                <?php foreach($culet_array as $loop){
+                                        echo "<option value='".$loop->id."'>".$loop->value."</option>";
+                                 } ?>
+                                </select>
+							</div>
+						</div>
                     </div>
                 </div>
                 </div>
                 </div>
+
             </div>
             </div>
             <hr>
@@ -279,8 +325,8 @@
     </section>
 	</div>
 </div>
-<script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <?php $this->load->view('js_footer'); ?>
+<script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script>
 $(document).ready(function()
 {    
@@ -304,7 +350,10 @@ function autobarcode(obj) {
 function disablebutton() {
     
     
-    if (document.getElementById('shape').value < 1) {
+    if (document.getElementById('natural').value < 1) {
+        alert("กรุณาเลือก NATURAL DIAMOND");
+        document.getElementById('natural').focus();
+    }else if (document.getElementById('shape').value < 1) {
         alert("กรุณาเลือก SHAPE");
         document.getElementById('shape').focus();
     }else if (document.getElementById('cuttingstyle').value < 1) {
@@ -388,6 +437,15 @@ function disablebutton() {
     }else if ((document.getElementById('lowerhalflength').value*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('lowerhalflength').focus();
+    }else if (document.getElementById('girdlethickness').value < 1) {
+        alert("กรุณาเลือก GIRDLE THICKNESS");
+        document.getElementById('girdlethickness').focus();
+    }else if (document.getElementById('girdlefinish').value < 1) {
+        alert("กรุณาเลือก GIRDLE FINISH");
+        document.getElementById('girdlefinish').focus();
+    }else if (document.getElementById('culet').value < 1) {
+        alert("กรุณาเลือก CULET");
+        document.getElementById('culet').focus();
     }else{
         var r = confirm("ยืนยันการบันทึก !!");
         if (r == true) {
@@ -397,6 +455,8 @@ function disablebutton() {
         
     }
 }
+    
+
 </script>
 </body>
 </html>
