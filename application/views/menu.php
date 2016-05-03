@@ -317,6 +317,11 @@
                 <i class="fa fa-circle-o"></i> <span>Add New Certificate</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("ss_certificate/view_all_certificate"); ?>">
+                <i class="fa fa-circle-o"></i> <span>All Certificates</span>
+              </a>
+            </li>
             <?php } ?>
           </ul>
         </section>

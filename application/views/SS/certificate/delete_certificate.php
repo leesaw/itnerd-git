@@ -12,7 +12,7 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>เพิ่มข้อมูล Certificate</h1>
+            <h1>Certificate</h1>
         </section>
             
 		<section class="content">
@@ -20,16 +20,16 @@
             <div class="col-md-12">
                 <div class="box box-primary color-palette-box">
                 <div class="box-header with-border">
-                  <h3 class="box-title">กรุณาอัพโหลดรูปภาพสำหรับ Certificate นี้</h3>
+                  <h3 class="box-title"><?php foreach($cer_array as $loop) { if ($loop->cer_enable ==0) echo "<label class='text-red'>Removed</lable>"; }  ?></h3>
                 </div>
                 <div class="box-body">
-        <?php if ($this->session->flashdata('showresult') == 'true') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; 
-        ?>
 		<div class="row">
             <div class="col-xs-6">
                 <div class="row"><div class="col-xs-12">
                 <div class="panel panel-success">
-                    <?php foreach($cer_array as $loop) { ?>
+                    <?php 
+                
+                    foreach($cer_array as $loop) { ?>
 					<div class="panel-heading"><strong>Details</strong></div>
 					
                     <div class="panel-body">
@@ -113,10 +113,12 @@
 					
                     <div class="panel-body">
                         <div class="row">
-                            <div id="my-dropzone" class="dropzone">
-                                <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>228px x 90px
-                                </div>
+                            <div class="col-xs-12">
+                            <center>
+                            <?php foreach($result_array as $loop2) { ?>
+                            <img src="<?php echo base_url().$path_result."/".$cer_id."/".$loop2->pre_value; ?>" style="width:100%; max-width:300px;" />
+                            <?php } ?>
+                            </center>
                             </div>
 						</div>
                     </div>
@@ -129,10 +131,12 @@
 					
                     <div class="panel-body">
                         <div class="row">
-                            <div id="my-dropzone2" class="dropzone">
-                                <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 135px
-                                </div>
+                            <div class="col-xs-12">
+                            <center>
+                            <?php foreach($proportion_array as $loop2) { ?>
+                            <img src="<?php echo base_url().$path_proportion."/".$cer_id."/".$loop2->ppr_value; ?>"  style="width:100%; max-width:300px;" />
+                            <?php } ?>
+                            </center>
                             </div>
 						</div>
                     </div>
@@ -274,10 +278,12 @@
 					
                     <div class="panel-body">
                         <div class="row">
-                            <div id="my-dropzone3" class="dropzone">
-                                <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 210px
-                                </div>
+                            <div class="col-xs-12">
+                            <center>
+                            <?php foreach($clarity_array as $loop2) { ?>
+                            <img src="<?php echo base_url().$path_clarity."/".$cer_id."/".$loop2->pcl_value; ?>"  style="width:100%; max-width:300px;" />
+                            <?php } ?>
+                            </center>
                             </div>
 						</div>
                     </div>
@@ -285,13 +291,11 @@
                 </div></div>
             </div>
             </div>
-                    <?php } ?>
+                    <?php $enable = $loop->cer_enable; } ?>
             <hr>
             <div class="row">
 							<div class="col-md-6">
-									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf_full/".$cer_id); ?>" target="blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-success"><i class='fa fa-diamond'></i> Full Certificate</button></a>
-                                    &nbsp;&nbsp;&nbsp;
-                                    <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_small/".$cer_id); ?>" target="blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-info"><i class='fa fa-diamond'></i> Small Certificate </button></a>
+									<button type="button" name="savebtn" id="savebtn"  class="btn btn-danger" onclick="removeconfirm()" <?php if ($enable==0) echo "disabled"; ?>><i class='fa fa-remove'></i> Remove this Certificate</button>
                                     &nbsp;&nbsp;&nbsp;
 									<button type="button" class="btn btn-warning" onClick="window.location.href='<?php echo site_url("ss_certificate/view_all_certificate"); ?>'"> Cancel </button>
 							</div>
@@ -327,110 +331,31 @@ function autobarcode(obj) {
 	$('#barcode').val(input);
 }
     
-Dropzone.autoDiscover = false;
-var myDropzone = new Dropzone("#my-dropzone", {
-    url: "<?php echo site_url("ss_certificate/upload_picture_result/".$cer_id); ?>",
-    acceptedFiles: "image/*",
-    addRemoveLinks: true,
-    removedfile: function(file) {
-        var name = file.name;
-        $.ajax({
-            type: "post",
-            url: "<?php echo site_url("ss_certificate/remove_picture_result/".$cer_id); ?>",
-            data: { file: name },
-            dataType: 'html'
-        });
-
-        // remove the thumbnail
-        var previewElement;
-        return (previewElement = file.previewElement) != null ? (previewElement.parentNode.removeChild(file.previewElement)) : (void 0);
-    },
-    init: function() {
-        var me = this;
-        $.get("<?php echo site_url("ss_certificate/list_picture_result/".$cer_id); ?>", function(data) {
-            // if any files already in server show all here
-            if (data.length > 0) {
-                $.each(data, function(key, value) {
-                    var mockFile = value;
-                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
-                    me.emit("addedfile", mockFile);
-                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
-                    me.emit("complete", mockFile);
-                });
-            }
-        });
+function removeconfirm() {
+    var r = confirm("ยืนยันการลบ !!");
+    if (r == true) {
+        confirmform();
     }
-});
-
-var myDropzone2 = new Dropzone("#my-dropzone2", {
-    url: "<?php echo site_url("ss_certificate/upload_picture_proportion/".$cer_id) ?>",
-    acceptedFiles: "image/*",
-    addRemoveLinks: true,
-    removedfile: function(file) {
-        var name = file.name;
-
-        $.ajax({
-            type: "post",
-            url: "<?php echo site_url("ss_certificate/remove_picture_proportion/".$cer_id) ?>",
-            data: { file: name },
-            dataType: 'html'
-        });
-
-        // remove the thumbnail
-        var previewElement;
-        return (previewElement = file.previewElement) != null ? (previewElement.parentNode.removeChild(file.previewElement)) : (void 0);
-    },
-    init: function() {
-        var me = this;
-        $.get("<?php echo site_url("ss_certificate/list_picture_proportion/".$cer_id) ?>", function(data) {
-            // if any files already in server show all here
-            if (data.length > 0) {
-                $.each(data, function(key, value) {
-                    var mockFile = value;
-                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
-                    me.emit("addedfile", mockFile);
-                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
-                    me.emit("complete", mockFile);
-                });
-            }
-        });
-    }
-});
+}
     
-var myDropzone3 = new Dropzone("#my-dropzone3", {
-    url: "<?php echo site_url("ss_certificate/upload_picture_clarity/".$cer_id) ?>",
-    acceptedFiles: "image/*",
-    addRemoveLinks: true,
-    removedfile: function(file) {
-        var name = file.name;
-
-        $.ajax({
-            type: "post",
-            url: "<?php echo site_url("ss_certificate/remove_picture_clarity/".$cer_id) ?>",
-            data: { file: name },
-            dataType: 'html'
-        });
-
-        // remove the thumbnail
-        var previewElement;
-        return (previewElement = file.previewElement) != null ? (previewElement.parentNode.removeChild(file.previewElement)) : (void 0);
-    },
-    init: function() {
-        var me = this;
-        $.get("<?php echo site_url("ss_certificate/list_picture_clarity/".$cer_id) ?>", function(data) {
-            // if any files already in server show all here
-            if (data.length > 0) {
-                $.each(data, function(key, value) {
-                    var mockFile = value;
-                    me.createThumbnailFromUrl(mockFile,"<?php echo base_url(); ?>"+value.path);
-                    me.emit("addedfile", mockFile);
-                    //me.emit("thumbnail", mockFile, "<?php echo base_url(); ?>"+value.path);
-                    me.emit("complete", mockFile);
-                });
+function confirmform()
+{
+    document.getElementById("savebtn").disabled = true;
+    var cer_id = <?php echo $cer_id; ?>;
+    $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("ss_certificate/delete_certificate_confirm"); ?>" ,
+            data : {cer_id: cer_id} ,
+            dataType: 'json',
+            success : function(data) {
+                location.reload(); 
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+                document.getElementById("savebtn").disabled = false;
             }
         });
-    }
-});
+}
 </script>
 </body>
 </html>

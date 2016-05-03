@@ -6,6 +6,7 @@
 <body>
 <?php 
 foreach($cer_array as $loop) {
+    $number = $loop->cer_number;
     $shape = $loop->shape;
     $cutting = $loop->cuttingstyle;
     $measurement = $loop->cer_measurement;
@@ -14,6 +15,7 @@ foreach($cer_array as $loop) {
     $clarity = $loop->clarity;
     $polish = $loop->polish;
     $symmetry = $loop->symmetry;
+    $proportion = $loop->proportion;
     $fluorescence = $loop->fluorescence;
     
 }    
@@ -32,6 +34,7 @@ foreach($clarity_array as $loop) {
 ?>
 <table border="0">
 <tbody>
+    <tr><td height="100"></td><td> </td><td style="text-align:center"><h3>DIAMOND REGISTERATION NUMBER</h3><br><b><?php echo $number; ?></b></td></tr>
     <tr><td width="232" height="17" ></td><td rowspan="8" width="36"> </td><td rowspan="8" width="253"><img src="<?php echo $path_proportion."/".$cer_id."/".$pic_proportion; ?>" width="253" height="135" /></td></tr>
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
@@ -39,7 +42,7 @@ foreach($clarity_array as $loop) {
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $color;  ?></b></td></tr>
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $polish;  ?></b></td></tr>
+    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
 </tbody>
 </table>
 <table border="0">

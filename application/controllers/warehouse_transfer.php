@@ -765,13 +765,16 @@ function transferstock_disable_confirm()
 
 function importstock_history()
 {
-    $currentdate = date("Y-m");
-    $currentdate = explode('-', $currentdate);
-    $currentmonth = $currentdate[1]."/".$currentdate[0];
-    $data['month'] = $currentmonth;
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
     
-    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
-    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
     
     $sql = "";
     $sql .= "stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
@@ -781,6 +784,11 @@ function importstock_history()
     
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);
     
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['month'] = $currentdate;
+    
     $data['title'] = "Nerd - Report Transfer In";
     $this->load->view("TP/warehouse/report_stockin_item", $data);
 }
@@ -788,20 +796,27 @@ function importstock_history()
     
 function transferstock_history()
 {
-    $currentdate = date("Y-m");
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
     
-    $currentdate = explode('-', $currentdate);
-    $currentmonth = $currentdate[1]."/".$currentdate[0];
-    $data['month'] = $currentmonth;
-    
-    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
-    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
     
     $sql = "stot_dateadd >= '".$start."' and stot_dateadd <= '".$end."'";
     if ($this->session->userdata('sessstatus') != '88') {
         $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
     }
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['month'] = $currentdate;
     
     $data['title'] = "Nerd - Report Transfer Stock";
     $this->load->view("TP/warehouse/report_transfer_item", $data);

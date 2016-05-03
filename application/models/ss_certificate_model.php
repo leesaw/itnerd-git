@@ -40,6 +40,7 @@ Class Ss_certificate_model extends CI_Model
     $this->db->select("pre_value");
 	$this->db->from('ss_picture_result');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("pre_id", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -49,6 +50,7 @@ Class Ss_certificate_model extends CI_Model
     $this->db->select("ppr_value");
 	$this->db->from('ss_picture_proportion');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("ppr_id", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -58,6 +60,7 @@ Class Ss_certificate_model extends CI_Model
     $this->db->select("pcl_value");
 	$this->db->from('ss_picture_clarityplot');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("pcl_id", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }

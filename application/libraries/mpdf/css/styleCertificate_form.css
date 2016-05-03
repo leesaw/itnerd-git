@@ -1,0 +1,17 @@
+body {
+	font-family: ffdin;
+	font-size: 12px;
+    
+}
+
+@page {
+    margin-left: 25px;
+    margin-right: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}

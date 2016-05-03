@@ -149,6 +149,13 @@ $this->fontdata = array(
         'I'  => "THSaraban-Italic.ttf",
         'BI'   =>  "THSaraban-BoldItalic.ttf"
         ),
+    
+    "ffdin" => array(
+        'R' => "DINRegular.ttf",
+        'B' => "DINMedium.ttf",
+        'I'  => "THSaraban-Italic.ttf",
+        'BI'   =>  "THSaraban-BoldItalic.ttf"
+        ),
 
 
 /* Indic fonts */

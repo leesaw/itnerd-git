@@ -117,7 +117,7 @@ function add_newcert()
     
     /////   ------  end get list
     
-	$data['title'] = "NGG| Nerd - Add New Certification";
+	$data['title'] = "NGG| Nerd - Add New Certificate";
 	$this->load->view('SS/certificate/add_newcert_view',$data);
 }
     
@@ -210,6 +210,87 @@ function save()
     
 }
     
+function edit()
+{
+    $cer_id = ($this->input->post('cer_id'));
+    $number = ($this->input->post('number'));
+    $natural= ($this->input->post('natural'));
+    $shape= ($this->input->post('shape'));
+    $cuttingstyle= ($this->input->post('cuttingstyle'));
+    $measurement= ($this->input->post('measurement'));
+    $carat= ($this->input->post('carat'));
+    $color= ($this->input->post('color'));
+    $clarity= ($this->input->post('clarity'));
+    $girdleinscription= ($this->input->post('girdleinscription'));
+    $fluorescence= ($this->input->post('fluorescence'));
+    $proportion= ($this->input->post('proportion'));
+    $symmetry= ($this->input->post('symmetry'));
+    $polish= ($this->input->post('polish'));
+    $totaldepth= ($this->input->post('totaldepth'));
+    $totalsize= ($this->input->post('totalsize'));
+    $crownheight= ($this->input->post('crownheight'));
+    $crownangle= ($this->input->post('crownangle'));
+    $starlength= ($this->input->post('starlength'));
+    $paviliondepth= ($this->input->post('paviliondepth'));
+    $pavilionangle= ($this->input->post('pavilionangle'));
+    $lowerhalflength= ($this->input->post('lowerhalflength'));
+    $girdlethickness= ($this->input->post('girdlethickness'));
+    $girdlefinish= ($this->input->post('girdlefinish'));
+    $culet= ($this->input->post('culet'));
+    
+    $currentdate = date("Y-m-d H:i:s");
+
+    $certificate = array(
+        'id' => $cer_id,
+        'cer_naturaldiamond_id' => $natural,
+        'cer_shape_id' => $shape,
+        'cer_cuttingstyle_id' => $cuttingstyle,
+        'cer_measurement' => $measurement,
+        'cer_carat' => $carat,
+        'cer_color_id' => $color,
+        'cer_clarity_id' => $clarity,
+        'cer_proportion_id' => $proportion,
+        'cer_symmetry_id' => $symmetry,
+        'cer_polish_id' => $polish,
+        'cer_totaldepth' => $totaldepth,
+        'cer_tablesize' => $totalsize,
+        'cer_crownheight' => $crownheight,
+        'cer_crownangle' => $crownangle,
+        'cer_starlength' => $starlength,
+        'cer_paviliondepth' => $paviliondepth,
+        'cer_pavilionangle' => $pavilionangle,
+        'cer_lowerhalflength' => $lowerhalflength,
+        'cer_girdlethickness_id' => $girdlethickness,
+        'cer_girdlefinish_id' => $girdlefinish,
+        'cer_culet_id' => $culet,
+        'cer_girdleinscription_id' => $girdleinscription,
+        'cer_fluorescence_id' => $fluorescence,
+        'cer_softwareresult' => 1,
+        'cer_dateadd' => $currentdate,
+        'cer_dateadd_by' => $this->session->userdata('sessid')
+    );
+
+    $cer_result = $this->ss_certificate_model->edit_certificate($certificate);
+
+    $currentdate = date("Y-m-d H:i:s");
+
+    unset($certificate['id']);
+    $temp = array('cer_certificate_id' => $cer_id, 'cer_status' => 2, 'cer_number' => $number);
+
+    $certificate = array_merge($certificate, $temp);
+
+    $result_log = $this->ss_certificate_model->add_log_certificate($certificate);
+    
+    if ($cer_result) 
+        $this->session->set_flashdata('showresult', 'success');
+    else
+        $this->session->set_flashdata('showresult', 'fail');
+        
+    redirect('ss_certificate/edit_certificate/'.$cer_id, 'refresh');
+
+    
+}
+    
 function add_newcert_ok()
 {
     $cer_id = $this->uri->segment(3);
@@ -218,7 +299,7 @@ function add_newcert_ok()
     $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
 
     $data["cer_id"] = $cer_id;
-    $data['title'] = "NGG| Nerd - Add New Certification";
+    $data['title'] = "NGG| Nerd - Add New Certificate";
     $this->load->view('SS/certificate/add_newcert_result',$data);
 }
     
@@ -402,12 +483,12 @@ public function list_picture_clarity()
     echo json_encode($files);
 }
     
-function view_certificate_pdf()
+function view_certificate_pdf_full()
 {
     $cer_id = $this->uri->segment(3);
 
     $this->load->library('mpdf/mpdf');                
-    $mpdf= new mPDF('','A4-L','0', 'helvetica');
+    $mpdf= new mPDF('','A4-L','0', 'ffdin');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate.css');
 
     $where = "cer_id = '".$cer_id."'";
@@ -430,6 +511,275 @@ function view_certificate_pdf()
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_pdf", $data, TRUE));
     $mpdf->Output();
+}
+    
+function view_certificate_pdf_small()
+{
+    $cer_id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('','A4-L','0', 'ffdin');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate.css');
+
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $where = "pre_certificate_id = '".$cer_id."'";
+    $data["result_array"] = $this->ss_certificate_model->get_picture_result($where);
+    
+    $where = "ppr_certificate_id = '".$cer_id."'";
+    $data["proportion_array"] = $this->ss_certificate_model->get_picture_proportion($where);
+    
+    $where = "pcl_certificate_id = '".$cer_id."'";
+    $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+
+    $data["cer_id"] = $cer_id;
+    $data["path_result"] = $this->upload_path_result;
+    $data["path_proportion"] = $this->upload_path_proportion;
+    $data["path_clarity"] = $this->upload_path_clarity;
+    //echo $html;
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_pdf", $data, TRUE));
+    $mpdf->Output();
+}
+    
+function view_certificate_pdf_form()
+{
+    $cer_id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('','A4','0', 'ffdin');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate_form.css');
+
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $where = "pre_certificate_id = '".$cer_id."'";
+    $data["result_array"] = $this->ss_certificate_model->get_picture_result($where);
+    
+    $where = "ppr_certificate_id = '".$cer_id."'";
+    $data["proportion_array"] = $this->ss_certificate_model->get_picture_proportion($where);
+    
+    $where = "pcl_certificate_id = '".$cer_id."'";
+    $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+
+    $data["cer_id"] = $cer_id;
+    $data["path_result"] = $this->upload_path_result;
+    $data["path_proportion"] = $this->upload_path_proportion;
+    $data["path_clarity"] = $this->upload_path_clarity;
+    //echo $html;
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_form", $data, TRUE));
+    $mpdf->Output();
+}
+
+    
+function view_all_certificate()
+{
+    $data['title'] = "NGG| Nerd - All Certificate";
+    $this->load->view('SS/certificate/view_all_certificate',$data);
+}
+
+function ajaxAllCertificate()
+{
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("cer_number, lsh_value as shape, cer_measurement, cer_carat, lpt_value as proportion, lco_value as color, lcl_value as clarity, cer_id")
+    ->from('ss_certificate')
+    ->join("ss_list_clarity", "lcl_id = cer_clarity_id", "left")
+    ->join("ss_list_color", "lco_id = cer_color_id", "left")
+    ->join("ss_list_culet", "lct_id = cer_culet_id", "left")
+    ->join("ss_list_cuttingstyle", "lcs_id = cer_cuttingstyle_id", "left")
+    ->join("ss_list_fluorescence", "lfu_id = cer_fluorescence_id", "left")
+    ->join("ss_list_girdlefinish", "lgf_id = cer_girdlefinish_id", "left")
+    ->join("ss_list_girdleinscription", "lgs_id = cer_girdleinscription_id", "left")
+    ->join("ss_list_girdlethickness", "lgt_id = cer_girdlethickness_id", "left")
+    ->join("ss_list_naturaldiamond", "lnd_id = cer_naturaldiamond_id", "left")
+    ->join("ss_list_polish", "lpo_id = cer_polish_id", "left")
+    ->join("ss_list_proportion", "lpt_id = cer_proportion_id", "left")
+    ->join("ss_list_shape", "lsh_id = cer_shape_id", "left")
+    ->join("ss_list_symmetry", "lsm_id = cer_symmetry_id", "left")
+    ->where('cer_enable',1)
+    ->edit_column("cer_id",'<div class="tooltip-demo">
+<a href="'.site_url("ss_certificate/view_certificate/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+<a href="'.site_url("ss_certificate/edit_certificate/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+<a href="'.site_url("ss_certificate/add_newcert_ok/$1").'" class="btn bg-purple btn-xs" data-title="Picture" data-toggle="tooltip" data-target="#picture" data-placement="top" rel="tooltip" title="แก้ไขรูปภาพ"><i class="fa fa-image"></i></a>
+<a href="'.site_url("ss_certificate/delete_certificate/$1").'" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#remove" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
+</div>',"cer_id");
+    echo $this->datatables->generate(); 
+}
+    
+function view_certificate()
+{
+    $cer_id = $this->uri->segment(3);
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $where = "pre_certificate_id = '".$cer_id."'";
+    $data["result_array"] = $this->ss_certificate_model->get_picture_result($where);
+    
+    $where = "ppr_certificate_id = '".$cer_id."'";
+    $data["proportion_array"] = $this->ss_certificate_model->get_picture_proportion($where);
+    
+    $where = "pcl_certificate_id = '".$cer_id."'";
+    $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+
+    $data["cer_id"] = $cer_id;
+    $data["path_result"] = $this->upload_path_result;
+    $data["path_proportion"] = $this->upload_path_proportion;
+    $data["path_clarity"] = $this->upload_path_clarity;
+    $data['title'] = "NGG| Nerd - View Certificate";
+    $this->load->view('SS/certificate/view_certificate',$data);
+}
+    
+function edit_certificate()
+{
+    $cer_id = $this->uri->segment(3);
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+
+    $this->load->helper(array('form'));
+	
+    //////////   ------ get list
+	$query = $this->ss_list_model->get_list_clarity();
+	if($query){
+		$data['clarity_array'] =  $query;
+	}else{
+		$data['clarity_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_color();
+	if($query){
+		$data['color_array'] =  $query;
+	}else{
+		$data['color_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_culet();
+	if($query){
+		$data['culet_array'] =  $query;
+	}else{
+		$data['culet_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_cuttingstyle();
+	if($query){
+		$data['cuttingstyle_array'] =  $query;
+	}else{
+		$data['cuttingstyle_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_fluorescence();
+	if($query){
+		$data['fluorescence_array'] =  $query;
+	}else{
+		$data['fluorescence_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_girdlefinish();
+	if($query){
+		$data['girdlefinish_array'] =  $query;
+	}else{
+		$data['girdlefinish_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_girdleinscription();
+	if($query){
+		$data['girdleinscription_array'] =  $query;
+	}else{
+		$data['girdleinscription_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_girdlethickness();
+	if($query){
+		$data['girdlethickness_array'] =  $query;
+	}else{
+		$data['girdlethickness_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_naturaldiamond();
+	if($query){
+		$data['naturaldiamond_array'] =  $query;
+	}else{
+		$data['naturaldiamond_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_polish();
+	if($query){
+		$data['polish_array'] =  $query;
+	}else{
+		$data['polish_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_proportion();
+	if($query){
+		$data['proportion_array'] =  $query;
+	}else{
+		$data['proportion_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_shape();
+	if($query){
+		$data['shape_array'] =  $query;
+	}else{
+		$data['shape_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_symmetry();
+	if($query){
+		$data['symmetry_array'] =  $query;
+	}else{
+		$data['symmetry_array'] = array();
+	}
+    
+    /////   ------  end get list
+    
+    $data["cer_id"] = $cer_id;
+    $data['title'] = "NGG| Nerd - View Certificate";
+    $this->load->view('SS/certificate/edit_certificate',$data);
+}
+    
+function delete_certificate()
+{
+    $cer_id = $this->uri->segment(3);
+    $data["showresult"] = $this->session->flashdata('showresult');
+    $where = "cer_id = '".$cer_id."'";
+    $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $where = "pre_certificate_id = '".$cer_id."'";
+    $data["result_array"] = $this->ss_certificate_model->get_picture_result($where);
+    
+    $where = "ppr_certificate_id = '".$cer_id."'";
+    $data["proportion_array"] = $this->ss_certificate_model->get_picture_proportion($where);
+    
+    $where = "pcl_certificate_id = '".$cer_id."'";
+    $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+
+    $data["cer_id"] = $cer_id;
+    $data["path_result"] = $this->upload_path_result;
+    $data["path_proportion"] = $this->upload_path_proportion;
+    $data["path_clarity"] = $this->upload_path_clarity;
+    $data['title'] = "NGG| Nerd - View Certificate";
+    $this->load->view('SS/certificate/delete_certificate',$data);
+}
+    
+function delete_certificate_confirm()
+{
+    $currentdate = date("Y-m-d H:i:s");
+        
+    $cer_id = $this->input->post("cer_id");
+    $certificate = array("id" => $cer_id, "cer_enable" => 0, "cer_dateadd" => $currentdate,"cer_dateadd_by" => $this->session->userdata('sessid'));
+    $query = $this->ss_certificate_model->edit_certificate($certificate);
+    
+    
+    if ($query) {
+        $result = "OK";
+    }else{
+        $result = "ERROR";
+    }
+    
+    echo json_encode($result);
+    exit();
 }
 
 }
