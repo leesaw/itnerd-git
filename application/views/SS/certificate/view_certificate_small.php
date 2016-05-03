@@ -36,13 +36,22 @@ foreach($clarity_array as $loop) {
 <tbody>
     <tr><td width="163" style="text-align:center"><b>DIAMOND REGISTERATION NUMBER</b><br><?php echo $number; ?></td></tr>
     <tr><td height="37"></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $shape." ".$cutting;  ?></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $measurement;  ?></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
     <tr><td height="8"></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $carat;  ?></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $color;  ?></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $clarity;  ?></td></tr>
-    <tr><td height="12" style="text-align:right"><?php echo $proportion;  ?></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $carat;  ?></b></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $color;  ?></b></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
+    <tr><td height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
+</tbody>
+</table>
+<table border="0">
+<tbody>
+    <tr><td colspan="3" width="163" height="56"></td></tr>
+    <tr><td width="52" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
+    <tr><td height="5" colspan="3"> </td></tr>
+    <tr><td style="text-align:center" colspan="3"><img src="<?php echo $path_result."/".$cer_id."/".$pic_result; ?>" width="163" height="65" /></td></tr>
+    <tr><td height="70" colspan="3"> </td></tr>
 </tbody>
 </table>
 </body>
