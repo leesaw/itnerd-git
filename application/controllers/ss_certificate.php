@@ -518,8 +518,8 @@ function view_certificate_pdf_small()
     $cer_id = $this->uri->segment(3);
 
     $this->load->library('mpdf/mpdf');                
-    $mpdf= new mPDF('','A4-L','0', 'ffdin');
-    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate.css');
+    $mpdf= new mPDF('','A5-L','0', 'ffdin');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleCertificate_small.css');
 
     $where = "cer_id = '".$cer_id."'";
     $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
@@ -539,7 +539,7 @@ function view_certificate_pdf_small()
     $data["path_clarity"] = $this->upload_path_clarity;
     //echo $html;
     $mpdf->WriteHTML($stylesheet,1);
-    $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_pdf", $data, TRUE));
+    $mpdf->WriteHTML($this->load->view("SS/certificate/view_certificate_small", $data, TRUE));
     $mpdf->Output();
 }
     
