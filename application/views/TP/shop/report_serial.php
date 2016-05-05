@@ -28,7 +28,7 @@
             
         <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-default">
+                <div class="panel panel-success">
 					<div class="panel-heading">
                         
                     </div>
@@ -58,7 +58,7 @@
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->posroit_item_srp; ?></td>
-                                    <td><?php echo "<button class='btn btn-success btn-xs'>ขายแล้ว</button>"; ?></td>
+                                    <td><?php echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; ?></td>
                                     <td><?php 
                                         echo "ราคา ".number_format($loop->posroit_netprice)." บาท";
                                         if ($loop->posroit_dc_baht > 0)
@@ -66,7 +66,7 @@
                                         $dateadd = explode("-", $loop->posrot_issuedate);
                                                                      
                                         echo "<br>วันที่ ".$dateadd[2]."/".$dateadd[1]."/".$dateadd[0];
-                                    ?></td>
+                                    ?><br><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียดการขาย"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการขาย</a> </td>
                                     </tr>
                                 <?php } ?>
                                     
@@ -87,7 +87,7 @@
                                         $dateadd = explode("-", $loop->posro_issuedate);
                                                                      
                                         echo "<br>วันที่ ".$dateadd[2]."/".$dateadd[1]."/".$dateadd[0];
-                                    ?></td>
+                                    ?><br><a href="<?php echo site_url("sale/saleorder_rolex_pos_last")."/".$loop->posroi_pos_rolex_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการขาย</a> </td>
                                     </tr>
                                 <?php } ?>
                                     
@@ -120,7 +120,7 @@
                                                                      
                                         echo "<br>วันที่ ".$dateadd[2]."/".$dateadd[1]."/".$dateadd[0];    
                                         
-                                    ?></td>
+                                    ?><br><a href="<?php echo site_url("pos/stock_rolex_pos_borrow_last")."/".$loop->posrobi_pos_rolex_borrow_id; ?>" class="btn btn-danger btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการส่งของ</a></td>
                                     </tr>
                                 <?php } ?>
 								</tbody>
