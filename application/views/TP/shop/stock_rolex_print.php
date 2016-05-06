@@ -17,7 +17,7 @@
  $datetime = date("Y-m-d H:i:s");
 ?>
 <tr>
-    <td>สาขา <?php echo $shop_name; ?><br>รายละเอียด : <?php echo $detail; ?></td><td> </td><td> วันที่พิมพ์: <?php echo $datetime; ?><br>
+    <td>สาขา <?php echo $shop_name; ?></td><td> </td><td> วันที่พิมพ์: <?php echo $datetime; ?><br>
     </td>
 </tr>
 </tbody>
@@ -29,8 +29,8 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; if(isset($item_array)) { foreach($item_array as $loop) { ?>
-<tr style="border:1px solid black; border-top:1px solid black;"><td align="center"><?php echo $no; ?></td>
+<?php $no=1; $sum=0; $count_serial=0; if(isset($item_array)) { foreach($item_array as $loop) { ?>
+<tr><td align="center" style="border-top:1px solid black;"><?php echo $no; ?></td>
 <td style="border-left:1px solid black; border-top:1px solid black;"><?php echo $loop->it_refcode; ?></td>
 <td style="border-left:1px solid black; border-top:1px solid black;"></td>
 <td style="border-left:1px solid black; border-top:1px solid black;" align="center"><?php echo $loop->br_name; ?></td>
@@ -45,9 +45,9 @@
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
         if ($loop->stob_item_id==$loop2->it_id) { ?>
-<tr style="border:1px solid black;"><td align="center"></td>
+<tr style=""><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
-<td align="center" style="border-left:1px solid black;"><?php echo $loop2->itse_serial_number; ?></td>
+<td align="center" style="border-left:1px solid black;"><?php echo $loop2->itse_serial_number; $count_serial++; ?></td>
 <?php if ($loop2->itse_enable ==0) { 
     $message = "";
     foreach($sold_array as $loop_sold) {
@@ -79,7 +79,7 @@ if(isset($serial_array)) {
 }
 ?> 
 <?php $no++; } } ?> 
-<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum; ?></td><td style="border-top:1px solid black; border-left:1px solid black;">&nbsp;</td></tr>
+<tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black; border-left:1px solid black;">จำนวน Serial ทั้งหมด</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $count_serial; ?></td><td style="border-top:1px solid black; border-left:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum; ?></td><td style="border-top:1px solid black; border-left:1px solid black;">&nbsp;</td></tr>
 
 </tbody>
 </table>
@@ -87,10 +87,9 @@ if(isset($serial_array)) {
 <tbody>
 <tr><td width="350" align="center">ผู้ตรวจสอบสินค้า</td><td width="350" align="center">ผู้อนุมัติ</td>
 </tr>
-<tr><td> </td><td>&nbsp;</td></tr>
+<tr><td> &nbsp;</td><td> &nbsp;</td></tr>
 <tr><td align="center">..........................................................</td><td align="center">  &nbsp;&nbsp;&nbsp; ..........................................................</td>
 </tr>
-<tr><td> &nbsp;</td><td> &nbsp;</td></tr>
 <tbody>
 </table>
 </body>

@@ -667,5 +667,30 @@ function stock_POS_borrow_return_today()
     $this->load->view("TP/shop/report_stock_POS_borrow_today", $data);
 }
     
+function form_list_borrow_item()
+{
+    $sql = "";
+    $this->load->model('tp_saleperson_model','',TRUE);
+    $data['borrower_array'] = $this->tp_saleperson_model->getBorrowerName($sql);
+    
+    $data['title'] = "Rolex - List of Borrowed Item";
+    $this->load->view("TP/shop/form_search_borrow_item", $data);
+}
+    
+function get_borrow_item()
+{
+    $borrower_name = $this->input->post("borrower");
+    
+    $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_enable=1";
+    
+    $query = $this->tp_shop_model->getItem_borrow_serial($where);
+    $data["borrow_array"] = $query;
+    
+    $data["borrower"] = $borrower_name;
+    
+    $data['title'] = "Rolex - List of Borrowed Item";
+    $this->load->view("TP/shop/result_search_borrow_item", $data);
+}
+    
 }
 ?>

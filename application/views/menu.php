@@ -288,6 +288,11 @@
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+              </a>
+            </li>
             <li class="header">NGG Timepieces Office</li>
             <li>
                 <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>

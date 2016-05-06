@@ -11,7 +11,7 @@ foreach($serial_array as $loop) { ?>
 <table border="0">
 <tbody>
 <tr>
-<td style="text-align: top;" width="170"><b><?php echo $loop->br_name; ?></b>
+<td style="text-align: top;" width="170"><b><?php echo $loop->br_name." ".$loop->itse_serial_number; ?></b>
 <br/>
 <b><?php echo $loop->it_refcode; ?></b>
 <br/>
