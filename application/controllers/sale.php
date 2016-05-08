@@ -1063,5 +1063,94 @@ function exportExcel_sale_report()
     $objWriter->save('php://output');
 }
     
+function report_rolex_sale_form()
+{
+    $this->load->model('tp_item_model','',TRUE);
+    $this->load->model('tp_shop_model','',TRUE);
+    
+    $sql = "br_id = '888'";
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = "sh_id = '888'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($sql);
+    $sql = "";
+    $this->load->model('tp_saleperson_model','',TRUE);
+    $data['borrower_array'] = $this->tp_saleperson_model->getBorrowerName($sql);
+
+    $data['title'] = "Nerd - Rolex Sale Report";
+    $this->load->view('TP/sale/search_rolex_salereport',$data);
+}
+    
+function report_rolex_sale_result()
+{
+    $brand = $this->input->post("brand");
+    $shop = $this->input->post("shop");
+    
+    $brand_array = explode("-", $brand);
+    $brand_code = $brand_array[0];
+    $brand_name = $brand_array[1];
+    $data['brand_id'] = $brand_code;
+    $data['brand_name'] = $brand_name;
+    
+    $shop_array = explode("-", $shop);
+    $shop_code = $shop_array[0];
+    $shop_name = $shop_array[1];
+    $data['shop_id'] = $shop_code;
+    $data['shop_name'] = $shop_name;
+
+    
+    
+    $start = $this->input->post("startdate");
+    if ($start != "") {
+        $start = explode('/', $start);
+        $start= $start[2]."-".$start[1]."-".$start[0];
+    }else{
+        $start = "1970-01-01";
+    }
+    $end = $this->input->post("enddate");
+    if ($end != "") {
+        $end = explode('/', $end);
+        $end= $end[2]."-".$end[1]."-".$end[0];
+    }else{
+        $end = date('Y-m-d');
+    }
+    
+    $data['startdate'] = $start;
+    $data['enddate'] = $end;
+
+    $data['title'] = "Nerd - Rolex Sale Report";
+    $this->load->view('TP/sale/report_rolex_sale_result',$data);
+}
+    
+function ajaxView_rolex_salereport()
+{
+    $brand = $this->uri->segment(4);
+    $shop = $this->uri->segment(5);
+    $startdate = $this->uri->segment(6);
+    $enddate = $this->uri->segment(7);
+    
+    $sql .= "posrot_issuedate >= '".$startdate."' and posrot_issuedate <= '".$enddate."'";
+    
+    if ($shop=="0"){
+        $sql = " ";
+    }else if ($shop == "888") {
+        
+
+    }
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("so_issuedate, sh_name, it_refcode, br_name, soi_qty, it_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
+    ->from('tp_saleorder_item')
+    ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
+    ->join('tp_shop', 'so_shop_id = sh_id','left')
+    ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
+    ->join('tp_item', 'it_id = soi_item_id','left')
+    ->join('tp_brand', 'br_id = it_brand_id','left')
+    //->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
+    ->where('so_enable',1)
+    ->where($sql);
+    echo $this->datatables->generate(); 
+}
+    
 }
 ?>
