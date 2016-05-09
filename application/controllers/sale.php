@@ -548,8 +548,14 @@ function saleorder_rolex_temp_save()
     $number = $this->tp_saleorder_model->getMaxNumber_rolex_temp_shop($month, $shop_id);
     $number++;
     
-    $number = "NGGTP-B".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
-
+    if (($shop_id == 0) && ($saleperson_code == 0)) {
+        $number = "NGGTP-DS".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+        $sale_status = 'D';
+    }else{
+        $number = "NGGTP-B".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+        $sale_status = 'N';
+    }
+    
     $sale = array( 'posrot_number' => $number,
                     'posrot_issuedate' => $datein,
                     'posrot_dateadd' => $currentdate,
@@ -561,7 +567,8 @@ function saleorder_rolex_temp_save()
                     'posrot_payment' => $payment,
                     'posrot_payment_value' => $payment_value,
                     'posrot_remark' => $remark,
-                    'posrot_dateadd_by' => $this->session->userdata('sessid')
+                    'posrot_dateadd_by' => $this->session->userdata('sessid'),
+                    'posrot_status' => $sale_status
             );
     $last_id = $this->tp_saleorder_model->addPOS_rolex_temp($sale);
     $count = 0;
@@ -603,6 +610,14 @@ function saleorder_rolex_temp_save()
         
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
+        
+        if (($this->input->post("borrow_item_id") != "") && ($this->input->post("borrow_item_id")>0) ) {
+            $sale = array(  'id' => $this->input->post("borrow_item_id"),
+                        'posrobi_enable' => 0,
+                        'posrobi_pos_temp_id' => $last_id
+            );
+            $query = $this->tp_shop_model->editPOS_rolex_borrow_item($sale);
+        }
     }
 
     $result = array("a" => $count, "b" => $last_id);
@@ -834,7 +849,7 @@ function saleorder_history()
     if ($this->session->userdata('sessstatus') != '88') {
         $sql .= " and ".$this->shop_rolex;
     }
-    //$sql .= " and stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
+    $sql .= " and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
     
     $data['final_array'] = $this->tp_saleorder_model->getSaleOrder($sql);
     
@@ -1150,6 +1165,111 @@ function ajaxView_rolex_salereport()
     ->where('so_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 
+}
+    
+function saleorder_rolex_temp_borrow_print()
+{
+    $id = $this->uri->segment(3);
+    $borrow_item_id = $this->uri->segment(4);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    $mpdf->showWatermarkImage = true;
+
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+    
+    $sql = "posrobi_id = ".$borrow_item_id;
+    
+    $data['borrow_array'] = $this->tp_shop_model->getItem_borrow_serial($sql);
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/sale/bill_borrow_rolex_print", $data, TRUE));
+    $mpdf->Output();
+}
+    
+function saleorder_rolex_borrow_last()
+{
+    $borrow_item_id = $this->uri->segment(3);
+    
+    $sql = "posrobi_id = ".$borrow_item_id;
+    $query = $this->tp_shop_model->getItem_borrow_serial($sql);
+
+    foreach($query as $loop) {
+        $id = $loop->posrobi_pos_temp_id;
+        break;
+    }
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+    
+    $sql = "posrobi_id = ".$borrow_item_id;
+    
+    $data['borrow_array'] = $this->tp_shop_model->getItem_borrow_serial($sql);
+    
+    $data['pos_rolex_id'] = $id;
+    $data['borrow_item_id'] = $borrow_item_id;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/sale/saleorder_borrow_view", $data);
+}
+    
+function saleorder_rolex_void_borrow()
+{
+    $id = $this->uri->segment(3);
+    $borrow_item_id = $this->uri->segment(4);
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    foreach($query as $loop) {
+        $remark = $loop->posrot_remark;
+        $shop_id = $loop->posrot_shop_id;
+    }
+    $remark .= "##VOID##".$this->input->post("remarkvoid");
+    $pos = array("id" => $id, "posrot_status" => 'V', "posrot_remark" => $remark,
+                "posrot_dateadd" => $currentdate, "posrot_dateadd_by" => $this->session->userdata('sessid')
+                );
+    $query = $this->tp_saleorder_model->editPOS_rolex_temp($pos);
+    
+    $sale = array(  'id' => $borrow_item_id,
+                    'posrobi_enable' => 1,
+                    'posrobi_pos_temp_id' => 0
+                );
+    $query = $this->tp_shop_model->editPOS_rolex_borrow_item($sale);
+		
+    redirect('pos/form_list_borrow_item', 'refresh');
 }
     
 }

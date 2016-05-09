@@ -256,13 +256,11 @@
               // only HATA
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) { ?>
             <li class="header">รายงาน ROLEX</li>
-            <!--
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ประวัติใบกำกับภาษี</span>
               </a>
             </li>
-            -->
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>ประวัติใบเสร็จรับเงิน</span>
@@ -291,7 +289,7 @@
               </a>
             </li>
             <li class="treeview">
-                <a href="#"><i class="fa fa-cube"></i> <span>รายงาน (Reports)</span><i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-cube text-red"></i> <span>รายงาน (Reports)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
                     <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
                         <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>

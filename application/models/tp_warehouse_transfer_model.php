@@ -117,8 +117,8 @@ Class Tp_warehouse_transfer_model extends CI_Model
     $end = $month."-31 23:59:59";
     $this->db->select("stoi_id");
 	$this->db->from('tp_stock_in');
-    $this->db->where("stoi_datein >=",$start);
-    $this->db->where("stoi_datein <=",$end);
+    $this->db->where("stoi_dateadd >=",$start);
+    $this->db->where("stoi_dateadd <=",$end);
     $this->db->where("stoi_is_rolex", $rolex);
 	$query = $this->db->get();		
 	return $query->num_rows();
@@ -130,8 +130,8 @@ Class Tp_warehouse_transfer_model extends CI_Model
     $end = $month."-31 23:59:59";
     $this->db->select("stot_id");
 	$this->db->from('tp_stock_transfer');
-    $this->db->where("stot_datein >=",$start);
-    $this->db->where("stot_datein <=",$end);
+    $this->db->where("stot_dateadd >=",$start);
+    $this->db->where("stot_dateadd <=",$end);
     $this->db->where("stot_is_rolex", $rolex);
 	$query = $this->db->get();		
 	return $query->num_rows();

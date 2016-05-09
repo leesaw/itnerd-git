@@ -36,6 +36,7 @@
                             <table class="table" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
+                                        <th>วันที่ส่งของ</th>
                                         <th>Serial No.</th>
                                         <th>Brand</th>
                                         <th width="120">Product No.</th>
@@ -43,7 +44,6 @@
                                         <th>Bracelet</th>
                                         <th>Description</th>
                                         <th>Retail Price</th>
-                                        <th>วันที่ส่งของ</th>
                                         <th width="100">รายละเอียด</th>
                                         <!-- <th width="50">Caseback</th> -->
                                     </tr>
@@ -52,6 +52,7 @@
                                                                     
                                 <?php foreach($borrow_array as $loop) { ?>
                                     <tr>
+                                    <td><?php echo $loop->posrob_issuedate; ?></td>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
                                     <td><?php echo $loop->it_refcode; ?></td>
@@ -59,8 +60,13 @@
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->it_srp; ?></td>
-                                    <td><?php echo $loop->posrob_issuedate; ?></td>
-                                    <td><a href="<?php echo site_url("pos/stock_rolex_pos_borrow_last")."/".$loop->posrobi_pos_rolex_borrow_id; ?>" class="btn btn-danger btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span>รายงานการขาย</a></td>
+                                    <td>
+                                    <?php if ($loop->posrobi_enable == 1) { ?>    
+                                        <a href="<?php echo site_url("pos/form_rolex_borrow_sold")."/".$loop->posrobi_id; ?>" class="btn btn-danger btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="แจ้งขาย"><i class="fa fa-shopping-cart"></i> แจ้งขาย</a>
+                                    <?php }else if ($loop->posrobi_enable == 0) { ?>
+                                        <a href="<?php echo site_url("sale/saleorder_rolex_borrow_last")."/".$loop->posrobi_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ขายแล้ว"><i class="fa fa-check-square-o"></i> ขายแล้ว</a>
+                                    <?php } ?>
+                                    </td>
                                     </tr>
                                 <?php } ?>
 								</tbody>

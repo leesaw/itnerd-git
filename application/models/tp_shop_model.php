@@ -61,7 +61,7 @@ Class Tp_shop_model extends CI_Model
     
  function getItem_borrow_serial($where)
  {
-    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, posrob_borrower_name, posrobi_stock_balance_id, posrobi_id, posrobi_enable, posrob_issuedate, posrobi_pos_rolex_borrow_id");
+    $this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, posrob_borrower_name, posrobi_stock_balance_id, posrobi_id, posrobi_enable, posrob_issuedate, posrobi_pos_rolex_borrow_id, posrobi_id, posrobi_item_serial_number_id, posrobi_pos_temp_id");
     $this->db->from('tp_pos_rolex_borrow_item');
     $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
     $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id', 'left');

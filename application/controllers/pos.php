@@ -681,7 +681,7 @@ function get_borrow_item()
 {
     $borrower_name = $this->input->post("borrower");
     
-    $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_enable=1";
+    $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_return_id=0";
     
     $query = $this->tp_shop_model->getItem_borrow_serial($where);
     $data["borrow_array"] = $query;
@@ -690,6 +690,22 @@ function get_borrow_item()
     
     $data['title'] = "Rolex - List of Borrowed Item";
     $this->load->view("TP/shop/result_search_borrow_item", $data);
+}
+    
+function form_rolex_borrow_sold()
+{
+    $borrow_id = $this->uri->segment(3);
+    
+    $datein = date("d/m/Y");
+    $data['datein'] = $datein;
+    
+    $where = "posrobi_id = '".$borrow_id."'";
+    
+    $query = $this->tp_shop_model->getItem_borrow_serial($where);
+    $data["borrow_array"] = $query;
+    
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/sale/form_rolex_saleorder_borrow", $data);
 }
     
 }
