@@ -12,7 +12,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            NGG | Rolex <?php if ($sessstatus ==8) echo "POS"; ?> <small>Current version 0.1.0</small>
+            NGG | Rolex <?php if ($sessstatus ==8) echo "POS"; ?> <small>Current version 1.2.0</small>
         </h1>
     </section>
 	<!-- Main content -->
@@ -90,6 +90,26 @@
                         </div>
                     </div>
                 </div>
+        <?php }else{ ?>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <i class="fa fa-warning"></i>
+
+                      <h3 class="box-title">NERD version 1.2 noted</h3>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            <li>เพิ่มเมนู "รายงาน (Reports)"</li>
+                            <li>สามารถดูรายการสินค้า Rolex ที่ถูกยืมได้ โดยไปที่เมนู <b>"รายงาน(Reports) -> รายการสินค้ายืม"</b></li>
+                            <li>สามารถดู Sale Report โดยไปที่เมนู <b>"รายงาน(Reports) -> รายงานการขาย Rolex"</b></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         <?php } ?>
     </section>
 </div>

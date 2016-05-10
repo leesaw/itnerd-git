@@ -24,7 +24,7 @@ function index()
     
 function importstock() 
 {
-	$sql = "";
+	$sql = "wh_enable = 1";
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['currentdate'] = date("d/m/Y");
     $remark = $this->uri->segment(3);
@@ -46,7 +46,7 @@ function importstock()
     
 function transferstock() 
 {
-	$sql = "";
+	$sql = "wh_enable = 1";
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['currentdate'] = date("d/m/Y");
 

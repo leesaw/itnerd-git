@@ -34,7 +34,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        <form name="exportexcel" action="<?php echo site_url("sale/exportExcel_sale_report"); ?>" method="post">
+                        <form name="exportexcel" action="<?php echo site_url("sale/exportExcel_rolex_sale_report"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
                         <input type="hidden" name="shop" value="<?php echo $shop_id."-".$shop_name; ?>">
@@ -48,7 +48,6 @@
                                 <thead>
                                     <tr>
                                         <th>วันที่ขาย</th>
-                                        <th>ขายที่</th>
                                         <th>Product Number</th>
                                         <th>Family</th>
                                         <th>Description</th>
@@ -66,7 +65,7 @@
                                     <tr>
                                         <th colspan="4" style="text-align:right">จำนวนทั้งหมด:</th>
                                         <th></th>
-                                        <th colspan="5" style="text-align:right">ยอดเงินทั้งหมด:</th>
+                                        <th></th><th></th><th></th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -141,32 +140,68 @@ $(document).ready(function()
                     typeof i === 'number' ?
                         i : 0;
             };
+            
+            var countVal = function (i) {
+                return typeof i === 'string' ? 1 : 0;
+            }
  
             // Total over all pages
-            total = api
+            var total_row = 0;
+            total_count = api
                 .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return total_row+=countVal(a)+countVal(b);
+                }, 0 );
+            
+            
+            total_srp = api
+                .column( 5 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
             
-            total_money = api
-                .column( 10 )
+            total_dc = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            
+            total_net = api
+                .column( 7 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
             
             // Total over this page
-            pageTotal = api
+            
+            var total_row_current = 0;
+            pageTotal_count = api
                 .column( 4, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return total_row_current+=countVal(a)+countVal(b);
+                }, 0 );
+            
+            pageTotal_srp = api
+                .column( 5, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
             
-            pageTotal_money = api
-                .column( 10, { page: 'current'} )
+            pageTotal_dc = api
+                .column( 6, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+            
+            pageTotal_net = api
+                .column( 7, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -174,11 +209,19 @@ $(document).ready(function()
  
             // Update footer
             $( api.column( 4 ).footer() ).html(
-                total+' ('+pageTotal+')'
+                total_count+'<br>('+pageTotal_count+')'
             );
             
-            $( api.column( 10 ).footer() ).html(
-                (total_money).formatMoney(2, '.', ',')+'<br>('+(pageTotal_money).formatMoney(2, '.', ',')+')'
+            $( api.column( 5 ).footer() ).html(
+                (total_srp).formatMoney(2, '.', ',')+'<br>('+(pageTotal_srp).formatMoney(2, '.', ',')+')'
+            );
+            
+            $( api.column( 6 ).footer() ).html(
+                (total_dc).formatMoney(2, '.', ',')+'<br>('+(pageTotal_dc).formatMoney(2, '.', ',')+')'
+            );
+            
+            $( api.column( 7 ).footer() ).html(
+                (total_net).formatMoney(2, '.', ',')+'<br>('+(pageTotal_net).formatMoney(2, '.', ',')+')'
             );
         }
     });

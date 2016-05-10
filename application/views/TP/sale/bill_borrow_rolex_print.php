@@ -9,7 +9,7 @@
 <tr>
 <td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
 <td width="320">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120  <?php echo "///".$debug; ?></div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120 </div>
 </td> 
 <?php foreach($pos_array as $loop) { $datetime = $loop->posrot_issuedate; $so_id = $loop->posrot_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posrot_customer_name; $cusaddress = $loop->posrot_customer_address; $remark=$loop->posrot_remark; break; } 
 
@@ -25,7 +25,7 @@ foreach($borrow_array as $loop) {
     <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบแจ้งขาย</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?><br>Remark: <?php echo $remark; ?></td><td> </td><td colspan="2">เลขที่ใบส่งของ: <?php echo $so_id; ?><br>ขายโดย:  <?php echo $borrower_name; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?><br>Remark: <?php echo $remark; ?></td><td> </td><td colspan="2">เลขที่ใบแจ้งขาย: <?php echo $so_id; ?><br>ขายโดย:  <?php echo $borrower_name; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>

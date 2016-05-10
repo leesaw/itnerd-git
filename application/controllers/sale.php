@@ -1138,33 +1138,125 @@ function report_rolex_sale_result()
     
 function ajaxView_rolex_salereport()
 {
-    $brand = $this->uri->segment(4);
-    $shop = $this->uri->segment(5);
-    $startdate = $this->uri->segment(6);
-    $enddate = $this->uri->segment(7);
+    $brand = $this->uri->segment(3);
+    $shop = $this->uri->segment(4);
+    $startdate = $this->uri->segment(5);
+    $enddate = $this->uri->segment(6);
     
-    $sql .= "posrot_issuedate >= '".$startdate."' and posrot_issuedate <= '".$enddate."'";
+    $table_join = " ";
+    
+    $sql_temp = "posrot_issuedate >= '".$startdate."' and posrot_issuedate <= '".$enddate."'";
     
     if ($shop=="0"){
-        $sql = " ";
-    }else if ($shop == "888") {
+        $sql_temp .= " and ( posrot_shop_id = '888' or posrot_shop_id = '0')";
+    }else if ($shop < 888) {
+        $table_join = " LEFT JOIN `tp_pos_rolex_borrow_item` on `tp_pos_rolex_borrow_item`.`posrobi_pos_temp_id` = `tp_pos_rolex_temp`.`posrot_id`
+LEFT JOIN `tp_pos_rolex_borrow` on `tp_pos_rolex_borrow`.`posrob_id` = `tp_pos_rolex_borrow_item`.`posrobi_pos_rolex_borrow_id` LEFT JOIN `tp_pos_rolex_borrower` on `tp_pos_rolex_borrower`.`posbor_name`=`tp_pos_rolex_borrow`.`posrob_borrower_name` ";
         
-
+        $sql_temp .= " and posrot_shop_id = '0' and `tp_pos_rolex_borrower`.`posbor_id` = '".$shop."'";
+    }else{
+        $sql_temp .= " and posrot_shop_id = '".$shop."'";
+    }
+    
+    $sql_vat = "posro_issuedate >= '".$startdate."' and posro_issuedate <= '".$enddate."'";
+    
+    if ($shop=="0"){
+        $sql_vat .= " ";
+    }else {
+        $sql_vat .= " and posro_shop_id = '".$shop."'";
     }
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("so_issuedate, sh_name, it_refcode, br_name, soi_qty, it_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
-    ->from('tp_saleorder_item')
-    ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
-    ->join('tp_shop', 'so_shop_id = sh_id','left')
-    ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
-    ->join('tp_item', 'it_id = soi_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    //->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
-    ->where('so_enable',1)
-    ->where($sql);
+    ->select("solddate, it_refcode, it_model, it_short_description, itse_serial_number, it_srp, it_dc, it_netprice, cusname")
+    ->from("((SELECT posrot_issuedate as solddate, it_refcode, it_model, it_short_description, itse_serial_number, posroit_item_srp as it_srp, posroit_dc_baht as it_dc, posroit_netprice as it_netprice, posrot_customer_name as cusname  FROM (`tp_pos_rolex_temp_item`) LEFT JOIN `tp_pos_rolex_temp` ON `tp_pos_rolex_temp`.`posrot_id` = `tp_pos_rolex_temp_item`.`posroit_pos_rolex_temp_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_temp_item`.`posroit_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_temp_item`.`posroit_item_serial_number_id`=`tp_item_serial`.`itse_id`".$table_join."WHERE `posrot_status` != 'V' AND `posrot_enable` = 1 AND ".$sql_temp.") UNION (SELECT posro_issuedate as solddate, it_refcode, it_model, it_short_description, itse_serial_number, posroi_item_srp as it_srp, posroi_dc_baht as it_dc, posroi_netprice as it_netprice, posro_customer_name as cusname  FROM (`tp_pos_rolex_item`) LEFT JOIN `tp_pos_rolex` ON `tp_pos_rolex`.`posro_id` = `tp_pos_rolex_item`.`posroi_pos_rolex_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_item`.`posroi_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_item`.`posroi_item_serial_number_id`=`tp_item_serial`.`itse_id` WHERE `posro_status` != 'V' AND `posro_enable` = 1 AND ".$sql_vat.") ) as aa");
     echo $this->datatables->generate(); 
+}
+    
+function exportExcel_rolex_sale_report()
+{
+    $brand = $this->input->post("brand");
+    $shop = $this->input->post("shop");
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+    
+    $table_join = " ";
+    
+    $sql_temp = "posrot_issuedate >= '".$startdate."' and posrot_issuedate <= '".$enddate."'";
+    
+    if ($shop=="0"){
+        $sql_temp .= " and ( posrot_shop_id = '888' or posrot_shop_id = '0')";
+    }else if ($shop < 888) {
+        $table_join = " LEFT JOIN `tp_pos_rolex_borrow_item` on `tp_pos_rolex_borrow_item`.`posrobi_pos_temp_id` = `tp_pos_rolex_temp`.`posrot_id`
+LEFT JOIN `tp_pos_rolex_borrow` on `tp_pos_rolex_borrow`.`posrob_id` = `tp_pos_rolex_borrow_item`.`posrobi_pos_rolex_borrow_id` LEFT JOIN `tp_pos_rolex_borrower` on `tp_pos_rolex_borrower`.`posbor_name`=`tp_pos_rolex_borrow`.`posrob_borrower_name` ";
+        
+        $sql_temp .= " and posrot_shop_id = '0' and `tp_pos_rolex_borrower`.`posbor_id` = '".$shop."'";
+    }else{
+        $sql_temp .= " and posrot_shop_id = '".$shop."'";
+    }
+    
+    $sql_vat = "posro_issuedate >= '".$startdate."' and posro_issuedate <= '".$enddate."'";
+    
+    if ($shop=="0"){
+        $sql_vat .= " ";
+    }else {
+        $sql_vat .= " and posro_shop_id = '".$shop."'";
+    }
+    
+    $item_array = $this->tp_saleorder_model->getSaleOrder_Item_rolex($table_join,$sql_temp,$sql_vat);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Sale Report');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Sold Date');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'Product Number');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Serial');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Retail Price');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Discount(บาท)');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Receive on Inv.');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'Customer');
+    
+    $row = 2;
+    $sum1 = 0;
+    $sum2 = 0;
+    $sum3 = 0;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->solddate);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_dc, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_netprice, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->cusname);
+        $row++;
+        
+        $sum1 += $loop->it_srp; $sum2 += $loop->it_dc; $sum3 += $loop->it_netprice;
+    }
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "จำนวนทั้งหมด");    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $row-2);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($sum1, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($sum2, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($sum3, 2, '.', ','));
+    
+
+    $filename='rolex_sale_report.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 function saleorder_rolex_temp_borrow_print()
