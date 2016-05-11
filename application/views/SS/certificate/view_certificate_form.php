@@ -45,10 +45,10 @@ foreach($cer_array as $loop) {
     $paviliondepth = $loop->cer_paviliondepth;
     $pavilionangle = $loop->cer_pavilionangle;
     $lowerhalflength = $loop->cer_lowerhalflength;
-    $girdlethickness = $loop->girdlethickness;
+    $girdlethickness = $loop->cer_girdlethickness;
     $girdlefinish = $loop->girdlefinish;
     $culet = $loop->culet;
-    $girdleinscription = $loop->girdleinscription;
+    $girdleinscription = $loop->cer_girdleinscription;
     $softwareresult = $loop->cer_softwareresult;
     $fluorescence = $loop->fluorescence;
     

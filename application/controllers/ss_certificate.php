@@ -65,7 +65,7 @@ function add_newcert()
 	}else{
 		$data['girdlefinish_array'] = array();
 	}
-    
+    /*
     $query = $this->ss_list_model->get_list_girdleinscription();
 	if($query){
 		$data['girdleinscription_array'] =  $query;
@@ -79,7 +79,7 @@ function add_newcert()
 	}else{
 		$data['girdlethickness_array'] = array();
 	}
-    
+    */
     $query = $this->ss_list_model->get_list_naturaldiamond();
 	if($query){
 		$data['naturaldiamond_array'] =  $query;
@@ -147,6 +147,8 @@ function save()
     $girdlefinish= ($this->input->post('girdlefinish'));
     $culet= ($this->input->post('culet'));
     
+    $comment = ($this->input->post('comment'));
+    
     $currentdate = date("Y-m-d");
     $date_array = explode('-',date("y-m-d"));
     
@@ -176,12 +178,13 @@ function save()
         'cer_paviliondepth' => $paviliondepth,
         'cer_pavilionangle' => $pavilionangle,
         'cer_lowerhalflength' => $lowerhalflength,
-        'cer_girdlethickness_id' => $girdlethickness,
+        'cer_girdlethickness' => $girdlethickness,
         'cer_girdlefinish_id' => $girdlefinish,
         'cer_culet_id' => $culet,
-        'cer_girdleinscription_id' => $girdleinscription,
+        'cer_girdleinscription' => $girdleinscription,
         'cer_fluorescence_id' => $fluorescence,
         'cer_softwareresult' => 1,
+        'cer_comment' => $comment,
         'cer_dateadd' => $currentdate,
         'cer_dateadd_by' => $this->session->userdata('sessid'),
         'cer_status' => 1
@@ -238,6 +241,8 @@ function edit()
     $girdlefinish= ($this->input->post('girdlefinish'));
     $culet= ($this->input->post('culet'));
     
+    $comment = ($this->input->post('comment'));
+    
     $currentdate = date("Y-m-d H:i:s");
 
     $certificate = array(
@@ -260,12 +265,13 @@ function edit()
         'cer_paviliondepth' => $paviliondepth,
         'cer_pavilionangle' => $pavilionangle,
         'cer_lowerhalflength' => $lowerhalflength,
-        'cer_girdlethickness_id' => $girdlethickness,
+        'cer_girdlethickness' => $girdlethickness,
         'cer_girdlefinish_id' => $girdlefinish,
         'cer_culet_id' => $culet,
-        'cer_girdleinscription_id' => $girdleinscription,
+        'cer_girdleinscription' => $girdleinscription,
         'cer_fluorescence_id' => $fluorescence,
         'cer_softwareresult' => 1,
+        'cer_comment' => $comment,
         'cer_dateadd' => $currentdate,
         'cer_dateadd_by' => $this->session->userdata('sessid')
     );
@@ -297,6 +303,13 @@ function add_newcert_ok()
     $data["showresult"] = $this->session->flashdata('showresult');
     $where = "cer_id = '".$cer_id."'";
     $data["cer_array"] = $this->ss_certificate_model->get_certificate($where);
+    
+    $query = $this->ss_list_model->get_list_symbol();
+	if($query){
+		$data['symbol_array'] = $query;
+	}else{
+		$data['symbol_array'] = array();
+	}
 
     $data["cer_id"] = $cer_id;
     $data['title'] = "NGG| Nerd - Add New Certificate";
@@ -592,8 +605,8 @@ function ajaxAllCertificate()
     ->join("ss_list_cuttingstyle", "lcs_id = cer_cuttingstyle_id", "left")
     ->join("ss_list_fluorescence", "lfu_id = cer_fluorescence_id", "left")
     ->join("ss_list_girdlefinish", "lgf_id = cer_girdlefinish_id", "left")
-    ->join("ss_list_girdleinscription", "lgs_id = cer_girdleinscription_id", "left")
-    ->join("ss_list_girdlethickness", "lgt_id = cer_girdlethickness_id", "left")
+    //->join("ss_list_girdleinscription", "lgs_id = cer_girdleinscription_id", "left")
+    //->join("ss_list_girdlethickness", "lgt_id = cer_girdlethickness_id", "left")
     ->join("ss_list_naturaldiamond", "lnd_id = cer_naturaldiamond_id", "left")
     ->join("ss_list_polish", "lpo_id = cer_polish_id", "left")
     ->join("ss_list_proportion", "lpt_id = cer_proportion_id", "left")
@@ -682,7 +695,7 @@ function edit_certificate()
 	}else{
 		$data['girdlefinish_array'] = array();
 	}
-    
+    /*
     $query = $this->ss_list_model->get_list_girdleinscription();
 	if($query){
 		$data['girdleinscription_array'] =  $query;
@@ -696,7 +709,7 @@ function edit_certificate()
 	}else{
 		$data['girdlethickness_array'] = array();
 	}
-    
+    */
     $query = $this->ss_list_model->get_list_naturaldiamond();
 	if($query){
 		$data['naturaldiamond_array'] =  $query;

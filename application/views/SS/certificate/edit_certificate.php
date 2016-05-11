@@ -136,14 +136,8 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>GIRDLE INSCRIPTION *</label>
-                                    <select class="form-control" name="girdleinscription" id="girdleinscription">
-                                        <option value="0">-- เลือก --</option>
-                                    <?php foreach($girdleinscription_array as $loop){
-                                            echo "<option value='".$loop->id."'";
-                                            if ($loop_main->cer_girdleinscription_id==$loop->id) echo " selected";
-                                            echo ">".$loop->value."</option>";
-                                     } ?>
-                                    </select>
+                                    <input type="text" class="form-control" name="girdleinscription" id="girdleinscription" value="<?php echo $loop_main->cer_girdleinscription; ?>" required>
+                                    <p class="help-block"><?php echo form_error('girdleinscription'); ?></p>
                                 </div>
 							</div>
                             <div class="col-md-6">
@@ -162,6 +156,24 @@
 						</div>
 					</div>
 				</div></div></div>
+                <div class="row">
+                <div class="col-xs-12">
+                <div class="panel panel-primary">
+					<div class="panel-heading"><strong>COMMENT</strong></div>
+					
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>COMMENT *</label>
+                                    <input type="text" class="form-control" name="comment" id="comment" value="<?php echo $loop_main->cer_comment; ?>" required>
+                                    <p class="help-block"><?php echo form_error('comment'); ?></p>
+                                </div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                </div></div>
 			</div>	
             <div class="col-xs-6">
                 <div class="row">
@@ -303,14 +315,8 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <label>GIRDLE THICKNESS *</label>
-                                <select class="form-control" name="girdlethickness" id="girdlethickness">
-                                    <option value="0">-- เลือก --</option>
-                                <?php foreach($girdlethickness_array as $loop){
-                                        echo "<option value='".$loop->id."'";
-                                        if ($loop_main->cer_girdlethickness_id==$loop->id) echo " selected";
-                                        echo ">".$loop->value."</option>";
-                                 } ?>
-                                </select>
+                                <input type="text" class="form-control" name="girdlethickness" id="girdlethickness" value="<?php echo $loop_main->cer_girdlethickness; ?>" required>
+                                    <p class="help-block"><?php echo form_error('girdlethickness'); ?></p>
 							</div>
                             <div class="col-xs-6">
                                 <label>GIRDLE FINISH *</label>
@@ -410,8 +416,8 @@ function disablebutton() {
     }else if (document.getElementById('clarity').value < 1) {
         alert("กรุณาเลือก CLARITY GRADE");
         document.getElementById('clarity').focus();
-    }else if (document.getElementById('girdleinscription').value < 1) {
-        alert("กรุณาเลือก GIRDLE INSCRIPTION");
+    }else if (document.getElementById('girdleinscription').value == "") {
+        alert("กรุณาป้อนค่า GIRDLE INSCRIPTION");
         document.getElementById('girdleinscription').focus();
     }else if (document.getElementById('fluorescence').value < 1) {
         alert("กรุณาเลือก FLUORESCENCE");
@@ -473,8 +479,8 @@ function disablebutton() {
     }else if ((document.getElementById('lowerhalflength').value*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('lowerhalflength').focus();
-    }else if (document.getElementById('girdlethickness').value < 1) {
-        alert("กรุณาเลือก GIRDLE THICKNESS");
+    }else if (document.getElementById('girdlethickness').value == "") {
+        alert("กรุณาป้อนค่า GIRDLE THICKNESS");
         document.getElementById('girdlethickness').focus();
     }else if (document.getElementById('girdlefinish').value < 1) {
         alert("กรุณาเลือก GIRDLE FINISH");

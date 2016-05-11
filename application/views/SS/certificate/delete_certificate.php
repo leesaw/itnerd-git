@@ -94,7 +94,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>GIRDLE INSCRIPTION *</label>
-                                    <input type="text" class="form-control" name="girdleinscription" id="girdleinscription" value="<?php echo $loop->girdleinscription; ?>" readonly>
+                                    <input type="text" class="form-control" name="girdleinscription" id="girdleinscription" value="<?php echo $loop->cer_girdleinscription; ?>" readonly>
                                 </div>
 							</div>
                             <div class="col-md-6">
@@ -106,6 +106,23 @@
 						</div>
 					</div>
 				</div></div></div>
+                <div class="row">
+                <div class="col-xs-12">
+                <div class="panel panel-success">
+					<div class="panel-heading"><strong>COMMENT</strong></div>
+					
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label>COMMENT *</label>
+                                    <input type="text" class="form-control" name="comment" id="comment" value="<?php echo $loop->cer_comment; ?>" readonly>
+                                </div>
+							</div>
+						</div>
+                    </div>
+                </div>
+                </div></div>
                 <div class="row">
                 <div class="col-xs-12">
                 <div class="panel panel-primary">
@@ -254,7 +271,7 @@
                         <div class="row">
                             <div class="col-xs-6">
                                 <label>GIRDLE THICKNESS *</label>
-                                <input type="text" class="form-control" name="girdlethickness" id="girdlethickness" value="<?php echo $loop->girdlethickness; ?>" readonly>
+                                <input type="text" class="form-control" name="girdlethickness" id="girdlethickness" value="<?php echo $loop->cer_girdlethickness; ?>" readonly>
 							</div>
                             <div class="col-xs-6">
                                 <label>GIRDLE FINISH *</label>

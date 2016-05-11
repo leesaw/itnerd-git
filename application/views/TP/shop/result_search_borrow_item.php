@@ -55,7 +55,7 @@
                                     <td><?php echo $loop->posrob_issuedate; ?></td>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
+                                    <td><a href="#" class="pop"><img src="<?php echo $loop->it_refcode; ?>" style="display: none;" /><?php echo $loop->it_refcode; ?></a></td>
                                     <td><?php echo $loop->it_model; ?></td>
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
@@ -98,12 +98,14 @@
 	</div>
 
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" data-dismiss="modal">
-    <div class="modal-content"  >              
+  <div class="modal-dialog">
+    <div class="modal-content">              
       <div class="modal-body">
       	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <img src="" class="imagepreview" style="width: 100%;" >
-      </div> 
+        <center><h3 id="showrefcode"></h3>
+        <img src="" class="imagepreview" style="width:80%; height: 60%;" >
+        </center>
+      </div>
     </div>
   </div>
 </div>
@@ -120,6 +122,15 @@ $(document).ready(function()
     var oTable = $('#tablebarcode').DataTable({
        
     });
+    
+    $('#tablebarcode').on('click', '.pop', function(e){
+        var imgsrc = '<?php echo base_url(); ?>'+'picture/rolex/'+$(this).find('img').attr('src')+"/1.png";
+        
+        //alert($(this).find('img').attr('src'));
+        $('.imagepreview').attr('src', imgsrc);
+        document.getElementById("showrefcode").innerHTML = $(this).find('img').attr('src');
+        $('#imagemodal').modal('show');   
+    });		
 });
 </script>
 </body>
