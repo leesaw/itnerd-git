@@ -301,6 +301,9 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <label>KEY TO SYMBOLS *</label>
+                                <?php foreach($symbol_array as $loop) { ?>
+                                
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
