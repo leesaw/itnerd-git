@@ -689,7 +689,12 @@ function get_borrow_item()
     $data["borrower"] = $borrower_name;
     
     $data['title'] = "Rolex - List of Borrowed Item";
-    $this->load->view("TP/shop/result_search_borrow_item", $data);
+    
+    if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) {
+        $this->load->view("TP/shop/result_search_borrow_item_only_view", $data);
+    }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) {
+        $this->load->view("TP/shop/result_search_borrow_item", $data);
+    }
 }
     
 function form_rolex_borrow_sold()

@@ -29,7 +29,9 @@
             <div class="col-xs-6">
                 <div class="row"><div class="col-xs-12">
                 <div class="panel panel-success">
-                    <?php foreach($cer_array as $loop) { ?>
+                    <?php foreach($cer_array as $loop) { 
+                        $symbol_check = explode("#",$loop->cer_symbol);
+                    ?>
 					<div class="panel-heading"><strong>Details</strong></div>
 					
                     <div class="panel-body">
@@ -300,10 +302,32 @@
                         <hr>
                         <div class="row">
                             <div class="col-xs-12">
-                                <label>KEY TO SYMBOLS *</label>
-                                <?php foreach($symbol_array as $loop) { ?>
+                                <div class='row'>
+                                    <div class="col-xs-12">
+                                        <label>KEY TO SYMBOLS *</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                <?php $i_row = 0; foreach($symbol_array as $loop_symbol) { 
+                                 $i_row++;    
+                                ?>
                                 
-                                <?php } ?>
+                                <div class="col-xs-3"><input type="checkbox" name="symbol" value="<?php echo $loop_symbol->id; ?>" 
+                                <?php  
+                                    for($i=0; $i<count($symbol_check); $i++) {
+                                        if ($symbol_check[$i] == $loop_symbol->id)
+                                            echo "checked";
+                                    }                            
+                                                             
+                                ?> > <img src="<?php echo base_url()."/picture/ss/symbol.png"; ?>" width="20"> <?php echo $loop_symbol->value; ?></div>
+                                <?php if ($i_row%4 == 0) echo "</div><div class='row'>"; } ?>
+                                </div>
+                                <br>
+                                <div class='row'>
+                                    <div class="col-xs-12">
+                                <button name="savesymbol" id="savesymbol" onclick="savesymbol()" class="btn btn-primary btn-sm">บันทึก KEY TO SYMBOLS</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -459,6 +483,36 @@ var myDropzone3 = new Dropzone("#my-dropzone3", {
         });
     }
 });
+    
+function savesymbol() {
+    var symbol = document.getElementsByName('symbol');
+    var cer_id = '<?php echo $cer_id; ?>';
+    document.getElementById("savesymbol").disabled = true;
+    var index = 0;
+    var symbol_array = new Array();
+    for(var i=0; i<symbol.length; i++){
+        if ( symbol[i].checked ) {
+            symbol_array[index] = symbol[i].value;
+            index++;
+        }
+    }
+    
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("ss_certificate/save_symbol"); ?>" ,
+        data : {symbol_array: symbol_array, cer_id: cer_id} ,
+        dataType: 'json',
+        success : function(data) {
+            alert("บันทึก Key to Symbol เรียบร้อยแล้ว");
+            location.reload();
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+            document.getElementById("savesymbol").disabled = false;
+        }
+    });
+}
+
 </script>
 </body>
 </html>

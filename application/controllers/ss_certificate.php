@@ -794,6 +794,26 @@ function delete_certificate_confirm()
     echo json_encode($result);
     exit();
 }
+    
+function save_symbol()
+{
+    $symbol_input = $this->input->post("symbol_array");
+    $cer_id = $this->input->post("cer_id");
+    $symbol = "";
+    for($i=0; $i<count($symbol_input); $i++) {
+        $symbol .= "#".$symbol_input[$i];
+    }
+    
+
+    $certificate = array(
+        'id' => $cer_id,
+        'cer_symbol' => $symbol
+    );
+
+    $cer_result = $this->ss_certificate_model->edit_certificate($certificate);
+
+    echo json_encode("OK");
+}
 
 }
 ?>

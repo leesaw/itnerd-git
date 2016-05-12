@@ -54,17 +54,38 @@ foreach($cer_array as $loop) {
     
 }    
 
+$none_picture = base_url()."picture/ss/none.png";
+
 foreach($result_array as $loop) {
     $pic_result = $loop->pre_value;
+}
+    
+if ($pic_result != "") {
+    $pic_result = $path_result."/".$cer_id."/".$pic_result;
+}else{
+    $pic_result = $none_picture;
 }
     
 foreach($proportion_array as $loop) {
     $pic_proportion = $loop->ppr_value;
 }
     
+if ($pic_proportion != "") {
+    $pic_proportion = $path_proportion."/".$cer_id."/".$pic_proportion;
+}else{
+    $pic_proportion = $none_picture;
+}
+    
 foreach($clarity_array as $loop) {
     $pic_clarity = $loop->pcl_value;
 }
+  
+if ($pic_clarity != "") {
+    $pic_clarity = $path_clarity."/".$cer_id."/".$pic_clarity;
+}else{
+    $pic_clarity = $none_picture;
+}
+    
 ?>
 <table border="0">
 <tbody>
@@ -111,7 +132,7 @@ foreach($clarity_array as $loop) {
     
     
     <tr><td colspan="2" height="20"><b>CUT</b></td><td colspan="8"></td></tr>
-    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="20"></td><td colspan="4" rowspan="20" style="text-align:center;"><img src="<?php echo $path_proportion."/".$cer_id."/".$pic_proportion; ?>" style="width:100%; max-width:300px;"></td></tr>
+    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="20"></td><td colspan="4" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td></tr>
     <tr><td></td><td height="20">SYMMETRY</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $symmetry; ?></td><td colspan="4"></td></tr>
     <tr><td></td><td height="20">POLISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $polish; ?></td><td colspan="4"></td></tr>
     
@@ -141,7 +162,7 @@ foreach($clarity_array as $loop) {
     <tr><td colspan="10" height="10"> </td></tr>
     
     <tr><td colspan="6" height="25">SOFTWARE RESULT : PASS</td><td></td><td colspan="3">CLARITY PLOT</td></tr>
-    <tr><td colspan="6" height="90"><img src="<?php echo $path_result."/".$cer_id."/".$pic_result; ?>" style="width:100%; max-width:400px; max-height:90px" /></td><td></td><td colspan="3" style="text-align: center"><img src="<?php echo $path_clarity."/".$cer_id."/".$pic_clarity; ?>" style="width:100%; max-width:400px; max-height:90px" /></td></tr>
+    <tr><td colspan="6" height="90"><img src="<?php echo $pic_result; ?>" style="width:100%; max-width:400px; max-height:90px" /></td><td></td><td colspan="3" style="text-align: center"><img src="<?php echo $pic_clarity; ?>" style="width:100%; max-width:400px; max-height:90px" /></td></tr>
     
     <tr><td colspan="10" height="10"> </td></tr>
     <tr><td colspan="6" height="20">COMMENT</td><td></td><td colspan="3">KEY TO SYMBOL</td></tr>

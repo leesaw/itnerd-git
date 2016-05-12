@@ -20,17 +20,19 @@ foreach($cer_array as $loop) {
     
 }    
 
+$none_picture = base_url()."picture/ss/none.png";
+
 foreach($result_array as $loop) {
     $pic_result = $loop->pre_value;
 }
     
-foreach($proportion_array as $loop) {
-    $pic_proportion = $loop->ppr_value;
+if ($pic_result != "") {
+    $pic_result = $path_result."/".$cer_id."/".$pic_result;
+}else{
+    $pic_result = $none_picture;
 }
     
-foreach($clarity_array as $loop) {
-    $pic_clarity = $loop->pcl_value;
-}
+    
 ?>
 <table border="0">
 <tbody>
@@ -50,7 +52,7 @@ foreach($clarity_array as $loop) {
     <tr><td colspan="3" width="163" height="56"></td></tr>
     <tr><td width="52" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
     <tr><td height="5" colspan="3"> </td></tr>
-    <tr><td style="text-align:center" colspan="3"><img src="<?php echo $path_result."/".$cer_id."/".$pic_result; ?>" width="163" height="65" /></td></tr>
+    <tr><td style="text-align:center" colspan="3"><img src="<?php echo $pic_result; ?>" width="163" height="65" /></td></tr>
     <tr><td height="70" colspan="3"> </td></tr>
 </tbody>
 </table>

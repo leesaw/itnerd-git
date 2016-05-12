@@ -250,6 +250,9 @@
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
               </a>
             </li>
+            <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+            </a></li>
             <?php } ?>
               
             <?php 
