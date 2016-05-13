@@ -17,7 +17,7 @@ foreach($cer_array as $loop) {
     $symmetry = $loop->symmetry;
     $proportion = $loop->proportion;
     $fluorescence = $loop->fluorescence;
-    
+    $comment = $loop->cer_comment;
 }    
 
 $none_picture = base_url()."picture/ss/none.png";
@@ -52,8 +52,14 @@ if ($pic_result != "") {
     <tr><td colspan="3" width="163" height="56"></td></tr>
     <tr><td width="52" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="52" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
     <tr><td height="5" colspan="3"> </td></tr>
-    <tr><td style="text-align:center" colspan="3"><img src="<?php echo $pic_result; ?>" width="163" height="65" /></td></tr>
-    <tr><td height="70" colspan="3"> </td></tr>
+    <tr><td style="text-align:center" colspan="3"><img src="<?php echo $pic_result; ?>" width="163" height="63" /></td></tr>
+</tbody>
+</table>
+<table border="0">
+<tbody>
+    <tr><td height="14" width="45"> </td><td width="60" style="font-size:7px"><?php echo substr($comment,0,30); ?></td></tr>
+    <tr><td> </td><td height="12" style="font-size:7px"><?php echo substr($comment,30,30); ?></td></tr>
+    <tr><td> </td><td height="12" style="font-size:7px"><?php echo substr($comment,60,30); ?></td></tr>
 </tbody>
 </table>
 </body>

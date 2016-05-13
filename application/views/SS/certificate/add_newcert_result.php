@@ -134,7 +134,7 @@
                         <div class="row">
                             <div id="my-dropzone" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>228px x 90px
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>228px x 85px
                                 </div>
                             </div>
 						</div>
@@ -295,7 +295,7 @@
                         <div class="row">
                             <div id="my-dropzone3" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 210px
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 135px
                                 </div>
                             </div>
 						</div>
@@ -319,7 +319,7 @@
                                             echo "checked";
                                     }                            
                                                              
-                                ?> > <img src="<?php echo base_url()."/picture/ss/symbol.png"; ?>" width="20"> <?php echo $loop_symbol->value; ?></div>
+                                ?> > <img src="<?php echo base_url()."/picture/ss/".$loop_symbol->picture; ?>" width="20"> <?php echo $loop_symbol->value; ?></div>
                                 <?php if ($i_row%4 == 0) echo "</div><div class='row'>"; } ?>
                                 </div>
                                 <br>
@@ -339,9 +339,9 @@
             <hr>
             <div class="row">
 							<div class="col-md-6">
-									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf_full/".$cer_id); ?>" target="blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-success"><i class='fa fa-diamond'></i> Full Certificate</button></a>
+									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf_full/".$cer_id); ?>" target="_blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-success"><i class='fa fa-diamond'></i> Full Certificate</button></a>
                                     &nbsp;&nbsp;&nbsp;
-                                    <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_small/".$cer_id); ?>" target="blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-info"><i class='fa fa-diamond'></i> Small Certificate </button></a>
+                                    <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_small/".$cer_id); ?>" target="_blank"><button type="button" name="savebtn" id="savebtn"  class="btn btn-info"><i class='fa fa-diamond'></i> Small Certificate </button></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_form/".$cer_id); ?>" target="_blank"><button type="button" name="formbtn" id="formbtn"  class="btn bg-purple"><i class='fa fa-file-o'></i> Certificate Form </button></a>
                                     &nbsp;&nbsp;&nbsp;

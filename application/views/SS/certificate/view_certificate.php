@@ -312,9 +312,9 @@
             <hr>
             <div class="row">
 							<div class="col-md-6">
-									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf_full/".$cer_id); ?>" target="blank"><button type="button" name="fullbtn" id="fullbtn"  class="btn btn-success"><i class='fa fa-diamond'></i> Full Certificate</button></a>
+									<a href="<?php echo site_url("ss_certificate/view_certificate_pdf_full/".$cer_id); ?>" target="_blank"><button type="button" name="fullbtn" id="fullbtn"  class="btn btn-success"><i class='fa fa-diamond'></i> Full Certificate</button></a>
                                     &nbsp;&nbsp;&nbsp;
-                                    <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_small/".$cer_id); ?>" target="blank"><button type="button" name="smallbtn" id="smallbtn"  class="btn btn-info"><i class='fa fa-diamond'></i> Small Certificate </button></a>
+                                    <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_small/".$cer_id); ?>" target="_blank"><button type="button" name="smallbtn" id="smallbtn"  class="btn btn-info"><i class='fa fa-diamond'></i> Small Certificate </button></a>
                                     &nbsp;&nbsp;&nbsp;
                                     <a href="<?php echo site_url("ss_certificate/view_certificate_pdf_form/".$cer_id); ?>" target="_blank"><button type="button" name="formbtn" id="formbtn"  class="btn bg-purple"><i class='fa fa-file-o'></i> Certificate Form </button></a>
                                     &nbsp;&nbsp;&nbsp;

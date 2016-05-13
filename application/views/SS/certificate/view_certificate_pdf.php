@@ -18,6 +18,7 @@ foreach($cer_array as $loop) {
     $proportion = $loop->proportion;
     $fluorescence = $loop->fluorescence;
     $comment = $loop->cer_comment;
+    $symbol = explode("#",$loop->cer_symbol);
 }
     
 $none_picture = base_url()."picture/ss/none.png";
@@ -51,6 +52,17 @@ if ($pic_clarity != "") {
 }else{
     $pic_clarity = $none_picture;
 }
+    
+$symbol_key = array();
+$index = 0;
+foreach($symbol_array as $loop) {
+    for($i=0; $i<count($symbol); $i++) {
+        if ($symbol[$i] == $loop->id) {
+            $symbol_key[$index] = array("value" => $loop->value, "picture" => $loop->picture);
+            $index++;
+        }
+    }
+}
 
 ?>
 <table border="0">
@@ -66,14 +78,27 @@ if ($pic_clarity != "") {
     <tr><td width="232" height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
 </tbody>
 </table>
-<table border="1">
+<table border="0">
 <tbody>
     <tr><td height="30" colspan="3"> </td><td> </td><td> </td></tr>
-    <tr><td colspan="3" width="232" height="30" style="text-align:right"> </td><td rowspan="4" width="36"> </td><td rowspan="4" width="253"><img src="<?php echo $pic_clarity; ?>" width="253" height="210" /></td></tr>
-    <tr><td width="80" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="75" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="75" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
-    <tr><td height="8" colspan="3"> </td></tr>
-    <tr><td width="228" style="text-align:center" colspan="3"><img src="<?php echo $pic_result; ?>" width="228" height="80" /></td></tr>
-    <tr><td height="30" colspan="3"><?php echo substr($comment,0,26); ?></td><td> </td><td><?php echo substr($comment,0,26); ?></td></tr>
+    <tr><td colspan="3" width="228" height="48" style="text-align:right"> </td><td rowspan="4" width="36" height="135"> </td><td rowspan="4" width="253" height="135"><img src="<?php echo $pic_clarity; ?>" width="253" height="135" /></td></tr>
+    <tr><td width="76" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="76" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="76" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
+    <tr><td height="20" colspan="3"> </td></tr>
+    <tr><td width="228" style="text-align:center" colspan="3" rowspan="2"><img src="<?php echo $pic_result; ?>" width="228" height="85" /></td></tr>
+    <tr><td></td><td height="17">KEY TO SYMBOLS</td></tr>
+</tbody>
+</table>
+<table border="0">
+<tbody>
+    <tr><td height="12" width="58"></td><td width="100"></td><td width="36"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
+        for($i=0; $i<count($symbol_key); $i++) {
+            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']."<br>";
+        }
+    ?></td></tr>
+    <tr><td height="14"></td><td><?php echo substr($comment,0,30); ?></td><td> </td></tr>
+    <tr><td height="17"></td><td style="vertical-align:bottom;"><?php echo substr($comment,30,30); ?></td><td> </td></tr>
+    <tr><td height="19"></td><td><?php echo substr($comment,60,30); ?></td><td> </td></tr>
+    <tr><td height="30"></td><td> </td><td> </td></tr>
 </tbody>
 </table>
 </body>

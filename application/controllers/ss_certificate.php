@@ -11,7 +11,7 @@ function __construct()
      $this->load->model('ss_list_model','',TRUE);
      $this->load->model('ss_certificate_model','',TRUE);
      $this->load->library('form_validation');
-     if (!($this->session->userdata('sessusername'))) redirect('catalog', 'refresh');
+     if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
 }
 
 function index()
@@ -515,6 +515,13 @@ function view_certificate_pdf_full()
     
     $where = "pcl_certificate_id = '".$cer_id."'";
     $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+    
+    $query = $this->ss_list_model->get_list_symbol();
+	if($query){
+		$data['symbol_array'] = $query;
+	}else{
+		$data['symbol_array'] = array();
+	}
 
     $data["cer_id"] = $cer_id;
     $data["path_result"] = $this->upload_path_result;
@@ -575,6 +582,13 @@ function view_certificate_pdf_form()
     
     $where = "pcl_certificate_id = '".$cer_id."'";
     $data["clarity_array"] = $this->ss_certificate_model->get_picture_clarity($where);
+    
+    $query = $this->ss_list_model->get_list_symbol();
+	if($query){
+		$data['symbol_array'] = $query;
+	}else{
+		$data['symbol_array'] = array();
+	}
 
     $data["cer_id"] = $cer_id;
     $data["path_result"] = $this->upload_path_result;

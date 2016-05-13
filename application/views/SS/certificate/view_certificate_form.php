@@ -51,7 +51,8 @@ foreach($cer_array as $loop) {
     $girdleinscription = $loop->cer_girdleinscription;
     $softwareresult = $loop->cer_softwareresult;
     $fluorescence = $loop->fluorescence;
-    
+    $comment = $loop->cer_comment;
+    $symbol = explode("#",$loop->cer_symbol);
 }    
 
 $none_picture = base_url()."picture/ss/none.png";
@@ -84,6 +85,17 @@ if ($pic_clarity != "") {
     $pic_clarity = $path_clarity."/".$cer_id."/".$pic_clarity;
 }else{
     $pic_clarity = $none_picture;
+}
+    
+$symbol_key = array();
+$index = 0;
+foreach($symbol_array as $loop) {
+    for($i=0; $i<count($symbol); $i++) {
+        if ($symbol[$i] == $loop->id) {
+            $symbol_key[$index] = array("value" => $loop->value, "picture" => $loop->picture);
+            $index++;
+        }
+    }
 }
     
 ?>
@@ -166,7 +178,10 @@ if ($pic_clarity != "") {
     
     <tr><td colspan="10" height="10"> </td></tr>
     <tr><td colspan="6" height="20">COMMENT</td><td></td><td colspan="3">KEY TO SYMBOL</td></tr>
-    <tr><td colspan="6" height="20"> </td><td></td><td colspan="3">Pinpoint<br>Needle </td></tr>
+    <tr><td colspan="6" height="20"><?php echo $comment; ?></td><td></td><td colspan="3">
+        <?php for($i=0; $i<count($symbol_key); $i++) {
+            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']." ";
+        } ?></td></tr>
     <tr><td colspan="10" height="10"> </td></tr>
     
     <tr><td colspan="6" height="20" style="font-size:8px">THE CHARACTERISTICS OF DIAMOND DESCRIBED IN THIS CERTIFICATE WERE DETERMINED USING 10X BINOCULAR MAGNIFICATION, DIAMOND LITE AND MASTER COLOR DIAMONDS, ULTRAVIOLET LIGHT, MILLIMETER GAUGE, DIAMOND BALANCE AND AN ELECTRONIC PROPORTION MEASUREMENT SYSTEM.</td><td></td><td colspan="3" style="font-size:8px">RED SYMBOL DENOTES INTERNAL CHARACTERISTICS (INCLUSIONS). GREEN SYMBOLS DENOTE EXTERNAL CHARACTERISTICS (BLEMISHES). DIAGRAM IS AN APPROXIMATE REPRESENTATION OF THE DIAMOND AND SYMBOLS SHOWN INDICATE TYPE, POSITION AND APPROXIMATE SIZE OF CLARITY CHARACTERISTICS. ALL CLARITY CHARACTERISTICS MAY NOT BE SHOWN. DETAILS OF FINISH ARE NOT SHOWN.</td></tr>

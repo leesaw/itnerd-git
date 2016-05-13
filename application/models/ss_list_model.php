@@ -123,6 +123,7 @@ Class Ss_list_model extends CI_Model
 	$this->db->select("lsy_id as id, lsy_value as value, lsy_picture as picture, lsy_enable as enable");
 	$this->db->from("ss_list_symbol");
     $this->db->where("lsy_enable", 1);
+    $this->db->order_by("value");
 	$query = $this->db->get();		
 	return $query->result();
  }

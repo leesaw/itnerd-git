@@ -144,8 +144,8 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <label>COMMENT *</label>
-                                    <input type="text" class="form-control" name="comment" id="comment" value="<?php echo set_value('comment'); ?>" required>
+                                    <label>COMMENT * (ไม่เกิน 90 ตัวอักษร)</label>
+                                    <input type="text" class="form-control" name="comment" id="comment" value="<?php echo set_value('comment'); ?>" maxlength="90" required>
                                     <p class="help-block"><?php echo form_error('comment'); ?></p>
                                 </div>
 							</div>
