@@ -24,7 +24,7 @@
                         
         <div class="box-body">
         <div class="row">
-            <form action="<?php echo site_url("warehouse/showBalance"); ?>" method="post">
+            <form action="<?php echo site_url("warehouse_transfer/result_search_transfer_item"); ?>" name="formfilter" id="formfilter" method="post">
             <div class="col-xs-8 col-md-4">
                 <label>Ref. Number หรือ Description ที่ต้องการค้นหา</label>
                 <div class="input-group">
@@ -37,47 +37,45 @@
         </div> 
         <br>
         <div class="row">
-            <div class="col-xs-5 col-md-3">
-                <label>เลือกยี่ห้อ</label>
+            <div class="col-xs-2 col-md-2">
+                เลือกยี่ห้อ
                 <div class="input-group">
                     <select id="brand" name="brand" class="form-control">
-                        <option value="0" selected>เลือกทั้งหมด</option>
+                        <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
                         <?php foreach($brand_array as $loop) { ?>
-                        <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_name; ?></option>
+                        <option value="<?php echo $loop->br_id."-".$loop->br_name; ?>"><?php echo $loop->br_name; ?></option>
                         <?php } ?>
                     </select>
                 </div>
             </div>
             <div class="col-xs-5 col-md-3">
-                <label>เลือก Warehouse</label>
+                เลือก Warehouse
                 <div class="input-group">
                     <select id="warehouse" name="warehouse" class="form-control">
-                        <option value="0" selected>เลือกทั้งหมด</option>
+                        <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
                         <?php 
                             foreach($whname_array as $loop) { 
                         ?>
-                        <option value="<?php echo $loop->wh_id; ?>"><?php echo $loop->wh_code."-".$loop->wh_name; ?>
+                        <option value="<?php echo $loop->wh_id."-".$loop->wh_name; ?>"><?php echo $loop->wh_code."-".$loop->wh_name; ?>
                         </option>
                         <?php } ?>
                     </select>
                 </div>
             </div>
             <div class="col-xs-3 col-md-2">
-                <label>ราคาต่ำสุด</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" name="minprice" id="minprice">
-                </div>
+                เลือกวันที่เริ่มต้น : 
+                <input type="text" class="form-control" id="startdate" name="startdate" value="" />
             </div>
             <div class="col-xs-3 col-md-2">
-                <label>ราคาสูงสุด</label>
-                <div class="input-group">
-                    <input type="text" class="form-control" name="maxprice" id="maxprice">
-                </div>
+                สิ้นสุด :
+                <input type="text" class="form-control" id="enddate" name="enddate" value="" />
             </div>
-            
+            <div class="col-xs-3 col-md-2">
+                <br>
+                <div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div>
+            </div>
         </div>
-        <br>
-            <div class="row"><div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div></div>              
+    
                         
         </form>               
                         
@@ -174,7 +172,9 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
-    get_datepicker("#datein");
+    get_datepicker("#startdate");
+    get_datepicker("#enddate");
+    get_datepicker_month("#datein");
     
     var oTable = $('#tablefinal').DataTable();
     $('#fancyboxall').fancybox({ 
@@ -187,11 +187,18 @@ $(document).ready(function()
     
 });
     
-function get_datepicker(id)
+function get_datepicker_month(id)
 {
     $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
     minViewMode: "months" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
+}
+    
+function get_datepicker(id)
+{
+    $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
+
 }
     
 function submitform()

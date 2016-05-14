@@ -29,7 +29,7 @@ Class Tp_warehouse_model extends CI_Model
     
  function getWarehouse_balance_caseback($where)
  {
-	$this->db->select("it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_code, itse_serial_number");
+	$this->db->select("it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_code, itse_serial_number, br_name, itse_enable");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_warehouse', 'itse_warehouse_id = wh_id','left');
     $this->db->join('tp_item', 'it_id = itse_item_id','left');	

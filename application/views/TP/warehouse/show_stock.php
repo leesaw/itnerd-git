@@ -54,7 +54,7 @@
                                     <tr>
                                         <th width="80">Ref. Number</th>
                                         <th>Brand</th>
-                                        <th>Model</th>
+                                        <th>Family</th>
                                         <th>Warehouse</th>
 										<th width="50">Qty</th>
                                         <th>SRP</th>

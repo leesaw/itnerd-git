@@ -116,6 +116,19 @@ function getBalance()
     $this->load->view('TP/warehouse/search_stock',$data);
 }
     
+function showSerial()
+{
+    $serial = $this->input->post("serial");
+    
+    $where = "itse_serial_number like '".$serial."'";
+    $data['stock_array'] = $this->tp_warehouse_model->getWarehouse_balance_caseback($where);
+    
+    $data['serial'] = $serial;
+    
+    $data['title'] = "NGG| Nerd - Search Stock";
+    $this->load->view('TP/warehouse/result_serial',$data);
+}
+    
 function showBalance()
 {
     $refcode = $this->input->post("refcode");
@@ -243,7 +256,7 @@ function ajaxViewStock()
     ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
     ->join('tp_item', 'it_id = stob_item_id','left')
     ->join('tp_brand', 'br_id = it_brand_id','left')
-    //->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
+    ->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
     ->where('it_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 

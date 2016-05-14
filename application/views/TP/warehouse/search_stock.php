@@ -84,6 +84,28 @@
                 </div>
             </div>
         </div>
+        
+        <div class="row">
+            <div class="col-md-10">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">ค้นหาเฉพาะ Serial</div>
+        <div class="panel-body">
+        <div class="row">
+            <form action="<?php echo site_url("warehouse/showSerial"); ?>" method="post">
+            <div class="col-xs-3 col-md-3">
+                Serial Number ที่ต้องการค้นหา
+                <input type="text" class="form-control" name="serial" id="serial">
+            </div>
+            <div class="col-xs-3 col-md-3">
+            <br><button type="submit" name="action" value="0" class="btn btn-primary"><i class="fa fa-search"></i> ค้นหา</button></div>              
+                        
+        </form>               
+                        
+					</div>
+                </div>
+            </div>
+        </div>
+        </div>
         </section>
           
           
