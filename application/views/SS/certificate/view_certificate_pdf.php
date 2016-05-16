@@ -68,20 +68,20 @@ foreach($symbol_array as $loop) {
 <table border="0">
 <tbody>
     <tr><td height="100"></td><td> </td><td style="text-align:center"><h3>DIAMOND REGISTERATION NUMBER</h3><br><b><?php echo $number; ?></b></td></tr>
-    <tr><td width="232" height="17" ></td><td rowspan="8" width="36"> </td><td rowspan="8" width="253"><img src="<?php echo $pic_proportion; ?>" width="253" height="135" /></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
-    <tr><td width="232" height="8" style="text-align:right"> </td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $color;  ?></b></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
-    <tr><td width="232" height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
+    <tr><td width="228" height="17" ></td><td rowspan="8" width="40"> </td><td rowspan="8" width="253"><img src="<?php echo $pic_proportion; ?>" width="253" height="135" /></td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
+    <tr><td width="228" height="8" style="text-align:right"> </td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $color;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
 </tbody>
 </table>
 <table border="0">
 <tbody>
-    <tr><td height="30" colspan="3"> </td><td> </td><td> </td></tr>
-    <tr><td colspan="3" width="228" height="48" style="text-align:right"> </td><td rowspan="4" width="36" height="135"> </td><td rowspan="4" width="253" height="135"><img src="<?php echo $pic_clarity; ?>" width="253" height="135" /></td></tr>
+    <tr><td height="31" colspan="3"> </td><td> </td><td> </td></tr>
+    <tr><td colspan="3" width="228" height="48" style="text-align:right"> </td><td rowspan="4" width="38" height="135"> </td><td rowspan="4" width="253" height="135"><img src="<?php echo $pic_clarity; ?>" width="253" height="135" /></td></tr>
     <tr><td width="76" height="12" style="text-align:center"><b><?php echo $polish;  ?></b></td><td width="76" height="12" style="text-align:center"><b><?php echo $symmetry;  ?></b></td><td width="76" height="12" style="text-align:center"><b><?php echo $fluorescence;  ?></b></td></tr>
     <tr><td height="20" colspan="3"> </td></tr>
     <tr><td width="228" style="text-align:center" colspan="3" rowspan="2"><img src="<?php echo $pic_result; ?>" width="228" height="85" /></td></tr>
@@ -90,7 +90,7 @@ foreach($symbol_array as $loop) {
 </table>
 <table border="0">
 <tbody>
-    <tr><td height="12" width="58"></td><td width="100"></td><td width="36"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
+    <tr><td height="12" width="60"></td><td width="100"></td><td width="36"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
         for($i=0; $i<count($symbol_key); $i++) {
             echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']."<br>";
         }
@@ -101,5 +101,6 @@ foreach($symbol_array as $loop) {
     <tr><td height="30"></td><td> </td><td> </td></tr>
 </tbody>
 </table>
+<pagebreak>
 </body>
 </html>

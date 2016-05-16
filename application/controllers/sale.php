@@ -98,8 +98,8 @@ function check_code()
             
             $output .= "<td>";
             if (count($barcode) > 0) {
-                $output .= "<select name='barcode_id' id ='barcode_id'><option value='-10'>-- เลือกบาร์โค้ดห้าง --</option>";
-                $output .= "<option value='0'>ไม่มีบาร์โค้ดห้าง</option>";
+                $output .= "<select name='barcode_id' id ='barcode_id'><option value='-10'>-- เลือกบาร์โค้ด --</option>";
+                $output .= "<option value='0'>ไม่มีบาร์โค้ด</option>";
                 foreach($barcode as $loop_barcode) {
                     $output .= "<option value = '".$loop_barcode->sb_id."'>".$loop_barcode->sb_number."(ลด".$loop_barcode->sb_discount_percent."% GP".$loop_barcode->sb_gp."%)</option>";
                 }

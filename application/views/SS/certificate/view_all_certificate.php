@@ -30,7 +30,8 @@
 			<div class="col-xs-12">
                 <div class="panel panel-success">
 					<div class="panel-heading">
-                        Completed Certificates
+                        Completed Certificates &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="<?php echo site_url("ss_certificate/search_certificate"); ?>" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> Advanced Search</a>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablecert" width="100%">

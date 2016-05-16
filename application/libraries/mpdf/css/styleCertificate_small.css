@@ -4,8 +4,18 @@ body {
     
 }
 
+@page :first {
+    background-image:url("./picture/ss/CERTIFICATED_NGG_small_front.png"); 
+    background-image-resize:4;
+    background-repeat: no-repeat;
+    margin-left: 216px;
+    margin-right: 5px;
+    margin-top: 42px;
+    margin-bottom: 5px;
+}
+
 @page {
-    background-image:url("./picture/ss/CERTIFICATED_NGG_Cut.jpg"); 
+    background-image:url("./picture/ss/CERTIFICATED_NGG_small_back.png"); 
     background-image-resize:4;
     background-repeat: no-repeat;
     margin-left: 216px;

@@ -77,7 +77,7 @@ Class Tp_shop_model extends CI_Model
     $this->db->select("sb_id, sb_number, sb_discount_percent, sb_gp, sb_brand_name");
 	$this->db->from('tp_sale_barcode');	
     if ($where != "") $this->db->where($where);
-    $this->db->order_by("sb_number", "asc");
+    $this->db->order_by("sb_discount_percent", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }

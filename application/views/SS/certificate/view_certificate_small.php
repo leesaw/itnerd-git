@@ -62,5 +62,6 @@ if ($pic_result != "") {
     <tr><td> </td><td height="12" style="font-size:7px"><?php echo substr($comment,60,30); ?></td></tr>
 </tbody>
 </table>
+<pagebreak>
 </body>
 </html>
