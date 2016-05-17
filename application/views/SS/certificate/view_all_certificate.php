@@ -39,11 +39,15 @@
                                     <tr>
                                         <th width="150">Cert. Number</th>
                                         <th>Shape</th>
+                                        <th>Cutting Style</th>
                                         <th>Measurement</th>
                                         <th>Carat</th>
                                         <th>Cut</th>
+                                        <th>Symmetry</th>
+                                        <th>Polish</th>
 										<th>Color</th>
                                         <th>Clarity</th>
+                                        <th>Fluorescence</th>
                                         <th width="120"> </th>
                                     </tr>
                                 </thead>

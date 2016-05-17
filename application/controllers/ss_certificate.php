@@ -611,7 +611,7 @@ function ajaxAllCertificate()
 {
     $this->load->library('Datatables');
     $this->datatables
-    ->select("cer_number, lsh_value as shape, cer_measurement, cer_carat, lpt_value as proportion, lco_value as color, lcl_value as clarity, cer_id")
+    ->select("cer_number, lsh_value as shape, lcs_value as cuttingstyle, cer_measurement, cer_carat, lpt_value as proportion, lsm_value as symmetry, lpo_value as polish, lco_value as color, lcl_value as clarity, lfu_value as fluorescence, cer_id")
     ->from('ss_certificate')
     ->join("ss_list_clarity", "lcl_id = cer_clarity_id", "left")
     ->join("ss_list_color", "lco_id = cer_color_id", "left")
@@ -920,6 +920,7 @@ function search_certificate()
     $data['proportion'] = 0;
     $data['symmetry'] = 0;
     $data['polish'] = 0;
+    $data['firstpage'] = 1;
     
     $data['title'] = "NGG| Nerd - Advanced Search";
     $this->load->view('SS/certificate/form_search_certificate',$data);
@@ -1024,12 +1025,30 @@ function result_search_certificate()
 		$data['symmetry_array'] = array();
 	}
     
+    $data['firstpage'] = 0;
+    
     $data['title'] = "NGG| Nerd - Advanced Search";
-    $this->load->view('SS/certificate/result_search_certificate',$data);
+    $this->load->view('SS/certificate/form_search_certificate',$data);
+    
+}
+    
+function ajaxView_search_certificate()
+{
+    $number = $this->uri->segment(3);
+    $carat1 = $this->uri->segment(4);
+    $carat2 = $this->uri->segment(5);
+    $shape = $this->uri->segment(6);
+    $cuttingstyle = $this->uri->segment(7);
+    $color = $this->uri->segment(8);
+    $clarity = $this->uri->segment(9);
+    $fluorescence = $this->uri->segment(10);
+    $proportion = $this->uri->segment(11);
+    $symmetry = $this->uri->segment(12);
+    $polish = $this->uri->segment(13);
     
     $where = "cer_enable = 1";
     
-    if ($number != "") $where .= " and cer_number like '%".$number."%'";
+    if ($number != "NULL") $where .= " and cer_number like '%".$number."%'";
     if ($shape != 0) $where .= " and cer_shape_id = '".$shape."'";
     if ($cuttingstyle != 0) $where .= " and cer_cuttingstyle_id = '".$cuttingstyle."'";
     if ($color != 0) $where .= " and cer_color_id = '".$color."'";
@@ -1040,11 +1059,32 @@ function result_search_certificate()
     if ($polish != 0) $where .= " and cer_polish_id = '".$polish."'";
     if ($carat1 != "") $where .= " and cer_carat >= ".$carat1;
     if ($carat2 != "") $where .= " and cer_carat <= ".$carat2;
-}
     
-function ajaxView_search_certificate()
-{
-    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("cer_number, lsh_value as shape, lcs_value as cuttingstyle, cer_measurement, cer_carat, lpt_value as proportion, lsm_value as symmetry, lpo_value as polish, lco_value as color, lcl_value as clarity, lfu_value as fluorescence, cer_id")
+    ->from('ss_certificate')
+    ->join("ss_list_clarity", "lcl_id = cer_clarity_id", "left")
+    ->join("ss_list_color", "lco_id = cer_color_id", "left")
+    ->join("ss_list_culet", "lct_id = cer_culet_id", "left")
+    ->join("ss_list_cuttingstyle", "lcs_id = cer_cuttingstyle_id", "left")
+    ->join("ss_list_fluorescence", "lfu_id = cer_fluorescence_id", "left")
+    ->join("ss_list_girdlefinish", "lgf_id = cer_girdlefinish_id", "left")
+    //->join("ss_list_girdleinscription", "lgs_id = cer_girdleinscription_id", "left")
+    //->join("ss_list_girdlethickness", "lgt_id = cer_girdlethickness_id", "left")
+    ->join("ss_list_naturaldiamond", "lnd_id = cer_naturaldiamond_id", "left")
+    ->join("ss_list_polish", "lpo_id = cer_polish_id", "left")
+    ->join("ss_list_proportion", "lpt_id = cer_proportion_id", "left")
+    ->join("ss_list_shape", "lsh_id = cer_shape_id", "left")
+    ->join("ss_list_symmetry", "lsm_id = cer_symmetry_id", "left")
+    ->where($where)
+    ->edit_column("cer_id",'<div class="tooltip-demo">
+<a href="'.site_url("ss_certificate/view_certificate/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+<a href="'.site_url("ss_certificate/edit_certificate/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+<a href="'.site_url("ss_certificate/add_newcert_ok/$1").'" class="btn bg-purple btn-xs" data-title="Picture" data-toggle="tooltip" data-target="#picture" data-placement="top" rel="tooltip" title="แก้ไขรูปภาพ"><i class="fa fa-image"></i></a>
+<a href="'.site_url("ss_certificate/delete_certificate/$1").'" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#remove" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
+</div>',"cer_id");
+    echo $this->datatables->generate();
 }
 
 }
