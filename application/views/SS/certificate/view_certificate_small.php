@@ -37,7 +37,7 @@ if ($pic_result != "") {
 <table border="0">
 <tbody>
     <tr><td width="163" style="text-align:center"><b>DIAMOND REGISTERATION NUMBER</b><br><?php echo $number; ?></td></tr>
-    <tr><td height="37"></td></tr>
+    <tr><td height="35"></td></tr>
     <tr><td height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
     <tr><td height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
     <tr><td height="8"></td></tr>

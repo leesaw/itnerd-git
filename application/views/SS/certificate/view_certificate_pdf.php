@@ -65,17 +65,17 @@ foreach($symbol_array as $loop) {
 }
 
 ?>
-<table border="0">
+<table border="">
 <tbody>
     <tr><td height="100"></td><td> </td><td style="text-align:center"><h3>DIAMOND REGISTERATION NUMBER</h3><br><b><?php echo $number; ?></b></td></tr>
     <tr><td width="228" height="17" ></td><td rowspan="8" width="40"> </td><td rowspan="8" width="253"><img src="<?php echo $pic_proportion; ?>" width="253" height="135" /></td></tr>
-    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
-    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
-    <tr><td width="228" height="8" style="text-align:right"> </td></tr>
-    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
-    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $color;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
+    <tr><td width="228" height="8" style="vertical-align:bottom;text-align:right"> </td></tr>
+    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
+    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $color;  ?></b></td></tr>
     <tr><td width="228" height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
-    <tr><td width="228" height="12" style="text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
+    <tr><td width="228" height="12" style="vertical-align:top;text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
 </tbody>
 </table>
 <table border="0">
@@ -90,14 +90,14 @@ foreach($symbol_array as $loop) {
 </table>
 <table border="0">
 <tbody>
-    <tr><td height="12" width="60"></td><td width="100"></td><td width="36"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
+    <tr><td height="12" width="60"></td><td width="100"></td><td width="60"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
         for($i=0; $i<count($symbol_key); $i++) {
             echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']."<br>";
         }
     ?></td></tr>
-    <tr><td height="14"></td><td><?php echo substr($comment,0,30); ?></td><td> </td></tr>
-    <tr><td height="17"></td><td style="vertical-align:bottom;"><?php echo substr($comment,30,30); ?></td><td> </td></tr>
-    <tr><td height="19"></td><td><?php echo substr($comment,60,30); ?></td><td> </td></tr>
+    <tr><td height="14"></td><td style="font-size:10px"><?php echo substr($comment,0,30); ?></td><td> </td></tr>
+    <tr><td height="17"></td><td style="vertical-align:bottom; font-size:10px"><?php echo substr($comment,30,30); ?></td><td> </td></tr>
+    <tr><td height="19"></td><td style="vertical-align:bottom; font-size:10px"><?php echo substr($comment,60,30); ?></td><td> </td></tr>
     <tr><td height="30"></td><td> </td><td> </td></tr>
 </tbody>
 </table>

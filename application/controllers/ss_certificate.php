@@ -873,21 +873,7 @@ function search_certificate()
 	}else{
 		$data['girdlefinish_array'] = array();
 	}
-    /*
-    $query = $this->ss_list_model->get_list_girdleinscription();
-	if($query){
-		$data['girdleinscription_array'] =  $query;
-	}else{
-		$data['girdleinscription_array'] = array();
-	}
-    
-    $query = $this->ss_list_model->get_list_girdlethickness();
-	if($query){
-		$data['girdlethickness_array'] =  $query;
-	}else{
-		$data['girdlethickness_array'] = array();
-	}
-    */
+
     $query = $this->ss_list_model->get_list_naturaldiamond();
 	if($query){
 		$data['naturaldiamond_array'] =  $query;
@@ -922,8 +908,143 @@ function search_certificate()
 	}else{
 		$data['symmetry_array'] = array();
 	}
+    
+    $data['number'] = "NULL";
+    $data['shape'] = 0;
+    $data['cuttingstyle'] = 0;
+    $data['carat1'] = 0.11;
+    $data['carat2'] = 23.99;
+    $data['color'] = 0;
+    $data['clarity'] = 0;
+    $data['fluorescence'] = 0;
+    $data['proportion'] = 0;
+    $data['symmetry'] = 0;
+    $data['polish'] = 0;
+    
     $data['title'] = "NGG| Nerd - Advanced Search";
     $this->load->view('SS/certificate/form_search_certificate',$data);
+}
+    
+function result_search_certificate()
+{
+    $number = ($this->input->post('cer_number'));
+    if ($number == "") $number="NULL";
+    $data['number'] = $number;
+    $data['shape'] = ($this->input->post('shape'));
+    $data['cuttingstyle'] = ($this->input->post('cuttingstyle'));
+    $carat1 = ($this->input->post('carat1'));
+    if ($carat1 == "") $carat1 = 0.11;
+    $data['carat1'] = $carat1;
+    $carat2 = ($this->input->post('carat2'));
+    if ($carat2 == "") $carat2 = 23.99;
+    $data['carat2'] = $carat2;
+    $data['color'] = ($this->input->post('color'));
+    $data['clarity'] = ($this->input->post('clarity'));
+    $data['fluorescence'] = ($this->input->post('fluorescence'));
+    $data['proportion'] = ($this->input->post('proportion'));
+    $data['symmetry'] = ($this->input->post('symmetry'));
+    $data['polish'] = ($this->input->post('polish'));
+    
+    
+    //////////   ------ get list
+	$query = $this->ss_list_model->get_list_clarity();
+	if($query){
+		$data['clarity_array'] =  $query;
+	}else{
+		$data['clarity_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_color();
+	if($query){
+		$data['color_array'] =  $query;
+	}else{
+		$data['color_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_culet();
+	if($query){
+		$data['culet_array'] =  $query;
+	}else{
+		$data['culet_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_cuttingstyle();
+	if($query){
+		$data['cuttingstyle_array'] =  $query;
+	}else{
+		$data['cuttingstyle_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_fluorescence();
+	if($query){
+		$data['fluorescence_array'] =  $query;
+	}else{
+		$data['fluorescence_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_girdlefinish();
+	if($query){
+		$data['girdlefinish_array'] =  $query;
+	}else{
+		$data['girdlefinish_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_naturaldiamond();
+	if($query){
+		$data['naturaldiamond_array'] =  $query;
+	}else{
+		$data['naturaldiamond_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_polish();
+	if($query){
+		$data['polish_array'] =  $query;
+	}else{
+		$data['polish_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_proportion();
+	if($query){
+		$data['proportion_array'] =  $query;
+	}else{
+		$data['proportion_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_shape();
+	if($query){
+		$data['shape_array'] =  $query;
+	}else{
+		$data['shape_array'] = array();
+	}
+    
+    $query = $this->ss_list_model->get_list_symmetry();
+	if($query){
+		$data['symmetry_array'] =  $query;
+	}else{
+		$data['symmetry_array'] = array();
+	}
+    
+    $data['title'] = "NGG| Nerd - Advanced Search";
+    $this->load->view('SS/certificate/result_search_certificate',$data);
+    
+    $where = "cer_enable = 1";
+    
+    if ($number != "") $where .= " and cer_number like '%".$number."%'";
+    if ($shape != 0) $where .= " and cer_shape_id = '".$shape."'";
+    if ($cuttingstyle != 0) $where .= " and cer_cuttingstyle_id = '".$cuttingstyle."'";
+    if ($color != 0) $where .= " and cer_color_id = '".$color."'";
+    if ($clarity != 0) $where .= " and cer_clarity_id = '".$clarity."'";
+    if ($fluorescence != 0) $where .= " and cer_fluorescence_id = '".$fluorescence."'";
+    if ($proportion != 0) $where .= " and cer_proportion_id = '".$proportion."'";
+    if ($symmetry != 0) $where .= " and cer_symmetry_id = '".$symmetry."'";
+    if ($polish != 0) $where .= " and cer_polish_id = '".$polish."'";
+    if ($carat1 != "") $where .= " and cer_carat >= ".$carat1;
+    if ($carat2 != "") $where .= " and cer_carat <= ".$carat2;
+}
+    
+function ajaxView_search_certificate()
+{
+    
 }
 
 }
