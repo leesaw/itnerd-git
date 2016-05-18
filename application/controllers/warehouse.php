@@ -136,48 +136,7 @@ function showBalance()
     $warehouse = $this->input->post("warehouse");
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
-    /*
-    $sql = $this->no_rolex;
-    
-    if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
-        if ($refcode!="") {
-            $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) { 
-                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
-            }else{
-                for($i=0; $i<count($keyword); $i++) {
-                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
-                }
-            }
-        }
-    }else {
-        if ($refcode!="") {
-            $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) { 
-                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
-            }else{
-                for($i=0; $i<count($keyword); $i++) {
-                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
-                }
-            }
-        }else{
-            $sql .= " and it_refcode like '%%'";
-        }
-        
-        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
-        else $sql .= " and br_id != '0'";
-            
-        if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
-        else $sql .= " and wh_id != '0'";
 
-        if (($minprice !="") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
-        else $sql .= " and it_srp >=0";
-            
-        if (($maxprice !="") && ($maxprice>=0)) $sql .= "it_srp <= '".$maxprice."'";
-        else $sql .= " and it_srp >=0";
-    }
-    $data['stock_array'] = $this->tp_warehouse_model->getWarehouse_balance($sql);
-    */
     if ($refcode == "") $refcode = "NULL";
     $data['refcode'] = $refcode;
     $data['brand'] = $brand;
@@ -186,9 +145,34 @@ function showBalance()
     $data['minprice'] = $minprice;
     if ($maxprice == "") $maxprice = 0;
     $data['maxprice'] = $maxprice;
+    
+    $data['viewby'] = 0;
 
-    $data['title'] = "NGG| Nerd - Ref Code";
+    $data['title'] = "NGG| Nerd - Stock";
     $this->load->view('TP/warehouse/show_stock',$data);
+}
+    
+function showBalance_byserial()
+{
+    $refcode = $this->input->post("refcode");
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+    $minprice = $this->input->post("minprice");
+    $maxprice = $this->input->post("maxprice");
+
+    if ($refcode == "") $refcode = "NULL";
+    $data['refcode'] = $refcode;
+    $data['brand'] = $brand;
+    $data['warehouse'] = $warehouse;
+    if ($minprice == "") $minprice = 0;
+    $data['minprice'] = $minprice;
+    if ($maxprice == "") $maxprice = 0;
+    $data['maxprice'] = $maxprice;
+    
+    $data['viewby'] = 1;
+
+    $data['title'] = "NGG| Nerd - Stock";
+    $this->load->view('TP/warehouse/show_stock_byserial',$data);
 }
     
 function view_serial()
@@ -256,7 +240,67 @@ function ajaxViewStock()
     ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
     ->join('tp_item', 'it_id = stob_item_id','left')
     ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
+    ->where('it_enable',1)
+    ->where($sql);
+    echo $this->datatables->generate(); 
+}
+    
+function ajaxViewStock_serial()
+{
+    $refcode = $this->uri->segment(3);
+    $keyword = explode("%20", $refcode);
+    $brand = $this->uri->segment(4);
+    $warehouse = $this->uri->segment(5);
+    $minprice = $this->uri->segment(6);
+    $maxprice = $this->uri->segment(7);
+    
+    $sql = $this->no_rolex;
+    
+    if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) {
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
+        else $sql .= " and wh_id != '0'";
+
+        if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
+        else $sql .= " and it_srp >=0";
+            
+        if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
+        else $sql .= " and it_srp >=0";
+    }
+    $sql .= " and itse_enable=1";
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("it_refcode, br_name, it_model, wh_name, itse_serial_number, it_srp, it_short_description")
+    ->from('tp_item_serial')
+    ->join('tp_warehouse', 'wh_id = itse_warehouse_id','left')
+    ->join('tp_item', 'it_id = itse_item_id','left')
+    ->join('tp_brand', 'br_id = it_brand_id','left')
     ->where('it_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 

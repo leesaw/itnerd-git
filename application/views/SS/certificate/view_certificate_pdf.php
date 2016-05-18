@@ -90,7 +90,7 @@ foreach($symbol_array as $loop) {
 </table>
 <table border="0">
 <tbody>
-    <tr><td height="12" width="60"></td><td width="100"></td><td width="60"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
+    <tr><td height="12" width="60"></td><td width="100"></td><td width="120"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
         for($i=0; $i<count($symbol_key); $i++) {
             echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']."<br>";
         }

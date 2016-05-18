@@ -38,9 +38,9 @@
                         <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
                         <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน 
+                        <input type="radio" name="byquantity" id="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน 
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byserial" id="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Serial
+                        <input type="radio" name="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Serial
                         <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Caseback</button>
                         </form>
                         <form name="exportcaseback" id="exportcaseback" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist_caseback"); ?>" method="post">
@@ -50,7 +50,7 @@
                         <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
                         <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
                         </form>
-                        <form name="viewbyserial" id="viewbyserial" action="<?php echo site_url("warehouse/showBalance_byserial"); ?>" method="post">
+                        <form name="viewbyquantity" id="viewbyquantity" action="<?php echo site_url("warehouse/showBalance"); ?>" method="post">
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand; ?>">
                         <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
@@ -66,7 +66,7 @@
                                         <th>Brand</th>
                                         <th>Family</th>
                                         <th>Warehouse</th>
-										<th width="50">Qty</th>
+										<th width="100">Serial</th>
                                         <th>SRP</th>
                                         <th width="200">Short Description</th>
                                         <!-- <th width="50">Caseback</th> -->
@@ -131,7 +131,7 @@ $(document).ready(function()
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("warehouse/ajaxViewStock")."/".$refcode."/".$brand."/".$warehouse."/".$minprice."/".$maxprice; ?>',
+        'sAjaxSource'    : '<?php echo site_url("warehouse/ajaxViewStock_serial")."/".$refcode."/".$brand."/".$warehouse."/".$minprice."/".$maxprice; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',
@@ -153,25 +153,30 @@ $(document).ready(function()
                         i : 0;
             };
  
+            var countVal = function (i) {
+                return typeof i === 'string' ? 1 : 0;
+            }
             // Total over all pages
-            total = api
+            var total_row = 0;
+            total_count = api
                 .column( 4 )
                 .data()
                 .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
+                    return total_row+=countVal(a)+countVal(b);
                 }, 0 );
             
             // Total over this page
-            pageTotal = api
+            var total_row_current = 0;
+            pageTotal_count = api
                 .column( 4, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
+                    return total_row_current+=countVal(a)+countVal(b);
                 }, 0 );
  
             // Update footer
             $( api.column( 4 ).footer() ).html(
-                total+' ('+pageTotal+')'
+                total_count+'<br>('+pageTotal_count+')'
             );
         }
     });
@@ -184,8 +189,8 @@ $(document).ready(function()
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    $('#byserial').on('click', function(){            
-        document.getElementById("viewbyserial").submit();
+    $('#byquantity').on('click', function(){            
+        document.getElementById("viewbyquantity").submit();
     });
 });
     
@@ -193,6 +198,7 @@ function showcaseback()
 {
     document.getElementById("exportcaseback").submit();
 }
+
 </script>
 </body>
 </html>
