@@ -31,7 +31,7 @@
                 <div class="panel panel-default">
 					<div class="panel-heading">
                         <form name="exportexcel" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist"); ?>" method="post">
-                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel จำนวน</button>
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand; ?>">
                         <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
@@ -40,8 +40,8 @@
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" name="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน 
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byserial" id="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Serial
-                        <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Caseback</button>
+                        <input type="radio" name="byserial" id="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Caseback
+                        <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Excel Caseback</button>
                         </form>
                         <form name="exportcaseback" id="exportcaseback" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist_caseback"); ?>" method="post">
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
@@ -184,7 +184,8 @@ $(document).ready(function()
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    $('#byserial').on('click', function(){            
+    $('#byserial').on('click', function(){     
+        document.getElementById('byserial').checked = false;
         document.getElementById("viewbyserial").submit();
     });
 });

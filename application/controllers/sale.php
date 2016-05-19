@@ -915,9 +915,16 @@ function report_sale_filter()
     
     $data['startdate'] = $start;
     $data['enddate'] = $end;
+    
+    $data['viewby'] = 0;
 
     $data['title'] = "Nerd - Search Sale Report";
     $this->load->view('TP/sale/search_salereport_result',$data);
+}
+    
+function report_sale_filter_byserial()
+{
+    
 }
     
 function ajaxViewSaleReport()
@@ -970,14 +977,15 @@ function ajaxViewSaleReport()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("so_issuedate, sh_name, it_refcode, br_name, soi_qty, it_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
+    ->select("so_issuedate, sh_name, it_refcode, itse_serial_number, br_name, soi_qty, it_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
     ->from('tp_saleorder_item')
     ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
+    ->join('tp_saleorder_serial', 'sos_saleorder_id = so_id and sos_item_id = soi_item_id', 'left')
     ->join('tp_shop', 'so_shop_id = sh_id','left')
     ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
     ->join('tp_item', 'it_id = soi_item_id','left')
     ->join('tp_brand', 'br_id = it_brand_id','left')
-    //->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left')
+    ->join('tp_item_serial', 'itse_id=sos_item_serial_id','left')
     ->where('so_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 
@@ -1027,6 +1035,104 @@ function exportExcel_sale_report()
         else $sql .= " and sh_id != '0'";
 
     }
+    
+    $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Sale Report');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'Sold Date');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'Shop');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Caseback');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Brand');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Qty (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'BAR');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'Discount (%)');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'On Top (บาท)');
+    $this->excel->getActiveSheet()->setCellValue('K1', 'GP (%)');
+    $this->excel->getActiveSheet()->setCellValue('L1', 'Receive on Inv.');
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->so_issuedate);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->sh_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->itse_serial_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->br_name);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->soi_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->sb_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->dc);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, number_format($loop->soi_dc_baht, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->gp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, number_format($loop->netprice, 2, '.', ','));
+        $row++;
+    }
+    
+
+    $filename='sale_report.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
+    
+function exportExcel_sale_report_caseback()
+{
+    $refcode = $this->input->post("refcode");
+    $keyword = explode(" ", $refcode);
+    $brand = $this->input->post("brand");
+    $shop = $this->input->post("shop");
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+    
+    $sql = $this->no_rolex;
+    
+    $sql .= " and so_enable = '1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
+    
+    if (($brand=="0") && ($shop=="0")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) {
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
+        else $sql .= " and sh_id != '0'";
+
+    }
+    
     
     $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);
     

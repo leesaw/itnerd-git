@@ -296,7 +296,7 @@ function ajaxViewStock_serial()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("it_refcode, br_name, it_model, wh_name, itse_serial_number, it_srp, it_short_description")
+    ->select("it_refcode, itse_serial_number, br_name, it_model, wh_name, it_srp, it_short_description")
     ->from('tp_item_serial')
     ->join('tp_warehouse', 'wh_id = itse_warehouse_id','left')
     ->join('tp_item', 'it_id = itse_item_id','left')

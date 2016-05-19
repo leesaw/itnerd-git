@@ -52,7 +52,8 @@
                                     <tr>
                                         <th>Sold Date</th>
                                         <th>Shop</th>
-                                        <th width="80">Ref. Number</th>
+                                        <th width="100">Ref. Number</th>
+                                        <th width="100">Caseback</th>
                                         <th>Brand</th>
 										<th width="50">Qty</th>
                                         <th>SRP</th>
@@ -61,7 +62,6 @@
                                         <th>On Top<br>บาท</th>
                                         <th>GP(%)</th>
                                         <th>Receive on Inv.</th>
-                                        <!-- <th width="50">Caseback</th> -->
                                     </tr>
                                 </thead>
                                 
@@ -69,7 +69,7 @@
 								</tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="4" style="text-align:right">จำนวนทั้งหมด:</th>
+                                        <th colspan="5" style="text-align:right">จำนวนทั้งหมด:</th>
                                         <th></th>
                                         <th colspan="5" style="text-align:right">ยอดเงินทั้งหมด:</th>
                                         <th></th>
@@ -149,14 +149,14 @@ $(document).ready(function()
  
             // Total over all pages
             total = api
-                .column( 4 )
+                .column( 5 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
             
             total_money = api
-                .column( 10 )
+                .column( 11 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -164,25 +164,25 @@ $(document).ready(function()
             
             // Total over this page
             pageTotal = api
-                .column( 4, { page: 'current'} )
+                .column( 5, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
             
             pageTotal_money = api
-                .column( 10, { page: 'current'} )
+                .column( 11, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
  
             // Update footer
-            $( api.column( 4 ).footer() ).html(
+            $( api.column( 5 ).footer() ).html(
                 total+' ('+pageTotal+')'
             );
             
-            $( api.column( 10 ).footer() ).html(
+            $( api.column( 11 ).footer() ).html(
                 (total_money).formatMoney(2, '.', ',')+'<br>('+(pageTotal_money).formatMoney(2, '.', ',')+')'
             );
         }
@@ -196,7 +196,10 @@ $(document).ready(function()
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    
+    $('#byserial').on('click', function(){      
+        document.getElementById('byserial').checked = false;
+        document.getElementById("viewbyserial").submit();
+    });
 });
     
 Number.prototype.formatMoney = function(c, d, t){
