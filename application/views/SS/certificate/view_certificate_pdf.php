@@ -72,7 +72,7 @@ foreach($symbol_array as $loop) {
     <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $shape." ".$cutting;  ?></b></td></tr>
     <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $measurement;  ?></b></td></tr>
     <tr><td width="228" height="8" style="vertical-align:bottom;text-align:right"> </td></tr>
-    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $carat." Ct";  ?></b></td></tr>
+    <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $carat." ct";  ?></b></td></tr>
     <tr><td width="228" height="12" style="vertical-align:bottom;text-align:right"><b><?php echo $color;  ?></b></td></tr>
     <tr><td width="228" height="12" style="text-align:right"><b><?php echo $clarity;  ?></b></td></tr>
     <tr><td width="228" height="12" style="vertical-align:top;text-align:right"><b><?php echo $proportion;  ?></b></td></tr>
@@ -90,11 +90,20 @@ foreach($symbol_array as $loop) {
 </table>
 <table border="0">
 <tbody>
-    <tr><td height="12" width="60"></td><td width="100"></td><td width="120"></td><td width="253" rowspan="5" style="vertical-align:top;"><?php 
+    <tr><td height="12" width="60"></td><td width="100"></td><td width="120"></td>
+    <td width="100" rowspan="5" style="vertical-align:top;"><?php 
         for($i=0; $i<count($symbol_key); $i++) {
-            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']."<br>";
+            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='8'> ".$symbol_key[$i]['value']."<br>";
+            if ($i>2) break;
         }
-    ?></td></tr>
+    ?></td>
+    <td width="100" rowspan="5" style="vertical-align:top;"><?php 
+        for($i=4; $i<count($symbol_key); $i++) {
+            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='8'> ".$symbol_key[$i]['value']."<br>";
+            if ($i>6) break;
+        }
+    ?></td>
+    </tr>
     <tr><td height="14"></td><td style="font-size:10px"><?php echo substr($comment,0,30); ?></td><td> </td></tr>
     <tr><td height="17"></td><td style="vertical-align:bottom; font-size:10px"><?php echo substr($comment,30,30); ?></td><td> </td></tr>
     <tr><td height="19"></td><td style="vertical-align:bottom; font-size:10px"><?php echo substr($comment,60,30); ?></td><td> </td></tr>

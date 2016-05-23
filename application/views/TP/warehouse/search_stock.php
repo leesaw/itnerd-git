@@ -106,6 +106,73 @@
             </div>
         </div>
         </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">จำนวนสินค้าในทุกสาขา</div>
+        <div class="panel-body table-responsive">
+        <div class="row">
+            <div class="col-xs-4">
+                <table class="table table-bordered" id="tablebarcode" width="100%">
+                    <thead>
+                    <tr><th>No.</th><th>สาขา</th><th>จำนวน</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                        $divide = ceil(count($number_array) / 3);
+                        $count_row = 1;
+                        foreach($number_array as $elementKey => &$element) { ?>
+                    <tr><td><?php echo $count_row; ?></td><td><?php echo $element->wh_code."-".$element->wh_name; ?></td><td><form action="<?php echo site_url("warehouse/showBalance"); ?>" method="post"><input type="hidden" name="warehouse" value="<?php echo $element->stob_warehouse_id; ?>"><input type="hidden" name="brand" value="0"><a href="javascript:;" onclick="parentNode.submit();"><?php echo $element->sum1; ?></a></form></td></tr>
+                    <?php  
+                        unset($number_array[$elementKey]); 
+                        if ($count_row >= $divide) break;
+                        $count_row++;
+                        } 
+                    ?>
+                    <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-4">
+                <table class="table table-bordered" id="tablebarcode" width="100%">
+                    <thead>
+                    <tr><th>No.</th><th>สาขา</th><th>จำนวน</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                        $count_row = 1;
+                        foreach($number_array as $elementKey => &$element) { ?>
+                    <tr><td><?php echo $divide+$count_row; ?></td><td><?php echo $element->wh_code."-".$element->wh_name; ?></td><td><form action="<?php echo site_url("warehouse/showBalance"); ?>" method="post"><input type="hidden" name="warehouse" value="<?php echo $element->stob_warehouse_id; ?>"><input type="hidden" name="brand" value="0"><a href="javascript:;" onclick="parentNode.submit();"><?php echo $element->sum1; ?></a></form></td></tr>
+                    <?php  
+                        unset($number_array[$elementKey]); 
+                        if ($count_row >= $divide) break;
+                        $count_row++;
+                        } 
+                    ?>
+                    <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-4">
+                <table class="table table-bordered" id="tablebarcode" width="100%">
+                    <thead>
+                    <tr><th>No.</th><th>สาขา</th><th>จำนวน</th></tr>
+                    </thead>
+                    <tbody>
+                    <?php 
+                        $count_row++;
+                        foreach($number_array as $elementKey => &$element) { ?>
+                    <tr><td><?php echo $divide+$count_row; ?></td><td><?php echo $element->wh_code."-".$element->wh_name; ?></td><td><form action="<?php echo site_url("warehouse/showBalance"); ?>" method="post"><input type="hidden" name="warehouse" value="<?php echo $element->stob_warehouse_id; ?>"><input type="hidden" name="brand" value="0"><a href="javascript:;" onclick="parentNode.submit();"><?php echo $element->sum1; ?></a></form></td></tr>
+                    <?php  
+                        $count_row++;
+                        } 
+                    ?>
+                    <tr></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
         </section>
           
           

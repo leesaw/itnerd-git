@@ -111,6 +111,11 @@ function getBalance()
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
     $sql = "wh_enable = '1'";
     $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
+    
+    // get total in each shops
+    $sql = $this->no_rolex;
+    $sql .= " and it_enable = 1 and stob_enable = 1 and wh_enable = 1";
+    $data['number_array'] = $this->tp_warehouse_model->getNumber_balance_groupbyshop($sql);
 
     $data['title'] = "NGG| Nerd - Search Stock";
     $this->load->view('TP/warehouse/search_stock',$data);
@@ -147,6 +152,11 @@ function showBalance()
     $data['maxprice'] = $maxprice;
     
     $data['viewby'] = 0;
+    
+    $sql = "br_id = '".$brand."'";
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = "wh_id = '".$warehouse."'";
+    $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
     $data['title'] = "NGG| Nerd - Stock";
     $this->load->view('TP/warehouse/show_stock',$data);

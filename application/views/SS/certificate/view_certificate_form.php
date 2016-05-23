@@ -180,7 +180,8 @@ foreach($symbol_array as $loop) {
     <tr><td colspan="6" height="20">COMMENT</td><td></td><td colspan="3">KEY TO SYMBOL</td></tr>
     <tr><td colspan="6" height="20"><?php echo $comment; ?></td><td></td><td colspan="3">
         <?php for($i=0; $i<count($symbol_key); $i++) {
-            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='10'> ".$symbol_key[$i]['value']." ";
+            echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='8'> ".$symbol_key[$i]['value']." &nbsp;&nbsp;&nbsp; ";
+            if ($i==3) echo "<br>";
         } ?></td></tr>
     <tr><td colspan="10" height="10"> </td></tr>
     

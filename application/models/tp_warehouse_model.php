@@ -13,6 +13,19 @@ Class Tp_warehouse_model extends CI_Model
 	return $query->result();
  }
     
+ function getNumber_balance_groupbyshop($where)
+ {
+    $this->db->select("SUM(stob_qty) as sum1, stob_warehouse_id, wh_name, wh_code");
+	$this->db->from('tp_stock_balance');
+	$this->db->join('tp_warehouse', 'wh_id = stob_warehouse_id','left');
+    $this->db->join('tp_item', 'it_id = stob_item_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    $this->db->group_by('stob_warehouse_id');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+    
  function getWarehouse_balance($where)
  {
 	$this->db->select("stob_id, stob_item_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, stob_qty, stob_warehouse_id, wh_name, wh_code, stob_lastupdate, stob_lastupdate_by, count(itse_serial_number) as has_serial");
