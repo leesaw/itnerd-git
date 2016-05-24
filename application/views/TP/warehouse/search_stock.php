@@ -107,7 +107,7 @@
         </div>
         </div>
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="panel panel-danger">
                     <div class="panel-heading">จำนวนสินค้าในทุกสาขา</div>
         <div class="panel-body table-responsive">

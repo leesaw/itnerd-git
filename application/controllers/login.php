@@ -23,7 +23,8 @@ class Login extends CI_Controller {
             'sessfirstname' => $row->firstname,
             'sesslastname' => $row->lastname,
             'sessstatus' => $row->status,
-            'sessrolex' => $row->is_rolex
+            'sessrolex' => $row->is_rolex,
+            'sessshopid' => $row->shop_id
           );
            
           $log_array = array(

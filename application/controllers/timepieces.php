@@ -21,6 +21,8 @@ function main()
         redirect('timepieces/main_rolex', 'refresh');
     }else if (($this->session->userdata('sessstatus') >= 50) && ($this->session->userdata('sessstatus') <= 59)) {
         redirect('sesto/main', 'refresh');
+    }else if (($this->session->userdata('sessstatus') >= 60) && ($this->session->userdata('sessstatus') <= 69)) {
+        redirect('ngg_gold/main', 'refresh');
     }
     $data['title'] = "NGG| NERD";
     $this->load->view('TP/main',$data);

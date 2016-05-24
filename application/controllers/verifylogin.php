@@ -23,7 +23,7 @@ class VerifyLogin extends CI_Controller {
      //Field validation failed.&nbsp; User redirected to login page
 
        $data['base'] = $this->config->item('base_url');
-       $data['title'] = "NGG|IT Support - Login";
+       $data['title'] = "NGG| Nerd - Login";
        $this->load->view('login_view',$data);
    }
    else
@@ -55,7 +55,8 @@ class VerifyLogin extends CI_Controller {
 		 'sessfirstname' => $row->firstname,
 		 'sesslastname' => $row->lastname,
          'sessrolex' => $row->is_rolex,
-		 'sessstatus' => $row->status
+		 'sessstatus' => $row->status,
+         'sessshopid' => $row->shop_id
        );
         
        $this->session->set_userdata($sess_array);

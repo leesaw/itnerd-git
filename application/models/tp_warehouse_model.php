@@ -22,6 +22,7 @@ Class Tp_warehouse_model extends CI_Model
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     $this->db->group_by('stob_warehouse_id');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by("wh_code", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
