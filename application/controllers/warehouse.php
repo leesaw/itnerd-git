@@ -250,6 +250,7 @@ function ajaxViewStock()
     ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
     ->join('tp_item', 'it_id = stob_item_id','left')
     ->join('tp_brand', 'br_id = it_brand_id','left')
+    ->where('stob_qty >', 0)
     ->where('it_enable',1)
     ->where($sql);
     echo $this->datatables->generate(); 
@@ -326,6 +327,7 @@ function exportExcel_stock_itemlist()
     $maxprice = $this->input->post("maxprice");
     
     $sql = $this->no_rolex;
+    $sql .= " and stob_qty >0";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
@@ -382,6 +384,7 @@ function exportExcel_stock_itemlist()
     $this->excel->getActiveSheet()->setCellValue('G1', 'รายละเอียด');
     
     $row = 2;
+    $count_qty = 0;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->it_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->br_name);
@@ -391,8 +394,14 @@ function exportExcel_stock_itemlist()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
         $row++;
+        $count_qty += $loop->stob_qty;
     }
     
+    // count all qty
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "จำนวนรวม");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $count_qty);
+    
+    //--------
 
     $filename='timepieces_search.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -473,6 +482,7 @@ function exportExcel_stock_itemlist_caseback()
     $this->excel->getActiveSheet()->setCellValue('G1', 'รายละเอียด');
     
     $row = 2;
+    $count_qty = 0;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->it_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->br_name);
@@ -482,9 +492,15 @@ function exportExcel_stock_itemlist_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
         $row++;
+        $count_qty++;
     }
     
-
+    // count all qty
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "จำนวนรวม");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $count_qty);
+    
+    //--------
+    
     $filename='caseback.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
     header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
