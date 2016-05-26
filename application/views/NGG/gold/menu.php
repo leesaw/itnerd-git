@@ -11,7 +11,7 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li><a href="<?php echo site_url("ngg_gold/main"); ?>">Home</a></li>
             <li><a href="<?php echo site_url("ngg_gold/form_warranty"); ?>">ออกบัตรรับประกันสินค้า (ทอง)</a></li>
           </ul>
         </div>

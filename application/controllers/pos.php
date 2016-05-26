@@ -692,6 +692,8 @@ function get_borrow_item()
     
     if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) {
         $this->load->view("TP/shop/result_search_borrow_item_only_view", $data);
+    }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==89) {
+        $this->load->view("TP/shop/result_search_borrow_item_only_view", $data);
     }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) {
         $this->load->view("TP/shop/result_search_borrow_item", $data);
     }
