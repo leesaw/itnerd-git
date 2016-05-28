@@ -10,85 +10,85 @@
     $custelephone = $loop->ngw_customertelephone;
     $shopname = $loop->sh_name;
     $shoptelephone = $loop->sh_telephone;
+    $number = $loop->ngw_number;
+    $product = $loop->ngw_product;
+    $kindgold = $loop->ngw_kindgold;
+    $price = $loop->ngw_price;
+    $payment = $loop->ngw_payment;
+    $code = $loop->ngw_code;
+    $weight = $loop->ngw_weight;
+    $jewelry = $loop->ngw_jewelry;
+    $datestart = $loop->ngw_datestart;
+    $old = $loop->ngw_old;
+    $model = $loop->ngw_model;
+    $goldbuy = $loop->ngw_goldbuy;
+    $goldsell = $loop->ngw_goldsell;
+    $saleperson = $loop->sp_firstname;
+    $issuedate = $loop->ngw_issuedate;
+    
 } 
 
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
+ $datestart_year=substr($datestart,0,4); 
+ $datestart_month=substr($datestart,5,2); 
+ $datestart_day=substr($datestart,8,2); 
+ $datestart = $datestart_day."/".$datestart_month."/".($datestart_year+543);
 ?>
 <table border="0">
 <tbody>
 <tr>
 <td width="200"></td>
-<td width="400"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="180px" /></center></td>
+<td width="400"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
 <td width="200" style="text-align: right;">
     <table border="1">
-        <tbody><tr><td width="120"><center><div style="font-size: 16pt;">สำหรับลูกค้า</div></center></td></tr>
+        <tbody><tr><td width="120"><center><div style="font-size: 20pt;">สำหรับ NGG</div></center></td></tr>
     </tbody>
     </table>
 </td>
 </tr>
-<tr><td colspan="3"><center><div style="font-size: 16pt;"><b>NGG ง้วน โกลด์ แอนด์ เจมส์ ศูนย์รวมเครื่องประดับครบวงจร</b></div></center></td></tr>
+<tr><td colspan="3"><center><div style="font-size: 20pt;"><b>NGG ง้วน โกลด์ แอนด์ เจมส์ ศูนย์รวมเครื่องประดับครบวงจร</b></div></center></td></tr>
 </tbody>
 </table>
 <table border="0">
 <tbody>
     <tr><td width="50"></td><td width="300">ชื่อลูกค้า : <?php echo $cusname; ?></td><td width="100"></td><td width="300">สาขา : <?php echo $shopname." โทร. ".$shoptelephone; ?></td><td width="50"></td></tr>
-    <tr><td></td><td>ที่อยู่ : <?php echo $cusaddress; ?></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td>เบอร์โทร : <?php echo $custelephone; ?></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td colspan="3">ที่อยู่ : <?php echo $cusaddress; ?> เบอร์โทร : <?php echo $custelephone; ?></td><td></td></tr>
+    <tr><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td></tr>
 </tbody>
 </table>
-<hr style="height:3px">
-<div style="font-size: 16pt;text-align:center"><b>บัตรรับประกันสินค้า<br>CERTIFICATE CARDS</b></div>
+
 <table border="0">
 <tbody>
-    <tr><td width="50"></td><td width="300">ชื่อลูกค้า : <?php echo $cusname; ?></td><td width="100"></td><td width="300">สาขา : <?php echo $shopname." โทร. ".$shoptelephone; ?></td><td width="50"></td></tr>
-    <tr><td></td><td>ที่อยู่ : <?php echo $cusaddress; ?></td><td></td><td></td><td></td></tr>
-    <tr><td></td><td>เบอร์โทร : <?php echo $custelephone; ?></td><td></td><td></td><td></td></tr>
-</tbody>
-</table>    
-    
-<table style="border:1px solid black; border-spacing:0px 0px;">
-<thead>
-	<tr>
-		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Serial Number</th><th width="250" style="border-left:1px solid black;border-bottom:1px solid black;">รายละเอียดสินค้า</th><th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="120" style="border-left:1px solid black;border-bottom:1px solid black;">หน่วยละ</th><th width="140" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวนเงิน</th>
-	</tr>
-</thead>
-<tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
-?>
-<tr style="border:1px solid black;"><td align="center" valign="top"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroit_qty." ".$loop->it_uom; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_item_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_item_srp; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
+<tr><td width="200"></td>
+    <td width="400" style="text-align:center"><div style="font-size: 20pt;"><b>บัตรรับประกันสินค้า</b></div></td>
+<td width="200"></td>
 </tr>
-<?php $no++; } } ?> 
+<tr><td></td><td style="text-align:center"><div style="font-size: 20pt;"><b>CERTIFICATE CARDS</b></td><td>เลขที่ใบรับประกัน : <?php echo $number; ?></td></tr>
+</tbody>
+</table>
 
-<?php if ($no*2<=24) { for($i=24-$no*2; $i>0; $i--) {?> 
-<tr><td>&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td></tr>
-<?php } } ?>
-
-</tbody>
+<table border="0">
 <tbody>
-<tr>
-<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td height="40" align="left" colspan=3 scope="row" style="border-top:1px solid black;">( <?php echo num2thai($sum); ?> )</td>
-<td align="right" colspan=2 scope="row" style="border-top:1px solid black;">จำนวนเงินรวมทั้งสิ้น&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black; border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
+    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo $product; ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo $code; ?></td><td width="50"></td></tr>
+    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo $kindgold; ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo $weight; ?> กรัม</td><td></td></tr>
+    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo number_format($price, 2, '.', ','); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
+    <tr><td></td><td>ชำระด้วย : <?php echo $payment; ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
+    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo $jewelry; ?></td><td></td><td rowspan="5">
+        
+    <table border="1">
+        <tbody>
+            <tr><td style="text-align:center;" width="250">รูปแบบ<br><?php echo $model; ?></td></tr>
+            <tr><td style="text-align:center;">ราคาทองคำแท่ง<br>ซื้อ <?php echo number_format($goldbuy, 2, '.', ','); ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ขาย <?php echo number_format($goldsell, 2, '.', ','); ?></td></tr>
+            <tr><td style="text-align:center;">ชื่อพนักงานขาย : <?php echo $saleperson; ?></td></tr>
+        </tbody>
+    </table>
+        
+    </td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo $datestart; ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo $old; ?></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td colspan="2">หมายเหตุ: ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</td><td></td></tr>
 </tbody>
+</table>
 <?php
 function num2thai($number){
 $t1 = array("ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า");
@@ -176,122 +176,64 @@ return $rstring;
 }
 
 ?>
-</table>
-<table style="border-bottom:1px solid black; border-spacing:0px 0px;">
-<tbody>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td><td width="170" align="center" style="border-left:1px solid black;"> </td>
-<td width="170" align="center" style="border-left:1px solid black;"> </td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
-</tr>
-<tr>
-<td height="50" align="center" style="border-left:1px solid black;">&nbsp;</td><td width="170" align="center" style="border-left:1px solid black;"> </td>
-<td width="170" align="center" style="border-left:1px solid black;"> </td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">......................................</td><td width="170" align="center" style="border-left:1px solid black;">......................................</td>
-<td width="170" align="center" style="border-left:1px solid black;">......................................</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;">......................................</td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td><td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td>
-<td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;">วันที่ / Date......................................</td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้รับของ / Receiver</td><td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้ส่งของ / Delivered By</td>
-<td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้รับเงิน / Collector</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black; border-top:1px solid black;">ผู้จัดการ / Manager</td>
-</tr>
-<tbody>
-</table>
 
 <pagebreak />
     
 <table border="0">
 <tbody>
 <tr>
-<td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
-<td width="320">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
-</td> 
-<?php foreach($pos_array as $loop) { $datetime = $loop->posrot_issuedate; $so_id = $loop->posrot_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posrot_customer_name; $cusaddress = $loop->posrot_customer_address; break; } 
-
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
-?>
-<td width="50"> </td>
-    <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบส่งของ</div><div style="font-weight: bold; font-size: 16pt;">สำเนา</div></td>
+<td width="200"></td>
+<td width="400"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
+<td width="200" style="text-align: right;">
+    <table border="1">
+        <tbody><tr><td width="120"><center><div style="font-size: 20pt;">สำหรับ ลูกค้า</div></center></td></tr>
+    </tbody>
+    </table>
+</td>
 </tr>
-<tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>&nbsp;<?php if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบเสร็จ: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
-    </td>
-</tr>
+<tr><td colspan="3"><center><div style="font-size: 20pt;"><b>NGG ง้วน โกลด์ แอนด์ เจมส์ ศูนย์รวมเครื่องประดับครบวงจร</b></div></center></td></tr>
 </tbody>
 </table>
-<br>
-<table style="border:1px solid black; border-spacing:0px 0px;">
-<thead>
-	<tr>
-		<th width="30" style="border-bottom:1px solid black;">No.</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Serial Number</th><th width="250" style="border-left:1px solid black;border-bottom:1px solid black;">รายละเอียดสินค้า</th><th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="120" style="border-left:1px solid black;border-bottom:1px solid black;">หน่วยละ</th><th width="140" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวนเงิน</th>
-	</tr>
-</thead>
+<table border="0">
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
-?>
-<tr style="border:1px solid black;"><td align="center" valign="top"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroit_qty." ".$loop->it_uom; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_item_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-<td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_item_srp; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
-</tr>
-<?php $no++; } } ?> 
-
-<?php if ($no*2<=24) { for($i=24-$no*2; $i>0; $i--) {?> 
-<tr><td>&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td></tr>
-<?php } } ?>
-
-</tbody>
-<tbody>
-<tr>
-<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
-<tr>
-<td height="40" align="left" colspan=3 scope="row" style="border-top:1px solid black;">( <?php echo num2thai($sum); ?> )</td>
-<td align="right" colspan=2 scope="row" style="border-top:1px solid black;">จำนวนเงินรวมทั้งสิ้น&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black; border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
-</tr>
+    <tr><td width="50"></td><td width="300">ชื่อลูกค้า : <?php echo $cusname; ?></td><td width="100"></td><td width="300">สาขา : <?php echo $shopname." โทร. ".$shoptelephone; ?></td><td width="50"></td></tr>
+    <tr><td></td><td colspan="3">ที่อยู่ : <?php echo $cusaddress; ?> เบอร์โทร : <?php echo $custelephone; ?></td><td></td></tr>
+    <tr><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td><td style="border-bottom:3px solid black;"></td></tr>
 </tbody>
 </table>
-<table style="border-bottom:1px solid black; border-spacing:0px 0px;">
+
+<table border="0">
 <tbody>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">ได้รับสินค้าตามรายการถูกต้องแล้ว</td><td width="170" align="center" style="border-left:1px solid black;"> </td>
-<td width="170" align="center" style="border-left:1px solid black;"> </td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
+<tr><td width="200"></td>
+    <td width="400" style="text-align:center"><div style="font-size: 20pt;"><b>บัตรรับประกันสินค้า</b></div></td>
+<td width="200"></td>
 </tr>
-<tr>
-<td height="50" align="center" style="border-left:1px solid black;">&nbsp;</td><td width="170" align="center" style="border-left:1px solid black;"> </td>
-<td width="170" align="center" style="border-left:1px solid black;"> </td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;"> </td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">......................................</td><td width="170" align="center" style="border-left:1px solid black;">......................................</td>
-<td width="170" align="center" style="border-left:1px solid black;">......................................</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;">......................................</td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td><td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td>
-<td width="170" align="center" style="border-left:1px solid black;">วันที่ / Date......................................</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black;">วันที่ / Date......................................</td>
-</tr>
-<tr>
-<td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้รับของ / Receiver</td><td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้ส่งของ / Delivered By</td>
-<td width="170" align="center" style="border-left:1px solid black; border-top:1px solid black;">ผู้รับเงิน / Collector</td><td width="170" align="center" style="border-left:1px solid black; border-right:1px solid black; border-top:1px solid black;">ผู้จัดการ / Manager</td>
-</tr>
+<tr><td></td><td style="text-align:center"><div style="font-size: 20pt;"><b>CERTIFICATE CARDS</b></td><td>เลขที่ใบรับประกัน : <?php echo $number; ?></td></tr>
+</tbody>
+</table>
+
+<table border="0">
 <tbody>
+    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo $product; ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo $code; ?></td><td width="50"></td></tr>
+    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo $kindgold; ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo $weight; ?> กรัม</td><td></td></tr>
+    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo number_format($price, 2, '.', ','); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
+    <tr><td></td><td>ชำระด้วย : <?php echo $payment; ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
+    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo $jewelry; ?></td><td></td><td rowspan="5">
+        
+    <table border="1">
+        <tbody>
+            <tr><td style="text-align:center;" width="250">รูปแบบ<br><?php echo $model; ?></td></tr>
+            <tr><td style="text-align:center;">ราคาทองคำแท่ง<br>ซื้อ <?php echo number_format($goldbuy, 2, '.', ','); ?> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ขาย <?php echo number_format($goldsell, 2, '.', ','); ?></td></tr>
+            <tr><td style="text-align:center;">ชื่อพนักงานขาย : <?php echo $saleperson; ?></td></tr>
+        </tbody>
+    </table>
+        
+    </td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo $datestart; ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo $old; ?></td><td></td><td></td></tr>
+    <tr><td></td><td></td><td></td><td></td></tr>
+    <tr><td></td><td colspan="2">หมายเหตุ: ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</td><td></td></tr>
+</tbody>
 </table>
 </body>
 </html>
