@@ -392,7 +392,7 @@ function checkStock_transfer_caseback()
     $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
     $output = "";
     foreach ($result as $loop) {
-        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        $output .= "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
         $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
         $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
     }
@@ -565,33 +565,33 @@ function transferstock_save_confirm()
     
 function transferstock_final_print()
 {
-		$id = $this->uri->segment(3);
-		
-		$this->load->library('mpdf/mpdf');                
-        $mpdf= new mPDF('th','A4','0', 'thsaraban');
-		$stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
-		
-        $sql = "stot_id = '".$id."'";
-		$query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
-		if($query){
-			$data['stock_array'] =  $query;
-		}else{
-			$data['stock_array'] = array();
-		}
-    
-        $sql = "log_stot_transfer_id = '".$id."'";
-        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
-        if($query){
-            $data['serial_array'] =  $query;
-        }else{
-            $data['serial_array'] = array();
-        }   
-		
-		//echo $html;
-        $mpdf->SetJS('this.print();');
-		$mpdf->WriteHTML($stylesheet,1);
-        $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_transfer2_print", $data, TRUE));
-        $mpdf->Output();
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+    $sql = "stot_id = '".$id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+    if($query){
+        $data['stock_array'] =  $query;
+    }else{
+        $data['stock_array'] = array();
+    }
+
+    $sql = "log_stot_transfer_id = '".$id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }   
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_transfer2_print", $data, TRUE));
+    $mpdf->Output();
 }
     
 function transferstock_final_excel()
@@ -674,6 +674,7 @@ function transferstock_final_excel()
     
 function transferstock_final_print_serial()
 {
+    // ไม่ได้ใช้
 		$id = $this->uri->segment(3);
 		
 		$this->load->library('mpdf/mpdf');                
@@ -688,7 +689,7 @@ function transferstock_final_print_serial()
 			$data['stock_array'] = array();
 		}
     
-        $sql = "stot_id = '".$id."' and log_stots_enable = '1'";
+        $sql = "log_stot_id = '".$id."' and log_stots_enable = '1'";
         $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
         if($query){
             $data['serial_array'] =  $query;
@@ -1072,6 +1073,195 @@ function exportExcel_transfer_report()
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
+    
+function form_return_headoffice()
+{
+    $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_group_id = 7)";
+	$data['wh_out'] = $this->tp_warehouse_model->getWarehouse($sql);
+	$data['currentdate'] = date("d/m/Y");
+    
+    $sql = "wh_enable = 1 and wh_group_id = 3";
+	$data['wh_ho'] = $this->tp_warehouse_model->getWarehouse($sql);
+	$data['currentdate'] = date("d/m/Y");
+
+    $data['sessrolex'] = $this->session->userdata('sessrolex');
+    $data['remark'] = 0;
+    $data['title'] = "Nerd - Return Stock";
+    $this->load->view("TP/warehouse/form_return_headoffice", $data);
+}
+    
+function form_return_headoffice_select_item()
+{
+    $datein = $this->input->post("datein");
+    $whid_out = $this->input->post("whid_out");
+    $whid_in = $this->input->post("whid_in");
+    $watch_luxury = $this->input->post("watch_luxury");
+    /*
+    if ($this->session->userdata('sessrolex') == 0) $caseback = 0;
+    else $caseback = 1;
+    */
+    $whout_array = explode('#', $whid_out);
+    $whname_out = $whout_array[1];
+    $whid_out = $whout_array[0];
+    
+    $whin_array = explode('#', $whid_in);
+    $whname_in = $whin_array[1];
+    $whid_in = $whin_array[0];
+
+    $data['datein'] = $datein;
+    $data['whid_out'] = $whid_out;
+    $data['whname_out'] = $whname_out;
+    $data['whid_in'] = $whid_in;
+    $data['whname_in'] = $whname_in;
+    $data['remark'] = $watch_luxury;
+    $data['sessrolex'] = $this->session->userdata('sessrolex');
+    
+    $data['title'] = "Nerd - Return Stock";
+    $this->load->view("TP/warehouse/form_return_headoffice_select_item", $data);
+}
+    
+function save_return_headoffice()
+{
+    $luxury = $this->uri->segment(3);
+	$datein = $this->input->post("datein");
+	$whid_out = $this->input->post("whid_out");
+    $whid_in = $this->input->post("whid_in");
+    $it_array = $this->input->post("item");
+    $stot_remark = $this->input->post("stot_remark");
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $datein = explode('/', $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+    
+    $count = 0;
+    $month = date("Y-m");
+    $month_array = explode('-',date("y-m"));
+    
+    $number = $this->tp_warehouse_transfer_model->getMaxNumber_transfer_between($month, $this->session->userdata('sessrolex'));
+    $number++;
+    
+    if ($this->session->userdata('sessrolex') == 0) {
+        $number = "TB".$month_array[0].$month_array[1].str_pad($number, 4, '0', STR_PAD_LEFT);
+    }else{
+        $number = "TB-Ro".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
+    }
+    
+    $stock = array( 'stot_number' => $number,
+                    'stot_datein' => $datein,
+                    'stot_dateadd' => $currentdate,
+                    'stot_warehouse_out_id' => $whid_out,
+                    'stot_warehouse_in_id' => $whid_in,
+                    'stot_has_serial' => $luxury,
+                    'stot_is_rolex' => $this->session->userdata('sessrolex'),
+                    'stot_dateadd_by' => $this->session->userdata('sessid'),
+                    'stot_remark' => $stot_remark,
+                    "stot_status" => 2, 
+                    "stot_confirm_dateadd" => $currentdate,
+                    "stot_confirm_by" => $this->session->userdata('sessid')
+            );
+    $last_id = $this->tp_warehouse_transfer_model->addWarehouse_transfer_between($stock);
+    
+    for($i=0; $i<count($it_array); $i++){
+        
+        // check item id of serial
+        $where = "log_stot_transfer_id = '".$last_id."' and log_stot_item_id = '".$it_array[$i]["id"]."' and log_stot_enable=1";
+        $check_item = $this->tp_log_model->getLogStockTransfer($where);
+        $count_result = 0;
+        foreach($check_item as $loop_check) {
+            $count_result++;
+            $log_stot_id = $loop_check->log_stot_id;
+            $log_qty = $loop_check->log_stot_qty_want;
+        }
+        if ($count_result > 0) {
+            $qty_update = $log_qty + $it_array[$i]["qty"];
+            $stock = array('id' => $log_stot_id, 'log_stot_qty_want' => $qty_update, 'log_stot_qty_final' => $qty_update);
+            $query = $this->tp_log_model->editWarehouse_transfer_between($stock);
+            $last_log_id = $log_stot_id;
+        }else{
+            $stock = array( 'log_stot_transfer_id' => $last_id,
+                            'log_stot_old_qty' => $it_array[$i]["old_qty"],
+                            'log_stot_qty_want' => $it_array[$i]["qty"],
+                            'log_stot_qty_final' => $it_array[$i]["qty"],
+                            'log_stot_item_id' => $it_array[$i]["id"]
+            );
+            $last_log_id = $this->tp_log_model->addLogStockTransfer($stock);
+        }
+        $count += $it_array[$i]["qty"];
+        
+        if ($luxury==1){
+            
+            $stock = array( 'log_stots_stot_id' => $last_log_id,
+                            'log_stots_item_serial_id' => $it_array[$i]["itse_id"]
+            );
+            $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+            
+            $this->load->model('tp_item_model','',TRUE);
+            $serial_item = array( 'id' => $it_array[$i]["itse_id"],
+                                'itse_warehouse_id' => $whid_in,
+                                'itse_dateadd' => $currentdate
+                            );
+            $query = $this->tp_item_model->editItemSerial($serial_item);
+            //$count++;
+        }
+        
+        
+        // decrease stock warehouse out
+        $sql = "stob_item_id = '".$it_array[$i]["id"]."' and stob_warehouse_id = '".$whid_out."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+        
+        $qty_update = $it_array[$i]["qty"];
+        
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+
+                $qty_new = $loop->stob_qty - $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        // increase stock warehouse in
+        $sql = "stob_item_id = '".$it_array[$i]["id"]."' and stob_warehouse_id = '".$whid_in."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+        
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+                
+                $qty_new = $loop->stob_qty + $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }else{
+            $stock = array( 'stob_qty' => $qty_update,
+                            'stob_lastupdate' => $currentdate,
+                            'stob_lastupdate_by' => $this->session->userdata('sessid'),
+                            'stob_warehouse_id' => $whid_in,
+                            'stob_item_id' => $it_array[$i]["id"]
+                     );
+            $query = $this->tp_warehouse_transfer_model->addWarehouse_transfer($stock);
+            
+        }
+    }
+
+    
+    $result = array("a" => $count, "b" => $last_id);
+    echo json_encode($result);
+    exit();
+}
+    
     
 }
 ?>

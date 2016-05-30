@@ -83,12 +83,13 @@ Class Tp_warehouse_transfer_model extends CI_Model
     
  function getWarehouse_transfer_between_serial($where)
  {
-	$this->db->select("stot_number, log_stots_item_serial_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, wh1.wh_id as wh_out_id, wh1.wh_name as wh_out_name, wh1.wh_code as wh_out_code, wh2.wh_id as wh_in_id, wh2.wh_name as wh_in_name, wh2.wh_code as wh_in_code, SUM(log_stots_qty_want) as qty_update, MIN(log_stots_old_qty) as qty_old, SUM(log_stots_qty_final) as qty_final, stot_datein, user1.firstname as firstname, user1.lastname as lastname, user2.firstname as confirm_firstname, user2.lastname as confirm_lastname, stot_status, it_id, log_stots_id, stot_remark, stot_dateadd, stot_confirm_dateadd, br_id, it_short_description");
+	$this->db->select("stot_number, log_stots_item_serial_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, wh1.wh_id as wh_out_id, wh1.wh_name as wh_out_name, wh1.wh_code as wh_out_code, wh2.wh_id as wh_in_id, wh2.wh_name as wh_in_name, wh2.wh_code as wh_in_code, SUM(log_stot_qty_want) as qty_update, MIN(log_stot_old_qty) as qty_old, SUM(log_stot_qty_final) as qty_final, stot_datein, user1.firstname as firstname, user1.lastname as lastname, user2.firstname as confirm_firstname, user2.lastname as confirm_lastname, stot_status, it_id, log_stots_id, stot_remark, stot_dateadd, stot_confirm_dateadd, br_id, it_short_description");
 	$this->db->from('log_stock_transfer_serial');
+    $this->db->join('log_stock_transfer', 'log_stot_id = log_stots_stot_id','left');
     $this->db->join('tp_item_serial', 'itse_id = log_stots_item_serial_id','left');
     $this->db->join('tp_item', 'it_id = itse_item_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
-	$this->db->join('tp_stock_transfer', 'stot_id = log_stots_transfer_id','left');	
+	$this->db->join('tp_stock_transfer', 'stot_id = log_stot_transfer_id','left');	
     $this->db->join('tp_warehouse wh1', 'wh1.wh_id = stot_warehouse_out_id','inner');
     $this->db->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner');
     $this->db->join('nerd_users user1', 'user1.id = stot_dateadd_by','left');

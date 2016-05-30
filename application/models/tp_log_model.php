@@ -9,6 +9,15 @@ Class Tp_log_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+    
+ function getLogStockTransfer($where)
+ {
+	$this->db->select("	log_stot_id, log_stot_transfer_id, log_stot_item_id, log_stot_old_qty, 	log_stot_qty_want, log_stot_qty_final, log_stot_enable");
+	$this->db->from('log_stock_transfer');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
 
  function addLogStockBalance($insert=NULL)
  {		

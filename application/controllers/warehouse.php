@@ -162,6 +162,34 @@ function showBalance()
     $this->load->view('TP/warehouse/show_stock',$data);
 }
     
+function show_all_product_warehouse()
+{
+    $refcode = $this->input->post("refcode");
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+    $minprice = $this->input->post("minprice");
+    $maxprice = $this->input->post("maxprice");
+
+    if ($refcode == "") $refcode = "NULL";
+    $data['refcode'] = $refcode;
+    $data['brand'] = $brand;
+    $data['warehouse'] = $warehouse;
+    if ($minprice == "") $minprice = 0;
+    $data['minprice'] = $minprice;
+    if ($maxprice == "") $maxprice = 0;
+    $data['maxprice'] = $maxprice;
+    
+    $data['viewby'] = 0;
+    
+    $sql = "br_id = '".$brand."'";
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = "wh_id = '".$warehouse."'";
+    $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
+
+    $data['title'] = "NGG| Nerd - Stock";
+    $this->load->view('TP/warehouse/show_stock',$data);
+}
+    
 function showBalance_byserial()
 {
     $refcode = $this->input->post("refcode");
@@ -180,6 +208,11 @@ function showBalance_byserial()
     $data['maxprice'] = $maxprice;
     
     $data['viewby'] = 1;
+    
+    $sql = "br_id = '".$brand."'";
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = "wh_id = '".$warehouse."'";
+    $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
     $data['title'] = "NGG| Nerd - Stock";
     $this->load->view('TP/warehouse/show_stock_byserial',$data);

@@ -101,6 +101,11 @@
                         <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
                     </li>
                     <?php } ?>
+                    <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
+                    <li>
+                        <a href="<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>"><i class="fa fa-circle-o"></i> คืนสินค้าเข้าคลัง HO</a>
+                    </li>
+                    <?php } ?>
 					<li>
                         <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
                     </li>

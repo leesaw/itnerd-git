@@ -331,7 +331,7 @@ function submitform()
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress').value;
     var custelephone = document.getElementById('custelephone').value;
-    custelephone = custelephone.replace(/[-/#]/g, "");
+    custelephone = custelephone.replace(/[-/#\s]/g, "");
     var datein = document.getElementById('datein').value;
     
     // radio choice

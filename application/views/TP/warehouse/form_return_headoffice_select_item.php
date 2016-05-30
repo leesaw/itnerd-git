@@ -25,7 +25,7 @@
                             <div class="col-md-2">
                                 <form action="<?php echo site_url("warehouse_transfer/save_importstock"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
-                                            วันที่ย้ายคลัง
+                                            วันที่คืนสินค้า
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>" readonly>
                                     </div>
 							</div>
@@ -46,19 +46,22 @@
                                         <input type="text" class="form-control" name="whname_in" id="whname_in" value="<?php echo $whname_in; ?>" readonly>
                                     </div>
 							</div>
+                            <div class="col-md-4">
+                                <?php if ($sessrolex != 1) { ?>
+                                <input type="radio" name="watch_luxury" id="watch_luxury" value="0" <?php if(($remark=='0') || (!isset($remark))) echo "checked"; ?> disabled> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <?php } ?>
+              <input type="radio" name="watch_luxury" id="watch_luxury" value="1" <?php if ($remark=='1') echo "checked"; ?> disabled> <label class="text-red"> Caseback</label>
+                            </div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
-                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการย้าย"; else echo "Caseback No. ที่ต้องการย้าย"; ?>">
+                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการคืน"; else echo "Caseback No. ที่ต้องการคืน"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall">เลือกสินค้าทั้งหมด</button>
-                                        </div> 
-                                        
-                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
+                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -109,7 +112,7 @@
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $remark; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
                                 
-                                <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><button type="button" class="btn btn-danger" name="resetbtn" id="resetbtn"><i class='fa fa-rotate-left'></i>  เริ่มต้นใหม่ </button></a>
+                                <a href="<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>"><button type="button" class="btn btn-danger" name="resetbtn" id="resetbtn"><i class='fa fa-rotate-left'></i>  เริ่มต้นใหม่ </button></a>
 							</div>
 						</div>
 						</form>
@@ -151,25 +154,6 @@ $(document).ready(function()
             },3000);
 		}
 	});
-    
-    $('#showall').keyup(function(e){ //enter next
-        if(e.keyCode == 13) {
-            var whid_out = <?php echo $whid_out; ?>;
-            var whname_out = "<?php echo $whname_out; ?>";
-            var luxury = <?php echo $remark; ?>;
-            if(product_code_value != "")
-			{
-                all_product(whid_out, whname_out, luxury);
-                
-			}
-            
-            $(this).val('');
-            
-            setTimeout(function(){
-                calculate();
-            },3000);
-		}
-	});
 
 });
     
@@ -195,50 +179,6 @@ function check_product_code(refcode_input, whid_out, whname_out, luxury)
             $.ajax({
                 type : "POST" ,
                 url : "<?php echo site_url("warehouse_transfer/checkStock_transfer"); ?>" ,
-                data : {refcode: refcode_input, whid_out: whid_out },
-                success : function(data) {
-                    if(data != "")
-                    {
-                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                        $('table > tbody').append(element);
-                        count_enter_form_input_product++;
-                        count_list++;
-                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
-                    }else{
-                        alert("ไม่พบ Ref. Code ที่ต้องการในคลัง "+whname_out);
-                    }
-                }
-            });
-        }else{
-            $.ajax({
-                type : "POST" ,
-                url : "<?php echo site_url("warehouse_transfer/checkStock_transfer_caseback"); ?>" ,
-                data : {refcode: refcode_input, whid_out: whid_out} ,
-                success : function(data) {
-                    if(data != "")
-                    {
-                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                        $('table > tbody').append(element);
-                        count_enter_form_input_product++;
-                        count_list++;
-                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
-                    }else{
-                        alert("ไม่พบ Caseback No. ที่ต้องการในคลัง "+whname_out);
-                    }
-                }
-            });
-        }
-	}
-}
-    
-function allproduct(whid_out, whname_out, luxury)
-{
-	if(whid_out != "")
-	{
-        if (luxury == 0) {
-            $.ajax({
-                type : "POST" ,
-                url : "<?php echo site_url("warehouse/show_all_product_warehouse"); ?>" ,
                 data : {refcode: refcode_input, whid_out: whid_out },
                 success : function(data) {
                     if(data != "")
@@ -312,7 +252,7 @@ function submitform(x)
         if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");
         }else{
-            var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+            var r = confirm("ยืนยันการคืนสินค้า !!");
             if (r == true) {
                 confirmform(x);
             }
@@ -334,13 +274,13 @@ function confirmform(luxury)
         
         var it_code = document.getElementsByName('it_code');
         for(var i=0; i<it_code.length; i++){
-            it_array[i] = {id: it_id[i].value, qty: 1, code: it_code[i].value, old_qty: it_old_qty[i].value};
+            it_array[i] = {id: it_id[i].value, itse_id: itse_id[i].value, qty: 1, code: it_code[i].value, old_qty: it_old_qty[i].value};
         }
         document.getElementById("savebtn").disabled = true;
 
         $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save/1"); ?>" ,
+            url : "<?php echo site_url("warehouse_transfer/save_return_headoffice/1"); ?>" ,
             data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array, stot_remark: stot_remark} ,
             dataType: 'json',
             success : function(data) {
@@ -348,10 +288,10 @@ function confirmform(luxury)
                 bootbox.confirm(message, function(result) {
                         var currentForm = this;
                         if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/transferstock_print_serial"); ?>"+"/"+data.b, "_blank");
-                            location.reload();
+                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print"); ?>"+"/"+data.b, "_blank");
+                            window.location = "<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>";
                         }else{
-                            location.reload();
+                            window.location = "<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>";
                         }
 
                 });
@@ -405,7 +345,7 @@ function confirmform(luxury)
         
         $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save/0"); ?>" ,
+            url : "<?php echo site_url("warehouse_transfer/save_return_headoffice/0"); ?>" ,
             data : {datein: datein, whid_out: whid_out, whid_in: whid_in, item: it_array, stot_remark: stot_remark} ,
             dataType: 'json',
             success : function(data) {
@@ -413,10 +353,10 @@ function confirmform(luxury)
                 bootbox.confirm(message, function(result) {
                         var currentForm = this;
                         if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/transferstock_print"); ?>"+"/"+data.b, "_blank");
-                            window.location = "<?php echo site_url("warehouse_transfer/transferstock"); ?>";
+                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print"); ?>"+"/"+data.b, "_blank");
+                            window.location = "<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>";
                         }else{
-                            window.location = "<?php echo site_url("warehouse_transfer/transferstock"); ?>";
+                            window.location = "<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>";
                         }
 
                 });
