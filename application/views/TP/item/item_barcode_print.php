@@ -11,23 +11,23 @@ foreach($serial_array as $loop) { ?>
 <table border="0">
 <tbody>
 <tr>
-<td style="text-align: top;" width="240"><b style="font-size:16"><?php echo $loop->br_name; ?></b>
+<td style="text-align: top;" width="240"><b><?php echo $loop->br_name; ?></b>
 <br/>
-<b style="font-size:16"><?php echo $loop->it_refcode; ?></b>
+<b><?php echo $loop->it_refcode; ?></b>
 <br/>
-<b style="font-size:16"><?php echo $loop->itse_serial_number; ?></b>
+<b><?php echo $loop->itse_serial_number; ?></b>
 <br/>
-<b style="font-size:16"><?php echo $loop->it_short_description; ?></b>
+<b><?php echo $loop->it_short_description; ?></b>
 </td>
 <td style="text-align: top;" width="500">
-<b style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>
 <br/>
-<b style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->it_barcode; ?></b>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->it_barcode; ?></b>
+<br/>
 <barcode code='<?php echo $loop->it_barcode; ?>' type="ean13" size="1.5" height="0.3" />
 <br/>
 <div id="text"></div>
-<b style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>
 </td>
 </tr>
 </tbody>

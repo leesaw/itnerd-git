@@ -17,16 +17,16 @@ foreach($serial_array as $loop) { ?>
 <br/>
 <b><?php echo $loop->it_model." ".$loop->it_remark; ?></b>
 <br/>
-<b><?php echo $loop->it_short_description; ?></b>
+<b style="font-size:12"><?php echo $loop->it_short_description; ?></b>
 </td>
 <td style="text-align: top;" width="500">
 <b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>
 <br/>
-<b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->itse_serial_number; ?></b>
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->itse_serial_number; ?></b>
 <br/>
 <barcode code='<?php echo $loop->itse_serial_number; ?>' type="C128a" size="1" height="1" class='barcode' />
 <br/>
-<b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>
 </td>
 </tr>
 </tbody>

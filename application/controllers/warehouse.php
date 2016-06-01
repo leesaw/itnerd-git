@@ -164,30 +164,29 @@ function showBalance()
     
 function show_all_product_warehouse()
 {
-    $refcode = $this->input->post("refcode");
-    $brand = $this->input->post("brand");
-    $warehouse = $this->input->post("warehouse");
-    $minprice = $this->input->post("minprice");
-    $maxprice = $this->input->post("maxprice");
-
-    if ($refcode == "") $refcode = "NULL";
-    $data['refcode'] = $refcode;
-    $data['brand'] = $brand;
-    $data['warehouse'] = $warehouse;
-    if ($minprice == "") $minprice = 0;
-    $data['minprice'] = $minprice;
-    if ($maxprice == "") $maxprice = 0;
-    $data['maxprice'] = $maxprice;
+    $warehouse = $this->input->post("wh_id");
     
-    $data['viewby'] = 0;
-    
-    $sql = "br_id = '".$brand."'";
-    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
-    $sql = "wh_id = '".$warehouse."'";
-    $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
+    $sql = "stob_warehouse_id = '".$warehouse."' and stob_qty > 0";
+    $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);
 
-    $data['title'] = "NGG| Nerd - Stock";
-    $this->load->view('TP/warehouse/show_stock',$data);
+    $arr = array();
+    $index = 0;
+    foreach ($result as $loop) {
+        $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        
+        if ($loop->stob_qty > 0) { 
+            $output .= "<td style='width: 120px;'>";
+        }else{
+            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+        }
+        $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$loop->stob_qty."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+        
+        $arr[$index] = $output;
+        $index++;
+    }
+    echo json_encode($arr);
+    exit();
 }
     
 function showBalance_byserial()
@@ -360,7 +359,7 @@ function exportExcel_stock_itemlist()
     $maxprice = $this->input->post("maxprice");
     
     $sql = $this->no_rolex;
-    $sql .= " and stob_qty >0";
+    $sql .= " and stob_qty >0 and it_enable = 1";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
@@ -458,6 +457,8 @@ function exportExcel_stock_itemlist_caseback()
     $maxprice = $this->input->post("maxprice");
     
     $sql = $this->no_rolex;
+    
+    $sql .= " and it_enable = 1";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {

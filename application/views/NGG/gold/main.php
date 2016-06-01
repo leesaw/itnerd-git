@@ -26,6 +26,11 @@
                                 <a href="<?php echo site_url("ngg_gold/form_warranty"); ?>"><button type="button" class="btn btn-primary btn-lg btn-block"><h4>ออกบัตรรับประกันสินค้า (ทอง)</h4></button></a>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <a href="<?php echo site_url("ngg_gold/list_warranty_today"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>บัตรรับประกันสินค้าของวันนี้ (ทอง)</h4></button></a>
+                            </div>
+                        </div>
                     </div>       
 					</div>
                 </div>

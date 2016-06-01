@@ -55,7 +55,7 @@
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการย้าย"; else echo "Caseback No. ที่ต้องการย้าย"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall">เลือกสินค้าทั้งหมด</button>
+                                            <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall" onclick="allproduct()">เลือกสินค้าทั้งหมด</button>
                                         </div> 
                                         
                                         <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
@@ -152,24 +152,6 @@ $(document).ready(function()
 		}
 	});
     
-    $('#showall').keyup(function(e){ //enter next
-        if(e.keyCode == 13) {
-            var whid_out = <?php echo $whid_out; ?>;
-            var whname_out = "<?php echo $whname_out; ?>";
-            var luxury = <?php echo $remark; ?>;
-            if(product_code_value != "")
-			{
-                all_product(whid_out, whname_out, luxury);
-                
-			}
-            
-            $(this).val('');
-            
-            setTimeout(function(){
-                calculate();
-            },3000);
-		}
-	});
 
 });
     
@@ -231,25 +213,32 @@ function check_product_code(refcode_input, whid_out, whname_out, luxury)
 	}
 }
     
-function allproduct(whid_out, whname_out, luxury)
+function allproduct()
 {
+    var whid_out = <?php echo $whid_out; ?>;
+    var whname_out = "<?php echo $whname_out; ?>";
+    var luxury = <?php echo $remark; ?>;
 	if(whid_out != "")
 	{
         if (luxury == 0) {
             $.ajax({
                 type : "POST" ,
                 url : "<?php echo site_url("warehouse/show_all_product_warehouse"); ?>" ,
-                data : {refcode: refcode_input, whid_out: whid_out },
+                data : { wh_id: whid_out },
+                dataType: "json",
                 success : function(data) {
-                    if(data != "")
+                    if(data.length > 0)
                     {
-                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                        $('table > tbody').append(element);
-                        count_enter_form_input_product++;
-                        count_list++;
+                        for(var i=0; i<data.length; i++) {
+                            var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                            $('table > tbody').append(element);
+                            count_enter_form_input_product++;
+                            count_list++;
+                        }
                         document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                        document.getElementById("showall").disabled = true;
                     }else{
-                        alert("ไม่พบ Ref. Code ที่ต้องการในคลัง "+whname_out);
+                        alert("ไม่พบสินค้าที่ต้องการในคลัง "+whname_out);
                     }
                 }
             });
@@ -273,6 +262,11 @@ function allproduct(whid_out, whname_out, luxury)
             });
         }
 	}
+    setTimeout(function(){
+        calculate();
+    },3000);
+    
+    
 }
 
 function delete_item_row(row1)

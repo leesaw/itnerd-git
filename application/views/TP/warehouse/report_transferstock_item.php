@@ -13,7 +13,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            รายการ-ย้ายคลังสินค้า
+            รายงาน-ย้ายคลังสินค้า
         </h1>
     </section>
 	
@@ -29,7 +29,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-danger">
 					<div class="panel-heading">
-                        <h4>รายการย้ายคลังสินค้าที่กำลังดำเนินการ</h4>
+                        <h4>รายงานย้ายคลังสินค้าที่กำลังดำเนินการ</h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
@@ -68,7 +68,8 @@
 				</div>
 			</div>	
             
-		</div>               
+		</div>  
+            <!--
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-success">
@@ -116,7 +117,7 @@
 			</div>	
             
 		</div>                
-                        
+             -->           
                         
 					</div>
                 </div>

@@ -216,5 +216,31 @@ function check_telephone()
     echo json_encode($result);
 }
     
+function list_warranty_today()
+{
+    $currentdate = date("Y-m-d");
+    $currentdate = "2016-05-26";
+    $start = $currentdate." 00:00:00";
+    $end = $currentdate." 23:59:59";
+    
+    $this->load->model('tp_shop_model','',TRUE);
+    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."' and ngw_shop_id = '".$this->session->userdata('sessshopid')."'";
+    $query = $this->ngg_gold_model->get_warranty($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    
+    $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['title'] = "NGG| Nerd - Warranty Card List";
+    $this->load->view("NGG/gold/list_warranty_today", $data);
+}
+    
 }
 ?>

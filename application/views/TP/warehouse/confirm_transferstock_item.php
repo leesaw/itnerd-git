@@ -97,7 +97,8 @@
                                                     <td><?php echo $loop->br_name; ?></td>
                                                     <td><?php echo $loop->it_model; ?></td>
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
-                                                    <td><?php echo $loop->qty_old; ?></td>
+                                                    <td><input type='hidden' name='qty_old' id='qty_old' value=" <?php echo $loop->qty_old; ?>"><?php if ($loop->qty_old <1) echo "<span class='text-red'><b>".$loop->qty_old."</b></span>";
+                                                        else echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
                                                     <td>
                                                         <?php if ($loop->br_has_serial==1) { ?>
@@ -231,9 +232,15 @@ function returnform()
 function submitform()
 {
     var it_final = document.getElementsByName('it_final');
+    var qty_old = document.getElementsByName('qty_old');
     for(var i=0; i<it_final.length; i++){
         if (it_final[i].value == "") {
             alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
+            return;
+        }
+        
+        if (parseInt(it_final[i].value) > parseInt(qty_old[i].value)) {
+            alert("จำนวนสินค้าคงเหลือไม่เพียงพอกับที่ต้องการ !!");
             return;
         }
     }

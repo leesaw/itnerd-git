@@ -18,7 +18,22 @@
 	<!-- Main content -->
     <section class="content">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                      <i class="fa fa-warning"></i>
+
+                      <h3 class="box-title">NERD version 1.3 noted</h3>
+                    </div>
+                    <div class="box-body">
+                        <ul>
+                            <li>เจ้าหน้าที่ดูแลคลังสามารถย้ายสินค้าเฉพาะในคลังโปรและคลัง Head Office มายังคลัง Head Office ได้เอง</li>
+                            <li>สามารถเลือก Ref. Number ทั้งหมดในคลังที่ต้องการย้ายคลัง โดยการคลิกปุ่ม "เลือกสินค้าทั้งหมด"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="box box-primary">
                     <div class="box-header with-border">
                       <i class="fa fa-warning"></i>

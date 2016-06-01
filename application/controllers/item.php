@@ -444,7 +444,7 @@ function rolex_barcode_print()
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
     
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '888' and itse_id = 348";
+    $sql_result = "br_id = '888' and itse_dateadd > '2016-05-31 00:00:00'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
     if($query){
@@ -466,12 +466,13 @@ function item_barcode_print()
     $id = $this->uri->segment(3);
     
     $this->load->library('mpdf/mpdf');                
-    $mpdf= new mPDF('th',array(104,17),'0', 'thsaraban');
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
     
     $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '896' and itse_dateadd >= '".$currentdate." 00:00:00' and itse_dateadd <= '".$currentdate." 23:59:59' and itse_enable = '1'";
+    $sql_result = "br_id = '896' and (itse_serial_number = '1608108779' or itse_serial_number = '1608108796' or itse_serial_number = '1608108803' or itse_serial_number = '1608108809') and itse_enable = '1'";
+    //$sql_result = "br_id = '896'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_item_model->getItem_caseback($sql_result);
     if($query){
