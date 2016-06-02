@@ -669,15 +669,29 @@ function saleorder_rolex_pos_temp_last()
     }else{
         $data['pos_array'] = array();
     }
+    
 
-    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
-    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    foreach($query as $loop1) {
+        if ($loop1->posrot_status == 'D' and $loop1->posrot_shop_id == 0) {
+            $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+            $query = $this->tp_saleorder_model->getPOS_rolex_temp_item_borrow($sql);
+            foreach($query as $loop2) {
+                $data["posrob_borrower_name"] = $loop2->posrob_borrower_name;
+                break;
+            }
+        }else{
+            $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+            $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+            $data["posrob_borrower_name"] = "";
+        }
+        break;
+    }
+    
     if($query){
         $data['item_array'] =  $query;
     }else{
         $data['item_array'] = array();
     }
-    
     $data['pos_rolex_id'] = $id;
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/sale/saleorder_pos_temp_view", $data);

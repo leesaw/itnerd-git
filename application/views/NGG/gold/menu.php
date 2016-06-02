@@ -12,7 +12,14 @@
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="<?php echo site_url("ngg_gold/main"); ?>">Home</a></li>
+            <?php if ($this->session->userdata('sessstatus') == 61) { ?>
             <li><a href="<?php echo site_url("ngg_gold/form_warranty"); ?>">ออกบัตรรับประกันสินค้า (ทอง)</a></li>
+            <?php } ?>
+            <?php if ($this->session->userdata('sessstatus') == 62) { ?>
+            <li>
+                <a href="<?php echo site_url("ngg_gold/list_warranty_filter"); ?>">แสดงบัตรรับประกันสินค้าทั้งหมด (ทอง)</a>
+            </li>
+            <?php } ?>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

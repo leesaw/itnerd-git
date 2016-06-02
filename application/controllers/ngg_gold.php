@@ -219,7 +219,7 @@ function check_telephone()
 function list_warranty_today()
 {
     $currentdate = date("Y-m-d");
-    $currentdate = "2016-05-26";
+    //$currentdate = "2016-05-26";
     $start = $currentdate." 00:00:00";
     $end = $currentdate." 23:59:59";
     
@@ -240,6 +240,133 @@ function list_warranty_today()
     $data["currentdate"] = $currentdate;
     $data['title'] = "NGG| Nerd - Warranty Card List";
     $this->load->view("NGG/gold/list_warranty_today", $data);
+}
+    
+function void_warranty()
+{
+    $id = $this->uri->segment(3);
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $sql = "ngw_id = '".$id."'";
+    $query = $this->ngg_gold_model->get_warranty($sql);
+    foreach($query as $loop) {
+        $remark = $loop->ngw_remark;
+        $shop_id = $loop->ngw_shop_id;
+        
+        $cusname = $loop->ngw_customername; 
+        $cusaddress = $loop->ngw_customeraddress;
+        $custelephone = $loop->ngw_customertelephone;
+        $shopname = $loop->sh_name;
+        $shoptelephone = $loop->sh_telephone;
+        $number = $loop->ngw_number;
+        $product = $loop->ngw_product;
+        $kindgold = $loop->ngw_kindgold;
+        $price = $loop->ngw_price;
+        $payment = $loop->ngw_payment;
+        $code = $loop->ngw_code;
+        $weight = $loop->ngw_weight;
+        $jewelry = $loop->ngw_jewelry;
+        $datestart = $loop->ngw_datestart;
+        $old = $loop->ngw_old;
+        $model = $loop->ngw_model;
+        $goldbuy = $loop->ngw_goldbuy;
+        $goldsell = $loop->ngw_goldsell;
+        $issuedate = $loop->ngw_issuedate;
+        $salebarcode = $loop->sp_barcode;
+        $saleperson_code = $loop->ngw_saleperson_id;
+        $datein = $loop->ngw_issuedate;
+    }
+    $remark .= "##VOID##".$this->input->post("remarkvoid");
+    $pos = array("id" => $id, "ngw_status" => 'V', "ngw_remark" => $remark
+                );
+    $query = $this->ngg_gold_model->edit_warranty($pos);
+    
+    $warranty = array( 'ngw_number' => $number,
+                    'ngw_product' => $product,
+                    'ngw_kindgold' => $kindgold,
+                    'ngw_price' => $price,
+                    'ngw_payment' => $payment,
+                    'ngw_code' => $code,
+                    'ngw_weight' => $weight,
+                    'ngw_jewelry' => $jewelry,
+                    'ngw_datestart' => $datestart,
+                    'ngw_old' => $old,
+                    'ngw_model' => $model,
+                    'ngw_goldbuy' => $goldbuy,
+                    'ngw_goldsell' => $goldsell,
+                    'ngw_customername' => $cusname,
+                    'ngw_customertelephone' => $custelephone,
+                    'ngw_customeraddress' => $cusaddress,
+                    'ngw_saleperson_id' => $saleperson_code,
+                    'ngw_issuedate' => $datein,
+                    'ngw_shop_id' => $shop_id,
+                    'ngw_dateadd' => $currentdate,
+                    'ngw_remark' => $remark,
+                    'ngw_enable' => 1,
+                    'ngw_status' => 'V',
+                    'ngw_dateaddby' => $this->session->userdata('sessid')
+            );
+    $query = $this->ngg_gold_model->add_log_warranty($warranty);
+		
+    redirect('ngg_gold/view_warranty/'.$id, 'refresh');
+}
+    
+function list_warranty_filter()
+{
+    $currentdate = date("Y-m");
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $data['warranty_array'] = $this->ngg_gold_model->get_warranty($sql);
+    
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    
+    $data["startdate"] = "";
+    $data["enddate"] = "";
+    
+    $data["search"] = 0;
+    
+    $data['title'] = "NGG| Nerd - Warranty Card List";
+    $this->load->view("NGG/gold/list_warranty_month", $data);
+}
+    
+function result_warranty_filter()
+{
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+    $data['month'] = "";
+    
+    $startdate_array = explode('/', $startdate);
+    $start = $startdate_array[2]."-".$startdate_array[1]."-".$startdate_array[0];
+    
+    $enddate_array = explode('/', $enddate);
+    $end = $enddate_array[2]."-".$enddate_array[1]."-".$enddate_array[0];
+    
+    $start = $start." 00:00:00";
+    $end = $end." 23:59:59";
+    
+    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $data['warranty_array'] = $this->ngg_gold_model->get_warranty($sql);
+    
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    
+    $data["startdate"] = $startdate;
+    $data["enddate"] = $enddate;
+    
+    $data["search"] = 1;
+    
+    $data['title'] = "NGG| Nerd - Warranty Card List";
+    $this->load->view("NGG/gold/list_warranty_month", $data);
 }
     
 }

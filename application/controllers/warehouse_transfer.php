@@ -965,7 +965,7 @@ function ajaxView_seach_transfer()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("stot_datein, stot_number, it_refcode, br_name, it_model, it_short_description, it_srp, 	log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
+    ->select("stot_datein, CONCAT('/', stot_id, '\">', stot_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, 	log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
     ->from('log_stock_transfer')
     ->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left')
     ->join('tp_item', 'it_id = log_stot_item_id','left')
@@ -974,7 +974,8 @@ function ajaxView_seach_transfer()
     ->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner')
     ->where('stot_enable',1)
     ->where('log_stot_qty_final >',0)
-    ->where($sql);
+    ->where($sql)
+    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/transferstock_final_print").'$1',"transfer_id");
     echo $this->datatables->generate(); 
 }
     

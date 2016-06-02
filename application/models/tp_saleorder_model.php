@@ -154,6 +154,21 @@ Class Tp_saleorder_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  } 
+    
+ function getPOS_rolex_temp_item_borrow($where)
+ {
+    $this->db->select("posroit_id, posroit_pos_rolex_temp_id, posroit_item_id, posroit_item_serial_number_id, posroit_item_srp, posroit_qty, posroit_dc_percent, posroit_dc_baht, posroit_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_short_description, posroit_stock_balance_id, posrob_borrower_name");
+	$this->db->from('tp_pos_rolex_temp_item');	
+    $this->db->join('tp_item', 'it_id = posroit_item_id','left');	
+    $this->db->join('tp_item_serial', 'itse_id = posroit_item_serial_number_id','left');	
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    $this->db->join('tp_pos_rolex_borrow_item', 'posrobi_pos_temp_id = posroit_pos_rolex_temp_id', 'left');
+    $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
+    $this->db->join('tp_pos_rolex_borrower', 'posbor_name = posrob_borrower_name', 'left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
 
  function addSaleOrder($insert=NULL)
  {		
