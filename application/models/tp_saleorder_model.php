@@ -62,8 +62,9 @@ Class Tp_saleorder_model extends CI_Model
     
  function getSaleOrder_Item_rolex($table_join,$where_temp,$where_vat)
  {
-    $this->db->select("solddate, it_refcode, it_model, it_short_description, itse_serial_number, it_srp, it_dc, it_netprice, cusname");
-	$this->db->from("((SELECT posrot_issuedate as solddate, it_refcode, it_model, it_short_description, itse_serial_number, posroit_item_srp as it_srp, posroit_dc_baht as it_dc, posroit_netprice as it_netprice, posrot_customer_name as cusname  FROM (`tp_pos_rolex_temp_item`) LEFT JOIN `tp_pos_rolex_temp` ON `tp_pos_rolex_temp`.`posrot_id` = `tp_pos_rolex_temp_item`.`posroit_pos_rolex_temp_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_temp_item`.`posroit_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_temp_item`.`posroit_item_serial_number_id`=`tp_item_serial`.`itse_id`".$table_join."WHERE `posrot_status` != 'V' AND `posrot_enable` = 1 AND ".$where_temp.") UNION (SELECT posro_issuedate as solddate, it_refcode, it_model, it_short_description, itse_serial_number, posroi_item_srp as it_srp, posroi_dc_baht as it_dc, posroi_netprice as it_netprice, posro_customer_name as cusname  FROM (`tp_pos_rolex_item`) LEFT JOIN `tp_pos_rolex` ON `tp_pos_rolex`.`posro_id` = `tp_pos_rolex_item`.`posroi_pos_rolex_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_item`.`posroi_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_item`.`posroi_item_serial_number_id`=`tp_item_serial`.`itse_id` WHERE `posro_status` != 'V' AND `posro_enable` = 1 AND ".$where_vat.") ) as aa");	
+    $this->db->select("solddate, number, it_refcode, it_model, it_short_description, itse_serial_number, it_srp, it_dc, it_netprice, cusname");
+	$this->db->from("((SELECT posrot_issuedate as solddate, posrot_number as number, it_refcode, it_model, it_short_description, itse_serial_number, posroit_item_srp as it_srp, posroit_dc_baht as it_dc, posroit_netprice as it_netprice, posrot_customer_name as cusname  FROM (`tp_pos_rolex_temp_item`) LEFT JOIN `tp_pos_rolex_temp` ON `tp_pos_rolex_temp`.`posrot_id` = `tp_pos_rolex_temp_item`.`posroit_pos_rolex_temp_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_temp_item`.`posroit_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_temp_item`.`posroit_item_serial_number_id`=`tp_item_serial`.`itse_id`".$table_join."WHERE `posrot_status` != 'V' AND `posrot_enable` = 1 AND ".$where_temp.") UNION (SELECT posro_issuedate as solddate, posro_number as number, it_refcode, it_model, it_short_description, itse_serial_number, posroi_item_srp as it_srp, posroi_dc_baht as it_dc, posroi_netprice as it_netprice, posro_customer_name as cusname  FROM (`tp_pos_rolex_item`) LEFT JOIN `tp_pos_rolex` ON `tp_pos_rolex`.`posro_id` = `tp_pos_rolex_item`.`posroi_pos_rolex_id` LEFT JOIN `tp_item` ON `tp_pos_rolex_item`.`posroi_item_id`=`tp_item`.`it_id` LEFT JOIN `tp_item_serial` ON  `tp_pos_rolex_item`.`posroi_item_serial_number_id`=`tp_item_serial`.`itse_id` WHERE `posro_status` != 'V' AND `posro_enable` = 1 AND ".$where_vat.") ) as aa");	
+    $this->db->order_by("solddate");
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -273,6 +274,14 @@ function addSaleOrder_serial($insert=NULL)
 	$this->db->where('posrot_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_pos_rolex_temp', $edit); 	
+	return $query;
+ }
+    
+ function editPOS_rolex_temp_item($edit=NULL)
+ {
+	$this->db->where('posroit_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_pos_rolex_temp_item', $edit); 	
 	return $query;
  }
 

@@ -37,7 +37,7 @@
                         <form name="exportexcel" action="<?php echo site_url("sale/exportExcel_rolex_sale_report"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
-                        <input type="hidden" name="shop" value="<?php echo $shop_id."-".$shop_name; ?>">
+                        <input type="hidden" name="shop" value="<?php echo $shop_id; ?>">
                         <input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
                         <input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
                         </form>

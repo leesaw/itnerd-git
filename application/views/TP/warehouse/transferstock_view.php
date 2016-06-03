@@ -29,7 +29,7 @@
                             <div class="col-md-2">
                                 <form action="<?php echo site_url("warehouse_transfer/transferstock_select_item"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
-                                            วันที่ย้ายคลัง
+                                            วันที่กำหนดส่ง
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>

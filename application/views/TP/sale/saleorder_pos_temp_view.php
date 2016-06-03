@@ -24,7 +24,7 @@
                         <div class="row">
                             <div class="col-md-2">
                                     <div class="form-group-sm has-success">
-                                        <label class="control-label" for="inputSuccess">เลขที่ใบเสร็จ</label>
+                                        <label class="control-label" for="inputSuccess">เลขที่ใบส่งของ</label>
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $loop->posrot_number; ?>" readonly>
                                     </div>
 							</div>
@@ -130,23 +130,24 @@
 						</div>	
                         <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group-sm">
-                                    ชื่อ-นามสกุลพนักงานขาย
-                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>">
+                                <div class="form-group-sm has-success">
+                                    <label class="control-label" for="inputSuccess">ชื่อ-นามสกุลพนักงานขาย</label>
+                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group-sm">
-                                    Remark
-                                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $remark; ?>">
+                                <div class="form-group-sm has-success">
+                                    <label class="control-label" for="inputSuccess">Remark</label>
+                                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $remark; ?>" readonly>
                                 </div>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
-							<div class="col-md-6">
+							<div class="col-md-12">
                                 <a href="<?php echo site_url("sale/saleorder_rolex_temp_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบเสร็จรับเงิน </button></a>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบเสร็จรับเงิน (Void) </button>
+                                <a href="<?php echo site_url("sale/saleorder_rolex_temp_edit")."/".$pos_rolex_id; ?>"><button type="button" class="btn btn-warning" name="printbtn" id="printbtn"><i class='fa fa-edit'></i>  แก้ไขใบเสร็จรับเงิน </button></a>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-danger pull-right" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบเสร็จรับเงิน (Void) </button>
                                 <form action="<?php echo site_url("sale/saleorder_rolex_void_pos_temp")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
 							</div>
 						</div>

@@ -25,7 +25,7 @@
                             <div class="col-md-2">
                                 <form action="<?php echo site_url("warehouse_transfer/save_importstock"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
-                                            วันที่คืนสินค้า
+                                            วันที่กำหนดส่ง
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>" readonly>
                                     </div>
 							</div>

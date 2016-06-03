@@ -2,6 +2,7 @@
 <html>
 <head>
 <?php $this->load->view('NGG/gold/header_view'); ?>
+<link href="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body class="hold-transition skin-red layout-top-nav">
@@ -26,11 +27,11 @@
                         <form action="<?php echo site_url("ngg_gold/result_warranty_filter"); ?>" name="formfilter" id="formfilter" method="post">
                         <div class="col-xs-3 col-md-2">
                             เลือกวันที่เริ่มต้น : 
-                            <input type="text" class="form-control" id="startdate" name="startdate" value="<?php echo $startdate; ?>" />
+                            <input type="text" class="form-control" id="startdate" name="startdate" value="<?php echo $start_form; ?>" />
                         </div>
                         <div class="col-xs-3 col-md-2">
                             สิ้นสุด :
-                            <input type="text" class="form-control" id="enddate" name="enddate" value="<?php echo $enddate; ?>" />
+                            <input type="text" class="form-control" id="enddate" name="enddate" value="<?php echo $end_form; ?>" />
                         </div>
                         <div class="col-xs-3 col-md-2">
                             <br>
@@ -48,13 +49,13 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
 					<div class="panel-heading">
-                        <h4>รายการบัตรรับประกันสินค้า<?php if ($search==0) { ?>ของเดือนที่ <?php echo $month; } ?></h4>
+                        <h4>รายการบัตรรับประกันสินค้า<?php if ($search==0) { ?>ของเดือนที่ <?php echo $month; } ?> <u>จำนวน <?php echo $count_warranty; ?> ชิ้น</u></h4>
                     </div>
                     <div class="panel-body table-responsive">
-                            <table class="table table-hover" id="tablefinal" width="100%">
+                            <table class="table table-hover" id="tablegold" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>เลขที่ใบรับประกัน</th>
+                                        <th width="125">เลขที่ใบรับประกัน</th>
                                         <th>ประเภทสินค้า</th>
                                         <th>ชนิดของทอง</th>
                                         <th>น้ำหนัก</th>
@@ -68,21 +69,6 @@
                                 </thead>
                                 
 								<tbody>
-                                    <?php foreach($warranty_array as $loop) { ?>
-                                    <tr>
-                                        <td><?php echo $loop->ngw_number; if ($loop->ngw_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก</button>"; ?></td>
-                                        <td><?php echo $loop->ngw_product; ?></td>
-                                        <td><?php echo $loop->ngw_kindgold; ?></td>
-                                        <td><?php echo $loop->ngw_weight; ?></td>
-                                        <td><?php echo $loop->ngw_price; ?></td>
-                                        <td><?php echo $loop->ngw_customername; ?></td>
-                                        <td><?php echo $loop->ngw_customertelephone; ?></td>
-                                        <td><?php echo $loop->sp_firstname." ".$loop->sp_lastname; ?></td>
-                                        <td><?php echo $loop->sh_name; ?></td>
-                                        <td><a href="<?php echo site_url("ngg_gold/view_warranty")."/".$loop->ngw_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
-                                        </td>
-                                    </tr>
-                                    <?php } ?>
 								</tbody>
 							</table>
                         
@@ -105,6 +91,23 @@ $(document).ready(function()
 {
     get_datepicker("#startdate");
     get_datepicker("#enddate");
+    
+    var oTable = $('#tablegold').DataTable({
+        "bProcessing": true,
+        'bServerSide'    : false,
+        "bDeferRender": true,
+        'sAjaxSource'    : '<?php echo site_url("ngg_gold/ajaxViewWarranty")."/".$startdate."/".$enddate; ?>',
+        "fnServerData": function ( sSource, aoData, fnCallback ) {
+            $.ajax( {
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success":fnCallback
+
+            });
+        }
+    });
 });
     
 function get_datepicker(id)

@@ -625,6 +625,58 @@ function saleorder_rolex_temp_save()
     exit();
 }
     
+function saleorder_rolex_temp_save_edit()
+{
+    $cusname = $this->input->post("cusname");
+    $cusaddress = $this->input->post("cusaddress");
+    $custelephone = $this->input->post("custelephone");
+    
+    $payment = $this->input->post("payment");
+    $payment_value = $this->input->post("payment_value");
+    $remark = $this->input->post("remark");
+    
+    $it_array = $this->input->post("item");
+    $datein = $this->input->post("datein");
+    
+    $pos_id = $this->input->post("pos_id");
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $datein = explode('/', $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+    
+    $sale = array( 'id' => $pos_id,
+                    'posrot_issuedate' => $datein,
+                    'posrot_customer_name' => $cusname,
+                    'posrot_customer_address' => $cusaddress,
+                    'posrot_customer_tel' => $custelephone,
+                    'posrot_payment' => $payment,
+                    'posrot_payment_value' => $payment_value,
+                    'posrot_dateadd' => $currentdate,
+                    'posrot_dateadd_by' => $this->session->userdata('sessid'),
+                    'posrot_remark' => $remark
+            );
+    
+    $query = $this->tp_saleorder_model->editPOS_rolex_temp($sale);
+    
+    $count = 0;
+    for($i=0; $i<count($it_array); $i++){
+        // edit item to so
+        $net = $it_array[$i]["it_srp"]-$it_array[$i]["dc_thb"];
+        $sale_item = array(  'id' => $it_array[$i]["posroit_id"],
+                        'posroit_dc_baht' => $it_array[$i]["dc_thb"],
+                        'posroit_netprice' => $net
+            );
+        $query = $this->tp_saleorder_model->editPOS_rolex_temp_item($sale_item);
+        $count ++;
+    }
+    
+    
+    $result = array("a" => $count, "b" => $pos_id);
+    echo json_encode($result);
+    exit();
+}
+    
 function saleorder_rolex_temp_print()
 {
     $id = $this->uri->segment(3);
@@ -715,6 +767,45 @@ function saleorder_POS_temp_today()
     $data["currentdate"] = $currentdate;
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/sale/report_saleorder_POS_temp_today", $data);
+}
+    
+function saleorder_rolex_temp_edit()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+    
+
+    foreach($query as $loop1) {
+        if ($loop1->posrot_status == 'D' and $loop1->posrot_shop_id == 0) {
+            $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+            $query = $this->tp_saleorder_model->getPOS_rolex_temp_item_borrow($sql);
+            foreach($query as $loop2) {
+                $data["posrob_borrower_name"] = $loop2->posrob_borrower_name;
+                break;
+            }
+        }else{
+            $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+            $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+            $data["posrob_borrower_name"] = "";
+        }
+        break;
+    }
+    
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+    $data['pos_rolex_id'] = $id;
+    $data['title'] = "Rolex - Sale Memo";
+    $this->load->view("TP/sale/saleorder_pos_temp_edit", $data);
 }
     
 function saleorder_POS_temp_history()
@@ -1333,14 +1424,15 @@ LEFT JOIN `tp_pos_rolex_borrow` on `tp_pos_rolex_borrow`.`posrob_id` = `tp_pos_r
     $this->excel->getActiveSheet()->setTitle('Sale Report');
 
     $this->excel->getActiveSheet()->setCellValue('A1', 'Sold Date');
-    $this->excel->getActiveSheet()->setCellValue('B1', 'Product Number');
-    $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
-    $this->excel->getActiveSheet()->setCellValue('D1', 'Description');
-    $this->excel->getActiveSheet()->setCellValue('E1', 'Serial');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'Retail Price');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'Discount(บาท)');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'Receive on Inv.');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'Customer');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'เลขที่เอกสาร');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Product Number');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Family');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Serial');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Retail Price');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Discount(บาท)');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'Receive on Inv.');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'Customer');
     
     $row = 2;
     $sum1 = 0;
@@ -1348,23 +1440,24 @@ LEFT JOIN `tp_pos_rolex_borrow` on `tp_pos_rolex_borrow`.`posrob_id` = `tp_pos_r
     $sum3 = 0;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->solddate);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);    
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_dc, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_netprice, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->cusname);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_short_description);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->itse_serial_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_dc, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, number_format($loop->it_netprice, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->cusname);
         $row++;
         
         $sum1 += $loop->it_srp; $sum2 += $loop->it_dc; $sum3 += $loop->it_netprice;
     }
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "จำนวนทั้งหมด");    
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $row-2);
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($sum1, 2, '.', ','));
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($sum2, 2, '.', ','));
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($sum3, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "จำนวนทั้งหมด");    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $row-2);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($sum1, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($sum2, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, number_format($sum3, 2, '.', ','));
     
 
     $filename='rolex_sale_report.xlsx'; //save our workbook as this file name

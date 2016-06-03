@@ -31,7 +31,7 @@
 							</div>
                             <div class="col-md-2">
                                     <div class="form-group-sm">
-                                            วันที่ย้ายคลัง
+                                            วันที่กำหนดส่ง
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $loop->stot_datein; ?>" readonly>
                                     </div>
 							</div>

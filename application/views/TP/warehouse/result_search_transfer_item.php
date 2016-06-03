@@ -50,7 +50,7 @@
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="80">วันที่ย้าย</th>
+                                        <th width="80">วันที่กำหนดส่ง</th>
                                         <th width="100">เลขที่ย้ายคลัง</th>
                                         <th width="120">Ref. Number</th>
                                         <th>Brand</th>

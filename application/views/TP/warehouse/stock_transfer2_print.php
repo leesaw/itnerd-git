@@ -22,7 +22,7 @@
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
 </tr>
 <tr>
-    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>
+    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่กำหนดส่ง : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>
     </td>
 </tr>
 </tbody>
@@ -47,7 +47,7 @@ if ($loop->qty_final > 0) {
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
 </tr>
 <tr>
-    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่กำหนดส่ง : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>
     </td>
 </tr>
 </tbody>
