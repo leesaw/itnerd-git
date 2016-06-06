@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style type="text/css">
+u {    
+    border-bottom: 2px dotted #000;
+    text-decoration: none;
+    padding-bottom: 0;
+}
+</style>
 <title>Gold Warranty Printing</title>
 </head>
 <body>
@@ -26,7 +33,7 @@
     $saleperson = $loop->sp_firstname;
     $issuedate = $loop->ngw_issuedate;
     
-} 
+}
 
  $datestart_year=substr($datestart,0,4); 
  $datestart_month=substr($datestart,5,2); 
@@ -39,8 +46,8 @@
 <td width="200"></td>
 <td width="400"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
 <td width="200" style="text-align: right;">
-    <table border="1">
-        <tbody><tr><td width="120"><center><div style="font-size: 20pt;">สำหรับ NGG</div></center></td></tr>
+    <table style="border-bottom:1px solid red;border-top:1px solid red;border-left:1px solid red;border-right:1px solid red;">
+        <tbody><tr><td width="120" ><center><div style="font-size: 20pt; color:red">สำหรับ NGG</div></center></td></tr>
     </tbody>
     </table>
 </td>
@@ -62,17 +69,17 @@
     <td width="400" style="text-align:center"><div style="font-size: 20pt;"><b>บัตรรับประกันสินค้า</b></div></td>
 <td width="200"></td>
 </tr>
-<tr><td></td><td style="text-align:center"><div style="font-size: 20pt;"><b>CERTIFICATE CARDS</b></td><td>เลขที่ใบรับประกัน : <?php echo $number; ?></td></tr>
+<tr><td></td><td style="text-align:center"><div style="font-size: 20pt;"><b>CERTIFICATE CARDS</b></td><td>เลขที่ใบรับประกัน : <u><?php echo $number; ?></u></td></tr>
 </tbody>
 </table>
 
 <table border="0">
 <tbody>
-    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo $product; ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo $code; ?></td><td width="50"></td></tr>
-    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo $kindgold; ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo $weight; ?> กรัม</td><td></td></tr>
-    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo number_format($price, 2, '.', ','); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
-    <tr><td></td><td>ชำระด้วย : <?php echo $payment; ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
-    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo $jewelry; ?></td><td></td><td rowspan="5">
+    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo  insertspace($product,30); ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo insertspace($code,30); ?></td><td width="50"></td></tr>
+    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo insertspace($kindgold,30); ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo insertspace($weight,20); ?> กรัม</td><td></td></tr>
+    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo insertspace(number_format($price, 2, '.', ','),30); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
+    <tr><td></td><td>ชำระด้วย : <?php echo insertspace($payment,30); ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
+    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo insertspace($jewelry,20); ?></td><td></td><td rowspan="5">
         
     <table border="1">
         <tbody>
@@ -83,13 +90,27 @@
     </table>
         
     </td><td></td></tr>
-    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo $datestart; ?></td><td></td><td></td></tr>
-    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo $old; ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo insertspace($datestart,30); ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo insertspace($old,30); ?></td><td></td><td></td></tr>
     <tr><td></td><td></td><td></td><td></td></tr>
     <tr><td></td><td colspan="2">หมายเหตุ: ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</td><td></td></tr>
 </tbody>
 </table>
 <?php
+function insertspace($string, $number) {
+    $count = strlen($string);
+    if ($count < $number) {
+        $j = 0;
+        for($i=$count; $i <= $number; $i++) {
+            $j++;
+            $diff = ($number - $count)/2;
+            if ($j < $diff) $string = "&nbsp;".$string;
+            else $string .= "&nbsp;";
+        }
+    }
+    return "<u>".$string."</u>";
+}    
+
 function num2thai($number){
 $t1 = array("ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า");
 $t2 = array("เอ็ด", "ยี่", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน");
@@ -185,8 +206,8 @@ return $rstring;
 <td width="200"></td>
 <td width="400"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
 <td width="200" style="text-align: right;">
-    <table border="1">
-        <tbody><tr><td width="120"><center><div style="font-size: 20pt;">สำหรับ ลูกค้า</div></center></td></tr>
+    <table style="border-bottom:1px solid red;border-top:1px solid red;border-left:1px solid red;border-right:1px solid red;">
+        <tbody><tr><td width="120" ><center><div style="font-size: 20pt; color:red">สำหรับ ลูกค้า</div></center></td></tr>
     </tbody>
     </table>
 </td>
@@ -214,11 +235,11 @@ return $rstring;
 
 <table border="0">
 <tbody>
-    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo $product; ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo $code; ?></td><td width="50"></td></tr>
-    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo $kindgold; ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo $weight; ?> กรัม</td><td></td></tr>
-    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo number_format($price, 2, '.', ','); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
-    <tr><td></td><td>ชำระด้วย : <?php echo $payment; ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
-    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo $jewelry; ?></td><td></td><td rowspan="5">
+    <tr><td width="50"></td><td width="400">ประเภทสินค้า (PRODUCT) : <?php echo  insertspace($product,30); ?></td><td width="20"></td><td width="280">รหัส (NO.) : <?php echo insertspace($code,30); ?></td><td width="50"></td></tr>
+    <tr><td></td><td>ชนิดของทอง (KIND OF GOLD) : <?php echo insertspace($kindgold,30); ?></td><td></td><td>น้ำหนัก (WEIGHT) : <?php echo insertspace($weight,20); ?> กรัม</td><td></td></tr>
+    <tr><td></td><td>จำนวนเงิน (PRICE) : <?php echo insertspace(number_format($price, 2, '.', ','),30); ?> บาท</td><td colspan="2" style="border-bottom:1px solid black;border-top:1px solid black;border-left:1px solid black;border-right:1px solid black;">&nbsp;&nbsp;<?php echo num2thai($price); ?></td><td></td></tr>
+    <tr><td></td><td>ชำระด้วย : <?php echo insertspace($payment,30); ?></td><td colspan="2" style="text-align:center;">( ตัวอักษรจำนวนเงิน )</td><td></td></tr>
+    <tr><td></td><td>จำนวนเพชร/พลอย (NUMBER OF D/J) : <?php echo insertspace($jewelry,20); ?></td><td></td><td rowspan="5">
         
     <table border="1">
         <tbody>
@@ -229,8 +250,8 @@ return $rstring;
     </table>
         
     </td><td></td></tr>
-    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo $datestart; ?></td><td></td><td></td></tr>
-    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo $old; ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; วันที่เริ่มรับประกันสินค้า : <?php echo insertspace($datestart,30); ?></td><td></td><td></td></tr>
+    <tr><td></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; หมายเหตุมีสินค้าเก่ามาเปลี่ยน : <?php echo insertspace($old,30); ?></td><td></td><td></td></tr>
     <tr><td></td><td></td><td></td><td></td></tr>
     <tr><td></td><td colspan="2">หมายเหตุ: ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</td><td></td></tr>
 </tbody>

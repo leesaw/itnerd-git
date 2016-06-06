@@ -75,7 +75,7 @@ function checkpass($id, $password)
  
  function getOneUser($id=NULL)
  {
-	$this->db->select("id, username, firstname, lastname, status, is_rolex");
+	$this->db->select("id, username, firstname, lastname, status, is_rolex, shop_id");
 	$this->db->from('nerd_users');			
 	$this->db->where('id', $id);	
 	$query = $this->db->get();		

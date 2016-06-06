@@ -157,6 +157,12 @@ $this->fontdata = array(
         'BI'   =>  "THSaraban-BoldItalic.ttf"
         ),
 
+    "thangsana" => array(
+        'R' => "Angsa.ttf",
+        'B' => "Angsab.ttf",
+        'I'  => "Angsai.ttf",
+        'BI'   =>  "Angsabi.ttf"
+        ),
 
 /* Indic fonts */
 	"ind_bn_1_001" => array(

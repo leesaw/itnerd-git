@@ -180,7 +180,7 @@ function print_warranty()
     $id = $this->uri->segment(3);
 
     $this->load->library('mpdf/mpdf');
-    $mpdf= new mPDF('th','A5-L','0', 'thsaraban');
+    $mpdf= new mPDF('th','A5-L','0', 'thangsana');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style_A5_gold_warranty.css');
     $mpdf->SetWatermarkImage(base_url()."dist/img/watermark-ngg.png", 0.1, array(100,33), array(55,70));
     $mpdf->showWatermarkImage = true;
