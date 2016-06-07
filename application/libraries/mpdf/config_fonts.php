@@ -163,6 +163,12 @@ $this->fontdata = array(
         'I'  => "Angsai.ttf",
         'BI'   =>  "Angsabi.ttf"
         ),
+    "dbth" => array(
+        'R' => "DBHelvethaicaR.ttf",
+        'B' => "DBHelvethaicaB.ttf",
+        'I'  => "DBHelvethaicaI.ttf",
+        'BI'   =>  "DBHelvethaicaBI.ttf"
+        ),
 
 /* Indic fonts */
 	"ind_bn_1_001" => array(
