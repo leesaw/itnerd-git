@@ -167,18 +167,24 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label>วันที่เริ่มรับประกันสินค้า *</label>
-                                    <input type="text" class="form-control" name="datestart" id="datestart" value="<?php echo $datestart; ?>" readonly>
+                            <div class="col-md-5">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>วันที่เริ่มรับประกันสินค้า *</label>
+                                        <input type="text" class="form-control" name="datestart" id="datestart" value="<?php echo $datestart; ?>" readonly>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>หมายเหตุมีของเก่ามาเปลี่ยน</label>
+                                        <input type="text" class="form-control" name="old" id="old" autocomplete="off" value="<?php echo $old; ?>" readonly>
+                                    </div>
+                                    </div>
                                 </div>
 							</div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label>หมายเหตุมีของเก่ามาเปลี่ยน</label>
-                                    <input type="text" class="form-control" name="old" id="old" autocomplete="off" value="<?php echo $old; ?>" readonly>
-                                </div>
-                            </div>
                             <div class="col-md-1">
                             </div>
                             <div class="col-md-5">

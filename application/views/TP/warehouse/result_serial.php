@@ -30,7 +30,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-success">
 					<div class="panel-heading">
-                        
+                        ข้อมูลสินค้า
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table" id="tablebarcode" width="100%">
@@ -67,6 +67,38 @@
                                     </tr>
                                 <?php } ?>
 								</tbody>
+							</table>
+                        
+					</div>
+                    
+				</div>
+			</div>	
+            
+		</div>
+        <div class="row">
+			<div class="col-xs-12">
+                <div class="panel panel-default">
+					<div class="panel-heading">
+                        ข้อมูลการย้ายคลัง
+                    </div>
+                    <div class="panel-body table-responsive">
+                            <table class="table table-hover" id="tabletransfer" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="80">วันที่กำหนดส่ง</th>
+                                        <th width="100">เลขที่ย้ายคลัง</th>
+                                        <th width="120">Ref. Number</th>
+                                        <th width="100">Serial</th>
+                                        <th>ออกจากคลัง</th>
+                                        <th>เข้าคลัง</th>
+                                    </tr>
+                                </thead>
+                                
+								<tbody>
+								</tbody>
+                                <tfoot>
+                                   
+                                </tfoot>
 							</table>
                         
 					</div>
@@ -113,8 +145,44 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
+    var oTable = $('#tabletransfer').DataTable({
+        "bProcessing": true,
+        'bServerSide'    : false,
+        "bDeferRender": true,
+        'sAjaxSource'    : '<?php echo site_url("warehouse_transfer/ajaxView_seach_transfer_serial")."/".$serial; ?>',
+        "fnServerData": function ( sSource, aoData, fnCallback ) {
+            $.ajax( {
+                "dataType": 'json',
+                "type": "POST",
+                "url": sSource,
+                "data": aoData,
+                "success":fnCallback
+
+            });
+        }
+    });
+    
+    $('#fancyboxall').fancybox({ 
+    'width': '30%',
+    'height': '80%', 
+    'autoScale':false,
+    'transitionIn':'none', 
+    'transitionOut':'none', 
+    'type':'iframe'}); 
+    
     
 });
+    
+Number.prototype.formatMoney = function(c, d, t){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
 </script>
 </body>
 </html>

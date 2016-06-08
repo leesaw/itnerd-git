@@ -646,8 +646,8 @@ function transferstock_final_excel()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, strtoupper($loop->br_name));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->qty_final);  
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_uom);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->qty_final*$loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->qty_final*$loop->it_srp);
         $row++;
         $no++;
         $sum += $loop->qty_final*$loop->it_srp; 
@@ -657,7 +657,7 @@ function transferstock_final_excel()
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, "รวมจำนวน");
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $sum_qty);    
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, "รวมเงิน");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($sum, 2, '.', ','));
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $sum);
     
 
     $filename='nerd_transfer.xlsx'; //save our workbook as this file name
@@ -979,6 +979,34 @@ function ajaxView_seach_transfer()
     echo $this->datatables->generate(); 
 }
     
+function ajaxView_seach_transfer_serial()
+{
+    $serial = $this->uri->segment(3);
+    $sql = "";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= $this->no_rolex;
+    }else{ $sql .= "br_id != 888"; }
+    
+    $sql .= " and itse_serial_number like '".$serial."'";
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("stot_datein, CONCAT('/', stot_id, '\">', stot_number, '</a>') as transfer_id, it_refcode, itse_serial_number,  CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
+    ->from('log_stock_transfer_serial')
+    ->join('log_stock_transfer', 'log_stots_stot_id = log_stot_id', 'left')
+    ->join('tp_item_serial', 'log_stots_item_serial_id = itse_id', 'left')
+    ->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left')
+    ->join('tp_item', 'it_id = log_stot_item_id','left')
+    ->join('tp_brand', 'br_id = it_brand_id','left')
+    ->join('tp_warehouse wh1', 'wh1.wh_id = stot_warehouse_out_id','inner')
+    ->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner')
+    ->where('stot_enable',1)
+    ->where('log_stot_qty_final >',0)
+    ->where($sql)
+    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/transferstock_final_print").'$1',"transfer_id");
+    echo $this->datatables->generate(); 
+}
+    
 function exportExcel_transfer_report()
 {
     $refcode = $this->input->post("refcode");
@@ -1055,7 +1083,7 @@ function exportExcel_transfer_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_short_description);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->log_stot_qty_final);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->wh_in);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->wh_out);

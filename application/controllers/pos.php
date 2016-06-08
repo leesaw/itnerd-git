@@ -193,7 +193,7 @@ function stock_rolex_excel()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
         
         $serial_temp = "";
         $count = 0;

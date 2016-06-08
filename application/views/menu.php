@@ -120,10 +120,10 @@
                 </ul>
 
             </li>
-            <?php if ($this->session->userdata('sessstatus') != 2) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
+                <?php if ($this->session->userdata('sessstatus') != 2) { ?>
                     <?php if ($this->session->userdata('sessstatus') != 4) { ?>
 				    <li>
 					   <a href="<?php echo site_url("sale/saleorder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
@@ -132,13 +132,14 @@
 					<li>
                         <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>
                     </li>
+                <?php } ?>
                     <li>
                         <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
                     </li>
                 </ul>
 
             </li>
-            <?php } ?>
+            <?php  ?>
             <?php }else{ ?>
             <li class="header">ROLEX</li>
             <li>
@@ -312,6 +313,9 @@
               
             </li>
             <li class="header">NGG Timepieces Office</li>
+            <li>
+               <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
+            </li>
             <li>
                 <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
             </li>

@@ -1171,7 +1171,7 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->itse_serial_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->br_name);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->soi_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->sb_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->dc);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, number_format($loop->soi_dc_baht, 2, '.', ','));
@@ -1267,7 +1267,7 @@ function exportExcel_sale_report_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->soi_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->sb_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->dc);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, number_format($loop->soi_dc_baht, 2, '.', ','));
@@ -1445,9 +1445,9 @@ LEFT JOIN `tp_pos_rolex_borrow` on `tp_pos_rolex_borrow`.`posrob_id` = `tp_pos_r
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_short_description);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->itse_serial_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, number_format($loop->it_srp, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, number_format($loop->it_dc, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, number_format($loop->it_netprice, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_dc);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_netprice);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->cusname);
         $row++;
         

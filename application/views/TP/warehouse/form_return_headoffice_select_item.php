@@ -321,22 +321,25 @@ function submitform(x)
 
 function confirmform(luxury)
 {
+    
     if (luxury==1) {
         var whid_out = <?php echo $whid_out; ?>;
         var whid_in = <?php echo $whid_in; ?>;
         var datein = "<?php echo $datein; ?>";
         var it_id = document.getElementsByName('it_id');
+        var itse_id = document.getElementsByName('itse_id');
         var it_quantity = document.getElementsByName('it_quantity');
         var it_old_qty = document.getElementsByName('old_qty');
         var stot_remark =  document.getElementById("stotremark").value;
         var it_array = new Array();
         
         var it_code = document.getElementsByName('it_code');
+
         for(var i=0; i<it_code.length; i++){
             it_array[i] = {id: it_id[i].value, itse_id: itse_id[i].value, qty: 1, code: it_code[i].value, old_qty: it_old_qty[i].value};
         }
         document.getElementById("savebtn").disabled = true;
-
+        
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/save_return_headoffice/1"); ?>" ,
@@ -362,6 +365,7 @@ function confirmform(luxury)
                 document.getElementById("savebtn").disabled = false;
             }
         });
+        
     }else if (luxury==0){
         var whid_out = <?php echo $whid_out; ?>;
         var whid_in = <?php echo $whid_in; ?>;

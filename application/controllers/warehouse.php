@@ -107,13 +107,13 @@ function disable_warehouse()
     
 function getBalance()
 {   
-    $sql = $this->no_rolex;
+    $sql = "br_id != 888";
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
     $sql = "wh_enable = '1'";
     $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
     
     // get total in each shops
-    $sql = $this->no_rolex;
+    $sql = "br_id != 888";
     $sql .= " and it_enable = 1 and stob_enable = 1 and wh_enable = 1";
     $data['number_array'] = $this->tp_warehouse_model->getNumber_balance_groupbyshop($sql);
 
@@ -423,7 +423,7 @@ function exportExcel_stock_itemlist()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code." (".$loop->wh_name.")");
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->stob_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
         $row++;
         $count_qty += $loop->stob_qty;
@@ -523,7 +523,7 @@ function exportExcel_stock_itemlist_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code." (".$loop->wh_name.")");
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, number_format($loop->it_srp));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
         $row++;
         $count_qty++;

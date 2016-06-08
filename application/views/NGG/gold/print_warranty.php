@@ -36,55 +36,66 @@ u {
 
  $datestart_year=substr($datestart,0,4); 
  $datestart_month=substr($datestart,5,2); 
+ $datestart_month = month2thai(intval($datestart_month));
  $datestart_day=substr($datestart,8,2); 
- $datestart = $datestart_day."/".$datestart_month."/".($datestart_year+543);
+ $datestart = $datestart_day." ".$datestart_month." ".($datestart_year+543);
     
  $issuedate_year=substr($issuedate,0,4); 
  $issuedate_month=substr($issuedate,5,2); 
+ $issuedate_month = month2thai(intval($issuedate_month));
  $issuedate_day=substr($issuedate,8,2); 
- $issuedate = $issuedate_day."/".$issuedate_month."/".($issuedate_year+543);
+ $issuedate = $issuedate_day." ".$issuedate_month." ".($issuedate_year+543);
 ?>
 <table border="0">
 <tbody>
 <tr>
-    <td width="200"><div style="font-size: 36pt;">ใบรับประกันสินค้า</div><div style="font-size: 24pt;">CERTIFICATE CARDS</div>เลขที่ใบรับประกัน : <u><?php echo $number; ?></u></td><td width="30"></td>
-    <td width="360"><span style="font-size: 11pt;"><b>ของขวัญจากธรรมชาติ ศาสตร์และศิลป์แห่งเครื่องประดับ</b><br><br>ศูนย์รวมเครื่องประดับเลอค่า ทองคำ เพชร อัญมณี และนาฬิกา รับรองคุณภาพจากสถาบันชั้นนำ GIA GRS GIT และสมาคมผู้ค้าทองคำแห่งประเทศไทย รับประกันการซื้อคืน บริการซ่อมแซมและทำความสะอาด จำหน่าย / รับซื้อ และ แลกเปลี่ยน<br><br>
-    WWW.NGGJEWELLERY.COM  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WWW.NGGTIMEPIECES.COM</span></td><td width="10"></td>
+    <td width="260"><div style="font-size: 10pt;">CHAIN STORE JEWELRY, NATURAL GLAMOUR GIFT<BR><br>GOLD | DIAMOND | GEMSTONE | WATCH<BR>SELLER / BUYER AND EXCHANGE<br><br>ศูนย์บริการลูกค้า 02 682 3388-89</div></td><td width="30"></td>
+    <td width="310"><div style="font-size: 36pt;">ใบรับประกันสินค้า</div><div style="font-size: 24pt;">CERTIFICATE CARDS</div>เลขที่ใบรับประกัน : <u><?php echo $number; ?></u></td><td width="10"></td>
     <td width="200"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
 </tr>
     <tr><td colspan="5" height="8"></td></tr>
-    <tr><td colspan="3"><div style="font-size: 20pt;"><b>NGG ง้วน โกลด์ แอนด์ เจมส์ ศูนย์รวมเครื่องประดับครบวงจร</b></div></td><td></td><td><center><div style="font-size: 20pt; color:red">สำหรับ ลูกค้า</div></center></td></tr>
 </tbody>
 </table>
 <table border="0">
 <tbody>
-<tr><td colspan="3" height="5" style="border-top:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;"></td></tr>
+<tr><td colspan="10" height="5" style="border-top:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;"></td></tr>
 <tr>
-    <td style="border-left:1px solid #848484;border-right:1px solid #848484;"> &nbsp; วันที่ : <?php echo $issuedate; ?><br> &nbsp; สาขา : <?php echo $shopname." โทร. ".$shoptelephone; ?></td>
-    <td colspan="2" style="border-right:1px solid #848484"> &nbsp; ชื่อลูกค้า : <?php echo $cusname; ?> &nbsp;&nbsp;&nbsp;&nbsp; เบอร์โทรศัพท์ : <?php echo $custelephone; ?><br> &nbsp; ที่อยู่ลูกค้า : <?php echo $cusaddress; ?> </td>
+    <td colspan="5" style="border-left:1px solid #848484;border-right:1px solid #848484;"> &nbsp; วันที่ : <?php echo $issuedate; ?><br> &nbsp; สาขา : <?php echo $shopname." โทร. ".$shoptelephone; ?></td>
+    <td colspan="5" style="border-right:1px solid #848484"> &nbsp; ชื่อลูกค้า : <?php echo $cusname; ?> &nbsp;&nbsp;&nbsp;&nbsp; เบอร์โทรศัพท์ : <?php echo $custelephone; ?><br> &nbsp; ที่อยู่ลูกค้า : <?php echo $cusaddress; ?> </td>
 </tr>
-<tr><td colspan="3" height="5" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;"></td></tr>
+<tr><td colspan="10" height="5" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;"></td></tr>
 <tr>
-    <th height="30" width="340" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">ซื้อ</th><th width="180" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">แลกเปลี่ยน</th><th width="280" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">การชำระเงิน</th>
+    <th height="20" colspan="5" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">ซื้อ</th><th width="180" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">แลกเปลี่ยน</th><th colspan="4" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">การชำระเงิน</th>
 </tr>
-<tr><td height="8" style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;border-right:1px solid #848484"></td></tr>
-</tbody>
-</table>
-<table border="0">
-<tbody>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ประเภทสินค้า <span style="font-size:12pt">(Product)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $product; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td width="180" rowspan="7" style="vertical-align:top;border-right:1px solid #848484;"><center>หมายเหตุมีสินค้าเก่ามาเปลี่ยน<br><?php echo insertspace($old,50); ?></center></td><td width="5" ></td><td width="110">จำนวนเงิน <span style="font-size:12pt">(Price)</span></td><td width="160" style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($price, 2, '.', ','); ?> บาท</center></td><td width="5" style="border-right:1px solid #848484;"></td></tr>
+<tr><td colspan="5" height="5" style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;"></td><td colspan="4" style="border-left:1px solid #848484;border-right:1px solid #848484"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ประเภทสินค้า <span style="font-size:12pt">(Product)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $product; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td width="180" rowspan="7" style="vertical-align:top;border-right:1px solid #848484;"><center>หมายเหตุ<br><?php echo insertspace($old,50); ?></center></td><td width="5" ></td><td width="110">จำนวนเงิน <span style="font-size:12pt">(Price)</span></td><td width="160" style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($price, 2, '.', ','); ?> บาท</center></td><td width="5" style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">รหัส <span style="font-size:12pt">(No.)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo $code; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td>ชำระด้วย <span style="font-size:12pt">(Payment)</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo $payment; ?></center></td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ชนิดของทอง <span style="font-size:12pt">(Kind of Gold)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $kindgold; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:right;font-size:12pt;border-bottom:1px solid #848484;">(<?php echo num2thai($price); ?>)</td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">น้ำหนัก <span style="font-size:12pt">(Weight)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $weight; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:center">ราคาทองคำแท่ง</td><td style="border-right:1px solid #848484;"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">น้ำหนัก <span style="font-size:12pt">(Weight)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $weight; ?> กรัม</center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:center">ราคาทองคำแท่ง</td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">รูปแบบ <span style="font-size:12pt">(Model)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $model; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ซื้อ</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldbuy, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">จำนวนเพชร/พลอย</td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $jewelry; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ขาย</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldsell, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;"><span style="font-size:12pt">(Number of D/J)</span></td><td width="10"></td><td style="vertical-align:top;" width="170"></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td></td><td></td><td style="border-right:1px solid #848484;"></td></tr>
+    <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">จำนวนเพชร/พลอย <span style="font-size:10pt">(No. of D/J)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $jewelry; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ขาย</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldsell, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;"><span style="font-size:12pt"></span></td><td width="10"></td><td style="vertical-align:top;" width="170"></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td></td><td></td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td colspan="5" style="border-right:1px solid #848484;border-left:1px solid #848484;border-bottom:1px solid #848484;"></td><td style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td><td colspan="4" style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td></tr>
 <tr><td colspan="2" style="border-left:1px solid #848484;">วันที่เริ่มรับประกันสินค้า</td><td></td><td style="border-bottom:2px dotted #848484;"><center><?php echo $datestart; ?></center></td><td style="border-right:1px solid #848484;"></td><td><center>ชื่อพนักงานขาย</center></td><td colspan="4" style="border-right:1px solid #848484;border-bottom:2px dotted #848484;"><center><?php echo $saleperson; ?></center></td></tr>
 <tr><td colspan="2" style="border-left:1px solid #848484;border-bottom:1px solid #848484;"></td><td style="border-bottom:1px solid #848484;"></td><td style="border-bottom:1px solid #848484;"></td><td style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td><td colspan="5" style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td></tr>
+<tr>
+    <td colspan="6">
+    <div style="font-size:9pt"><b>เงื่อนไขการรับประกัน</b> : การรับเปลี่ยน-คืนสินค้า จะต้องมีใบรับประกันมาด้วยทุกครั้ง มิฉะนั้นต้องมีการประเมินราคาใหม่ โดยจะต้องอ้างอิงตามน้ำหนักและคุณภาพ ซึ่งบริษัทอ้างอิงตามราคาตลาด ณ วันที่มีการตกลงซื้อคืน การประเมินคุณภาพ หรืออัตราค่าบริการต่าง ๆ เป็นดุลยพินิจของผู้เชี่ยวชาญของบริษัทเท่านั้น การเปลี่ยน-คืนสินค้า จะต้องกระทำโดยผู้ซื้อหรือผู้ที่ได้รับมอบอำนาจเท่านั้น บริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขต่าง ๆ โดยไม่แจ้งให้ทราบล่วงหน้า</div>
+    <span style="font-size: 20pt; color:red">สำหรับลูกค้า</span>
+    </td>
+    <td colspan="5">
+    <table border="0">
+        <tbody>
+            <tr><td width="130" style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><div style="font-size:9pt"><b>เงื่อนไขบริการและการดูแลรักษา</b></div><span style="font-size:9pt;"><center>ตรวจสภาพ</center></span></td><td width="72" style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><div style="font-size:9pt;"><center><b>ลูกค้าปกติ</b></center></div><span style="font-size:9pt;"><center>ฟรี</center></span></td><td width="73" style="border-bottom:1px dotted #848484;"><div style="font-size:9pt;"><center><b>เอ็นจีจี เมมเบอร์</b></center></div><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ทำความสะอาด</center></span></td><td style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ฟรี</center></span></td><td style="border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td style="border-right:1px dotted #848484;"><span style="font-size:9pt;"><center>ซ่อมบำรุง</center></span></td><td style="border-right:1px dotted #848484;"><span style="font-size:9pt;"><center>-</center></span></td><td><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td colspan="3"><span style="font-size:8pt;">บริษัทขอสงวนสิทธ์การให้บริการฟรี ขึ้นอยู่กับสภาพของเครื่องประดับและดุลยพินิจของบริษัท</span></td></tr>
+        </tbody>
+    </table>
+    </td>
+</tr>
 </tbody>
 </table>
-    <div style="font-size:12pt">หมายเหตุ : ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</div>
 <?php
 function insertspace($string, $number) {
     $count = strlen($string);
@@ -100,6 +111,11 @@ function insertspace($string, $number) {
     return "<u>".$string."</u>";
 }    
 
+function month2thai($number){
+    $thai_month_arr=array("0"=>"", "1"=>"มกราคม", "2"=>"กุมภาพันธ์", "3"=>"มีนาคม", "4"=>"เมษายน", "5"=>"พฤษภาคม", "6"=>"มิถุนายน", "7"=>"กรกฎาคม", "8"=>"สิงหาคม", "9"=>"กันยายน", "10"=>"ตุลาคม",  "11"=>"พฤศจิกายน", "12"=>"ธันวาคม");  
+    return $thai_month_arr[$number];
+}
+    
 function num2thai($number){
 $t1 = array("ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า");
 $t2 = array("เอ็ด", "ยี่", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน");
@@ -192,13 +208,11 @@ return $rstring;
 <table border="0">
 <tbody>
 <tr>
-    <td width="200"><div style="font-size: 36pt;">ใบรับประกันสินค้า</div><div style="font-size: 24pt;">CERTIFICATE CARDS</div>เลขที่ใบรับประกัน : <u><?php echo $number; ?></u></td><td width="30"></td>
-    <td width="360"><span style="font-size: 11pt;"><b>ของขวัญจากธรรมชาติ ศาสตร์และศิลป์แห่งเครื่องประดับ</b><br><br>ศูนย์รวมเครื่องประดับเลอค่า ทองคำ เพชร อัญมณี และนาฬิกา รับรองคุณภาพจากสถาบันชั้นนำ GIA GRS GIT และสมาคมผู้ค้าทองคำแห่งประเทศไทย รับประกันการซื้อคืน บริการซ่อมแซมและทำความสะอาด จำหน่าย / รับซื้อ และ แลกเปลี่ยน<br><br>
-    WWW.NGGJEWELLERY.COM  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WWW.NGGTIMEPIECES.COM</span></td><td width="10"></td>
+    <td width="260"><div style="font-size: 10pt;">CHAIN STORE JEWELRY, NATURAL GLAMOUR GIFT<BR><br>GOLD | DIAMOND | GEMSTONE | WATCH<BR>SELLER / BUYER AND EXCHANGE<br><br>ศูนย์บริการลูกค้า 02 682 3388-89</div></td><td width="30"></td>
+    <td width="310"><div style="font-size: 36pt;">ใบรับประกันสินค้า</div><div style="font-size: 24pt;">CERTIFICATE CARDS</div>เลขที่ใบรับประกัน : <u><?php echo $number; ?></u></td><td width="10"></td>
     <td width="200"><center><img src="<?php echo base_url(); ?>dist/img/logo_NGG.png" width="200px" /></center></td>
 </tr>
     <tr><td colspan="5" height="8"></td></tr>
-    <tr><td colspan="3"><div style="font-size: 20pt;"><b>NGG ง้วน โกลด์ แอนด์ เจมส์ ศูนย์รวมเครื่องประดับครบวงจร</b></div></td><td></td><td><center><div style="font-size: 20pt; color:red">สำหรับ NGG</div></center></td></tr>
 </tbody>
 </table>
 <table border="0">
@@ -210,25 +224,40 @@ return $rstring;
 </tr>
 <tr><td colspan="3" height="5" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;"></td></tr>
 <tr>
-    <th height="30" width="340" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">ซื้อ</th><th width="180" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">แลกเปลี่ยน</th><th width="280" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">การชำระเงิน</th>
+    <th height="20" width="340" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">ซื้อ</th><th width="180" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">แลกเปลี่ยน</th><th width="280" style="border-bottom:1px solid #848484;border-left:1px solid #848484;border-right:1px solid #848484;">การชำระเงิน</th>
 </tr>
-<tr><td height="8" style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;border-right:1px solid #848484"></td></tr>
+<tr><td height="5" style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;"></td><td style="border-left:1px solid #848484;border-right:1px solid #848484"></td></tr>
 </tbody>
 </table>
 <table border="0">
 <tbody>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ประเภทสินค้า <span style="font-size:12pt">(Product)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $product; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td width="180" rowspan="7" style="vertical-align:top;border-right:1px solid #848484;"><center>หมายเหตุมีสินค้าเก่ามาเปลี่ยน<br><?php echo insertspace($old,50); ?></center></td><td width="5" ></td><td width="110">จำนวนเงิน <span style="font-size:12pt">(Price)</span></td><td width="160" style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($price, 2, '.', ','); ?> บาท</center></td><td width="5" style="border-right:1px solid #848484;"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ประเภทสินค้า <span style="font-size:12pt">(Product)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $product; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td width="180" rowspan="7" style="vertical-align:top;border-right:1px solid #848484;"><center>หมายเหตุ<br><?php echo insertspace($old,50); ?></center></td><td width="5" ></td><td width="110">จำนวนเงิน <span style="font-size:12pt">(Price)</span></td><td width="160" style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($price, 2, '.', ','); ?> บาท</center></td><td width="5" style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">รหัส <span style="font-size:12pt">(No.)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo $code; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td>ชำระด้วย <span style="font-size:12pt">(Payment)</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo $payment; ?></center></td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">ชนิดของทอง <span style="font-size:12pt">(Kind of Gold)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $kindgold; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:right;font-size:12pt;border-bottom:1px solid #848484;">(<?php echo num2thai($price); ?>)</td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">น้ำหนัก <span style="font-size:12pt">(Weight)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $weight; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:center">ราคาทองคำแท่ง</td><td style="border-right:1px solid #848484;"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">น้ำหนัก <span style="font-size:12pt">(Weight)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $weight; ?> กรัม</center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td colspan="2" style="text-align:center">ราคาทองคำแท่ง</td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">รูปแบบ <span style="font-size:12pt">(Model)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $model; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ซื้อ</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldbuy, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">จำนวนเพชร/พลอย</td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $jewelry; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ขาย</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldsell, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
-<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;"><span style="font-size:12pt">(Number of D/J)</span></td><td width="10"></td><td style="vertical-align:top;" width="170"></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td></td><td></td><td style="border-right:1px solid #848484;"></td></tr>
+    <tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;">จำนวนเพชร/พลอย <span style="font-size:10pt">(No. of D/J)</span></td><td width="10"></td><td style="vertical-align:top;border-bottom:2px dotted #848484;" width="170"><center><?php echo  $jewelry; ?></center></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td style="text-align:center">ขาย</td><td style="vertical-align:top;border-bottom:2px dotted #848484;"><center><?php echo number_format($goldsell, 2, '.', ','); ?> บาท</center></td><td style="border-right:1px solid #848484;"></td></tr>
+<tr><td width="5" style="border-left:1px solid #848484;"></td><td width="150" style="vertical-align:top;"><span style="font-size:12pt"></span></td><td width="10"></td><td style="vertical-align:top;" width="170"></td><td width="5" style="border-right:1px solid #848484;"></td><td></td><td></td><td></td><td style="border-right:1px solid #848484;"></td></tr>
 <tr><td colspan="5" style="border-right:1px solid #848484;border-left:1px solid #848484;border-bottom:1px solid #848484;"></td><td style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td><td colspan="4" style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td></tr>
 <tr><td colspan="2" style="border-left:1px solid #848484;">วันที่เริ่มรับประกันสินค้า</td><td></td><td style="border-bottom:2px dotted #848484;"><center><?php echo $datestart; ?></center></td><td style="border-right:1px solid #848484;"></td><td><center>ชื่อพนักงานขาย</center></td><td colspan="4" style="border-right:1px solid #848484;border-bottom:2px dotted #848484;"><center><?php echo $saleperson; ?></center></td></tr>
 <tr><td colspan="2" style="border-left:1px solid #848484;border-bottom:1px solid #848484;"></td><td style="border-bottom:1px solid #848484;"></td><td style="border-bottom:1px solid #848484;"></td><td style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td><td colspan="5" style="border-right:1px solid #848484;border-bottom:1px solid #848484;"></td></tr>
+<tr>
+    <td colspan="6">
+    <div style="font-size:9pt"><b>เงื่อนไขการรับประกัน</b> : การรับเปลี่ยน-คืนสินค้า จะต้องมีใบรับประกันมาด้วยทุกครั้ง มิฉะนั้นต้องมีการประเมินราคาใหม่ โดยจะต้องอ้างอิงตามน้ำหนักและคุณภาพ ซึ่งบริษัทอ้างอิงตามราคาตลาด ณ วันที่มีการตกลงซื้อคืน การประเมินคุณภาพ หรืออัตราค่าบริการต่าง ๆ เป็นดุลยพินิจของผู้เชี่ยวชาญของบริษัทเท่านั้น การเปลี่ยน-คืนสินค้า จะต้องกระทำโดยผู้ซื้อหรือผู้ที่ได้รับมอบอำนาจเท่านั้น บริษัทขอสงวนสิทธิ์ในการเปลี่ยนแปลงเงื่อนไขต่าง ๆ โดยไม่แจ้งให้ทราบล่วงหน้า</div>
+    <span style="font-size: 20pt; color:red">สำหรับเอ็นจีจี</span>
+    </td>
+    <td colspan="5">
+    <table border="0">
+        <tbody>
+            <tr><td width="130" style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><div style="font-size:9pt"><b>เงื่อนไขบริการและการดูแลรักษา</b></div><span style="font-size:9pt;"><center>ตรวจสภาพ</center></span></td><td width="72" style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><div style="font-size:9pt;"><center><b>ลูกค้าปกติ</b></center></div><span style="font-size:9pt;"><center>ฟรี</center></span></td><td width="73" style="border-bottom:1px dotted #848484;"><div style="font-size:9pt;"><center><b>เอ็นจีจี เมมเบอร์</b></center></div><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ทำความสะอาด</center></span></td><td style="border-right:1px dotted #848484;border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ฟรี</center></span></td><td style="border-bottom:1px dotted #848484;"><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td style="border-right:1px dotted #848484;"><span style="font-size:9pt;"><center>ซ่อมบำรุง</center></span></td><td style="border-right:1px dotted #848484;"><span style="font-size:9pt;"><center>-</center></span></td><td><span style="font-size:9pt;"><center>ฟรี</center></span></td></tr>
+            <tr><td colspan="3"><span style="font-size:8pt;">บริษัทขอสงวนสิทธ์การให้บริการฟรี ขึ้นอยู่กับสภาพของเครื่องประดับและดุลยพินิจของบริษัท</span></td></tr>
+        </tbody>
+    </table>
+    </td>
+</tr>
 </tbody>
 </table>
-    <div style="font-size:12pt">หมายเหตุ : ใบรับประกันสินค้ามีผลในการรับซื้อคืนของสินค้าในราคามาตรฐาน</div>
 </body>
 </html>
