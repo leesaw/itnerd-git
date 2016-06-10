@@ -37,6 +37,7 @@ foreach($cer_array as $loop) {
     $polish = $loop->polish;
     $symmetry = $loop->symmetry;
     $proportion = $loop->proportion;
+    $proportion_id = $loop->lpt_id;
     $totaldepth = $loop->cer_totaldepth;
     $tablesize = $loop->cer_tablesize;
     $crownheight = $loop->cer_crownheight;
@@ -47,7 +48,9 @@ foreach($cer_array as $loop) {
     $lowerhalflength = $loop->cer_lowerhalflength;
     $girdlethickness = $loop->cer_girdlethickness;
     $girdlefinish = $loop->girdlefinish;
+    $girdlefinish_id = $loop->lgf_id;
     $culet = $loop->culet;
+    $culet_id = $loop->lct_id;
     $girdleinscription = $loop->cer_girdleinscription;
     $softwareresult = $loop->cer_softwareresult;
     $fluorescence = $loop->fluorescence;
@@ -144,33 +147,79 @@ foreach($symbol_array as $loop) {
     
     
     <tr><td colspan="2" height="20"><b>CUT</b></td><td colspan="8"></td></tr>
-    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="20"></td><td colspan="4" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td></tr>
-    <tr><td></td><td height="20">SYMMETRY</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $symmetry; ?></td><td colspan="4"></td></tr>
+    <?php if ($proportion_id != 100) { ?>
+    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="20"></td><td colspan="3" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td></tr>
+    <?php } ?>
+    
+    <tr><td></td><td height="20">SYMMETRY</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $symmetry; ?></td>
+    <?php if ($proportion_id != 100) { ?>
+        <td colspan="4"></td></tr>
+    <?php }else{ ?>
+        <td rowspan="20"></td><td colspan="3" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td>
+    <?php } ?>
     <tr><td></td><td height="20">POLISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $polish; ?></td><td colspan="4"></td></tr>
+    
+    <?php if ($proportion_id == 100) { ?>
+    <tr><td></td><td height="20"> </td><td colspan="4"> </td><td colspan="4" rowspan="20" style="text-align:center;"> </td></tr>
+    <?php } ?>
     
     <tr><td colspan="10" height="10"> </td></tr>
     
     <tr><td colspan="2" height="20"><b>TECHNICAL INFORMATION</b></td><td colspan="8"></td></tr>
+    <?php $empty = ""; ?>
+    <?php if ($totaldepth != 0) { ?>
     <tr><td></td><td height="20" colspan="2">TOTAL DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $totaldepth; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($tablesize != 0) { ?>
     <tr><td></td><td height="20" colspan="2">TABLE SIZE PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $tablesize; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($crownheight != 0) { ?>
     <tr><td></td><td height="20" colspan="2">CROWN HEIGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownheight; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($crownangle != 0) { ?>
     <tr><td></td><td height="20" colspan="2">CROWN ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownangle; ?> &deg;</td><td colspan="5"></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($starlength != 0) { ?>
     <tr><td></td><td height="20" colspan="2">STAR LENGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $starlength; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($paviliondepth != 0) { ?>
     <tr><td></td><td height="20" colspan="2">PAVILION DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $paviliondepth; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($pavilionangle != 0) { ?>
     <tr><td></td><td height="20" colspan="2">PAVILION ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $pavilionangle; ?> &deg;</td><td colspan="5"></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($lowerhalflength != 0) { ?>
     <tr><td></td><td height="20" colspan="2">LOWER HALF-LENGTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $lowerhalflength; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    
     
     <tr><td colspan="10" height="10"> </td></tr>
     
+    <?php if ($lowerhalflength != 0) { ?>
     <tr><td></td><td height="20">GIRDLE THICKNESS</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlethickness; ?></td><td colspan="4"></td></tr>
-    <tr><td></td><td height="20">GIRDLE FINISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlefinish; ?></td><td colspan="4"></td></tr>
-    <tr><td></td><td height="20">CULET</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $culet; ?></td><td colspan="4"></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
     
+    <?php if ($girdlefinish_id != 100) { ?>
+    <tr><td></td><td height="20">GIRDLE FINISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlefinish; ?></td><td colspan="4"></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    
+    <?php if ($culet_id != 100) { ?>
+    <tr><td></td><td height="20">CULET</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $culet; ?></td><td colspan="4"></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+        
     <tr><td colspan="10" height="10"> </td></tr>
     
     <tr><td colspan="2" height="20">GIRDLE INSCRIPTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdleinscription; ?></td><td colspan="4"></td></tr>
     <tr><td colspan="2" height="20">FLUORESCENCE</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $fluorescence; ?></td><td colspan="4"></td></tr>
-    
+    <?php echo $empty; ?>
     <tr><td colspan="10" height="10"> </td></tr>
     
     <tr><td colspan="6" height="25">SOFTWARE RESULT : PASS</td><td></td><td colspan="3">CLARITY PLOT</td></tr>
@@ -188,7 +237,7 @@ foreach($symbol_array as $loop) {
     <tr><td colspan="6" height="20" style="font-size:8px">THE CHARACTERISTICS OF DIAMOND DESCRIBED IN THIS CERTIFICATE WERE DETERMINED USING 10X BINOCULAR MAGNIFICATION, DIAMOND LITE AND MASTER COLOR DIAMONDS, ULTRAVIOLET LIGHT, MILLIMETER GAUGE, DIAMOND BALANCE AND AN ELECTRONIC PROPORTION MEASUREMENT SYSTEM.</td><td></td><td colspan="3" style="font-size:8px">RED SYMBOL DENOTES INTERNAL CHARACTERISTICS (INCLUSIONS). GREEN SYMBOLS DENOTE EXTERNAL CHARACTERISTICS (BLEMISHES). DIAGRAM IS AN APPROXIMATE REPRESENTATION OF THE DIAMOND AND SYMBOLS SHOWN INDICATE TYPE, POSITION AND APPROXIMATE SIZE OF CLARITY CHARACTERISTICS. ALL CLARITY CHARACTERISTICS MAY NOT BE SHOWN. DETAILS OF FINISH ARE NOT SHOWN.</td></tr>
     
     <tr><td colspan="10" height="10"> </td></tr>
-    <tr style="background-color:black;"><td colspan="6" height="20" style="font-size:8px ;color:white">THIS DOCUMENT IS NOT A WARANTY OR APPRAISAL OF VALUE.</td><td></td><td colspan="3" style="font-size:8px;color:white">FOR TERM AND CONDITION SEE WWW.NGGJEWELLERY.COM/TERM OR CALL 02 635 1391</td></tr>
+    <tr style="background-color:black;"><td colspan="10" style="font-size:8px;color:white"><center>FOR TERM AND CONDITION SEE WWW.NGGJEWELLERY.COM/TERM OR CALL 02 635 1391</center></td></tr>
 </tbody>
 </table>
 </body>

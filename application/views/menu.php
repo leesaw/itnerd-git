@@ -100,6 +100,9 @@
                     <li>
                         <a href="<?php echo site_url("warehouse_transfer/transferstock"); ?>"><i class="fa fa-circle-o"></i> ย้ายคลังสินค้า</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("warehouse_transfer/form_replace_branch"); ?>"><i class="fa fa-circle-o"></i> สวมสินค้าสาขา</a>
+                    </li>
                     <?php } ?>
                     <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
                     <li>
@@ -139,7 +142,17 @@
                 </ul>
 
             </li>
-            <?php  ?>
+            <?php if ($this->session->userdata('sessstatus') == 1 || $this->session->userdata('sessstatus') == 2) { ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-wrench"></i> <span>ส่งซ่อม (Repair)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("tp_repair/form_new_repair"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลส่งซ่อม</a>
+                    </li>
+                </ul>
+
+            </li>
+            <?php } ?>
             <?php }else{ ?>
             <li class="header">ROLEX</li>
             <li>
