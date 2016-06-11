@@ -407,7 +407,7 @@ function disablebutton() {
     }else if (document.getElementById('carat').value == "") {
         alert("กรุณาป้อนค่า CARAT WEIGHT");
         document.getElementById('carat').focus();
-    }else if ((document.getElementById('carat').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('carat').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CARAT WEIGHT ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('carat').focus();
     }else if (document.getElementById('color').value < 1) {
@@ -434,49 +434,50 @@ function disablebutton() {
     }else if (document.getElementById('totaldepth').value == "") {
         alert("กรุณาป้อนค่า TOTAL DEPTH");
         document.getElementById('totaldepth').focus();
-    }else if ((document.getElementById('totaldepth').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('totaldepth').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า TOTAL DEPTH ที่เป็นตัวเลขเท่านั้น");
+        //alert(Math.floor(document.getElementById('totaldepth').value*1000)%1);
         document.getElementById('totaldepth').focus();
     }else if (document.getElementById('totalsize').value == "") {
         alert("กรุณาป้อนค่า TOTAL SIZE");
         document.getElementById('totalsize').focus();
-    }else if ((document.getElementById('totalsize').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('totalsize').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า TOTAL SIZE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('totalsize').focus();
     }else if (document.getElementById('crownheight').value == "") {
         alert("กรุณาป้อนค่า CROWN HEIGHT");
         document.getElementById('crownheight').focus();
-    }else if ((document.getElementById('crownheight').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('crownheight').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CROWN HEIGHT ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('crownheight').focus();
     }else if (document.getElementById('crownangle').value == "") {
         alert("กรุณาป้อนค่า CROWN ANGLE");
         document.getElementById('crownangle').focus();
-    }else if ((document.getElementById('crownangle').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('crownangle').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CROWN ANGLE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('crownangle').focus();
     }else if (document.getElementById('starlength').value == "") {
         alert("กรุณาป้อนค่า STAR LENGTH");
         document.getElementById('starlength').focus();
-    }else if ((document.getElementById('starlength').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('starlength').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า STAR LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('starlength').focus();
     }else if (document.getElementById('paviliondepth').value == "") {
         alert("กรุณาป้อนค่า PAVILION DEPTH");
         document.getElementById('paviliondepth').focus();
-    }else if ((document.getElementById('paviliondepth').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('paviliondepth').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า PAVILION DEPTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('paviliondepth').focus();
     }else if (document.getElementById('pavilionangle').value == "") {
         alert("กรุณาป้อนค่า PAVILION ANGLE");
         document.getElementById('pavilionangle').focus();
-    }else if ((document.getElementById('pavilionangle').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('pavilionangle').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า PAVILION ANGLE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('pavilionangle').focus();
     }else if (document.getElementById('lowerhalflength').value == "") {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH");
         document.getElementById('lowerhalflength').focus();
-    }else if ((document.getElementById('lowerhalflength').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('lowerhalflength').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('lowerhalflength').focus();
     }else if (document.getElementById('girdlethickness').value == "") {

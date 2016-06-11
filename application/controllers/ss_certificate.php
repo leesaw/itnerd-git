@@ -45,7 +45,7 @@ function add_newcert()
 		$data['culet_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_cuttingstyle();
+    $query = $this->ss_list_model->get_list_cuttingstyle("");
 	if($query){
 		$data['cuttingstyle_array'] =  $query;
 	}else{
@@ -101,7 +101,7 @@ function add_newcert()
 		$data['proportion_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_shape();
+    $query = $this->ss_list_model->get_list_shape("");
 	if($query){
 		$data['shape_array'] =  $query;
 	}else{
@@ -689,7 +689,7 @@ function edit_certificate()
 		$data['culet_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_cuttingstyle();
+    $query = $this->ss_list_model->get_list_cuttingstyle("");
 	if($query){
 		$data['cuttingstyle_array'] =  $query;
 	}else{
@@ -745,7 +745,7 @@ function edit_certificate()
 		$data['proportion_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_shape();
+    $query = $this->ss_list_model->get_list_shape("");
 	if($query){
 		$data['shape_array'] =  $query;
 	}else{
@@ -853,7 +853,7 @@ function search_certificate()
 		$data['culet_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_cuttingstyle();
+    $query = $this->ss_list_model->get_list_cuttingstyle("");
 	if($query){
 		$data['cuttingstyle_array'] =  $query;
 	}else{
@@ -895,7 +895,7 @@ function search_certificate()
 		$data['proportion_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_shape();
+    $query = $this->ss_list_model->get_list_shape("");
 	if($query){
 		$data['shape_array'] =  $query;
 	}else{
@@ -969,7 +969,7 @@ function result_search_certificate()
 		$data['culet_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_cuttingstyle();
+    $query = $this->ss_list_model->get_list_cuttingstyle("");
 	if($query){
 		$data['cuttingstyle_array'] =  $query;
 	}else{
@@ -1011,7 +1011,7 @@ function result_search_certificate()
 		$data['proportion_array'] = array();
 	}
     
-    $query = $this->ss_list_model->get_list_shape();
+    $query = $this->ss_list_model->get_list_shape("");
 	if($query){
 		$data['shape_array'] =  $query;
 	}else{
@@ -1085,6 +1085,50 @@ function ajaxView_search_certificate()
 <a href="'.site_url("ss_certificate/delete_certificate/$1").'" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#remove" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
 </div>',"cer_id");
     echo $this->datatables->generate();
+}
+    
+function save_new_shape()
+{
+    $value = $this->input->post("shape");
+    $where = "lsh_value like '".$value."'";
+    $duplicate = false;
+    $query = $this->ss_list_model->get_list_shape($where);
+    foreach($query as $loop) {
+        if($loop->id > 0) $duplicate = true;
+    }
+    
+    if ($duplicate) {
+        $last_id = 0;
+    }else{
+        $shape = array("lsh_value" => $this->input->post("shape"));
+        $last_id = $this->ss_list_model->add_list_shape($shape);
+    }
+    
+    $result = array("a" => $last_id, "b" => $this->input->post("shape"));
+    echo json_encode($result);
+    exit();
+}
+    
+function save_new_cutting()
+{
+    $value = $this->input->post("cutting");
+    $where = "lcs_value like '".$value."'";
+    $duplicate = false;
+    $query = $this->ss_list_model->get_list_cuttingstyle($where);
+    foreach($query as $loop) {
+        if($loop->id > 0) $duplicate = true;
+    }
+    
+    if ($duplicate) {
+        $last_id = 0;
+    }else{
+        $cutting = array("lcs_value" => $this->input->post("cutting"));
+        $last_id = $this->ss_list_model->add_list_cutting($cutting);
+    }
+
+    $result = array("a" => $last_id, "b" => $this->input->post("cutting"));
+    echo json_encode($result);
+    exit();
 }
 
 }

@@ -61,7 +61,7 @@
 							</div>
                         </div>
                         <div class="row">
-							<div class="col-md-7">
+							<div class="col-md-9">
                                 <div class="form-group">
                                 <label>ประเภทสินค้า * </label><br>
                                 <label class="radio-inline"><input type="radio" name="product" id="product" value="สร้อยคอ">สร้อยคอ</label>
@@ -69,10 +69,15 @@
                                 <label class="radio-inline"><input type="radio" name="product" id="product" value="แหวน">แหวน</label>
                                 <label class="radio-inline"><input type="radio" name="product" id="product" value="จี้">จี้</label>
                                 <label class="radio-inline"><input type="radio" name="product" id="product" value="ต่างหู">ต่างหู</label>
+                                <label class="radio-inline"><input type="radio" name="product" id="product" value="กำไล">กำไล</label>
+                                <label class="radio-inline"><input type="radio" name="product" id="product" value="สร้อยข้อมือกึ่งกำไล">มือกึ่งกำไล</label>
+                                <label class="radio-inline"><input type="radio" name="product" id="product" value="กิมตุ้ง">กิมตุ้ง</label>
+                                <label class="radio-inline"><input type="radio" name="product" id="product" value="กระเป๋า">กระเป๋า</label>
+                                <br><br>
+                                <label class="radio-inline"><input type="radio" name="product" id="product" value="เข็มขัด">เข็มขัด</label>
+                                     
                                 <label class="radio-inline"><input type="radio" name="product" id="product" value="0">อื่น ๆ .... <input type="text" name="txt_product" id="txt_product" value="" autocomplete="off"></label>
                                 </div>
-                            </div>
-                            <div class="col-md-1">
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
@@ -98,6 +103,21 @@
                                     <div class="input-group">
                                         <input type="text" class="form-control" name="weight" id="weight" autocomplete="off">
                                         <span class="input-group-addon">กรัม</span>
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="fa fa-caret-down"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href='#' id='weight_list' onclick='addweight(1)'>1</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(1.89)'>1.89</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(3.79)'>3.79</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(7.58)'>7.58</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(15.16)'>15.16</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(30.32)'>30.32</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(45.48)'>45.48</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(60.64)'>60.64</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(75.8)'>75.8</a></li>
+                        <li><a href='#' id='weight_list' onclick='addweight(151.6)'>151.6</a></li>
+                      </ul>
+                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -374,7 +394,7 @@ function submitform()
     }else if (custelephone == "") {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า");
         document.getElementById('custelephone').focus();
-    }else if ((custelephone*1000) % 1 != 0) {
+    }else if ((Math.floor(custelephone)*1000) % 1 != 0) {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('custelephone').focus(); 
     }else if (cusaddress == "") {
@@ -418,14 +438,14 @@ function submitform()
         document.getElementById('datestart').focus(); 
     }else if (goldbuy == "") {
         alert("กรุณาใส่ราคาซื้อทองแท่ง");
-        document.getElementById('goldbuy').focus(); 
-    }else if ((goldbuy*1000) % 1 != 0) {
+        document.getElementById('goldbuy').focus();
+    }else if ((Math.floor(goldbuy)*1000) % 1 != 0) {
         alert("กรุณาใส่ราคาซื้อทองแท่ง ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('goldbuy').focus();
     }else if (goldsell == "") {
         alert("กรุณาใส่ราคาขายทองแท่ง");
         document.getElementById('goldsell').focus(); 
-    }else if ((goldsell*1000) % 1 != 0) {
+    }else if ((Math.floor(goldsell)*1000) % 1 != 0) {
         alert("กรุณาใส่ราคาขายทองแท่ง ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('goldsell').focus();
     }else if (saleperson_name == "" || saleperson_code =="") {
@@ -510,6 +530,11 @@ function confirmform()
         }
     });
     
+}
+    
+function addweight(val1) 
+{
+    document.getElementById('weight').value = val1;
 }
 </script>
 </body>

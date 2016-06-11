@@ -5,6 +5,7 @@
 </head>
 
 <body class="skin-red">
+    <input type="hidden" id="refresh" value="no">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
 	
@@ -51,7 +52,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>SHAPE *</label>
+                                    <label>SHAPE *</label> <button type="button" class="btn btn-success btn-xs" onClick="add_shape();"> <i class="fa fa-plus"></i> เพิ่ม Shape</button>
                                     <select class="form-control" name="shape" id="shape">
                                         <option value="0">-- เลือก --</option>
                                         <?php foreach($shape_array as $loop){
@@ -62,7 +63,7 @@
 							</div>
                             <div class="col-md-6">
 									<div class="form-group">
-                                        <label>CUTTING STYLE *</label>
+                                        <label>CUTTING STYLE *</label> <button type="button" class="btn btn-success btn-xs" onClick="add_cutting();"> <i class="fa fa-plus"></i> เพิ่ม Cutting Style</button>
                                         <select class="form-control" name="cuttingstyle" id="cuttingstyle">
                                             <option value="0">-- เลือก --</option>
 										<?php foreach($cuttingstyle_array as $loop){
@@ -337,11 +338,14 @@
 </div>
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
+<script src="<?php echo base_url(); ?>plugins/bootbox.min.js"></script>
 <script>
 $(document).ready(function()
 {    
     //document.getElementById("savebtn").disabled = false;
+    var $input = $('#refresh');
 
+    $input.val() == 'yes' ? location.reload(true) : $input.val('yes');
 });
 $(".alert-message").alert();
 window.setTimeout(function() { $(".alert-message").alert('close'); }, 5000);
@@ -375,7 +379,7 @@ function disablebutton() {
     }else if (document.getElementById('carat').value == "") {
         alert("กรุณาป้อนค่า CARAT WEIGHT");
         document.getElementById('carat').focus();
-    }else if ((document.getElementById('carat').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('carat').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CARAT WEIGHT ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('carat').focus();
     }else if (document.getElementById('color').value < 1) {
@@ -402,49 +406,50 @@ function disablebutton() {
     }else if (document.getElementById('totaldepth').value == "") {
         alert("กรุณาป้อนค่า TOTAL DEPTH");
         document.getElementById('totaldepth').focus();
-    }else if ((document.getElementById('totaldepth').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('totaldepth').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า TOTAL DEPTH ที่เป็นตัวเลขเท่านั้น");
+        //alert(Math.floor(document.getElementById('totaldepth').value*1000)%1);
         document.getElementById('totaldepth').focus();
     }else if (document.getElementById('totalsize').value == "") {
         alert("กรุณาป้อนค่า TOTAL SIZE");
         document.getElementById('totalsize').focus();
-    }else if ((document.getElementById('totalsize').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('totalsize').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า TOTAL SIZE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('totalsize').focus();
     }else if (document.getElementById('crownheight').value == "") {
         alert("กรุณาป้อนค่า CROWN HEIGHT");
         document.getElementById('crownheight').focus();
-    }else if ((document.getElementById('crownheight').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('crownheight').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CROWN HEIGHT ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('crownheight').focus();
     }else if (document.getElementById('crownangle').value == "") {
         alert("กรุณาป้อนค่า CROWN ANGLE");
         document.getElementById('crownangle').focus();
-    }else if ((document.getElementById('crownangle').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('crownangle').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า CROWN ANGLE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('crownangle').focus();
     }else if (document.getElementById('starlength').value == "") {
         alert("กรุณาป้อนค่า STAR LENGTH");
         document.getElementById('starlength').focus();
-    }else if ((document.getElementById('starlength').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('starlength').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า STAR LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('starlength').focus();
     }else if (document.getElementById('paviliondepth').value == "") {
         alert("กรุณาป้อนค่า PAVILION DEPTH");
         document.getElementById('paviliondepth').focus();
-    }else if ((document.getElementById('paviliondepth').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('paviliondepth').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า PAVILION DEPTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('paviliondepth').focus();
     }else if (document.getElementById('pavilionangle').value == "") {
         alert("กรุณาป้อนค่า PAVILION ANGLE");
         document.getElementById('pavilionangle').focus();
-    }else if ((document.getElementById('pavilionangle').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('pavilionangle').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า PAVILION ANGLE ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('pavilionangle').focus();
     }else if (document.getElementById('lowerhalflength').value == "") {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH");
         document.getElementById('lowerhalflength').focus();
-    }else if ((document.getElementById('lowerhalflength').value*1000) % 1 != 0) {
+    }else if ((Math.floor(document.getElementById('lowerhalflength').value)*1000) % 1 != 0) {
         alert("กรุณาป้อนค่า LOWER HALF-LENGTH ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('lowerhalflength').focus();
     }else if (document.getElementById('girdlethickness').value == "") {
@@ -464,6 +469,70 @@ function disablebutton() {
         }
         
     }
+}
+    
+function add_shape() {
+    bootbox.prompt("ป้อนชื่อ Shape ใหม่", function(result) {       
+        if (result != null && result !="") {                                                                        
+            var name = result;
+            $.ajax({
+                    url : '<?php echo site_url('ss_certificate/save_new_shape'); ?>',
+                    type:'post',
+                    dataType: 'json',
+                    data: { shape:name },
+                    success : function(data) {
+                        if (data.a==0) {
+                            alert("ชื่อ Shape: "+data.b+" มีอยู่ในระบบแล้ว  !!!");
+                        }else{
+                            var select = document.getElementById('shape');
+                            var opt = document.createElement('option');
+                            opt.value = data.a;
+                            opt.innerHTML = data.b;
+                            opt.selected = true;
+                            select.appendChild(opt);
+                        }
+                    },
+                    error: function (textStatus, errorThrown) {
+                        alert("เกิดความผิดพลาด !!!");
+                    }
+                }); 
+
+        }else if (result =="") {
+            alert('ไม่สามารถเพิ่มข้อมูลได้');
+        }
+    });
+}
+    
+function add_cutting() {
+    bootbox.prompt("ป้อนชื่อ Cutting Style ใหม่", function(result) {       
+        if (result != null && result !="") {                                                                        
+            var name = result;
+            $.ajax({
+                    url : '<?php echo site_url('ss_certificate/save_new_cutting'); ?>',
+                    type:'post',
+                    dataType: 'json',
+                    data: { cutting:name },
+                    success : function(data) {
+                        if (data.a==0) {
+                            alert("ชื่อ Cutting Style: "+data.b+" มีอยู่ในระบบแล้ว  !!!");
+                        }else{
+                            var select = document.getElementById('cuttingstyle');
+                            var opt = document.createElement('option');
+                            opt.value = data.a;
+                            opt.innerHTML = data.b;
+                            opt.selected = true;
+                            select.appendChild(opt);
+                        }
+                    },
+                    error: function (textStatus, errorThrown) {
+                        alert("เกิดความผิดพลาด !!!");
+                    }
+                }); 
+
+        }else if (result =="") {
+            alert('ไม่สามารถเพิ่มข้อมูลได้');
+        }
+    });
 }
     
 

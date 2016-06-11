@@ -28,11 +28,13 @@ Class Ss_list_model extends CI_Model
 	return $query->result();
  }
     
- function get_list_cuttingstyle()
+ function get_list_cuttingstyle($where)
  {
 	$this->db->select("lcs_id as id, lcs_value as value, lcs_enable as enable");
 	$this->db->from("ss_list_cuttingstyle");
     $this->db->where("lcs_enable", 1);
+    if ($where != "") $this->db->where($where);
+    $this->db->order_by("value", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -100,11 +102,13 @@ Class Ss_list_model extends CI_Model
 	return $query->result();
  }
     
- function get_list_shape()
+ function get_list_shape($where)
  {
 	$this->db->select("lsh_id as id, lsh_value as value, lsh_enable as enable");
 	$this->db->from("ss_list_shape");
     $this->db->where("lsh_enable", 1);
+    if ($where != "") $this->db->where($where);
+    $this->db->order_by("value", "asc");
 	$query = $this->db->get();		
 	return $query->result();
  }
@@ -126,6 +130,18 @@ Class Ss_list_model extends CI_Model
     $this->db->order_by("value");
 	$query = $this->db->get();		
 	return $query->result();
+ }
+    
+ function add_list_shape($insert)
+ {
+    $this->db->insert("ss_list_shape", $insert);
+    return $this->db->insert_id();
+ }
+    
+ function add_list_cutting($insert)
+ {
+    $this->db->insert("ss_list_cuttingstyle", $insert);
+    return $this->db->insert_id();
  }
 
 }
