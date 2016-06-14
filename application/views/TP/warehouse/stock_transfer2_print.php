@@ -10,7 +10,7 @@
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td> 
-<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; break; } 
+<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; $wh_in_group = $loop->wh_in_group; break; } 
 
  $GGyear=substr($datetime,0,4); 
  $GGmonth=substr($datetime,5,2); 
@@ -19,7 +19,7 @@
  $dateadd = substr($dateadd,8,2)."/".substr($dateadd,5,2)."/".substr($dateadd,0,4)." ".substr($dateadd,11,8);
 ?>
 <td width="50"> </td>
-<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
+<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;"><?php if ($wh_in_group == 3) echo "ใบยืนยันรับสินค้า"; else echo "ใบส่งของ"; ?></div></td>
 </tr>
 <tr>
     <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php if ($status==4) echo "(สวมสินค้า) "; echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่กำหนดส่ง : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>

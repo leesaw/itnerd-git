@@ -39,14 +39,14 @@
                                         <input type="text" class="form-control" name="number" id="number" value="">
                                 </div>
 							</div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
 									<div class="form-group">
                                         สาขาที่ส่งซ่อม *
                                         <select class="form-control" name="shopid" id="shopid">
                                             <option value='0'>-- เลือกสาขา --</option>
 										<?php 	if(is_array($shop_array)) {
 												foreach($shop_array as $loop){
-													echo "<option value='".$loop->sh_id."#".$loop->sh_code."-".$loop->sh_name."'>".$loop->sh_code."-".$loop->sh_name."</option>";
+													echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
 										 } } ?>
                                         </select>
                                     </div>
@@ -65,13 +65,13 @@
 							</div>
 						</div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                 ชื่อลูกค้า *
                                 <input type="text" class="form-control" name="cusname" id="cusname" value="">
                                 </div>
                             </div>    
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                 เบอร์ติดต่อลูกค้า *
                                 <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
@@ -79,13 +79,13 @@
                             </div>   
                         </div>
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                 Ref. Number *
                                 <input type="text" class="form-control" name="refcode" id="refcode" value="">
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                 ยี่ห้อ *
                                 <select class="form-control" name="brandid" id="brandid">
@@ -97,10 +97,18 @@
                                 </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <div class="form-group">
                                 อาการ *
                                 <input type="text" class="form-control" name="case" id="case" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <div class="form-group">
+                                Remark
+                                <input type="text" class="form-control" name="remark" id="remark" value="">
                                 </div>
                             </div>
                         </div>
@@ -206,13 +214,14 @@ function confirmform()
     var refcode = document.getElementById('refcode').value;
     var brandid = document.getElementById('brandid').value;
     var case1 = document.getElementById('case').value;
+    var remark = document.getElementById('remark').value;
      
     document.getElementById("savebtn").disabled = true;
     
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_repair"); ?>" ,
-        data : {datein: datein, cusname: cusname, custelephone: custelephone, datecs: datecs, shopid: shopid, number: number, getfrom: getfrom, refcode: refcode, brandid: brandid, case: case1} ,
+        data : {datein: datein, cusname: cusname, custelephone: custelephone, datecs: datecs, shopid: shopid, number: number, getfrom: getfrom, refcode: refcode, brandid: brandid, case: case1, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "ทำการบันทึกเรียบร้อยแล้ว";

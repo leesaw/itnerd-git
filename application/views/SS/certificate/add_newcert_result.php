@@ -150,7 +150,7 @@
                         <div class="row">
                             <div id="my-dropzone2" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 135px
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>300px x 250px
                                 </div>
                             </div>
 						</div>
@@ -295,7 +295,7 @@
                         <div class="row">
                             <div id="my-dropzone3" class="dropzone">
                                 <div class="dz-message">
-                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>253px x 135px
+                                    <h3>Drop files here</h3> or <strong>click</strong> to upload<br>300px x 250px
                                 </div>
                             </div>
 						</div>

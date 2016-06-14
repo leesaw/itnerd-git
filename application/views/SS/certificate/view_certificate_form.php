@@ -22,6 +22,10 @@
         border-left:1px solid black;
         border-right:1px solid black;
     }
+    .imgcenter {
+        display: block;
+        margin: 0 auto;
+    }
 </style>
 </head>
 <body>
@@ -58,7 +62,7 @@ foreach($cer_array as $loop) {
     $symbol = explode("#",$loop->cer_symbol);
 }    
 
-$none_picture = base_url()."picture/ss/none.png";
+$none_picture = base_url()."picture/ss/none2.png";
 
 foreach($result_array as $loop) {
     $pic_result = $loop->pre_value;
@@ -132,103 +136,101 @@ foreach($symbol_array as $loop) {
         </td></tr>
     <tr><td colspan="7" height="50"> </td><td colspan="3"></td></tr>
     
-    
     <tr><td colspan="2" height="25"><b>CLARITY GRADE</b></td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $clarity; ?> </td><td></td><td colspan="3" rowspan="2" style="vertical-align:top;">
-        
+
     <table border="0" height="75" style="font-size:8px">
         <tbody>
             <tr><th width="60" height="23" class="lineleftbottom">FL</th><th width="60" class="lineleftbottom">IF</th><th width="38" class="lineleftbottom">VVS1</th><th width="37" class="lineleftbottom">VVS2</th><th width="34" class="lineleftbottom">VS1</th><th width="34" class="lineleftbottom">VS2</th><th width="34" class="lineleftbottom">SI1</th><th width="33" class="lineleftrightbottom">SI2</th></tr>
             <tr><td height="40" class="lineleft"><center>FLAWLESS</center></td><td class="lineleft"><center>INTERNALLY FLAWLESS</center></td><td colspan="2" class="lineleft"><center>VERY VERY SLIGHTLY INCLUDED</center></td><td colspan="2" class="lineleft"><center>VERY SLIGHTLY INCLUDED</center></td><td colspan="2" class="lineleftright"><center>SLIGHTLY INCLUDED</center></td></tr>
         </tbody>
     </table>
-        
+       
         </td></tr>
+    
+
     <tr><td colspan="7" height="50"> </td><td colspan="3"></td></tr>
-    
-    
+
     <tr><td colspan="2" height="20"><b>CUT</b></td><td colspan="8"></td></tr>
     <?php if ($proportion_id != 100) { ?>
-    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="20"></td><td colspan="3" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td></tr>
+    <tr><td></td><td height="20">PROPORTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $proportion; ?></td><td rowspan="13"></td><td colspan="3" rowspan="13" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="max-width:300px;max-height:250px"></td></tr>
     <?php } ?>
     
     <tr><td></td><td height="20">SYMMETRY</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $symmetry; ?></td>
     <?php if ($proportion_id != 100) { ?>
-        <td colspan="4"></td></tr>
+        <td></td></tr>
     <?php }else{ ?>
-        <td rowspan="20"></td><td colspan="3" rowspan="20" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="width:100%; max-width:300px;"></td>
+        <td rowspan="13"></td><td colspan="3" rowspan="13" style="text-align:center;"><img src="<?php echo $pic_proportion; ?>" style="max-width:300px; max-height:300px"></td></tr>
     <?php } ?>
-    <tr><td></td><td height="20">POLISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $polish; ?></td><td colspan="4"></td></tr>
+    <tr><td></td><td height="20">POLISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $polish; ?></td></tr>
     
     <?php if ($proportion_id == 100) { ?>
-    <tr><td></td><td height="20"> </td><td colspan="4"> </td><td colspan="4" rowspan="20" style="text-align:center;"> </td></tr>
+    <tr><td></td><td height="20"> </td><td colspan="4"> </td></tr>
     <?php } ?>
     
-    <tr><td colspan="10" height="10"> </td></tr>
+    <tr><td colspan="6" height="10"> </td></tr>
     
-    <tr><td colspan="2" height="20"><b>TECHNICAL INFORMATION</b></td><td colspan="8"></td></tr>
+    <tr><td colspan="2" height="20"><b>TECHNICAL INFORMATION</b></td><td colspan="3"></td></tr>
     <?php $empty = ""; ?>
     <?php if ($totaldepth != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">TOTAL DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $totaldepth; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">TOTAL DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $totaldepth; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($tablesize != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">TABLE SIZE PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $tablesize; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">TABLE SIZE PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $tablesize; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($crownheight != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">CROWN HEIGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownheight; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">CROWN HEIGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownheight; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($crownangle != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">CROWN ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownangle; ?> &deg;</td><td colspan="5"></td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">CROWN ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $crownangle; ?> &deg;</td><td></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($starlength != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">STAR LENGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $starlength; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">STAR LENGHT PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $starlength; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($paviliondepth != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">PAVILION DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $paviliondepth; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">PAVILION DEPTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $paviliondepth; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($pavilionangle != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">PAVILION ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $pavilionangle; ?> &deg;</td><td colspan="5"></td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">PAVILION ANGLE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $pavilionangle; ?> &deg;</td><td></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
     <?php if ($lowerhalflength != 0) { ?>
-    <tr><td></td><td height="20" colspan="2">LOWER HALF-LENGTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $lowerhalflength; ?></td><td colspan="5">&nbsp;&nbsp;%</td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20" colspan="2">LOWER HALF-LENGTH PERCENTAGE</td><td></td><td  class="underline">&nbsp;&nbsp;&nbsp;<?php echo $lowerhalflength; ?></td><td>&nbsp;&nbsp;%</td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="6"> </td></tr>'; } ?>
     
-    
-    
-    <tr><td colspan="10" height="10"> </td></tr>
+    <?php echo $empty; $empty = ""; ?>
+
+    <tr><td colspan="7" height="10"> </td><td colspan="3" rowspan="11" style="vertical-align:top;"><table border="0"><tbody><tr><td style="font-size:12px" width="345">CLARITY PLOT</td></tr><tr><td><center><img src="<?php echo $pic_clarity; ?>" style="max-width:300px; max-height:250px;"/></center></td></tr></tbody></table></td></tr>
     
     <?php if ($lowerhalflength != 0) { ?>
-    <tr><td></td><td height="20">GIRDLE THICKNESS</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlethickness; ?></td><td colspan="4"></td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20">GIRDLE THICKNESS</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlethickness; ?></td><td></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="7"> </td></tr>'; } ?>
     
     <?php if ($girdlefinish_id != 100) { ?>
-    <tr><td></td><td height="20">GIRDLE FINISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlefinish; ?></td><td colspan="4"></td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20">GIRDLE FINISH</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdlefinish; ?></td><td></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="7"> </td></tr>'; } ?>
     
     <?php if ($culet_id != 100) { ?>
-    <tr><td></td><td height="20">CULET</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $culet; ?></td><td colspan="4"></td></tr>
-    <?php }else{ $empty .= '<tr><td height="20" colspan="10"> </td></tr>'; } ?>
+    <tr><td></td><td height="20">CULET</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $culet; ?></td><td></td></tr>
+    <?php }else{ $empty .= '<tr><td height="20" colspan="7"> </td></tr>'; } ?>
         
-    <tr><td colspan="10" height="10"> </td></tr>
+    <tr><td colspan="7" height="10"> </td></tr>
     
-    <tr><td colspan="2" height="20">GIRDLE INSCRIPTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdleinscription; ?></td><td colspan="4"></td></tr>
-    <tr><td colspan="2" height="20">FLUORESCENCE</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $fluorescence; ?></td><td colspan="4"></td></tr>
+    <tr><td colspan="2" height="20">GIRDLE INSCRIPTION</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $girdleinscription; ?></td><td></td></tr>
+    <tr><td colspan="2" height="20">FLUORESCENCE</td><td colspan="4" class="underline">&nbsp;&nbsp;&nbsp;<?php echo $fluorescence; ?></td><td></td></tr>
     <?php echo $empty; ?>
-    <tr><td colspan="10" height="10"> </td></tr>
+    <tr><td colspan="7" height="10"> </td></tr>
     
-    <tr><td colspan="6" height="25">SOFTWARE RESULT : PASS</td><td></td><td colspan="3">CLARITY PLOT</td></tr>
-    <tr><td colspan="6" height="90"><img src="<?php echo $pic_result; ?>" style="width:100%; max-width:400px; max-height:90px" /></td><td></td><td colspan="3" style="text-align: center"><img src="<?php echo $pic_clarity; ?>" style="width:100%; max-width:400px; max-height:90px" /></td></tr>
-    
-    <tr><td colspan="10" height="10"> </td></tr>
+    <tr><td colspan="6" height="25">SOFTWARE RESULT : PASS</td><td></td></tr>
+    <tr><td colspan="6" height="90"><img src="<?php echo $pic_result; ?>" style="width:100%; max-width:400px; max-height:90px" /></td><td> </td></tr>
+    <tr><td colspan="7" height="10"> </td></tr>
     <tr><td colspan="6" height="20">COMMENT</td><td></td><td colspan="3">KEY TO SYMBOL</td></tr>
-    <tr><td colspan="6" height="20"><?php echo $comment; ?></td><td></td><td colspan="3">
-        <?php for($i=0; $i<count($symbol_key); $i++) {
+    <tr><td colspan="6" height="20"><?php echo $comment; ?></td><td></td><td colspan="3"><?php for($i=0; $i<count($symbol_key); $i++) {
             echo "<img src='".base_url()."/picture/ss/".$symbol_key[$i]['picture']."' width='8'> ".$symbol_key[$i]['value']." &nbsp;&nbsp;&nbsp; ";
             if ($i==3) echo "<br>";
         } ?></td></tr>
