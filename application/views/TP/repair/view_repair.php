@@ -211,15 +211,15 @@
   						<br>
                         <div name="submit1" class="row">
 							<div class="col-md-6">
-								<button type="button" class="btn bg-orange" name="fixbtn" id="fixbtn" onclick="fix_status()" <?php if ($rep_status == 'R') echo " disabled"; ?>><i class='fa fa-wrench'></i> แจ้งประเมินการซ่อม </button>&nbsp;&nbsp;
-                                <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-primary" name="donebtn" id="donebtn" <?php if ($rep_status == 'G' || $rep_status == 'R') echo " disabled"; ?>><i class='fa fa-thumbs-up'></i> แจ้งจบงาน </a>&nbsp;&nbsp;
-                                <a data-toggle="modal" data-target="#myModal_return" type="button" class="btn btn-success" name="returnbtn" id="returnbtn"<?php if ($rep_status == 'G' || $rep_status=='A') echo " disabled"; ?>><i class='fa fa-check-square-o'></i> แจ้งส่งกลับ </a>&nbsp;&nbsp;
+								<button type="button" class="btn bg-orange" name="fixbtn" id="fixbtn" onclick="fix_status()" <?php if ($rep_status == 'R' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-wrench'></i> แจ้งประเมินการซ่อม </button>&nbsp;&nbsp;
+                                <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-primary" name="donebtn" id="donebtn" <?php if ($rep_status == 'G' || $rep_status == 'R' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-thumbs-up'></i> แจ้งจบงาน </a>&nbsp;&nbsp;
+                                <a data-toggle="modal" data-target="#myModal_return" type="button" class="btn btn-success" name="returnbtn" id="returnbtn"<?php if ($rep_status == 'G' || $rep_status=='A' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-check-square-o'></i> แจ้งส่งกลับ </a>&nbsp;&nbsp;
                                 
 							</div>
                             <div class="col-md-6">
                                 <div class="pull-right">
-                                <a href="<?php echo site_url("tp_repair/form_edit_repair")."/".$rep_id; ?>" type="button" class="btn btn-warning" id="editbtn" name="editbtn"><i class='fa fa-edit'></i> แก้ไขข้อมูล</a>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-danger" onclick="disable_repair()" id="disablebtn" name="disablebtn"><i class='fa fa-trash'></i> ลบข้อมูล</button>&nbsp;&nbsp;
+                                <a href="<?php echo site_url("tp_repair/form_edit_repair")."/".$rep_id; ?>" type="button" class="btn btn-warning" id="editbtn" name="editbtn" <?php if ($rep_enable==0) echo " disabled"; ?>><i class='fa fa-edit'></i> แก้ไขข้อมูล</a>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-danger" onclick="disable_repair()" id="disablebtn" name="disablebtn" <?php if ($rep_enable==0) echo " disabled"; ?>><i class='fa fa-trash'></i> ลบข้อมูล</button>&nbsp;&nbsp;
                                 </div>
                             </div>
 						</div>
@@ -500,12 +500,7 @@ function disable_repair()
                 data : {rep_id: rep_id} ,
                 dataType: 'json',
                 success : function(data) {
-                    document.getElementById("fixbtn").disabled = true;
-                    document.getElementById("donebtn").disabled = true;
-                    document.getElementById("returnbtn").disabled = true;
-                    document.getElementById("editbtn").disabled = true;
-                    document.getElementById("disablebtn").disabled = true;
-                    document.getElementById("enable").innerHTML = "ยกเลิกแล้ว";
+                    location.reload();
                 },
                 error: function (textStatus, errorThrown) {
                     alert("เกิดความผิดพลาด !!!");
