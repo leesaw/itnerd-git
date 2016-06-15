@@ -68,6 +68,7 @@
                     <option value="G">รับเข้าซ่อม</option>
                     <option value="A">ประเมินการซ่อมแล้ว</option>
                     <option value="D">ซ่อมเสร็จ</option>
+                    <option value="C">ซ่อมไม่ได้</option>
                     <option value="R">ส่งกลับแล้ว</option>
                 </select>
                 </div>

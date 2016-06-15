@@ -44,7 +44,7 @@ if ($loop->qty_final > 0) {
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td> 
 <td width="50"> </td>
-<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบส่งของ</div></td>
+<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;"><?php if ($wh_in_group == 3) echo "ใบยืนยันรับสินค้า"; else echo "ใบส่งของ"; ?></div></td>
 </tr>
 <tr>
     <td>เลขที่ <?php echo $si_id; ?><br>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>Remark: <?php echo $stock_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่กำหนดส่ง : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>

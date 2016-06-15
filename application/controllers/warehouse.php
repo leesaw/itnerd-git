@@ -189,6 +189,45 @@ function show_all_product_warehouse()
     exit();
 }
     
+function show_all_product_transfer_id()
+{
+    $transfer_id = $this->input->post("transfer_id");
+    $warehouse = $this->input->post("whid_out");
+    
+    $sql = "log_stot_transfer_id = '".$transfer_id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+    
+    $arr = array();
+    $index = 0;
+    
+    foreach($query as $loop1) {
+        
+        $sql = "stob_warehouse_id = '".$warehouse."' and stob_item_id = '".$loop1->log_stot_item_id."'";
+        
+        $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);   
+        
+        foreach ($result as $loop) {
+            $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+
+            if ($loop->stob_qty > 0) { 
+                $output .= "<td style='width: 120px;'>";
+            }else{
+                $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+            }
+
+            $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+            $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$loop1->qty_final."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+
+            $arr[$index] = $output;
+            $index++;
+        }
+        
+    }
+    
+    echo json_encode($arr);
+    exit();
+}
+    
 function showBalance_byserial()
 {
     $refcode = $this->input->post("refcode");

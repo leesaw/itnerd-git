@@ -444,7 +444,7 @@ function rolex_barcode_print()
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
     
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '888' and itse_dateadd > '2016-05-31 00:00:00'";
+    $sql_result = "br_id = '888' and itse_serial_number like '3037J6Q0'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
     if($query){

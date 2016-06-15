@@ -63,6 +63,7 @@
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
                                         <?php if ($remark==0) { ?>
                                             <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall" onclick="allproduct()">เลือกสินค้าทั้งหมด</button>
+                                            <button type="button" class="btn btn-warning btn-sm"  name="showall" id="showall" onclick="alltransfer()">เลือกสินค้าจากใบย้ายคลัง</button>
                                         <?php } ?>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
@@ -273,6 +274,66 @@ function allproduct()
     
     
 }
+    
+function alltransfer()
+{
+    var transfer_id = 289;
+    var whid_out = <?php echo $whid_out; ?>;
+    var luxury = <?php echo $remark; ?>;
+	if(transfer_id != "")
+	{
+        if (luxury == 0) {
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("warehouse/show_all_product_transfer_id"); ?>" ,
+                data : { transfer_id: transfer_id, whid_out: whid_out  },
+                dataType: "json",
+                success : function(data) {
+                    if(data.length > 0)
+                    {
+                        for(var i=0; i<data.length; i++) {
+                            var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                            $('table > tbody').append(element);
+                            count_enter_form_input_product++;
+                            count_list++;
+                        }
+                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                        document.getElementById("showall").disabled = true;
+                    }else{
+                        alert("ไม่พบสินค้าที่ต้องการในคลัง "+whname_out);
+                    }
+                },
+                error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+
+            }
+            });
+        }else{
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("warehouse_transfer/checkStock_transfer_caseback"); ?>" ,
+                data : {refcode: refcode_input, whid_out: whid_out} ,
+                success : function(data) {
+                    if(data != "")
+                    {
+                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                        $('table > tbody').append(element);
+                        count_enter_form_input_product++;
+                        count_list++;
+                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                    }else{
+                        alert("ไม่พบ Caseback No. ที่ต้องการในคลัง "+whname_out);
+                    }
+                }
+            });
+        }
+	}
+    setTimeout(function(){
+        calculate();
+    },3000);
+    
+    
+}
 
 function delete_item_row(row1)
 {
@@ -290,6 +351,8 @@ function submitform(x)
     var whid_in = <?php echo $whid_in; ?>;
     var datein = "<?php echo $datein; ?>";
     var it_code = document.getElementsByName('it_code');
+    var it_final = document.getElementsByName('it_quantity');
+    var qty_old = document.getElementsByName('old_qty');
     if (whid_out < 0) {
         alert("กรุณาเลือกคลังสินค้า");
     }else if (whid_in < 0) {
@@ -311,6 +374,17 @@ function submitform(x)
         if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");
         }else{
+            for(var i=0; i<it_final.length; i++){
+                if (it_final[i].value == "") {
+                    alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
+                    return;
+                }
+
+                if (parseInt(it_final[i].value) > parseInt(qty_old[i].value)) {
+                    alert("จำนวนสินค้าคงเหลือไม่เพียงพอกับที่ต้องการ !!");
+                    return;
+                }
+            }
             var r = confirm("ยืนยันการคืนสินค้า !!");
             if (r == true) {
                 confirmform(x);

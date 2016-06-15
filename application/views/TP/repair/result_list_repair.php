@@ -28,13 +28,13 @@
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
-                <input type="text" class="form-control" name="number" id="number" value="<?php echo $number; ?>">
+                <input type="text" class="form-control" name="number" id="number" value="<?php if ($number != "NULL") echo $number; ?>">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                 Ref. Number
-                <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo $refcode; ?>">
+                <input type="text" class="form-control" name="refcode" id="refcode" value="<?php if ($refcode != "NULL") echo $refcode; ?>">
                 </div>
             </div>
             <div class="col-md-2">
@@ -70,6 +70,7 @@
                     <option value="G"<?php if($status=='G') echo " selected"; ?>>รับเข้าซ่อม</option>
                     <option value="A"<?php if($status=='A') echo " selected"; ?>>ประเมินการซ่อมแล้ว</option>
                     <option value="D"<?php if($status=='D') echo " selected"; ?>>ซ่อมเสร็จ</option>
+                    <option value="C"<?php if($status=='C') echo " selected"; ?>>ซ่อมไม่ได้</option>
                     <option value="R"<?php if($status=='R') echo " selected"; ?>>ส่งกลับแล้ว</option>
                 </select>
                 </div>
@@ -112,16 +113,15 @@
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="80">วันที่กำหนดส่ง</th>
-                                        <th width="100">เลขที่ย้ายคลัง</th>
-                                        <th width="120">Ref. Number</th>
-                                        <th>Brand</th>
-                                        <th>Family</th>
-                                        <th>Description</th>
-                                        <th>SRP</th>
-                                        <th>Qty (Pcs.)</th>
-                                        <th>ออกจากคลัง</th>
-                                        <th>เข้าคลัง</th>
+                                        <th width="80">วันที่ส่งซ่อม</th>
+                                        <th width="80">เลขที่ใบรับ</th>
+                                        <th>Ref. Number</th>
+                                        <th>ยี่ห้อ</th>
+                                        <th>สาขาที่ส่งซ่อม</th>
+                                        <th>รายละเอียดลูกค้า</th>
+                                        <th>อาการ</th>
+                                        <th>สถานะ</th>
+                                        <th> </th>
                                     </tr>
                                 </thead>
                                 
