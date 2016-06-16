@@ -45,6 +45,7 @@
                     <?php foreach($brand_array as $loop) { ?>
                     <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_code."-".$loop->br_name; ?></option>
                     <?php } ?>
+                    <option value='99999'>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>
@@ -57,6 +58,7 @@
                         foreach($shop_array as $loop){
                             echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
                  } } ?>
+                    <option value='99999'>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>

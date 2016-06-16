@@ -59,7 +59,13 @@
                                     <input type="text" class="form-control" name="custax_id" id="custax_id" value="">
                                 </div>
 							</div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
+                                <div class="form-group-sm">
+                                    Passport No.
+                                    <input type="text" class="form-control" name="cuspassport" id="cuspassport" value="">
+                                </div>
+							</div>
+                            <div class="col-md-2">
                                 <div class="form-group-sm">
                                     เบอร์ติดต่อ *
                                     <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
@@ -339,6 +345,7 @@ function confirmform()
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress').value;
     var custax_id = document.getElementById('custax_id').value;
+    var cuspassport = document.getElementById('cuspassport').value;
     var custelephone = document.getElementById('custelephone').value;
     var payment = document.getElementById('payment').value;
     var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
@@ -383,7 +390,7 @@ function confirmform()
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("sale/saleorder_rolex_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
+        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, cuspassport: cuspassport, custelephone: custelephone, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";

@@ -133,9 +133,10 @@ function form_list_repair()
 function result_list_repair()
 {
     if ($this->input->post("number") != "")
-        $data['number'] = $this->input->post("number");
+        $data['number'] = str_replace("/","_",$this->input->post("number"));
     else
         $data['number'] = "NULL";
+    
     if ($this->input->post("refcode") != "")
         $data['refcode'] = $this->input->post("refcode");
     else
@@ -166,15 +167,14 @@ function result_list_repair()
 function ajaxView_seach_repair()
 {
     $number = $this->uri->segment(3);
+    $number = str_replace("_","/",$number);
     $refcode = $this->uri->segment(4);
     $brandid = $this->uri->segment(5);
     $shopid = $this->uri->segment(6);
     $status = $this->uri->segment(7);
     
     $where = "";
-    if ($this->session->userdata('sessstatus') != '88') {
-        $where .= $this->no_rolex;
-    }else{ $where .= "br_id != 888"; }
+    $where .= "rep_enable = 1";
     
     if ($number != "NULL") {
         $where .= " and rep_number like '".$number."'";
@@ -193,11 +193,11 @@ function ajaxView_seach_repair()
         $where .= " and rep_status = '".$status."'";
     }
     
-    $where .= " and rep_enable = 1";
+    
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("rep_datein, rep_number, rep_refcode, br_name, sh1.sh_name as shopname, CONCAT(rep_cusname,' ', rep_custelephone), rep_case, 
+    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), rep_case, 
     (CASE 
         WHEN rep_status = 'G' THEN '<button class=\'btn btn-danger btn-xs\'>รับเข้าซ่อม</button>'
         WHEN rep_status = 'A' THEN '<button class=\'btn btn-warning btn-xs\'>ประเมินการซ่อมแล้ว</button>'

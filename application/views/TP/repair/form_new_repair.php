@@ -48,6 +48,7 @@
 												foreach($shop_array as $loop){
 													echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
 										 } } ?>
+                                            <option value='99999'>-- อื่น ๆ --</option>
                                         </select>
                                     </div>
 							</div>
@@ -94,6 +95,7 @@
                                         foreach($brand_array as $loop){
                                             echo "<option value='".$loop->br_id."'>".$loop->br_code." - ".$loop->br_name."</option>";
                                  } } ?>
+                                    <option value='99999'>-- อื่น ๆ --</option>
                                 </select>
                                 </div>
                             </div>
@@ -149,7 +151,7 @@ function submitform()
 {
     var cusname = document.getElementById('cusname').value;
     var custelephone = document.getElementById('custelephone').value;
-    custelephone = custelephone.replace(/[-/#\s]/g, "");
+    custelephone = custelephone.replace(/[-,/#\s]/g, "");
     var datein = document.getElementById('datein').value;
     var datecs = document.getElementById('datecs').value;
     var shopid = document.getElementById('shopid').value;

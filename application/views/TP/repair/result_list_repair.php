@@ -28,7 +28,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
-                <input type="text" class="form-control" name="number" id="number" value="<?php if ($number != "NULL") echo $number; ?>">
+                <input type="text" class="form-control" name="number" id="number" value="<?php if ($number != "NULL") echo str_replace("_","/",$number); ?>">
                 </div>
             </div>
             <div class="col-md-3">
@@ -45,6 +45,7 @@
                     <?php foreach($brand_array as $loop) { ?>
                     <option value="<?php echo $loop->br_id; ?>"<?php if($brandid==$loop->br_id) echo " selected"; ?>><?php echo $loop->br_code."-".$loop->br_name; ?></option>
                     <?php } ?>
+                    <option value='99999'<?php if ($brandid==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>
@@ -59,6 +60,7 @@
                             if ($shopid==$loop->sh_id) echo " selected";
                             echo ">".$loop->sh_code."-".$loop->sh_name."</option>";
                  } } ?>
+                    <option value='99999'<?php if ($shopid==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>

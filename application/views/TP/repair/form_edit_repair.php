@@ -92,6 +92,7 @@
                                                     if ($loop->sh_id==$rep_shop_id) echo " selected";
                                                     echo ">".$loop->sh_code."-".$loop->sh_name."</option>";
 										 } } ?>
+                                            <option value='99999'<?php if ($rep_shop_id==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                                         </select>
                                     </div>
 							</div>
@@ -140,6 +141,7 @@
                                             if ($loop->br_id==$rep_brand_id) echo " selected";
                                             echo ">".$loop->br_code." - ".$loop->br_name."</option>";
                                  } } ?>
+                                    <option value='99999'<?php if ($rep_brand_id==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                                 </select>
                                 </div>
                             </div>
@@ -195,7 +197,7 @@ function submitform()
 {
     var cusname = document.getElementById('cusname').value;
     var custelephone = document.getElementById('custelephone').value;
-    custelephone = custelephone.replace(/[-/#\s]/g, "");
+    custelephone = custelephone.replace(/[-,/#\s]/g, "");
     var datein = document.getElementById('datein').value;
     var datecs = document.getElementById('datecs').value;
     var shopid = document.getElementById('shopid').value;

@@ -11,7 +11,7 @@
 <td width="320">
 <div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
 </td> 
-<?php foreach($pos_array as $loop) { $datetime = $loop->posro_issuedate; $so_id = $loop->posro_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posro_customer_name; $cusaddress = $loop->posro_customer_address; $custaxid = $loop->posro_customer_taxid; break; } 
+<?php foreach($pos_array as $loop) { $datetime = $loop->posro_issuedate; $so_id = $loop->posro_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posro_customer_name; $cusaddress = $loop->posro_customer_address; $custaxid = $loop->posro_customer_taxid; $cuspassport = $loop->posro_customer_passport; break; } 
 
  $GGyear=substr($datetime,0,4); 
  $GGmonth=substr($datetime,5,2); 
@@ -21,7 +21,7 @@
     <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบกำกับภาษี/ ใบส่งสินค้า/ ใบเสร็จรับเงิน</div><div style="font-weight: bold; font-size: 16pt;">ต้นฉบับ</div></td>
 </tr>
 <tr>
-    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
+    <td width="300" colspan="2">นามผู้ซื้อ : <?php echo $cusname; ?><br>ที่อยู่ : <?php $strlen = mb_strlen($cusaddress); echo $cusaddress; ?><br>เลขประจำตัวผู้เสียภาษี : <?php echo $custaxid; if ($cuspassport !="") echo " &nbsp;&nbsp;&nbsp; Passport No. : ".$cuspassport; if ($strlen < 75) echo "<br>&nbsp;"; ?></td><td> </td><td colspan="2">เลขที่ใบกำกับภาษี: <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>พนักงานขาย:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>
@@ -52,16 +52,16 @@
 </tbody>
 <tbody>
 <tr>
-<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum/1.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
 <td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
-<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum/1.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
-<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(($sum/1.07)*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
 <td height="40" align="left" colspan=3 scope="row" style="border-top:1px solid black;">( <?php echo num2thai($sum); ?> )</td>

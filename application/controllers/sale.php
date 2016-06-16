@@ -305,6 +305,7 @@ function saleorder_rolex_save()
     $cusname = $this->input->post("cusname");
     $cusaddress = $this->input->post("cusaddress");
     $custax_id = $this->input->post("custax_id");
+    $cuspassport = $this->input->post("cuspassport");
     $custelephone = $this->input->post("custelephone");
     $payment = $this->input->post("payment");
     $payment_value = $this->input->post("payment_value");
@@ -334,6 +335,7 @@ function saleorder_rolex_save()
                     'posro_customer_name' => $cusname,
                     'posro_customer_address' => $cusaddress,
                     'posro_customer_taxid' => $custax_id,
+                    'posro_customer_passport' => $cuspassport,
                     'posro_customer_tel' => $custelephone,
                     'posro_sale_person_id' => $saleperson_code,
                     'posro_payment' => $payment,

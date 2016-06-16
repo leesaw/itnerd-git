@@ -63,7 +63,13 @@
                                     <input type="text" class="form-control" name="custax_id" id="custax_id" value="<?php echo $loop->posro_customer_taxid; ?>" readonly>
                                 </div>
 							</div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
+                                <div class="form-group-sm has-success">
+                                    <label class="control-label" for="inputSuccess">Passport No.</label>
+                                    <input type="text" class="form-control" name="cuspassport" id="cuspassport" value="<?php echo $loop->posro_customer_passport; ?>" readonly>
+                                </div>
+							</div>
+                            <div class="col-md-2">
                                 <div class="form-group-sm has-success">
                                     <label class="control-label" for="inputSuccess">เบอร์ติดต่อ</label>
                                     <input type="text" class="form-control" name="custelephone" id="custelephone" value="<?php echo $loop->posro_customer_tel; ?>" readonly>

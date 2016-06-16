@@ -63,7 +63,9 @@
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
                                         <?php if ($remark==0) { ?>
                                             <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall" onclick="allproduct()">เลือกสินค้าทั้งหมด</button>
+                                            <!--
                                             <button type="button" class="btn btn-warning btn-sm"  name="showall" id="showall" onclick="alltransfer()">เลือกสินค้าจากใบย้ายคลัง</button>
+                                            -->
                                         <?php } ?>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>

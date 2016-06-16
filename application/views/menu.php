@@ -55,6 +55,28 @@
               </a>
             </li>
             <?php } ?>
+            
+            <?php if ($this->session->userdata('sessstatus') == 5) { ?>
+            <li class="header">MAIN NAVIGATION</li>
+            <li>
+              <a href="<?php echo site_url("timepieces/main"); ?>">
+                <i class="fa fa-home"></i> <span>หน้าแรก</span>
+              </a>
+            </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-wrench"></i> <span>ส่งซ่อม (Repair)</span><i class="fa fa-angle-left pull-right"></i></a>
+				<ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("tp_repair/form_list_repair"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลส่งซ่อม</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_repair/form_new_repair"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลส่งซ่อม</a>
+                    </li>
+                </ul>
+
+            </li>
+            <?php } ?>
+              
             <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 4)) { ?>
             <?php if ($this->session->userdata('sessrolex') == 0) { ?>
             <li class="header">MAIN NAVIGATION</li>
