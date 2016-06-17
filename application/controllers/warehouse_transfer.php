@@ -44,6 +44,44 @@ function importstock()
     $this->load->view("TP/warehouse/addstock_view", $data);
 }
     
+function upload_excel_import_stock()
+{
+    $this->load->helper(array('form', 'url'));
+    
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'jpg|png';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+        //$this->load->view('upload_form', $error);
+    }
+    else
+    {
+        $data = array('upload_data' => $this->upload->data());
+        $sql = "wh_enable = 1";
+        $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
+        $data['currentdate'] = date("d/m/Y");
+
+        $data['sessrolex'] = $this->session->userdata('sessrolex');
+        $data['title'] = "Nerd - Transfer Stock";
+        $this->load->view("TP/warehouse/transferstock_view", $data);
+    }
+    
+    
+    
+    /*
+    $this->load->library('excel');
+    $reader= PHPExcel_IOFactory::createReader('Excel2007');
+    $reader->setReadDataOnly(true);
+    $excel=$reader->load($data['upload_data']['full_path']);
+    $sheet=$excel->setActiveSheetIndex(0);
+    */
+}
+    
 function transferstock() 
 {
 	$sql = "wh_enable = 1";

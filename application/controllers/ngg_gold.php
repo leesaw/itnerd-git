@@ -384,7 +384,7 @@ function ajaxViewWarranty()
     $start = $startdate." 00:00:00";
     $end = $enddate." 23:59:59";
     
-    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."' and ngw_shop_id = '".$this->session->userdata('sessshopid')."'";
     
     $this->load->library('Datatables');
     $this->datatables

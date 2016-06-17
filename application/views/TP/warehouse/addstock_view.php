@@ -60,6 +60,7 @@
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Code ที่รับเข้าคลัง">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
+                                            <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-check-square-o'></i> Upload Excel</a>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
 				                    <div class="panel-body">
@@ -108,6 +109,35 @@
             </div></section>
 	</div>
 </div>
+
+<!-- datepicker modal for upload excel -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">	                 	
+                    <i class='fa fa-thumbs-up'></i> Import Excel File
+                </h4>
+            </div>            <!-- /modal-header -->
+            <div class="modal-body">
+                <form action="<?php echo site_url("warehouse_transfer/upload_excel_import_stock"); ?>" method="post" enctype="multipart/form-data" id="upload_excel">
+                <div class="row"><div class="col-md-12"><form class="form-horizontal"><div class="form-group"><label class="col-md-4 control-label" for="donedate_done">เลือกไฟล์</label><div class="col-md-8"> <input type="file" class="form-control" id="excelfile_name" name="excelfile_name" /></div></div></form> </div>  </div>
+
+            </div>            <!-- /modal-body -->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="upload_excel();">Upload</button>
+
+            </div> 	
+            </form>								
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- close modal -->  
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
@@ -361,6 +391,10 @@ function confirmform(luxury)
     }
     
 }
+    
+function upload_excel() {
+    document.getElementById("upload_excel").submit();
+};
     
 </script>
 </body>
