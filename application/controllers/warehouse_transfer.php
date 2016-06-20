@@ -49,7 +49,8 @@ function upload_excel_import_stock()
     $this->load->helper(array('form', 'url'));
     
     $config['upload_path']          = './uploads/excel';
-    $config['allowed_types']        = 'jpg|png';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '2048';
 
     $this->load->library('upload', $config);
 
@@ -57,7 +58,7 @@ function upload_excel_import_stock()
     {
         $error = array('error' => $this->upload->display_errors());
 
-        //$this->load->view('upload_form', $error);
+        $this->load->view("TP/warehouse/addstock_view", $data);
     }
     else
     {

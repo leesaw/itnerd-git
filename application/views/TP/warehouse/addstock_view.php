@@ -122,8 +122,8 @@
                 </h4>
             </div>            <!-- /modal-header -->
             <div class="modal-body">
-                <form action="<?php echo site_url("warehouse_transfer/upload_excel_import_stock"); ?>" method="post" enctype="multipart/form-data" id="upload_excel">
-                <div class="row"><div class="col-md-12"><form class="form-horizontal"><div class="form-group"><label class="col-md-4 control-label" for="donedate_done">เลือกไฟล์</label><div class="col-md-8"> <input type="file" class="form-control" id="excelfile_name" name="excelfile_name" /></div></div></form> </div>  </div>
+                <form action="<?php echo site_url("warehouse_transfer/upload_excel_import_stock"); ?>" method="post" enctype="multipart/form-data" id="form_uploadexcel" class="form-horizontal">
+                <div class="row"><div class="col-md-12"><div class="form-group"><label class="col-md-4 control-label" for="donedate_done">เลือกไฟล์</label><div class="col-md-8"> <input type="file" class="form-control" id="excelfile_name" name="excelfile_name" /></div></div></form> </div>  </div>
 
             </div>            <!-- /modal-body -->
 
@@ -131,7 +131,7 @@
                 <button type="button" class="btn btn-success" onclick="upload_excel();">Upload</button>
 
             </div> 	
-            </form>								
+						
         </div>
     </div>
 </div>
@@ -393,7 +393,7 @@ function confirmform(luxury)
 }
     
 function upload_excel() {
-    document.getElementById("upload_excel").submit();
+    document.getElementById("form_uploadexcel").submit();
 };
     
 </script>

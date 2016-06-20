@@ -32,6 +32,7 @@ function index()
 function saleorder_view()
 {
     $sql = $this->shop_rolex;
+    $sql .= " and sh_enable = '1'";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
 	$data['currentdate'] = date("d/m/Y");
 
@@ -975,7 +976,8 @@ function report_sale_form()
         $sql .= $this->no_rolex;
     }else{ $sql .= "br_id != 888"; }
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
-    $sql = "sh_enable = '1'";
+    //$sql = "sh_enable = '1'";
+    $sql = "";
     $data['shop_array'] = $this->tp_shop_model->getShop($sql);
 
     $data['title'] = "Nerd - Search Sale Report";

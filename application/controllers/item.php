@@ -385,7 +385,7 @@ function getRefcode()
     $luxury = $this->input->post("luxury");
     
     $sql = "it_enable = 1 and it_refcode = '".$refcode."' and ".$this->no_rolex;
-    $sql .= " and br_has_serial = '".$luxury."'";
+    $sql .= " and it_has_caseback = '".$luxury."'";
     $result = $this->tp_item_model->getItem($sql);
     $output = "";
     foreach ($result as $loop) {
