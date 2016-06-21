@@ -63,7 +63,7 @@
                                     <?php $must_serial=0; 
                                           foreach($stock_array as $loop){ 
                                               $stot_remark = $loop->stot_remark;
-                                              if ($loop->br_has_serial == 1) { $must_serial++; break; } }
+                                              if ($loop->it_has_caseback == 1) { $must_serial++; break; } }
                                         if ($must_serial>0) {
                                     ?>
                                             <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Caseback No. ที่ต้องการย้าย"><div class="input-group-btn">
@@ -90,7 +90,7 @@
                                                     <?php 
                                                     $count=0;
                                                     foreach($stock_array as $loop) { ?>
-                                                    <tr<?php if ($loop->br_has_serial==1) echo " class='danger'"; ?>>
+                                                    <tr<?php if ($loop->it_has_caseback==1) echo " class='danger'"; ?>>
                                                     <input type='hidden' name='it_id' id='it_id' value=" <?php echo $loop->log_stot_item_id; ?>">
                                                     <input type='hidden' name='log_id' id='log_id' value="<?php echo $loop->log_stot_id; ?>">
                                                     <td><?php echo $loop->it_refcode; ?></td>
@@ -101,16 +101,16 @@
                                                         else echo $loop->qty_old; ?></td>
                                                     <td><?php echo $loop->qty_update; ?></td>
                                                     <td>
-                                                        <?php if ($loop->br_has_serial==1) { ?>
+                                                        <?php if ($loop->it_has_caseback==1) { ?>
                                                         <input type="hidden" name="count_serial_<?php echo $loop->log_stot_item_id; ?>" id="count_serial_<?php echo $loop->log_stot_item_id; ?>" value="<?php echo $count; ?>">
                                                         <?php } ?>
-                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->br_has_serial==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->br_has_serial)) echo "readonly"; ?> onChange='calculate();'>
+                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->it_has_caseback==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->it_has_caseback)) echo "readonly"; ?> onChange='calculate();'>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
                                                     
                                                     <?php // if has serial
                                                     $count_serial = 0;
-                                                    if ($loop->br_has_serial==1) {
+                                                    if ($loop->it_has_caseback==1) {
                                                         for($i=1; $i<=$loop->qty_update; $i++) {
                                                             $count_serial++;
                                                     ?>
@@ -210,6 +210,9 @@ function check_product_code(refcode_input, wh_id)
                             serial_id[i].value = data.c;
                             it_final[serial].value = parseInt(it_final[serial].value) + 1;
                             break;
+                        }else if(data.b == serial_array[i].value) {
+                            alert("Caseback ซ้ำ");
+                            break;
                         }
                     }
                 }else{
@@ -290,9 +293,13 @@ function confirmform()
         
         for(var j=0; j<serial.length; j++) {
             if (serial[j].value != "") {
+                
                 serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
                 index_serial++;
                 
+            }else{
+                alert("กรุณาใส่ Caseback ให้ครบ");
+                return;
             }
             
         }

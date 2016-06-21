@@ -46,11 +46,13 @@ function importstock()
     
 function upload_excel_import_stock()
 {
+    $luxury = $this->uri->segment(3);
+    
     $this->load->helper(array('form', 'url'));
     
     $config['upload_path']          = './uploads/excel';
     $config['allowed_types']        = 'xls|xlsx';
-    $config['max_size']             = '2048';
+    $config['max_size']             = '5000';
 
     $this->load->library('upload', $config);
 
@@ -58,29 +60,54 @@ function upload_excel_import_stock()
     {
         $error = array('error' => $this->upload->display_errors());
 
-        $this->load->view("TP/warehouse/addstock_view", $data);
     }
     else
     {
-        $data = array('upload_data' => $this->upload->data());
-        $sql = "wh_enable = 1";
-        $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
-        $data['currentdate'] = date("d/m/Y");
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
 
-        $data['sessrolex'] = $this->session->userdata('sessrolex');
-        $data['title'] = "Nerd - Transfer Stock";
-        $this->load->view("TP/warehouse/transferstock_view", $data);
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+                
+            }
+            
+        }
+        
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "") {
+                $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and ".$this->no_rolex;
+                $sql .= " and it_has_caseback = '".$luxury."'";
+                $this->load->model('tp_item_model','',TRUE);
+                $result = $this->tp_item_model->getItem($sql);
+                foreach ($result as $loop) {
+                    $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
+                    if ($luxury == 0) {
+                        $output .= "<input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+                    }else{
+                        $output .= "<input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+                        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$arr_data[$i]['B']."' style='width: 200px;'></td>";
+                    }
+                    
+                    $arr[$index] = $output;
+                    $index++;
+                }
+            }
+            
+        }
+        unlink($data['full_path']);
+        
+        echo json_encode($arr);
+        exit();
     }
-    
-    
-    
-    /*
-    $this->load->library('excel');
-    $reader= PHPExcel_IOFactory::createReader('Excel2007');
-    $reader->setReadDataOnly(true);
-    $excel=$reader->load($data['upload_data']['full_path']);
-    $sheet=$excel->setActiveSheetIndex(0);
-    */
+
 }
     
 function transferstock() 
@@ -405,6 +432,28 @@ function checkStock_transfer()
     $whid_out = $this->input->post("whid_out");
     
     $sql = "it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."'";
+    $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        
+        if ($loop->stob_qty > 0) { 
+            $output .= "<td style='width: 120px;'>";
+        }else{
+            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+        }
+        $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+    }
+    echo $output;
+}
+    
+function checkStock_transfer_onlyfashion()
+{
+    $refcode = $this->input->post("refcode");
+    $whid_out = $this->input->post("whid_out");
+    
+    $sql = "it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '0'";
     $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
     $output = "";
     foreach ($result as $loop) {

@@ -51,7 +51,7 @@
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
+									<div class="panel-heading"><div class="input-group input-group-sm col-xs-8">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการย้าย"; else echo "Caseback No. ที่ต้องการย้าย"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
@@ -215,6 +215,13 @@ function check_product_code(refcode_input, whid_out, whname_out, luxury)
     
 function allproduct()
 {
+    for(var i=0; i<count_enter_form_input_product; i++) {
+        $('#row'+i).remove();
+    }
+    count_enter_form_input_product = 0;
+    count_list = 0;
+    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+    
     var whid_out = <?php echo $whid_out; ?>;
     var whname_out = "<?php echo $whname_out; ?>";
     var luxury = <?php echo $remark; ?>;

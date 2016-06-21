@@ -5,7 +5,7 @@
     <!-- iCheck -->
 <script src="<?php echo base_url(); ?>plugins/iCheck/icheck.min.js" type="text/javascript"></script>
     <!-- SlimScroll -->
-<script src="<?php echo base_url(); ?>plugins/slimScroll/jquery.slimScroll.min.js" type="text/javascript"></script>
+<!-- <script src="<?php echo base_url(); ?>plugins/slimScroll/jquery.slimScroll.min.js" type="text/javascript"></script>
     <!-- FastClick -->
 <script src='<?php echo base_url(); ?>plugins/fastclick/fastclick.min.js'></script>
     <!-- AdminLTE App -->

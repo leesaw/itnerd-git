@@ -56,13 +56,19 @@
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
+									<div class="panel-heading">
+                                        <div class="input-group input-group-sm col-md-8">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Code ที่รับเข้าคลัง">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
-                                            <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-check-square-o'></i> Upload Excel</a>
+                                            <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้า Excel</a>
+                                            <a href="<?php if ($remark=='0') echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_fashion.xlsx"; else echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_caseback.xlsx"; ?>" type="button" class="btn bg-purple btn-sm"><i class='fa fa-file-excel-o'></i> ตัวอย่าง Excel</a>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
-                                        </div></div>
+                                            
+                                        
+                                        
+                                        </div>
+                                    </div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
 				                            <table class="table table-bordered table-hover" id="tablebarcode" width="100%">
@@ -118,7 +124,7 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">	                 	
-                    <i class='fa fa-thumbs-up'></i> Import Excel File
+                    <i class='fa fa-upload'></i> นำเข้า Excel
                 </h4>
             </div>            <!-- /modal-header -->
             <div class="modal-body">
@@ -393,7 +399,49 @@ function confirmform(luxury)
 }
     
 function upload_excel() {
-    document.getElementById("form_uploadexcel").submit();
+    var fileSelect = document.getElementById('excelfile_name');
+    var files = fileSelect.files;
+    var formData = new FormData();
+    
+    if (files[0] != 'undefined') {
+        formData.append("excelfile_name", files[0]);
+
+        $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("warehouse_transfer/upload_excel_import_stock")."/".$remark; ?>" ,
+            data : formData ,
+            processData : false,
+            contentType : false,
+            dataType: 'json',
+            success : function(data) {
+                if(data.length > 0)
+				{
+                    for(var i=0; i<data.length; i++) {
+                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                        //console.log(element);
+                        $('table > tbody').append(element);
+                        count_enter_form_input_product++;
+                        count_list++;
+                    }
+                    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                    
+                    var message = "ทำการนำเข้าข้อมูลเรียบร้อยแล้ว";
+                    bootbox.alert(message, function() {
+                        $('#myModal').modal('hide');
+                    });
+                    
+                }else{
+                	alert("ไม่พบ Ref. Code ที่ต้องการ");
+                }
+
+
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+    }
+    
 };
     
 </script>

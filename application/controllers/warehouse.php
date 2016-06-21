@@ -189,6 +189,54 @@ function show_all_product_warehouse()
     exit();
 }
     
+function show_all_product_warehouse_onlyfashion()
+{
+    $warehouse = $this->input->post("wh_id");
+    
+    $sql = "stob_warehouse_id = '".$warehouse."' and stob_qty > 0 and it_has_caseback = '0'";
+    $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);
+
+    $arr = array();
+    $index = 0;
+    foreach ($result as $loop) {
+        $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        
+        if ($loop->stob_qty > 0) { 
+            $output .= "<td style='width: 120px;'>";
+        }else{
+            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+        }
+        $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$loop->stob_qty."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+        
+        $arr[$index] = $output;
+        $index++;
+    }
+    echo json_encode($arr);
+    exit();
+}
+    
+function show_all_product_warehouse_caseback()
+{
+    $warehouse = $this->input->post("wh_id");
+    
+    $sql = "itse_warehouse_id = '".$warehouse."' and itse_enable = '1' and it_has_caseback = '1'";
+    $result = $this->tp_warehouse_model->getAll_Item_warehouse_caseback($sql);
+
+    $arr = array();
+    $index = 0;
+    foreach ($result as $loop) {
+       $output = "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+       $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+       $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+        
+       $arr[$index] = $output;
+       $index++;
+    }
+    echo json_encode($arr);
+    exit();
+}
+    
 function show_all_product_transfer_id()
 {
     $transfer_id = $this->input->post("transfer_id");

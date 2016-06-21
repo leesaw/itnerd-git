@@ -471,7 +471,7 @@ function item_barcode_print()
     
     $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '896' and itse_id > 1495";
+    $sql_result = "br_id = '896' and itse_serial_number like '1544106848'";
     //$sql_result = "br_id = '896'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_item_model->getItem_caseback($sql_result);
