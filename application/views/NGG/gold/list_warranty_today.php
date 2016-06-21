@@ -49,7 +49,7 @@
                                         <td><?php echo $loop->ngw_price; ?></td>
                                         <td><?php echo $loop->ngw_customername; ?></td>
                                         <td><?php echo $loop->ngw_customertelephone; ?></td>
-                                        <td><?php echo $loop->sp_firstname." ".$loop->sp_lastname; ?></td>
+                                        <td><?php echo $loop->sp_firstname." ".$loop->sp_lastname."<br>".$loop->sp_firstname2." ".$loop->sp_lastname2; ?></td>
                                         <td><a href="<?php echo site_url("ngg_gold/view_warranty")."/".$loop->ngw_id; ?>" class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a> 
                                         </td>
                                     </tr>

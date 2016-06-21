@@ -32,8 +32,10 @@
     $goldbuy = $loop->ngw_goldbuy;
     $goldsell = $loop->ngw_goldsell;
     $saleperson = $loop->sp_firstname." ".$loop->sp_lastname;
+    $saleperson2 = $loop->sp_firstname2." ".$loop->sp_lastname2;
     $issuedate = $loop->ngw_issuedate;
     $salebarcode = $loop->sp_barcode;
+    $salebarcode2 = $loop->sp_barcode2;
     $status = $loop->ngw_status;
     $remark = $loop->ngw_remark;
 } 
@@ -221,7 +223,15 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>รหัสพนักงานขาย *</label>
-                                    <input type="text" class="form-control" name="salepersonid" id="salepersonid" autocomplete="off" value="<?php echo $salebarcode; ?>" readonly>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">1</span>
+                                        <input type="text" class="form-control" name="salepersonid" id="salepersonid" autocomplete="off" value="<?php echo $salebarcode; ?>" readonly>
+                                    </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">2</span>
+                                        <input type="text" class="form-control" name="salepersonid2" id="salepersonid2" autocomplete="off" value="<?php echo $salebarcode2; ?>" readonly>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -229,6 +239,9 @@
                                     <label>ชื่อ-นามสกุลพนักงานขาย *</label>
                                     <input type="hidden" name="saleperson_code" id="saleperson_code" value="">
                                     <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $saleperson; ?>" readonly>
+                                    <br>
+                                    <input type="hidden" name="saleperson_code" id="saleperson_code" value="">
+                                    <input type="text" class="form-control" name="salename2" id="salename2" value="<?php echo $saleperson2; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">

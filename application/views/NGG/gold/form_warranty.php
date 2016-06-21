@@ -210,7 +210,15 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label>รหัสพนักงานขาย *</label>
-                                    <input type="text" class="form-control" name="salepersonid" id="salepersonid" value="" autocomplete="off">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">1</span>
+                                        <input type="text" class="form-control" name="salepersonid" id="salepersonid" value="" autocomplete="off">
+                                      </div>
+                                    <br>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">2</span>
+                                        <input type="text" class="form-control" name="salepersonid" id="salepersonid2" value="" autocomplete="off">
+                                      </div>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -218,6 +226,9 @@
                                     <label>ชื่อ-นามสกุลพนักงานขาย *</label>
                                     <input type="hidden" name="saleperson_code" id="saleperson_code" value="">
                                     <input type="text" class="form-control" name="salename" id="salename" value="" readonly>
+                                    <br>
+                                    <input type="hidden" name="saleperson_code2" id="saleperson_code2" value="">
+                                    <input type="text" class="form-control" name="salename2" id="salename2" value="" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -261,6 +272,7 @@ $(document).ready(function()
     
     $("#cusname").focus();
     document.getElementById("savebtn").disabled = false;
+    document.getElementById("salepersonid2").readOnly = true;
     
     $('#custelephone').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
@@ -279,6 +291,18 @@ $(document).ready(function()
             if(person_id != "")
 			{
                 check_saleperson_code(person_id,shop_id);
+			}
+            //calSummary();
+		}
+	});
+    
+    $('#salepersonid2').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var person_id = $.trim($(this).val());
+            var shop_id = document.getElementById("shop_id").value;
+            if(person_id != "")
+			{
+                check_saleperson_code2(person_id,shop_id);
 			}
             //calSummary();
 		}
@@ -313,6 +337,41 @@ function check_saleperson_code(saleperson_id, shop_id)
                 {
                     document.getElementById("salename").value = data.a;
                     document.getElementById("saleperson_code").value = data.b;
+                    document.getElementById("salepersonid2").readOnly = false;
+                }else{
+                    alert("ไม่พบรหัสพนักงาน");
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+	}
+
+}
+    
+function check_saleperson_code2(saleperson_id, shop_id)
+{
+	if(saleperson_id != "")
+	{
+        $.ajax({
+            type : "POST" ,
+            dataType: 'json',
+            url : "<?php echo site_url("sale/check_saleperson_rolex"); ?>" ,
+            data : {saleperson_id: saleperson_id, shop_id: shop_id},
+            success : function(data) {
+                if(data.a != "")
+                {
+                    if (document.getElementById("saleperson_code").value == data.b) {
+                        alert("รหัสพนักงานซ้ำ");
+                    }else{
+                        document.getElementById("salename2").value = data.a;
+                        document.getElementById("saleperson_code2").value = data.b;
+                        
+                    }
+                    
+                    
+
                 }else{
                     alert("ไม่พบรหัสพนักงาน");
                 }
@@ -505,6 +564,7 @@ function confirmform()
     goldsell = goldsell.replace(/,/g, "");
     
     var saleperson_code = document.getElementById('saleperson_code').value;
+    var saleperson_code2 = document.getElementById('saleperson_code2').value;
     var remark = document.getElementById('remark').value;
      
     document.getElementById("savebtn").disabled = true;
@@ -512,7 +572,7 @@ function confirmform()
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("ngg_gold/save_warranty"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, cusname: cusname, cusaddress: cusaddress, custelephone: custelephone, product: txt_product, kindgold: txt_kindgold, payment: txt_payment, code: code, weight: weight, price: price, jewelry: jewelry, model: model, datestart: datestart, old: old, goldbuy: goldbuy, goldsell: goldsell, saleperson_code:saleperson_code, remark: remark} ,
+        data : {datein: datein, shop_id: shop_id, cusname: cusname, cusaddress: cusaddress, custelephone: custelephone, product: txt_product, kindgold: txt_kindgold, payment: txt_payment, code: code, weight: weight, price: price, jewelry: jewelry, model: model, datestart: datestart, old: old, goldbuy: goldbuy, goldsell: goldsell, saleperson_code:saleperson_code, saleperson_code2:saleperson_code2, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "ทำการบันทึกเรียบร้อยแล้ว";

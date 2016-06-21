@@ -107,6 +107,7 @@ function save_warranty()
     $goldsell = $this->input->post("goldsell");
     $shop_id = $this->input->post("shop_id");
     $saleperson_code = $this->input->post("saleperson_code");
+    $saleperson_code2 = $this->input->post("saleperson_code2");
     $remark = $this->input->post("remark");
     
     $currentdate = date("Y-m-d H:i:s");
@@ -141,6 +142,7 @@ function save_warranty()
                     'ngw_customertelephone' => $custelephone,
                     'ngw_customeraddress' => $cusaddress,
                     'ngw_saleperson_id' => $saleperson_code,
+                    'ngw_saleperson2_id' => $saleperson_code2,
                     'ngw_issuedate' => $datein,
                     'ngw_shop_id' => $shop_id,
                     'ngw_dateadd' => $currentdate,
@@ -273,6 +275,7 @@ function void_warranty()
         $issuedate = $loop->ngw_issuedate;
         $salebarcode = $loop->sp_barcode;
         $saleperson_code = $loop->ngw_saleperson_id;
+        $saleperson_code2 = $loop->ngw_saleperson2_id;
         $datein = $loop->ngw_issuedate;
     }
     $remark .= "##VOID##".$this->input->post("remarkvoid");
@@ -297,6 +300,7 @@ function void_warranty()
                     'ngw_customertelephone' => $custelephone,
                     'ngw_customeraddress' => $cusaddress,
                     'ngw_saleperson_id' => $saleperson_code,
+                    'ngw_saleperson2_id' => $saleperson_code2,
                     'ngw_issuedate' => $datein,
                     'ngw_shop_id' => $shop_id,
                     'ngw_dateadd' => $currentdate,
@@ -388,11 +392,12 @@ function ajaxViewWarranty()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("IF(ngw_status = 'V', CONCAT(ngw_number, ' <button class=\"btn btn-danger btn-xs\">ยกเลิก</button>'), ngw_number) as column1, ngw_product, ngw_kindgold, ngw_weight, ngw_price, ngw_customername, ngw_customertelephone, CONCAT(sp_firstname, ' ', sp_lastname) as salename, sh_name, ngw_id", FALSE)
+    ->select("IF(ngw_status = 'V', CONCAT(ngw_number, ' <button class=\"btn btn-danger btn-xs\">ยกเลิก</button>'), ngw_number) as column1, ngw_product, ngw_kindgold, ngw_weight, ngw_price, ngw_customername, ngw_customertelephone, IF(ngw_saleperson2_id = '0', CONCAT(sale1.sp_firstname, ' ', sale1.sp_lastname), CONCAT(sale1.sp_firstname, ' ', sale1.sp_lastname, '<br>',sale2.sp_firstname, ' ', sale2.sp_lastname)) as salename, sh_name, ngw_id", FALSE)
     ->from("ngg_gold_warranty")
     ->join("tp_shop", "sh_id = ngw_shop_id", "left")
     ->join("nerd_users", "id = ngw_dateaddby", "left")
-    ->join("tp_sale_person", "sp_id = ngw_saleperson_id", "left")
+    ->join("tp_sale_person as sale1", "sale1.sp_id = ngw_saleperson_id", "left")
+    ->join("tp_sale_person as sale2", "sale2.sp_id = ngw_saleperson2_id", "left")
     ->where("ngw_enable", 1)
     ->where($sql)
     ->edit_column("ngw_id",'<a href="'.site_url("ngg_gold/view_warranty").'/$1"'.' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a>',"ngw_id");
