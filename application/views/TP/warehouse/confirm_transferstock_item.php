@@ -297,10 +297,10 @@ function confirmform()
                 serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
                 index_serial++;
                 
-            }else{
+            }/*else{
                 alert("กรุณาใส่ Caseback ให้ครบ");
                 return;
-            }
+            }*/
             
         }
     }

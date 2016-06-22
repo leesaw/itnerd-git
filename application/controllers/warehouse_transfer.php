@@ -44,6 +44,157 @@ function importstock()
     $this->load->view("TP/warehouse/addstock_view", $data);
 }
     
+function upload_excel_transfer_stock()
+{
+    $luxury = $this->uri->segment(3);
+    $whid_out = $this->uri->segment(4);
+    
+    $this->load->helper(array('form', 'url'));
+    
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+                
+            }
+            
+        }
+        
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "") {
+                
+                $sql = "it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."'";
+                $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
+                
+                foreach ($result as $loop) {
+                    $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+
+                    if ($loop->stob_qty > 0) { 
+                        $output .= "<td style='width: 120px;'>";
+                    }else{
+                        $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+                    }
+                    $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+                    $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+                    
+                    $arr[$index] = $output;
+                    $index++;
+                }
+
+            }
+            
+        }
+        unlink($data['full_path']);
+        
+        echo json_encode($arr);
+        exit();
+    }
+
+}
+    
+function upload_excel_transfer_stock_fashion()
+{
+    $luxury = $this->uri->segment(3);
+    $whid_out = $this->uri->segment(4);
+    
+    $this->load->helper(array('form', 'url'));
+    
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+                
+            }
+            
+        }
+        
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "" && $arr_data[$i]['B'] != "") {
+                if($luxury ==0) {
+                    $sql = "it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '".$luxury."'";
+                    $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+
+                        if ($loop->stob_qty > 0) { 
+                            $output .= "<td style='width: 120px;'>";
+                        }else{
+                            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+                        }
+                        $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+                        $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }else{
+                    $sql = "itse_serial_number = '".$arr_data[$i]['B']."' and itse_enable = 1 and itse_warehouse_id = '".$whid_out."' and ".$this->no_rolex;
+
+                    $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+                        $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+                        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }
+
+            }
+            
+        }
+        unlink($data['full_path']);
+        
+        echo json_encode($arr);
+        exit();
+    }
+
+}
+    
 function upload_excel_import_stock()
 {
     $luxury = $this->uri->segment(3);

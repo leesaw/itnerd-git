@@ -49,12 +49,12 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
-                    <div class="box_heading"><h3 class="box-title">ออกบัตรรับประกันสินค้า (ทอง)</h3></div>
+                    <div class="box_heading"></div>
                     <div class="box-body">
                     <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-info">
-					<div class="panel-heading"><strong>รายละเอียด <?php if($status=='V') { echo "<span class='text-red'>ยกเลิกแล้ว (Void)</span>"; } ?>
+					<div class="panel-heading"><span style="font-size:150%;">รายละเอียดบัตรรับประกันสินค้า (ทอง) </span><strong> <?php if($status=='V') { echo "<span class='text-red'>ยกเลิกแล้ว (Void)</span>"; } ?>
                         </strong></div>
 					
                     <div class="panel-body">
@@ -251,7 +251,7 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
+
                         <div class="row">
 							<div class="col-md-12">
                                 <?php if($status!='V') { ?>
