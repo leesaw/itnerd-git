@@ -29,7 +29,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-danger">
 					<div class="panel-heading">
-                        <h4>รายงานย้ายคลังสินค้าที่กำลังดำเนินการ</h4>
+                        <h4>รายงานย้ายคลังสินค้าที่กำลังดำเนินการ <a href="<?php echo site_url("warehouse_transfer/undo_confirm_transfer_between"); ?>" class="btn btn-warning btn-sm pull-right" id="lastconfirm" name="lastconfirm">ยกเลิกการยืนยัน</a></h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
@@ -41,7 +41,7 @@
 										<th>เข้าคลัง</th>
                                         <th>ผู้ทำรายการ</th>
                                         <th>สถานะ</th>
-                                        <th> </th>
+                                        <th width="80"> </th>
                                     </tr>
                                 </thead>
                                 

@@ -1019,7 +1019,7 @@ function importstock_history()
     $sql = "";
     $sql .= "stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
     if ($this->session->userdata('sessstatus') != '88') {
-        $sql .= " and stoi_is_rolex = ".$this->session->userdata('sessrolex');
+        $sql .= " and stoi_enable = 1 and stoi_is_rolex = ".$this->session->userdata('sessrolex');
     }
     
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);
@@ -1715,6 +1715,143 @@ function save_replace_branch()
     $result = array("a" => $count, "b" => $last_id);
     echo json_encode($result);
     exit();
+}
+    
+function undo_confirm_transfer_between()
+{
+    $currentdate = date("Y-m-d");
+    $last14days = date('Y-m-d', strtotime('-14 days'));
+    
+    $start = $last14days." 00:00:00";
+    $end = $currentdate." 23:59:59";
+    
+    $sql = "stot_confirm_dateadd >= '".$start."' and stot_confirm_dateadd <= '".$end."' and stot_status='2'";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
+    }
+    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    
+    $data['title'] = "Nerd - Report Transfer Stock";
+    $this->load->view("TP/warehouse/list_undo_transfer_between", $data);
+}
+    
+function save_undo_transfer_between()
+{
+    $stot_id = $this->input->post("stot_id");
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $stock = array("id" => $stot_id, "stot_status" => 1, "stot_confirm_dateadd" => '0000-00-00 00:00:00',"stot_confirm_by" => 0);
+    $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
+    
+    $count = 0;
+    
+    $sql = "stot_id = '".$stot_id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+    foreach($query as $loop){
+        $wh_out_id = $loop->wh_out_id;
+        $wh_in_id = $loop->wh_in_id;
+        $item_id = $loop->log_stot_item_id;
+        $qty = $loop->qty_final;
+        
+        // decrease stock warehouse in
+        $where2 = "stob_item_id = '".$item_id."' and stob_warehouse_id = '".$wh_in_id."'";
+        $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+        
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+
+                $qty_new = $loop->stob_qty - $qty;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+        
+        // increase stock warehouse out
+        $sql = "stob_item_id = '".$item_id."' and stob_warehouse_id = '".$wh_out_id."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+        
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+                
+                $qty_new = $loop->stob_qty + $qty;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }else{
+            $stock = array( 'stob_qty' => $qty,
+                            'stob_lastupdate' => $currentdate,
+                            'stob_lastupdate_by' => $this->session->userdata('sessid'),
+                            'stob_warehouse_id' => $wh_out_id,
+                            'stob_item_id' => $item_id
+                     );
+            $query = $this->tp_warehouse_transfer_model->addWarehouse_transfer($stock);
+            
+        }
+            
+        $count += $qty;
+    }
+    
+    $sql = "stot_id = '".$stot_id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+    foreach($query as $loop){
+        $itse_id = $loop->log_stots_item_serial_id;
+        $log_stots_id = $loop->log_stots_id;
+            
+        $serial = array( 'id' => $log_stots_id,
+                        'log_stots_enable' => 0
+        );
+        $del_query = $this->tp_log_model->editWarehouse_transfer_between_serial($serial);
+            
+       
+
+        $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+        $this->load->model('tp_item_model','',TRUE);
+        $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
+                            'itse_warehouse_id' => $wh_in_id
+                        );
+        $query = $this->tp_item_model->editItemSerial($serial_item);
+
+    }
+
+    $result = array("a" => $count, "b" => $stot_id);
+    echo json_encode($result);
+    exit();
+}
+    
+function save_undo_transfer_between_serial()
+{
+    $stot_id = $this->input->post("stot_id");
+    
+    $sql = "stot_id = '".$stot_id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial($sql);
+    if($query){
+        $data['stock_array'] =  $query;
+    }else{
+        $data['stock_array'] = array();
+    }
+
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    $data['stot_id'] = $id;
+    $data['title'] = "Nerd - Confirm Transfer Stock";
+    $this->load->view("TP/warehouse/disable_transferstock_item_serial", $data);
 }
     
     

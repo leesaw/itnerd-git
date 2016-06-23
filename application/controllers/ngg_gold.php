@@ -342,6 +342,34 @@ function list_warranty_filter()
     $this->load->view("NGG/gold/list_warranty_month", $data);
 }
     
+function list_warranty_filter_all_shop()
+{
+    $currentdate = date("Y-m");
+    $currentdate = explode('-', $currentdate);
+    $currentmonth = $currentdate[1]."/".$currentdate[0];
+    $data['month'] = $currentmonth;
+    
+    $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+    $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
+    
+    $sql = "ngw_status = 'N' and ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $data['warranty_array'] = $this->ngg_gold_model->get_warranty($sql);
+    $data['count_warranty'] = $this->ngg_gold_model->count_warranty($sql);
+    
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_category_id = '6'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    
+    $data["startdate"] = $currentdate[0]."-".$currentdate[1]."-01";
+    $data["enddate"] = $currentdate[0]."-".$currentdate[1]."-31";
+    $data["start_form"] = "";
+    $data["end_form"] = "";
+    $data["shopid"] = 0;
+    
+    $data['title'] = "NGG| Nerd - Warranty Card List";
+    $this->load->view("NGG/gold/list_warranty_month_all_shop", $data);
+}
+    
 function result_warranty_filter()
 {
     $data['month'] = "";
@@ -380,6 +408,47 @@ function result_warranty_filter()
     $this->load->view("NGG/gold/list_warranty_month", $data);
 }
     
+function result_warranty_filter_all_shop()
+{
+    $data['month'] = "";
+        
+    $start = $this->input->post("startdate");
+    if ($start != "") {
+        $start = explode('/', $start);
+        $start= $start[2]."-".$start[1]."-".$start[0];
+    }else{
+        $start = "1970-01-01";
+    }
+    $end = $this->input->post("enddate");
+    if ($end != "") {
+        $end = explode('/', $end);
+        $end= $end[2]."-".$end[1]."-".$end[0];
+    }else{
+        $end = date('Y-m-d');
+    }
+    
+    $data['startdate'] = $start;
+    $data['enddate'] = $end;
+    $shopid = $this->input->post("shopid");
+    
+    $sql = "ngw_status = 'N' and ngw_dateadd >= '".$start." 00:00:00' and ngw_dateadd <= '".$end." 23:59:59'";
+    if ($shopid > 0) $sql .= " and ngw_shop_id = '".$shopid."'";
+    $data['count_warranty'] = $this->ngg_gold_model->count_warranty($sql);
+    
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_category_id = '6'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    
+    $data["start_form"] = $this->input->post("startdate");
+    $data["end_form"] = $this->input->post("enddate");
+    $data["shopid"] = $this->input->post("shopid");
+    
+    $data["search"] = 1;
+    
+    $data['title'] = "NGG| Nerd - Warranty Card List";
+    $this->load->view("NGG/gold/list_warranty_month_all_shop", $data);
+}
+    
 function ajaxViewWarranty()
 {
     $startdate = $this->uri->segment(3);
@@ -389,6 +458,34 @@ function ajaxViewWarranty()
     $end = $enddate." 23:59:59";
     
     $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."' and ngw_shop_id = '".$this->session->userdata('sessshopid')."'";
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("IF(ngw_status = 'V', CONCAT(ngw_number, ' <button class=\"btn btn-danger btn-xs\">ยกเลิก</button>'), ngw_number) as column1, ngw_product, ngw_kindgold, ngw_weight, ngw_price, ngw_customername, ngw_customertelephone, IF(ngw_saleperson2_id = '0', CONCAT(sale1.sp_firstname, ' ', sale1.sp_lastname), CONCAT(sale1.sp_firstname, ' ', sale1.sp_lastname, '<br>',sale2.sp_firstname, ' ', sale2.sp_lastname)) as salename, sh_name, ngw_id", FALSE)
+    ->from("ngg_gold_warranty")
+    ->join("tp_shop", "sh_id = ngw_shop_id", "left")
+    ->join("nerd_users", "id = ngw_dateaddby", "left")
+    ->join("tp_sale_person as sale1", "sale1.sp_id = ngw_saleperson_id", "left")
+    ->join("tp_sale_person as sale2", "sale2.sp_id = ngw_saleperson2_id", "left")
+    ->where("ngw_enable", 1)
+    ->where($sql)
+    ->edit_column("ngw_id",'<a href="'.site_url("ngg_gold/view_warranty").'/$1"'.' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a>',"ngw_id");
+    echo $this->datatables->generate(); 
+}
+    
+function ajaxViewWarranty_shop()
+{
+    $startdate = $this->uri->segment(3);
+    $enddate = $this->uri->segment(4);
+    $shopid = $this->uri->segment(5);
+    
+    $start = $startdate." 00:00:00";
+    $end = $enddate." 23:59:59";
+    
+    $sql = "ngw_status = 'N' and ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    if ($shopid > 0) {
+        $sql .= " and ngw_shop_id = '".$shopid."'";
+    }
     
     $this->load->library('Datatables');
     $this->datatables

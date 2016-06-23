@@ -40,6 +40,13 @@
                             </div>
                         </div>
                         <?php }?>
+                        <?php if ($this->session->userdata('sessstatus') == 69) { ?>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <a href="<?php echo site_url("ngg_gold/list_warranty_filter_all_shop"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>แสดงบัตรรับประกันสินค้าทั้งหมด (ทอง)</h4></button></a>
+                            </div>
+                        </div>
+                        <?php } ?>
                     </div>       
 					</div>
                 </div>

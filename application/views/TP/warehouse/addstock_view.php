@@ -209,6 +209,9 @@ function check_product_code(refcode_input, luxury)
 			}
 		});
 	}
+    setTimeout(function(){
+                calculate();
+            },3000);
 }
 
 function delete_item_row(row1)
@@ -441,7 +444,9 @@ function upload_excel() {
             }
         });
     }
-    
+    setTimeout(function(){
+                calculate();
+            },3000);
 };
     
 </script>

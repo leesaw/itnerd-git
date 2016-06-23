@@ -20,6 +20,11 @@
                 <a href="<?php echo site_url("ngg_gold/list_warranty_filter"); ?>">แสดงบัตรรับประกันสินค้าทั้งหมด (ทอง)</a>
             </li>
             <?php } ?>
+            <?php if ($this->session->userdata('sessstatus') == 69) { ?>
+            <li>
+                <a href="<?php echo site_url("ngg_gold/list_warranty_filter_all_shop"); ?>">แสดงบัตรรับประกันสินค้าทั้งหมด (ทอง)</a>
+            </li>
+            <?php } ?>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

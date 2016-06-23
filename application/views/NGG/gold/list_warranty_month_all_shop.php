@@ -15,7 +15,7 @@
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="box-title">บัตรรับประกันสินค้า (ทอง) | สาขา <span class="text-blue"><?php foreach($shop_array as $loop) echo $loop->sh_name; ?> </span></h1>
+                <h1 class="box-title">บัตรรับประกันสินค้า (ทอง) <span class="text-blue"></span></h1>
             </div>
         </div>
         <div class="row">
@@ -24,7 +24,19 @@
                     <div class="box_heading"></div>
                     <div class="box-body"> 
                         <div class="row">
-                        <form action="<?php echo site_url("ngg_gold/result_warranty_filter"); ?>" name="formfilter" id="formfilter" method="post">
+                        <form action="<?php echo site_url("ngg_gold/result_warranty_filter_all_shop"); ?>" name="formfilter" id="formfilter" method="post">
+                        <div class="col-xs-3 col-md-3">
+                            สาขา : 
+                            <select class="form-control" name="shopid" id="shopid">
+                                <option value='-1'>-- เลือกทั้งหมด --</option>
+                            <?php 	if(is_array($shop_array)) {
+                                    foreach($shop_array as $loop){
+                                        echo "<option value='".$loop->sh_id."'";
+                                        if ($loop->sh_id==$shopid) echo " selected";
+                                        echo ">".$loop->sh_name."</option>";
+                             } } ?>
+                            </select>
+                        </div>
                         <div class="col-xs-3 col-md-2">
                             เลือกวันที่เริ่มต้น : 
                             <input type="text" class="form-control" id="startdate" name="startdate" value="<?php echo $start_form; ?>" />
@@ -49,7 +61,7 @@
             <div class="col-md-12">
                 <div class="panel panel-primary">
 					<div class="panel-heading">
-                        <h4>รายการบัตรรับประกันสินค้า<?php if ($search==0) { ?>ของเดือนที่ <?php echo $month; } ?> <u>จำนวน <?php echo $count_warranty; ?> ชิ้น</u></h4>
+                        <h4>รายการบัตรรับประกันสินค้า<?php if ($shopid==0) { ?>ของเดือนที่ <?php echo $month; } ?> <u>จำนวน <?php echo $count_warranty; ?> ชิ้น</u></h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablegold" width="100%">
@@ -70,6 +82,13 @@
                                 
 								<tbody>
 								</tbody>
+                                <tfoot>
+                                    <tr style="font-size:120%;" class="text-red">
+                                        <th colspan="4" style="text-align:right;"><label>ยอดเงินรวม:</th>
+                                        <th></th>
+                                        <th colspan="5"></th>
+                                    </tr>
+                                </tfoot>
 							</table>
                         
 					</div>
@@ -96,7 +115,7 @@ $(document).ready(function()
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("ngg_gold/ajaxViewWarranty")."/".$startdate."/".$enddate; ?>',
+        'sAjaxSource'    : '<?php echo site_url("ngg_gold/ajaxViewWarranty_shop")."/".$startdate."/".$enddate."/".$shopid; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',
@@ -106,9 +125,54 @@ $(document).ready(function()
                 "success":fnCallback
 
             });
+        },
+            "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total_srp = api
+                .column( 4 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+                
+            // Total over this page
+
+            pageTotal_srp = api
+                .column( 4, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            
+            $( api.column( 4 ).footer() ).html(
+                (total_srp).formatMoney(2, '.', ',')+'<br>('+(pageTotal_srp).formatMoney(2, '.', ',')+')'
+            );
         }
     });
 });
+    
+Number.prototype.formatMoney = function(c, d, t){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
     
 function get_datepicker(id)
 {

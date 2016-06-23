@@ -43,6 +43,12 @@ Class Tp_log_model extends CI_Model
 	return $this->db->insert_id();			
  }
     
+ function delLogStockTransfer_serial($id=NULL)
+ {
+	$this->db->where('log_stots_id', $id);
+	$this->db->delete('log_stock_transfer_serial'); 
+ }
+    
  function editWarehouse_transfer_between($edit=NULL)
  {
 	$this->db->where('log_stot_id', $edit['id']);
