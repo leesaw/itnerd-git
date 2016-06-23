@@ -1746,7 +1746,9 @@ function save_undo_transfer_between()
     $count = 0;
     
     $sql = "stot_id = '".$stot_id."'";
+    
     $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
+    
     foreach($query as $loop){
         $wh_out_id = $loop->wh_out_id;
         $wh_in_id = $loop->wh_in_id;
@@ -1755,10 +1757,11 @@ function save_undo_transfer_between()
         
         // decrease stock warehouse in
         $where2 = "stob_item_id = '".$item_id."' and stob_warehouse_id = '".$wh_in_id."'";
-        $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
         
-        if (!empty($query)) {
-            foreach($query as $loop) {
+        $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer($where2);
+        
+        if (!empty($query2)) {
+            foreach($query2 as $loop) {
                 $stock_id = $loop->stob_id;
 
                 $qty_new = $loop->stob_qty - $qty;
@@ -1773,11 +1776,11 @@ function save_undo_transfer_between()
         }
         
         // increase stock warehouse out
-        $sql = "stob_item_id = '".$item_id."' and stob_warehouse_id = '".$wh_out_id."'";
-        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+        $where2 = "stob_item_id = '".$item_id."' and stob_warehouse_id = '".$wh_out_id."'";
+        $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer($where2);
         
-        if (!empty($query)) {
-            foreach($query as $loop) {
+        if (!empty($query2)) {
+            foreach($query2 as $loop) {
                 $stock_id = $loop->stob_id;
                 
                 $qty_new = $loop->stob_qty + $qty;
@@ -1803,9 +1806,11 @@ function save_undo_transfer_between()
         $count += $qty;
     }
     
-    $sql = "stot_id = '".$stot_id."'";
-    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
-    foreach($query as $loop){
+    $where2 = "log_stot_transfer_id = '".$stot_id."'";
+    
+    $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($where2);
+    
+    foreach($query2 as $loop){
         $itse_id = $loop->log_stots_item_serial_id;
         $log_stots_id = $loop->log_stots_id;
             
@@ -1813,18 +1818,15 @@ function save_undo_transfer_between()
                         'log_stots_enable' => 0
         );
         $del_query = $this->tp_log_model->editWarehouse_transfer_between_serial($serial);
-            
-       
-
-        $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
+        
         $this->load->model('tp_item_model','',TRUE);
-        $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
-                            'itse_warehouse_id' => $wh_in_id
+        $serial_item = array( 'id' => $itse_id,
+                            'itse_warehouse_id' => $wh_out_id
                         );
-        $query = $this->tp_item_model->editItemSerial($serial_item);
+        $query3 = $this->tp_item_model->editItemSerial($serial_item);
 
     }
-
+    
     $result = array("a" => $count, "b" => $stot_id);
     echo json_encode($result);
     exit();

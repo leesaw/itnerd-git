@@ -59,7 +59,7 @@
                                         <td><?php if ($loop->stot_status==2 || $loop->stot_status==4) { ?>
                                         <a href="<?php echo site_url("warehouse_transfer/transferstock_final_print")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
                                         
-                                        <a href="#" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="ยกเลิก" onClick="del_confirm(<?php echo $loop->stot_id.",'".$loop->stot_number."',".$loop->	stot_has_serial; ?>')"><span class="glyphicon glyphicon-remove"></span></a>
+                                        <a href="#" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="ยกเลิก" onClick="del_confirm(<?php echo $loop->stot_id.",'".$loop->stot_number; ?>')"><span class="glyphicon glyphicon-remove"></span></a>
                                         <?php } ?>
                                         </td>
                                     </tr>
@@ -104,46 +104,26 @@ $(document).ready(function()
     
 });
     
-function del_confirm(val1, val2, val3) {
+function del_confirm(val1, val2) {
 	bootbox.confirm("ต้องการยกเลิกเลขที่ย้ายคลัง "+val2+" ใช่หรือไม่ ?", function(result) {
         if (result) {
-            if (val3 == 0) {
-                $.ajax({
-                    type : "POST" ,
-                    url : "<?php echo site_url("warehouse_transfer/save_undo_transfer_between"); ?>" ,
-                    data : { stot_id: val1 } ,
-                    dataType: 'json',
-                    success : function(data) {
-                        var message = "ทำการบันทึกเรียบร้อยแล้ว";
-                        bootbox.alert(message, function() {
-                            window.open("<?php echo site_url("ngg_gold/print_warranty"); ?>"+"/"+data.b, "_blank");
-                            window.location = "<?php echo site_url("ngg_gold/view_warranty"); ?>/"+data.b;
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("warehouse_transfer/save_undo_transfer_between"); ?>" ,
+                data : { stot_id: val1 } ,
+                dataType: 'json',
+                success : function(data) {
+                    var message = "ทำการบันทึกเรียบร้อยแล้ว";
+                    bootbox.alert(message, function() {
+                        location.reload();
 
-                        });
-                    },
-                    error: function (textStatus, errorThrown) {
-                        alert("เกิดความผิดพลาด !!!");
-                    }
-                });
-            }else{
-                $.ajax({
-                    type : "POST" ,
-                    url : "<?php echo site_url("warehouse_transfer/save_undo_transfer_between_serial"); ?>" ,
-                    data : { stot_id: val1 } ,
-                    dataType: 'json',
-                    success : function(data) {
-                        var message = "ทำการบันทึกเรียบร้อยแล้ว";
-                        bootbox.alert(message, function() {
-                            window.open("<?php echo site_url("ngg_gold/print_warranty"); ?>"+"/"+data.b, "_blank");
-                            window.location = "<?php echo site_url("ngg_gold/view_warranty"); ?>/"+data.b;
+                    });
+                },
+                error: function (textStatus, errorThrown) {
+                    alert("เกิดความผิดพลาด !!!");
+                }
+            });
 
-                        });
-                    },
-                    error: function (textStatus, errorThrown) {
-                        alert("เกิดความผิดพลาด !!!");
-                    }
-                });
-            }
         }
 
     });
