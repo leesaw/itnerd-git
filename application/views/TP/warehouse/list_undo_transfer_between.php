@@ -29,7 +29,7 @@
 			<div class="col-xs-12">
                 <div class="panel panel-warning">
 					<div class="panel-heading">
-                        <h4>รายงานย้ายคลังสินค้าที่สามารถยกเลิกได้ (ไม่เกิน 14 วัน) <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>" class="btn btn-danger btn-sm pull-right" id="lastconfirm" name="lastconfirm">รายงานย้ายคลังที่กำลังดำเนินการ</a></h4>
+                        <h4>รายงานย้ายคลังสินค้าที่สามารถยกเลิกได้ (ไม่เกิน 7 วัน) <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>" class="btn btn-danger btn-sm pull-right" id="lastconfirm" name="lastconfirm">รายงานย้ายคลังที่กำลังดำเนินการ</a></h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
@@ -109,20 +109,37 @@ function del_confirm(val1, val2) {
         if (result) {
             $.ajax({
                 type : "POST" ,
-                url : "<?php echo site_url("warehouse_transfer/save_undo_transfer_between"); ?>" ,
+                url : "<?php echo site_url("warehouse_transfer/check_undo_transfer_between"); ?>" ,
                 data : { stot_id: val1 } ,
                 dataType: 'json',
                 success : function(data) {
-                    var message = "ทำการบันทึกเรียบร้อยแล้ว";
-                    bootbox.alert(message, function() {
-                        location.reload();
+                    if (data.a>0) {
+                        $.ajax({
+                            type : "POST" ,
+                            url : "<?php echo site_url("warehouse_transfer/save_undo_transfer_between"); ?>" ,
+                            data : { stot_id: val1 } ,
+                            dataType: 'json',
+                            success : function(data) {
+                                var message = "ทำการบันทึกเรียบร้อยแล้ว";
+                                bootbox.alert(message, function() {
+                                    location.reload();
 
-                    });
+                                });
+                            },
+                            error: function (textStatus, errorThrown) {
+                                alert("เกิดความผิดพลาด !!!");
+                            }
+                        });
+                    }else{
+                        alert("ไม่สามารถยกเลิกการยืนยันได้ !!!");
+                    }
                 },
                 error: function (textStatus, errorThrown) {
                     alert("เกิดความผิดพลาด !!!");
                 }
             });
+            
+            
 
         }
 
