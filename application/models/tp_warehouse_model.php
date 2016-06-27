@@ -37,6 +37,7 @@ Class Tp_warehouse_model extends CI_Model
     $this->db->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left');
     $this->db->group_by('stob_id');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by('br_name, it_refcode');
 	$query = $this->db->get();		
 	return $query->result();
  }

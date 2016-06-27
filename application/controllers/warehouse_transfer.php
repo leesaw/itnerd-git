@@ -872,11 +872,12 @@ function transferstock_final_excel()
     
     $this->excel->getActiveSheet()->setCellValue('A4', 'No.');
     $this->excel->getActiveSheet()->setCellValue('B4', 'Ref. Number');
-    $this->excel->getActiveSheet()->setCellValue('C4', 'รายละเอียดสินค้า');
-    $this->excel->getActiveSheet()->setCellValue('D4', 'จำนวน');
-    $this->excel->getActiveSheet()->setCellValue('E4', 'หน่วย');
-    $this->excel->getActiveSheet()->setCellValue('F4', 'หน่วยละ');
-    $this->excel->getActiveSheet()->setCellValue('G4', 'จำนวนเงิน');
+    $this->excel->getActiveSheet()->setCellValue('C4', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('D4', 'รายละเอียดสินค้า');
+    $this->excel->getActiveSheet()->setCellValue('E4', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('F4', 'หน่วย');
+    $this->excel->getActiveSheet()->setCellValue('G4', 'หน่วยละ');
+    $this->excel->getActiveSheet()->setCellValue('H4', 'จำนวนเงิน');
     
     $row = 5;
     $no = 1;
@@ -886,20 +887,21 @@ function transferstock_final_excel()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, strtoupper($loop->br_name));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->qty_final);  
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_uom);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_srp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->qty_final*$loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->qty_final);  
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_uom);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->qty_final*$loop->it_srp);
         $row++;
         $no++;
         $sum += $loop->qty_final*$loop->it_srp; 
         $sum_qty += $loop->qty_final;
     }
     
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, "รวมจำนวน");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $sum_qty);    
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, "รวมเงิน");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $sum);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "รวมจำนวน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, "รวมเงิน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $sum);
     
 
     $filename='nerd_transfer.xlsx'; //save our workbook as this file name
