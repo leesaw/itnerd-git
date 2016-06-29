@@ -323,7 +323,7 @@ function ajaxViewStock()
     $minprice = $this->uri->segment(6);
     $maxprice = $this->uri->segment(7);
     
-    $sql = $this->no_rolex;
+    $sql = "br_id != '888'";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {

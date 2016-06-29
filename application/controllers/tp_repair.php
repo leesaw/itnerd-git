@@ -126,6 +126,10 @@ function form_list_repair()
 		$data['brand_array'] = array();
 	}
 
+    $sql = "rep_enable = '1' and rep_status != 'R'";
+    $query = $this->tp_repair_model->get_summary_status($sql);
+    $data['summary_array'] = $query;
+
     $data['title'] = "NGG| Nerd - Repair List";
     $this->load->view("TP/repair/form_list_repair", $data);
 }

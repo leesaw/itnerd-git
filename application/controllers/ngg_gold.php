@@ -324,7 +324,7 @@ function list_warranty_filter()
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
     
-    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $sql = "ngw_status = 'N' and ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."' and ngw_shop_id = '".$this->session->userdata('sessshopid')."'";
     $data['warranty_array'] = $this->ngg_gold_model->get_warranty($sql);
     $data['count_warranty'] = $this->ngg_gold_model->count_warranty($sql);
     
@@ -392,7 +392,7 @@ function result_warranty_filter()
     $data['startdate'] = $start;
     $data['enddate'] = $end;
     
-    $sql = "ngw_dateadd >= '".$start."' and ngw_dateadd <= '".$end."'";
+    $sql = "ngw_status = 'N' and ngw_dateadd >= '".$start." 00:00:00' and ngw_dateadd <= '".$end." 23:59:59' and ngw_shop_id = '".$this->session->userdata('sessshopid')."'";
     $data['count_warranty'] = $this->ngg_gold_model->count_warranty($sql);
     
     $this->load->model('tp_shop_model','',TRUE);

@@ -15,3 +15,18 @@
 <script src="<?php echo base_url(); ?>plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <!-- datepicker -->
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function () {
+    setNavigation();
+});
+
+function setNavigation() {
+    var path = window.location.href;
+    $(".sidebar ul li a").each(function(){
+        if($(this).attr("href") == path || $(this).attr("href") == '' ) {
+        	$(this).parents('li').addClass('active');
+        	$(this).addClass('active');
+    	}
+     })
+}
+</script>

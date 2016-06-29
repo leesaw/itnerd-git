@@ -76,11 +76,6 @@
                 </div>
             </div>
         </div> 
-        <div class="row">
-            
-            
-            
-        </div>
         <hr>
         <div class="row">
             <div class="col-xs-3 col-md-2">
@@ -95,7 +90,82 @@
                 </div>
             </div>
         </div>
-        </div>
+
+        <?php 
+        $status_got = 0; $status_assess = 0; $status_done = 0; $status_cancel = 0;
+        foreach($summary_array as $loop) { 
+                if ($loop->rep_status == 'G') $status_got = $loop->count1;
+                if ($loop->rep_status == 'A') $status_assess = $loop->count1;
+                if ($loop->rep_status == 'D') $status_done = $loop->count1;
+                if ($loop->rep_status == 'C') $status_cancel = $loop->count1;
+         } ?>
+         <!-- Info boxes -->
+         <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formviewstatus" id="formviewstatus" method="post">
+            <input type="hidden" name="number" value="">
+            <input type="hidden" name="refcode" value="">
+            <input type="hidden" name="brandid" value="0">
+            <input type="hidden" name="shopid" value="0">
+            <input type="hidden" name="status" id="status_all" value="">
+         </form>
+          <div class="row">
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="fa fa-cart-arrow-down"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">รับเข้าซ่อม</span>
+                  <span class="info-box-number"><a href="#" onclick="submit_status('G');"><?php echo $status_got; ?></a></span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-orange"><i class="fa fa-wrench"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">ประเมินการซ่อมแล้ว</span>
+                  <span class="info-box-number"><a href="#" onclick="submit_status('A');"><?php echo $status_assess; ?></a></span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <!-- fix for small devices only -->
+            <div class="clearfix visible-sm-block"></div>
+
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-green"><i class="fa fa-thumbs-up"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">ซ่อมเสร็จ</span>
+                  <span class="info-box-number"><a href="#" onclick="submit_status('D');"><?php echo $status_done; ?></a></span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-xs-12">
+              <div class="info-box">
+                <span class="info-box-icon bg-blue"><i class="fa fa-reply"></i></span>
+
+                <div class="info-box-content">
+                  <span class="info-box-text">ซ่อมไม่ได้</span>
+                  <span class="info-box-number"><a href="#" onclick="submit_status('C');"><?php echo $status_cancel; ?></a></span>
+                </div>
+                <!-- /.info-box-content -->
+              </div>
+              <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
         </section>
 		</div>
     
@@ -114,7 +184,11 @@ $(document).ready(function()
 
     
 });
-
+function submit_status(val1)
+{
+    document.getElementById('status_all').value = val1;
+    document.getElementById("formviewstatus").submit();
+}
 </script>
 </body>
 </html>

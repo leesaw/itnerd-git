@@ -13,6 +13,20 @@ Class Tp_repair_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+
+ function get_summary_status($where)
+ {
+ 	$this->db->select("rep_status, count(*) as count1", FALSE);
+	$this->db->from('tp_repair');
+	$this->db->join('tp_shop sh1', 'rep_shop_id = sh1.sh_id','left');
+    $this->db->join('tp_shop sh2', 'rep_return_shop_id = sh2.sh_id','left');	
+    $this->db->join('tp_brand', 'rep_brand_id = br_id','left');
+    $this->db->join('nerd_users', 'rep_dateaddby = id','left');	
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by('rep_status');
+	$query = $this->db->get();		
+	return $query->result();
+ }
     
  function add_repair($insert=NULL)
  {		
