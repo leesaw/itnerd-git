@@ -355,7 +355,7 @@ function submitform(x)
         if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");
         }else{
-            var r = confirm("ยืนยันการคืนสินค้า !!");
+            var r = confirm("ยืนยันการสวมสินค้า !!");
             if (r == true) {
                 confirmform(x);
             }
