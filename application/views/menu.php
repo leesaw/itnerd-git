@@ -95,6 +95,9 @@
 				    <li>
                         <a href="<?php echo site_url("item/additem"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลสินค้า</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("item/form_print_tag"); ?>"><i class="fa fa-circle-o"></i> พิมพ์ป้ายราคา</a>
+                    </li>
                     <!--
 					<li>
                         <a href="<?php echo site_url("managecat"); ?>"><i class="fa fa-circle-o"></i> จัดการประเภทสินค้า</a>

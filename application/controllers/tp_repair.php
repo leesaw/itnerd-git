@@ -201,7 +201,9 @@ function ajaxView_seach_repair()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), rep_case, 
+    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), rep_case,
+        (CASE WHEN rep_warranty = '1' THEN 'หมดประกัน' WHEN rep_warranty = '2' THEN 'อยู่ในประกัน' ELSE '-' END)
+    , rep_price,
     (CASE 
         WHEN rep_status = 'G' THEN '<button class=\'btn btn-danger btn-xs\'>รับเข้าซ่อม</button>'
         WHEN rep_status = 'A' THEN '<button class=\'btn btn-warning btn-xs\'>ประเมินการซ่อมแล้ว</button>'

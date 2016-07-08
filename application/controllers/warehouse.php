@@ -384,7 +384,7 @@ function ajaxViewStock_serial()
     $minprice = $this->uri->segment(6);
     $maxprice = $this->uri->segment(7);
     
-    $sql = $this->no_rolex;
+    $sql = "br_id != '888'";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
@@ -445,7 +445,7 @@ function exportExcel_stock_itemlist()
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
     
-    $sql = $this->no_rolex;
+    $sql = "br_id != '888'";
     $sql .= " and stob_qty >0 and it_enable = 1";
     
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
@@ -543,7 +543,7 @@ function exportExcel_stock_itemlist_caseback()
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
     
-    $sql = $this->no_rolex;
+    $sql = "br_id != '888'";
     
     $sql .= " and it_enable = 1";
     

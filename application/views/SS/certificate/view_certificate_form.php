@@ -62,7 +62,7 @@ foreach($cer_array as $loop) {
     $symbol = explode("#",$loop->cer_symbol);
 }    
 
-$none_picture = base_url()."picture/ss/none2.png";
+$none_picture = base_url()."picture/ss/none.png";
 
 foreach($result_array as $loop) {
     $pic_result = $loop->pre_value;

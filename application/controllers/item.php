@@ -471,7 +471,7 @@ function item_barcode_print()
     
     $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '896' and itse_serial_number like '1544106848'";
+    $sql_result = "br_id = '896' and (itse_serial_number like '1620102912' or itse_serial_number like '1620103072' or itse_serial_number like '1620103073')";
     //$sql_result = "br_id = '896'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_item_model->getItem_caseback($sql_result);
@@ -515,6 +515,23 @@ function filter_item()
     
     $data['title'] = "NGG| Nerd - All Product";
     $this->load->view('TP/item/filteritem_view',$data);
+}
+
+function form_print_tag()
+{
+    $remark = $this->uri->segment(3);
+    if ($remark != "") {
+        if ($remark == "fashion")
+            $remark = 0;
+        else
+            $remark = 1;
+    }else{
+        $remark = 0;
+    }
+
+    $data['remark'] = $remark;
+    $data['title'] = "NGG| Nerd - Print Tag";
+    $this->load->view('TP/item/form_print_tag',$data);
 }
 
     
