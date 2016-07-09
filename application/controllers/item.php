@@ -410,6 +410,21 @@ function getCaseback()
     foreach ($result as $loop) {
         $output .= "<td><input type='hidden' name='caseback_id' id='caseback_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td><td>";
         $output .= "1</td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;'></td>";
+    }
+    echo $output;
+}
+
+function getCaseback_lockCaseback()
+{
+    $refcode = $this->input->post("refcode");
+    
+    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and ".$this->no_rolex;
+    $result = $this->tp_item_model->getItem_caseback($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='caseback_id' id='caseback_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td><td>";
+        $output .= "1</td><td>".$loop->it_uom."</td>";
         $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
     }
     echo $output;
@@ -471,7 +486,7 @@ function item_barcode_print()
     
     $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '896' and (itse_serial_number like '1620102912' or itse_serial_number like '1620103072' or itse_serial_number like '1620103073')";
+    $sql_result = "br_id = '896' and itse_dateadd >= '2016-07-09 00:00:00' and itse_dateadd <= '2016-07-09 23:00:00'";
     //$sql_result = "br_id = '896'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_item_model->getItem_caseback($sql_result);
@@ -534,6 +549,174 @@ function form_print_tag()
     $this->load->view('TP/item/form_print_tag',$data);
 }
 
+function result_print_tag_ean()
+{
+    $caseback = $this->input->post("caseback");
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $currentdate = date('Y-m-d');
+    $this->load->model('tp_item_model','',TRUE);
+    $sql_result = "";
+    for($i=0; $i <count($caseback); $i++) {
+        if ($i>0) $sql_result .= " or ";
+        $sql_result .= "itse_serial_number like '".$caseback[$i]."'";
+    }
+
+    $query = $this->tp_item_model->getItem_caseback($sql_result);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_ean", $data, TRUE));
+    $mpdf->Output();
+}
+
+function result_print_tag_refcode()
+{
+    $it_id = $this->input->post("it_id");
+    $it_qty = $this->input->post("it_qty");
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $currentdate = date('Y-m-d');
+    $this->load->model('tp_item_model','',TRUE);
+    $result = array();
+    $index = 0;
+    $sql_result = "";
+    for($i=0; $i <count($it_id); $i++) {
+        $sql_result = "it_id = '".$it_id[$i]."'";
+        $query = $this->tp_item_model->getItem($sql_result);
+        foreach($query as $loop) {
+            $result[$index] = array( "br_name" => $loop->br_name, "it_refcode" => $loop->it_refcode, "it_srp" => $loop->it_srp, "it_model" => $loop->it_model, "it_qty" => $it_qty[$i] );
+            $index++;
+        }
+    }
+    $data['result_array'] = $result;
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
+    $mpdf->Output();
+}
+
+function result_print_tag_caseback()
+{
+    $caseback = $this->input->post("caseback");
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $currentdate = date('Y-m-d');
+    $this->load->model('tp_item_model','',TRUE);
+    $sql_result = "";
+    for($i=0; $i <count($caseback); $i++) {
+        if ($i>0) $sql_result .= " or ";
+        $sql_result .= "itse_serial_number like '".$caseback[$i]."'";
+    }
+
+    $query = $this->tp_item_model->getItem_caseback($sql_result);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+    
+    
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_caseback", $data, TRUE));
+    $mpdf->Output();
+}
+
+function upload_excel_item()
+{
+    $luxury = $this->uri->segment(3);
+    $whid_out = $this->uri->segment(4);
+    
+    $this->load->helper(array('form', 'url'));
+    
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+                
+            }
+            
+        }
+
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "") {
+                if($luxury ==0) {
+                    $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and ".$this->no_rolex;
+                    $sql .= " and it_has_caseback = '".$luxury."'";
+                    $this->load->model('tp_item_model','',TRUE);
+                    $result = $this->tp_item_model->getItem($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
+                        $output .= "<input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+                        
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }else{
+                    $sql = "it_enable = 1 and itse_serial_number = '".$arr_data[$i]['A']."' and ".$this->no_rolex;
+                    $sql .= " and it_has_caseback = '".$luxury."'";
+                    $this->load->model('tp_item_model','',TRUE);
+                    $result = $this->tp_item_model->getItem_caseback($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
+                        $output .= "<input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+                        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }
+            }
+            
+        }
+
+        unlink($data['full_path']);
+        
+        echo json_encode($arr);
+        exit();
+    }
+
+}
     
 }
 ?>

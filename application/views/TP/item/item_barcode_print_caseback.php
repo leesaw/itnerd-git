@@ -10,22 +10,23 @@ $i = 0;
 foreach($serial_array as $loop) { ?>
 <table border="0">
 <tbody>
-<tr>
-<td style="text-align: top;" width="240"><b><?php echo $loop->br_name." ".$loop->itse_serial_number; ?></b>
+<tr><td style="text-align: top;" width="40"></td>
+<td style="text-align: top;" width="200"><b><?php echo $loop->br_name; ?></b>
 <br/>
 <b><?php echo $loop->it_refcode; ?></b>
 <br/>
-<b><?php echo $loop->it_model." ".$loop->it_remark; ?></b>
+<b><?php echo $loop->itse_serial_number; ?></b>
 <br/>
-<b style="font-size:12"><?php echo $loop->it_short_description; ?></b>
+<b><?php echo $loop->it_model; ?></b>
 </td>
 <td style="text-align: top;" width="500">
-<b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>
+<b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name." ".$loop->it_refcode; ?></b>
 <br/>
 <b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->itse_serial_number; ?></b>
 <br/>
-<barcode code='<?php echo $loop->itse_serial_number; ?>' type="C128a" size="1" height="0.8" class='barcode' />
+<barcode code='<?php echo $loop->itse_serial_number; ?>' type="C128a" size="1" height="1" class='barcode' />
 <br/>
+<div id="text"></div>
 <b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>
 </td>
 </tr>

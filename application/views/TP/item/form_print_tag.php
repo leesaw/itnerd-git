@@ -18,8 +18,7 @@
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-					<div class="panel-heading"><strong> </strong></div>
-					<form action="<?php echo site_url("warehouse_transfer/save_importstock"); ?>" name="form1" id="form1" method="post">
+					<div class="panel-heading"><strong class="text-red">* จำเป็นต้องตั้งขนาดกระดาษเป็น 103.9mm * 17.00 mm</strong></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
@@ -32,11 +31,11 @@
 				                <div class="panel panel-default">
 									<div class="panel-heading">
                                         <div class="input-group input-group-sm col-md-8">
-                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Code ที่รับเข้าคลัง">
+                                        <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการ"; else echo "Caseback No. ที่ต้องการ"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
                                             <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้า Excel</a>
-                                            <a href="<?php if ($remark=='0') echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_fashion.xlsx"; else echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_caseback.xlsx"; ?>" type="button" class="btn bg-purple btn-sm"><i class='fa fa-file-excel-o'></i> ตัวอย่าง Excel</a>
+                                            <a href="<?php if ($remark=='0') echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_fashion.xlsx"; else echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_only_caseback.xlsx"; ?>" type="button" class="btn bg-purple btn-sm"><i class='fa fa-file-excel-o'></i> ตัวอย่าง Excel</a>
                                         </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                             
                                         
@@ -77,11 +76,14 @@
 							</div>	
 						</div>	
                         <div class="row">
-							<div class="col-md-6">
-									<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="submitform(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคา </button>
+							<div class="col-md-12">
+                                    <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="printrefcode(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Refcode </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <?php if ($remark ==1) { ?>
+									<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="printean(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ EAN </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <button type="button" class="btn bg-orange" name="savebtn" id="savebtn" onclick="printcaseback(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Caseback </button>
+                                    <?php  } ?>
 							</div>
 						</div>
-						</form>
 
 					</div>
 				</div>
@@ -165,23 +167,43 @@ function check_product_code(refcode_input, luxury)
 {
 	if(refcode_input != "")
 	{
-		$.ajax({
-			type : "POST" ,
-			url : "<?php echo site_url("item/getRefcode"); ?>" ,
-			data : {refcode: refcode_input, luxury: luxury} ,
-			success : function(data) {
-				if(data != "")
-				{
-                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                    $('table > tbody').append(element);
-                    count_enter_form_input_product++;
-                    count_list++;
-                    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
-                }else{
-                	alert("ไม่พบ Ref. Code ที่ต้องการ");
+        if (luxury == 0) {
+    		$.ajax({
+    			type : "POST" ,
+    			url : "<?php echo site_url("item/getRefcode"); ?>" ,
+    			data : {refcode: refcode_input, luxury: luxury} ,
+    			success : function(data) {
+    				if(data != "")
+    				{
+                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                        $('table > tbody').append(element);
+                        count_enter_form_input_product++;
+                        count_list++;
+                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                    }else{
+                    	alert("ไม่พบ Ref. Code ที่ต้องการ");
+                    }
+    			}
+    		});
+        }else{
+            $.ajax({
+                type : "POST" ,
+                url : "<?php echo site_url("item/getCaseback_lockCaseback"); ?>" ,
+                data : {refcode: refcode_input, luxury: luxury} ,
+                success : function(data) {
+                    if(data != "")
+                    {
+                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                        $('table > tbody').append(element);
+                        count_enter_form_input_product++;
+                        count_list++;
+                        document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                    }else{
+                        alert("ไม่พบ Ref. Code ที่ต้องการ");
+                    }
                 }
-			}
-		});
+            });
+        }
 	}
     setTimeout(function(){
                 calculate();
@@ -229,7 +251,7 @@ function alphanumeric(inputtxt)
     }  
 }  
     
-function submitform(x)
+function printean(x)
 {
     if (x==1) {
         var it_code = document.getElementsByName('it_code');
@@ -253,56 +275,137 @@ function submitform(x)
         if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");
         }else{
-            confirmform(x);
+            confirmean(x);
         }
     }else{
-        confirmform(x);
+        confirmean(x);
     }
 
 }
 
-function confirmform(luxury)
+function printrefcode(x)
 {
-    /*
+    var it_code = document.getElementsByName('it_id');
+    var it_quantity = document.getElementsByName('it_quantity');
+    for(var i=0; i<it_code.length; i++){
+        if (it_quantity[i].value % 1 !== 0)
+        {
+            alert("กรุณาใส่เฉพาะตัวเลขเท่านั้นในช่อง จำนวน");
+            it_quantity[i].value = "";
+            return;
+        }
+        
+    }
+
+    confirmrefcode(x);
+
+
+}
+
+function printcaseback(x)
+{
+    if (x==1) {
+        var it_code = document.getElementsByName('it_code');
+        var duplicate = 0;
+        for(var i=0; i<it_code.length; i++){
+            
+            if (!alphanumeric(it_code[i].value))
+            {
+                alert("กรุณาใส่เฉพาะตัวเลขหรือตัวอักษรเท่านั้นในช่อง Caseback");
+                it_code[i].value = "";
+                return;
+            }
+            
+            for(var j=i+1; j<it_code.length; j++){
+                if (it_code[i].value==it_code[j].value) {
+                    it_code[j].value = "";
+                    duplicate++;
+                }
+            }
+        }
+        if (duplicate > 0) {
+            alert("Caseback ซ้ำกัน");
+        }else{
+            confirmcaseback(x);
+        }
+    }else{
+        confirmcaseback(x);
+    }
+
+}
+
+function confirmean(luxury)
+{
+    
     if (luxury==1) {
         var it_id = document.getElementsByName('it_id');
-        var it_array = new Array();
         var it_code = document.getElementsByName('it_code');
         var input_form = "";
+        
         for(var i=0; i<it_code.length; i++){
             if (it_code[i].value == "") {
                 alert("กรุณาใส่ Cashback No. ให้ครบทุกช่อง");
                 return;
             }
-            input_form .= "<input type='hidden' name='caseback[]' value='"+it_code[i]+value+"'>";
-            it_array[i] = {id: it_id[i].value, qty: 1, code: it_code[i].value};
+            input_form += "<input type='hidden' name='caseback[]' value='"+it_code[i].value+"'>";
         }
-        //document.getElementById("savebtn").disabled = true;
-
-        //var url = '<?php echo site_url("item/result_print_tag_caseback"); ?>';
-        /*var form3 = $('<form action="'+url+'" method="post">'+input_form+'</form>');
+        var url = '<?php echo site_url("item/result_print_tag_ean"); ?>';
+        var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
         
         $('body').append(form3);
 
         form3.submit();
         
 
-    }else if (luxury==0){
+    }
+    
+}
+
+function confirmrefcode(luxury)
+{
+
+    var it_id = document.getElementsByName('it_id');
+    var it_quantity = document.getElementsByName('it_quantity');
+    var input_form = "";
+    
+    for(var i=0; i<it_id.length; i++){
+        input_form += "<input type='hidden' name='it_id[]' value='"+it_id[i].value+"'><input type='hidden' name='it_qty[]' value='"+it_quantity[i].value+"'>";
+    }
+
+    var url = '<?php echo site_url("item/result_print_tag_refcode"); ?>';
+    var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
+    
+    $('body').append(form3);
+
+    form3.submit();
+    
+}
+
+function confirmcaseback(luxury)
+{
+    
+    if (luxury==1) {
         var it_id = document.getElementsByName('it_id');
-        var it_quantity = document.getElementsByName('it_quantity');
-        var it_array = new Array();
+        var it_code = document.getElementsByName('it_code');
+        var input_form = "";
         
-        for(var i=0; i<it_quantity.length; i++){
-            if (it_quantity[i].value % 1 != 0 || it_quantity[i].value == "") {
-                alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
-                it_quantity[i].value = '';
+        for(var i=0; i<it_code.length; i++){
+            if (it_code[i].value == "") {
+                alert("กรุณาใส่ Cashback No. ให้ครบทุกช่อง");
                 return;
             }
-            it_array[i] = {id: it_id[i].value, qty: it_quantity[i].value};
+            input_form += "<input type='hidden' name='caseback[]' value='"+it_code[i].value+"'>";
         }
+        var url = '<?php echo site_url("item/result_print_tag_caseback"); ?>';
+        var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
+        
+        $('body').append(form3);
+
+        form3.submit();
+        
 
     }
-    */
+    
 }
     
 function upload_excel() {
@@ -315,7 +418,7 @@ function upload_excel() {
 
         $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/upload_excel_import_stock")."/".$remark; ?>" ,
+            url : "<?php echo site_url("item/upload_excel_item")."/".$remark; ?>" ,
             data : formData ,
             processData : false,
             contentType : false,
