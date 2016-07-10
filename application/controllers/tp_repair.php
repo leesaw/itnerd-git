@@ -420,5 +420,96 @@ function edit_repair()
     exit();
 }
     
+function exportExcel_repair_report()
+{
+    $number = $this->input->post("excel_number");
+    $number = str_replace("_","/",$number);
+    $refcode = $this->input->post("excel_refcode");
+    $brandid = $this->input->post("excel_brandid");
+    $shopid = $this->input->post("excel_shopid");
+    $status = $this->input->post("excel_status");
+    
+    $where = "";
+    $where .= "rep_enable = 1";
+    
+    if ($number != "NULL") {
+        $where .= " and rep_number like '".$number."'";
+    }
+    if ($refcode != "NULL") {
+        $where .= " and rep_refcode like '".$refcode."'";
+    }
+    
+    if ($brandid > 0) {
+        $where .= " and rep_brand_id = '".$brandid."'";
+    }
+    if ($shopid > 0) {
+        $where .= " and rep_shop_id = '".$shopid."'";
+    }
+    if ($status != '0') {
+        $where .= " and rep_status = '".$status."'";
+    }
+    
+    $item_array = $this->tp_repair_model->get_repair($where);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Repair Report');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', "วันที่ส่งซ่อม");
+    $this->excel->getActiveSheet()->setCellValue('B1', 'เลขที่ใบรับ');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'สาขาที่ส่งซ่อม');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'รายละเอียดลูกค้า');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'อาการ');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'ประกัน');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'ราคาซ่อม');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'สถานะ');
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->rep_datein);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->rep_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->rep_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->shopin_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->rep_cusname." ".$loop->rep_custelephone);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->rep_case);
+        
+        if ($loop->rep_warranty == '1') $rep_warranty = "หมดประกัน";
+        else if ($loop->rep_warranty == '2') $rep_warranty = "อยู่ในประกัน";
+        else $rep_warranty = "-";
+        
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $rep_warranty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->rep_price);
+        
+        switch ($loop->rep_status) {
+            case 'G' : $rep_status = "รับเข้าซ่อม"; break;
+            case 'A' : $rep_status = "ประเมินการซ่อมแล้ว"; break;
+            case 'D' : $rep_status = "ซ่อมเสร็จ"; break;
+            case 'C' : $rep_status = "ซ่อมไม่ได้"; break;
+            case 'R' : $rep_status = "ส่งกลับแล้ว"; break;
+        }
+        
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $rep_status);
+        $row++;
+    }
+    
+
+    $filename='repair_report.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
+    
 }
 ?>

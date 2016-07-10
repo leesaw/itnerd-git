@@ -109,7 +109,14 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        
+                        <form name="exportexcel" action="<?php echo site_url("tp_repair/exportExcel_repair_report"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        <input type="hidden" name="excel_number" value="<?php echo $number; ?>">
+                        <input type="hidden" name="excel_refcode" value="<?php echo $refcode; ?>">
+                        <input type="hidden" name="excel_brandid" value="<?php echo $brandid; ?>">
+                        <input type="hidden" name="excel_shopid" value="<?php echo $shopid; ?>">
+                        <input type="hidden" name="excel_status" value="<?php echo $status; ?>">
+                        </form>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
