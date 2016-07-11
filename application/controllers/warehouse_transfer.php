@@ -85,7 +85,7 @@ function upload_excel_transfer_stock()
         for($i=0; $i<count($arr_data); $i++) {
             if ($arr_data[$i]['A'] != "") {
                 
-                $sql = "it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."'";
+                $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."'";
                 $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
                 
                 foreach ($result as $loop) {
@@ -155,7 +155,7 @@ function upload_excel_transfer_stock_fashion()
         for($i=0; $i<count($arr_data); $i++) {
             if ($arr_data[$i]['A'] != "" && $arr_data[$i]['B'] != "") {
                 if($luxury ==0) {
-                    $sql = "it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '".$luxury."'";
+                    $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '".$luxury."'";
                     $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
                     foreach ($result as $loop) {
                         $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
@@ -584,7 +584,7 @@ function checkStock_transfer()
     $refcode = $this->input->post("refcode");
     $whid_out = $this->input->post("whid_out");
     
-    $sql = "it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."'";
+    $sql = "it_enable = 1 and it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."'";
     $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
     $output = "";
     foreach ($result as $loop) {
@@ -606,7 +606,7 @@ function checkStock_transfer_onlyfashion()
     $refcode = $this->input->post("refcode");
     $whid_out = $this->input->post("whid_out");
     
-    $sql = "it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '0'";
+    $sql = "it_enable = 1 and it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '0'";
     $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
     $output = "";
     foreach ($result as $loop) {
@@ -644,7 +644,26 @@ function report_transferstock()
 {
     $sql = "stot_status = 1 and stot_enable = 1";
     $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
-    $data['transfer_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+
+    $final_array = array();
+    $index = 0;
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    foreach ($query as $loop) {
+        $where_brand = "log_stot_transfer_id = '".$loop->stot_id."'";
+        $query_brand = $this->tp_warehouse_transfer_model->getBrand_transfer_list($where_brand);
+        $brand_string = "";
+        $count = 0;
+        foreach ($query_brand as $loop_brand) {
+            if ($count>0) $brand_string .= ", ";
+            $brand_string .= $loop_brand->br_name." <b>(".$loop_brand->qty.")</b>";
+            $count++;
+        }
+
+        $final_array[$index] = array("stot_number" => $loop->stot_number, "stot_datein" => $loop->stot_datein, "wh_out" => $loop->wh_out_code."-".$loop->wh_out_name, "wh_in" =>$loop->wh_in_code."-".$loop->wh_in_name, "name" => $loop->firstname." ".$loop->lastname, "stot_status" => $loop->stot_status, "stot_has_serial" => $loop->stot_has_serial, "stot_id" => $loop->stot_id, "brand" => $brand_string);
+        $index++;
+    }
+    
+    $data['transfer_array'] = $final_array;
     
     $currentdate = date("Y-m");
     
@@ -1057,8 +1076,26 @@ function transferstock_history()
     if ($this->session->userdata('sessstatus') != '88') {
         $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
     }
-    $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    //$data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    $final_array = array();
+    $index = 0;
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_list($sql);
+    foreach ($query as $loop) {
+        $where_brand = "log_stot_transfer_id = '".$loop->stot_id."'";
+        $query_brand = $this->tp_warehouse_transfer_model->getBrand_transfer_list($where_brand);
+        $brand_string = "";
+        $count = 0;
+        foreach ($query_brand as $loop_brand) {
+            if ($count>0) $brand_string .= ", ";
+            $brand_string .= $loop_brand->br_name." <b>(".$loop_brand->qty.")</b>";
+            $count++;
+        }
+
+        $final_array[$index] = array("stot_number" => $loop->stot_number, "stot_datein" => $loop->stot_datein, "wh_out" => $loop->wh_out_code."-".$loop->wh_out_name, "wh_in" =>$loop->wh_in_code."-".$loop->wh_in_name, "name" => $loop->firstname." ".$loop->lastname, "stot_status" => $loop->stot_status, "stot_has_serial" => $loop->stot_has_serial, "stot_id" => $loop->stot_id, "brand" => $brand_string);
+        $index++;
+    }
     
+    $data["final_array"] = $final_array;
     $currentdate = explode('-', $currentdate);
     $currentdate = $currentdate[1]."/".$currentdate[0];
     $data["currentdate"] = $currentdate;

@@ -145,11 +145,21 @@ function result_list_repair()
         $data['refcode'] = $this->input->post("refcode");
     else
         $data['refcode'] = "NULL";
+
+    if ($this->input->post("month") != "") {
+        $data['month'] = $this->input->post("month");
+        $month = explode('/',$this->input->post("month"));
+        $data['month_ajax'] = $month[1]."-".$month[0];
+    }
+    else {
+        $data['month'] = "";
+        $data['month_ajax'] = "NULL";
+    }
     
     $data['brandid'] = $this->input->post("brandid");
     $data['shopid'] = $this->input->post("shopid");
     $data['status'] = $this->input->post("status");
-    
+
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
@@ -176,6 +186,7 @@ function ajaxView_seach_repair()
     $brandid = $this->uri->segment(5);
     $shopid = $this->uri->segment(6);
     $status = $this->uri->segment(7);
+    $month = $this->uri->segment(8);
     
     $where = "";
     $where .= "rep_enable = 1";
@@ -196,7 +207,12 @@ function ajaxView_seach_repair()
     if ($status != '0') {
         $where .= " and rep_status = '".$status."'";
     }
-    
+
+    if ($month != "NULL") {
+        $start_date = $month."-01 00:00:00";
+        $end_date = $month."-31 23:59:59";
+        $where .= " and rep_datein >= '".$start_date."' and rep_datein <= '".$end_date."'";
+    }
     
     
     $this->load->library('Datatables');
@@ -428,6 +444,7 @@ function exportExcel_repair_report()
     $brandid = $this->input->post("excel_brandid");
     $shopid = $this->input->post("excel_shopid");
     $status = $this->input->post("excel_status");
+    $month = $this->input->post("excel_month");
     
     $where = "";
     $where .= "rep_enable = 1";
@@ -447,6 +464,12 @@ function exportExcel_repair_report()
     }
     if ($status != '0') {
         $where .= " and rep_status = '".$status."'";
+    }
+
+    if ($month != "NULL") {
+        $start_date = $month."-01 00:00:00";
+        $end_date = $month."-31 23:59:59";
+        $where .= " and rep_datein >= '".$start_date."' and rep_datein <= '".$end_date."'";
     }
     
     $item_array = $this->tp_repair_model->get_repair($where);

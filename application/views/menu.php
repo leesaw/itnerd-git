@@ -85,16 +85,18 @@
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
-            <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
+            <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2) || ($this->session->userdata('sessstatus') == 3)) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
+              <?php if ($this->session->userdata('sessstatus') != 3) { ?>
                     <li>
                         <a href="<?php echo site_url("item/manage"); ?>"><i class="fa fa-circle-o"></i> จัดการสินค้า</a>
                     </li>
 				    <li>
                         <a href="<?php echo site_url("item/additem"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลสินค้า</a>
                     </li>
+                  <?php } ?>
                     <li>
                         <a href="<?php echo site_url("item/form_print_tag"); ?>"><i class="fa fa-circle-o"></i> พิมพ์ป้ายราคา</a>
                     </li>

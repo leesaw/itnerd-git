@@ -123,21 +123,21 @@
                                 </thead>
                                 
 								<tbody>
-                                    <?php foreach($final_array as $loop) { ?>
+                                    <?php for($i=0; $i<count($final_array); $i++) { ?>
                                     <tr>
-                                        <td><?php echo $loop->stot_number; ?></td>
-                                        <td><?php echo $loop->stot_datein; ?></td>
-                                        <td><?php echo $loop->wh_out_code."-".$loop->wh_out_name; ?></td>
-                                        <td><?php echo $loop->wh_in_code."-".$loop->wh_in_name; ?></td>
-                                        <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><?php if($loop->stot_status==1) { echo "<a href='";
-                                        if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_print")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_print_serial")."/".$loop->stot_id;
-                                        echo "' target='blank'><button class='btn btn-xs btn-danger'>รอยืนยันจำนวนสินค้า</button></a>"; } if($loop->stot_status==2) echo "<button class='btn btn-xs btn-success'>ย้ายสินค้าเรียบร้อยแล้ว</button>"; if($loop->stot_status==3) echo "<button class='btn btn-xs btn-warning'>ยกเลิกแล้ว</button>"; if($loop->stot_status==4) echo "<button class='btn btn-xs bg-navy'>ย้ายสินค้าเรียบร้อยแล้ว(สวม)</button>"; ?></td>
+                                        <td><?php echo $final_array[$i]['stot_number']."<br><div class='text-blue'>".$final_array[$i]['brand']." "."</div>"; ?></td>
+                                        <td><?php echo $final_array[$i]['stot_datein']; ?></td>
+                                        <td><?php echo $final_array[$i]['wh_out']; ?></td>
+                                        <td><?php echo $final_array[$i]['wh_in']; ?></td>
+                                        <td><?php echo $final_array[$i]['name']; ?></td>
+                                        <td><?php if($final_array[$i]['stot_status']==1) { echo "<a href='";
+                                        if($final_array[$i]['stot_has_serial']==0) echo site_url("warehouse_transfer/transferstock_print")."/".$final_array[$i]['stot_id']; else echo site_url("warehouse_transfer/transferstock_print_serial")."/".$final_array[$i]['stot_id'];
+                                        echo "' target='blank'><button class='btn btn-xs btn-danger'>รอยืนยันจำนวนสินค้า</button></a>"; } if($final_array[$i]['stot_status']==2) echo "<button class='btn btn-xs btn-success'>ย้ายสินค้าเรียบร้อยแล้ว</button>"; if($final_array[$i]['stot_status']==3) echo "<button class='btn btn-xs btn-warning'>ยกเลิกแล้ว</button>"; if($final_array[$i]['stot_status']==4) echo "<button class='btn btn-xs bg-navy'>ย้ายสินค้าเรียบร้อยแล้ว(สวม)</button>"; ?></td>
                                         <td>
-                                        <?php if ($loop->stot_status==2 || $loop->stot_status==4) { ?>
-                                        <a href="<?php echo site_url("warehouse_transfer/transferstock_final_print")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        <?php if ($final_array[$i]['stot_status']==2 || $final_array[$i]['stot_status']==4) { ?>
+                                        <a href="<?php echo site_url("warehouse_transfer/transferstock_final_print")."/".$final_array[$i]['stot_id']; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
                                         &nbsp;
-                                        <a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/transferstock_final_excel")."/".$loop->stot_id; else echo site_url("warehouse_transfer/transferstock_final_excel")."/".$loop->stot_id; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
+                                        <a href="<?php if($final_array[$i]['stot_has_serial']==0) echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; else echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
                                         <?php } ?>
                                         </td>
                                     </tr>

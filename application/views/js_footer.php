@@ -25,7 +25,7 @@ function setNavigation() {
     var match1;
     $(".sidebar ul li a").each(function(){
         match1 = path.match($(this).attr("href"));
-        if($(this).attr("href") == path || $(this).attr("href") == '' || match1 == $(this).attr("href") ) {
+        if($(this).attr("href") == path || $(this).attr("href") == '' ) {
         	$(this).parents('li').addClass('active');
         	$(this).addClass('active');
     	}

@@ -10,6 +10,7 @@ Class Tp_repair_model extends CI_Model
     $this->db->join('tp_brand', 'rep_brand_id = br_id','left');
     $this->db->join('nerd_users', 'rep_dateaddby = id','left');	
     if ($where != "") $this->db->where($where);
+    $this->db->order_by('rep_datein');
 	$query = $this->db->get();		
 	return $query->result();
  }

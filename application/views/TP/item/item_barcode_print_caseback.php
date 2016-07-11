@@ -24,7 +24,7 @@ foreach($serial_array as $loop) { ?>
 <br/>
 <b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->itse_serial_number; ?></b>
 <br/>
-<barcode code='<?php echo $loop->itse_serial_number; ?>' type="C128a" size="1" height="1" class='barcode' />
+<barcode code='<?php echo $loop->itse_serial_number; ?>' type="C39" size="0.8" height="1" class='barcode' />
 <br/>
 <div id="text"></div>
 <b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($loop->it_srp)." THB"; ?></b>

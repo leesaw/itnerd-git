@@ -25,22 +25,28 @@
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formfilter" id="formfilter" method="post">
+            <div class="col-md-1">
+                <div class="form-group">
+                เดือน
+                <input type="text" class="form-control input-sm" name="month" id="month">
+                </div>
+            </div>
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
-                <input type="text" class="form-control" name="number" id="number">
+                <input type="text" class="form-control input-sm" name="number" id="number">
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                 Ref. Number
-                <input type="text" class="form-control" name="refcode" id="refcode">
+                <input type="text" class="form-control input-sm" name="refcode" id="refcode">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                 ยี่ห้อ
-                <select id="brandid" name="brandid" class="form-control">
+                <select id="brandid" name="brandid" class="form-control input-sm">
                     <option value="0" selected>เลือกทั้งหมด</option>
                     <?php foreach($brand_array as $loop) { ?>
                     <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_code."-".$loop->br_name; ?></option>
@@ -52,7 +58,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                 สาขาที่ส่งซ่อม
-                <select class="form-control" name="shopid" id="shopid">
+                <select class="form-control input-sm" name="shopid" id="shopid">
                     <option value="0" selected>เลือกทั้งหมด</option>
                 <?php 	if(is_array($shop_array)) {
                         foreach($shop_array as $loop){
@@ -65,7 +71,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                 สถานะการซ่อม
-                <select class="form-control" name="status" id="status">
+                <select class="form-control input-sm" name="status" id="status">
                     <option value="0" selected>เลือกทั้งหมด</option>
                     <option value="G">รับเข้าซ่อม</option>
                     <option value="A">ประเมินการซ่อมแล้ว</option>
@@ -76,10 +82,9 @@
                 </div>
             </div>
         </div> 
-        <hr>
         <div class="row">
             <div class="col-xs-3 col-md-2">
-                <div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div>
+                <button type="submit" name="action" value="0" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
     
@@ -182,12 +187,19 @@
 $(document).ready(function()
 {    
 
-    
+    get_datepicker_month("#month");
 });
 function submit_status(val1)
 {
     document.getElementById('status_all').value = val1;
     document.getElementById("formviewstatus").submit();
+}
+
+function get_datepicker_month(id)
+{
+    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
+    minViewMode: "months" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
 }
 </script>
 </body>

@@ -62,6 +62,19 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+
+ function getBrand_transfer_list($where)
+ {
+    $this->db->select("br_name, SUM(log_stot_qty_final) as qty");
+    $this->db->from('log_stock_transfer');
+    $this->db->join('tp_item', 'it_id = log_stot_item_id','left');  
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by('br_id');
+    $this->db->order_by('br_name');
+    $query = $this->db->get();      
+    return $query->result();
+ }
     
  function getWarehouse_transfer_between($where)
  {

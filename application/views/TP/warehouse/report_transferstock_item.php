@@ -46,17 +46,17 @@
                                 </thead>
                                 
 								<tbody>
-                                    <?php foreach($transfer_array as $loop) { ?>
+                                    <?php for($i=0; $i<count($transfer_array); $i++) { ?>
                                     <tr>
-                                        <td><?php echo $loop->stot_number; ?></td>
-                                        <td><?php echo $loop->stot_datein; ?></td>
-                                        <td><?php echo $loop->wh_out_code."-".$loop->wh_out_name; ?></td>
-                                        <td><?php echo $loop->wh_in_code."-".$loop->wh_in_name; ?></td>
-                                        <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><?php if($loop->stot_status==1) echo "<button class='btn btn-xs btn-danger'>รอยืนยันจำนวนสินค้า</button>"; ?></td>
-                                        <td><a href="<?php echo site_url("warehouse_transfer/transferstock_print")."/".$loop->stot_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
-                                        <a href="<?php echo site_url("warehouse_transfer/confirm_transfer_between")."/".$loop->stot_id; ?>" class="btn btn-success btn-xs" data-title="ยืนยันจำนวนสินค้า" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยืนยันจำนวนสินค้า"><i class="fa fa-check-square-o"></i></a>
-                                        <a href="<?php if($loop->stot_has_serial==0) echo site_url("warehouse_transfer/disable_transfer_between")."/".$loop->stot_id; else echo site_url("warehouse_transfer/disable_transfer_between_serial")."/".$loop->stot_id; ?>" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
+                                        <td><?php echo $transfer_array[$i]['stot_number']."<br><div class='text-blue'>".$transfer_array[$i]['brand']." "."</div>"; ?></td>
+                                        <td><?php echo $transfer_array[$i]['stot_datein']; ?></td>
+                                        <td><?php echo $transfer_array[$i]['wh_out']; ?></td>
+                                        <td><?php echo $transfer_array[$i]['wh_in']; ?></td>
+                                        <td><?php echo $transfer_array[$i]['name']; ?></td>
+                                        <td><?php if($transfer_array[$i]['stot_status']==1) echo "<button class='btn btn-xs btn-danger'>รอยืนยันจำนวนสินค้า</button>"; ?></td>
+                                        <td><a href="<?php echo site_url("warehouse_transfer/transferstock_print")."/".$transfer_array[$i]['stot_id']; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        <a href="<?php echo site_url("warehouse_transfer/confirm_transfer_between")."/".$transfer_array[$i]['stot_id']; ?>" class="btn btn-success btn-xs" data-title="ยืนยันจำนวนสินค้า" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยืนยันจำนวนสินค้า"><i class="fa fa-check-square-o"></i></a>
+                                        <a href="<?php if($transfer_array[$i]['stot_has_serial']==0) echo site_url("warehouse_transfer/disable_transfer_between")."/".$transfer_array[$i]['stot_id']; else echo site_url("warehouse_transfer/disable_transfer_between_serial")."/".$transfer_array[$i]['stot_id']; ?>" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
                                         </td>
                                     </tr>
                                     <?php } ?>

@@ -18,7 +18,7 @@
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-					<div class="panel-heading"><strong class="text-red">* จำเป็นต้องตั้งขนาดกระดาษเป็น 103.9mm * 17.00 mm</strong></div>
+					<div class="panel-heading"><strong class="text-red">* จำเป็นต้องตั้งขนาดกระดาษเป็น 110.00mm * 19.00 mm</strong></div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-4">
