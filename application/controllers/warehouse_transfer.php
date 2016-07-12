@@ -859,7 +859,7 @@ function transferstock_final_excel()
 {
     $id = $this->uri->segment(3);
 
-    $sql = "stot_id = '".$id."'";
+    $sql = "stot_id = '".$id."' and log_stot_qty_final > 0";
     $query1 = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
 
     $sql = "log_stot_transfer_id = '".$id."'";
