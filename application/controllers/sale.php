@@ -308,6 +308,7 @@ function saleorder_rolex_save()
     $custax_id = $this->input->post("custax_id");
     $cuspassport = $this->input->post("cuspassport");
     $custelephone = $this->input->post("custelephone");
+    $refund = $this->input->post("refund");
     $payment = $this->input->post("payment");
     $payment_value = $this->input->post("payment_value");
     $remark = $this->input->post("remark");
@@ -338,6 +339,7 @@ function saleorder_rolex_save()
                     'posro_customer_taxid' => $custax_id,
                     'posro_customer_passport' => $cuspassport,
                     'posro_customer_tel' => $custelephone,
+                    'posro_refund' => $refund,
                     'posro_sale_person_id' => $saleperson_code,
                     'posro_payment' => $payment,
                     'posro_payment_value' => $payment_value,
@@ -398,7 +400,7 @@ function saleorder_rolex_print()
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th','A4','0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
-    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    //$mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
     $mpdf->showWatermarkImage = true;
 
     $sql = "posro_id = '".$id."'";
@@ -408,6 +410,7 @@ function saleorder_rolex_print()
     }else{
         $data['pos_array'] = array();
     }
+
 
     $sql = "posroi_pos_rolex_id = '".$id."'";
     $query = $this->tp_saleorder_model->getPOS_rolex_item($sql);

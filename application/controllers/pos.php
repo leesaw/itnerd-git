@@ -242,6 +242,10 @@ function stock_rolex_borrow_save()
 {
     $borrower = $this->input->post("borrower");
 
+    $borrower_array = explode("-", $borrower);
+    $borrower = $borrower_array[1];
+    $borrower_id = $borrower_array[0];
+
     $remark = $this->input->post("remark");
     
     $shop_id = $this->input->post("shop_id");

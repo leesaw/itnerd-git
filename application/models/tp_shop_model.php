@@ -3,7 +3,7 @@ Class Tp_shop_model extends CI_Model
 {
  function getShop($where)
  {
-	$this->db->select("sh_id, sh_name, sh_code, sc_name, sg_name, sh_warehouse_id, wh_name, wh_code");
+	$this->db->select("sh_id, sh_name, sh_code, sh_detail, sh_address, sh_number, sc_name, sg_name, sh_warehouse_id, wh_name, wh_code");
 	$this->db->from('tp_shop');
 	$this->db->join('tp_shop_category', 'sh_category_id = sc_id','left');	
     $this->db->join('tp_shop_group', 'sh_group_id = sg_id','left');	

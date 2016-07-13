@@ -305,24 +305,31 @@
             <?php } ?>
               
             <?php 
-              // only HATA
+              // only Rolex Manager
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) { ?>
             <li class="header">รายงาน ROLEX</li>
-            <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบกำกับภาษี</span>
-              </a>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-folder-open-o text-red"></i> <span>เอกสารย้อนหลัง</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                    <li>
+                      <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษี</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบเสร็จรับเงิน</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบส่งของ/รับคืน</span>
+                      </a>
+                    </li>
+                    </ul>
+
             </li>
-            <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบเสร็จรับเงิน</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของ/รับคืน</span>
-              </a>
-            </li>
+            
             <!--
             <li>
               <a href="<?php echo site_url("pos/stock_POS_sale_history"); ?>">
@@ -340,18 +347,12 @@
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
               </a>
             </li>
-            <li class="treeview">
-                <a href="#"><i class="fa fa-cube text-red"></i> <span>รายงาน (Reports)</span><i class="fa fa-angle-left pull-right"></i></a>
-				<ul class="treeview-menu">
-                    <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
-                        <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
-                    </a></li>
-                    <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
-                        <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
-                    </a></li>
-                </ul>
-
-            </li>
+            <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+            </a></li>
+            <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
+            </a></li>
             <li>
               
             </li>
@@ -377,20 +378,26 @@
               // only view rolex sale
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==89) { ?>
             <li class="header">รายงาน ROLEX</li>
-            <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบกำกับภาษี</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบเสร็จรับเงิน</span>
-              </a>
-            </li>
-            <li>
-              <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
-                <i class="fa fa-circle-o text-red"></i><span>ประวัติใบส่งของ/รับคืน</span>
-              </a>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-folder-open-o text-red"></i> <span>เอกสารย้อนหลัง</span><i class="fa fa-angle-left pull-right"></i></a>
+                    <ul class="treeview-menu">
+                    <li>
+                      <a href="<?php echo site_url("sale/saleorder_POS_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบกำกับภาษี</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="<?php echo site_url("sale/saleorder_POS_temp_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบเสร็จรับเงิน</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="<?php echo site_url("pos/stock_POS_borrow_history"); ?>">
+                        <i class="fa fa-circle-o text-red"></i><span>ใบส่งของ/รับคืน</span>
+                      </a>
+                    </li>
+                    </ul>
+
             </li>
             <!--
             <li>
@@ -409,18 +416,13 @@
                 <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
               </a>
             </li>
-            <li class="treeview">
-                <a href="#"><i class="fa fa-cube text-red"></i> <span>รายงาน (Reports)</span><i class="fa fa-angle-left pull-right"></i></a>
-				<ul class="treeview-menu">
-                    <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
-                        <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
-                    </a></li>
-                    <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
-                        <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
-                    </a></li>
-                </ul>
+            <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+            </a></li>
+            <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
+            </a></li>
 
-            </li>
             <?php } ?>
             <?php 
               // only Sesto

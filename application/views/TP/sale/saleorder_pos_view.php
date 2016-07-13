@@ -40,6 +40,12 @@
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php echo $loop->sh_name; ?>" readonly>
                                     </div>
 							</div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label text-red">
+                                    <?php if ($loop->posro_refund == 1) { ?><u>VAT REFUND</u><?php } ?></label>
+                                </div>
+                            </div>
 						</div>
                         <br>
                         <div class="row">

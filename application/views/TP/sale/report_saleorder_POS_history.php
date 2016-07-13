@@ -59,7 +59,7 @@
 								<tbody>
                                     <?php foreach($pos_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->posro_number; if ($loop->posro_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; ?></td>
+                                        <td><?php echo $loop->posro_number; if ($loop->posro_status=='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิก (Void)</button>"; if($loop->posro_refund==1) echo " <button class='btn btn-xs btn-primary'>VAT Refund</button>"; ?></td>
                                         <td><?php echo $loop->posro_issuedate; ?></td>
                                         <td><?php echo $loop->posro_customer_name; ?></td>
                                         <td><?php echo $loop->posro_customer_tel; ?></td>
