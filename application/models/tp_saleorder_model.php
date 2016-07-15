@@ -56,6 +56,7 @@ Class Tp_saleorder_model extends CI_Model
     $this->db->join('tp_sale_barcode', 'sb_id = soi_sale_barcode_id','left');
     $this->db->join('tp_item_serial', 'itse_id=sos_item_serial_id','left');
     if ($where != "") $this->db->where($where);
+    $this->db->order_by('so_issuedate', 'asc');
 	$query = $this->db->get();		
 	return $query->result();
  }

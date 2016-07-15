@@ -76,7 +76,7 @@
                                                 <td><?php echo $loop->it_remark; ?></td>
                                                 <td><?php echo $loop->posrobi_qty." ".$loop->it_uom; ?></td>
                                                 <td><?php echo number_format($loop->it_srp); ?></td>
-                                                <td><?php echo $loop->posrob_borrower_name; ?></td>
+                                                <td><?php echo $loop->posbor_name; ?></td>
                                                 </tr>
                                                 <?php $sum += $loop->posrobi_qty; } ?>
 												</tbody>

@@ -36,8 +36,19 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
+
                         <form name="exportexcel" action="<?php echo site_url("sale/exportExcel_sale_report"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
+                        <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
+                        <input type="hidden" name="shop" value="<?php echo $shop_id; ?>">
+                        <input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
+                        <input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="btn btn-primary" type="button" onclick="print_report();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+                        </form>
+
+                        <form name="printreport" id="printreport" action="<?php echo site_url("sale/print_sale_report"); ?>" method="post" target="_blank">
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
                         <input type="hidden" name="shop" value="<?php echo $shop_id; ?>">
@@ -216,6 +227,11 @@ function showcaseback()
 {
 
     document.getElementById("exportcaseback").submit();
+}
+
+function print_report()
+{
+    document.getElementById("printreport").submit();
 }
 </script>
 </body>

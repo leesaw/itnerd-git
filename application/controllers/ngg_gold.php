@@ -344,7 +344,7 @@ function list_warranty_filter()
     
 function list_warranty_filter_all_shop()
 {
-    $currentdate = date("Y-m");
+    $currentdate = date("Y-m-d");
     $currentdate = explode('-', $currentdate);
     $currentmonth = $currentdate[1]."/".$currentdate[0];
     $data['month'] = $currentmonth;
@@ -362,8 +362,8 @@ function list_warranty_filter_all_shop()
     
     $data["startdate"] = $currentdate[0]."-".$currentdate[1]."-01";
     $data["enddate"] = $currentdate[0]."-".$currentdate[1]."-31";
-    $data["start_form"] = "";
-    $data["end_form"] = "";
+    $data["start_form"] = "01/".$currentdate[1]."/".$currentdate[0];
+    $data["end_form"] = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
     $data["shopid"] = 0;
     
     $data['title'] = "NGG| Nerd - Warranty Card List";

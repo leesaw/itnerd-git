@@ -670,7 +670,7 @@ function stock_rolex_borrow_return_print()
     $mpdf= new mPDF('th','A4','0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
     $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
-    $mpdf->showWatermarkImage = true;
+    //$mpdf->showWatermarkImage = true;
 
     $sql = "posrob_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
@@ -680,8 +680,8 @@ function stock_rolex_borrow_return_print()
         $data['pos_array'] = array();
     }
 
-    $sql = "posrobi_return_id = '".$id."'";
-    $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
+    $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow_item($sql);
     if($query){
         $data['item_array'] =  $query;
     }else{
@@ -707,7 +707,7 @@ function stock_rolex_pos_borrow_return_last()
         $data['pos_array'] = array();
     }
 
-    $sql = "posrobi_return_id = '".$id."'";
+    $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
     if($query){
         $data['item_array'] =  $query;
@@ -786,6 +786,40 @@ function form_rolex_borrow_sold()
     
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/sale/form_rolex_saleorder_borrow", $data);
+}
+
+function print_rolex_cn()
+{
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+    //$mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    $mpdf->showWatermarkImage = true;
+
+    $sql = "posro_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+
+    $sql = "posroi_pos_rolex_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/document/rolex_cn_print", $data, TRUE));
+    $mpdf->Output();
 }
     
 }

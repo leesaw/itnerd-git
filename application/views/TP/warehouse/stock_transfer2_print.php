@@ -12,9 +12,9 @@
 </td> 
 <?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; $wh_in_group = $loop->wh_in_group; break; } 
 
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
+ $GGyear=substr($datetime,0,4);
+ $GGmonth=substr($datetime,5,2);
+ $GGdate=substr($datetime,8,2);
 
  $dateadd = substr($dateadd,8,2)."/".substr($dateadd,5,2)."/".substr($dateadd,0,4)." ".substr($dateadd,11,8);
 ?>

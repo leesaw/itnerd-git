@@ -12,13 +12,12 @@
     <div class="container">
 	<!-- Main content -->
     <section class="content">
+        <h1>ระบบจัดการร้าน NGG | <span class="text-blue"><?php foreach($shop_array as $loop) echo "สาขา ".$loop->sh_name; ?> </span></h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
-                    <div class="box_heading"><h1 class="box-title">ระบบจัดการร้าน NGG | <span class="text-blue"><?php foreach($shop_array as $loop) echo "สาขา ".$loop->sh_name; ?> </span></h1></div>
+                    <div class="box-header"></div>
                     <div class="box-body">
-
-                    <hr>
                     <br>
                     <div class="row">
                         <?php if ($this->session->userdata('sessstatus') == 61) { ?>

@@ -1199,6 +1199,75 @@ function exportExcel_sale_report()
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
+
+function print_sale_report()
+{
+    $refcode = $this->input->post("refcode");
+    $keyword = explode(" ", $refcode);
+    $brand = $this->input->post("brand");
+    $shop = $this->input->post("shop");
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+
+    $this->load->model('tp_item_model','',TRUE);
+    $where = "br_id = ".$brand;
+    $data['brand_array'] = $this->tp_item_model->getBrand($where);
+    $data["refcode"] = $refcode;
+    $data["brand"] = $brand;
+    $data["shop"] = $shop;
+    $where = "sh_id = ".$shop;
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+    $data["startdate"] = $startdate;
+    $data["enddate"] = $enddate;
+
+    $sql = $this->no_rolex;
+    
+    $sql .= " and so_enable = '1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
+    
+    if (($brand=="0") && ($shop=="0")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) {
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
+        else $sql .= " and sh_id != '0'";
+
+    }
+    
+    $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th','A4-L','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/sale/print_sale_report_filter", $data, TRUE));
+    $mpdf->Output();
+}
     
 function exportExcel_sale_report_caseback()
 {
