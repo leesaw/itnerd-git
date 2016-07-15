@@ -9,7 +9,7 @@
 <tr>
 <td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
 <td width="320">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">277/1-3,271/5 Prajaksillapakhom Rd., Tambon Markkeang</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Amphur Mungudonthani, Udonthani 41000, Thailand</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สาขาที่ 00001</div>
 </td> 
 <?php foreach($pos_array as $loop) { $datetime = $loop->posro_issuedate; $so_id = $loop->posro_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posro_customer_name; $cusaddress = $loop->posro_customer_address; $custaxid = $loop->posro_customer_taxid; $cuspassport = $loop->posro_customer_passport; break; } 
 
@@ -37,7 +37,7 @@
 <?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
 ?>
 <tr style="border:1px solid black;"><td align="center" valign="top"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
+<td style="border-left:1px solid black;" align="center" valign="top"><?php echo $loop->itse_serial_number; ?></td>
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroi_qty." ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroi_netprice, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
@@ -188,7 +188,7 @@ return $rstring;
 <tr>
 <td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
 <td width="320">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">277/1-3,271/5 Prajaksillapakhom Rd., Tambon Markkeang</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Amphur Mungudonthani, Udonthani 41000, Thailand</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สาขาที่ 00001</div>
 </td> 
 <?php foreach($pos_array as $loop) { $datetime = $loop->posro_issuedate; $so_id = $loop->posro_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posro_customer_name; $cusaddress = $loop->posro_customer_address; $custaxid = $loop->posro_customer_taxid; break; } 
 
@@ -216,7 +216,7 @@ return $rstring;
 <?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
 ?>
 <tr style="border:1px solid black;"><td align="center" valign="top"><?php echo $no; ?></td>
-<td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
+<td style="border-left:1px solid black;" align="center" valign="top"><?php echo $loop->itse_serial_number; ?></td>
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->br_name." ".$loop->it_refcode." ".$loop->it_model; ?><br><?php echo $loop->it_remark." , ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->posroi_qty." ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroi_netprice, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>

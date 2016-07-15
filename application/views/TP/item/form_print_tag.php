@@ -199,7 +199,7 @@ function check_product_code(refcode_input, luxury)
                         count_list++;
                         document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
                     }else{
-                        alert("ไม่พบ Ref. Code ที่ต้องการ");
+                        alert("ไม่พบ Caseback ที่ต้องการ");
                     }
                 }
             });

@@ -419,7 +419,7 @@ function getCaseback_lockCaseback()
 {
     $refcode = $this->input->post("refcode");
     
-    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and ".$this->no_rolex;
+    $sql = "itse_serial_number = '".$refcode."' and ".$this->no_rolex;
     $result = $this->tp_item_model->getItem_caseback($sql);
     $output = "";
     foreach ($result as $loop) {
@@ -473,6 +473,32 @@ function rolex_barcode_print()
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/item/barcode_print", $data, TRUE));
+    $mpdf->Output();
+}
+
+function rolex_refcode_price_print(){
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    
+    $currentdate = date('Y-m-d');
+    $this->load->model('tp_item_model','',TRUE);
+    $result = array();
+    $index = 0;
+    $sql_result = "";
+
+    $sql_result = "br_id = '888'";
+    $query = $this->tp_item_model->getItem($sql_result);
+    foreach($query as $loop) {
+        $result[$index] = array( "br_name" => $loop->br_name, "it_refcode" => $loop->it_refcode, "it_srp" => $loop->it_srp, "it_model" => $loop->it_model, "it_qty" => 1 );
+        $index++;
+    }
+    $data['result_array'] = $result;
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
     $mpdf->Output();
 }
     

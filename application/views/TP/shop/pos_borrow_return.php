@@ -276,8 +276,8 @@ function confirmform()
     var saleperson_code = document.getElementById('saleperson_code').value;
     
     var itse_id = document.getElementsByName('itse_id');
-    var stob_id = document.getElementsByName('stob_id');
-    var posrobi_id = document.getElementsByName('posrobi_id');
+    //var stob_id = document.getElementsByName('stob_id');
+    //var posrobi_id = document.getElementsByName('posrobi_id');
     var it_id = document.getElementsByName('it_id');
     var it_array = new Array();
     var checked = 0;
@@ -297,7 +297,8 @@ function confirmform()
 
         }
         if (checked==0) {
-            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, posrobi_id: posrobi_id[i].value};
+            //it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, posrobi_id: posrobi_id[i].value};
+            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value};
             index++;
         }else{
             checked = 0;

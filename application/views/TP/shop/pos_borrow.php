@@ -45,7 +45,7 @@
                                     <select class="form-control" name="borrower" id="borrower">
                                     <option value="-1">--- เลือกชื่อผู้รับของ ---</option>
                             <?php foreach($borrower_array as $loop) { ?>
-                            <option value="<?php echo $loop->posbor_name; ?>"><?php echo $loop->posbor_name; ?></option>
+                            <option value="<?php echo $loop->posbor_id."-".$loop->posbor_name; ?>"><?php echo $loop->posbor_name; ?></option>
                             <?php } ?>
                                     
                                     </select>
@@ -300,7 +300,7 @@ function confirmform()
     var checked = 0;
     var index = 0;
 
-    for(var i=0; i<it_id.length; i++){
+    for(var i=0; i<it_id.length; i++) {
         for(var j=0; j<index; j++) {
             if (it_id[i].value == it_array[j]['id']) {
                 //it_array[j]['qty'] = parseInt(it_array[j]['qty']) + 1;

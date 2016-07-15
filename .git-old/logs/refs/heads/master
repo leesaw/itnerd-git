@@ -1,0 +1,137 @@
+0000000000000000000000000000000000000000 a9a0d342decb850d46b3c05325556b782e310b70 leesaw <mai2131@gmail.com> 1436841658 +0700	clone: from https://github.com/leesaw/itnerd-git.git
+a9a0d342decb850d46b3c05325556b782e310b70 1916beee8c6ee39f006a4e2947153c927cecefa2 leesaw <mai2131@gmail.com> 1436873978 +0700	commit: coding ring
+1916beee8c6ee39f006a4e2947153c927cecefa2 01174a57ffcf061733a0d51f0e6c47858300c355 leesaw <mai2131@gmail.com> 1437047914 +0700	commit: v1 ok
+01174a57ffcf061733a0d51f0e6c47858300c355 33456fa6aee75ac1159c26e43ac1f0af8b0ecf99 leesaw <mai2131@gmail.com> 1437099110 +0700	pull: Fast-forward
+33456fa6aee75ac1159c26e43ac1f0af8b0ecf99 cfd6cb9d44f49402e0d9d65cb4bc66ef2686dcb6 leesaw <mai2131@gmail.com> 1437131689 +0700	commit: add user management - ok
+cfd6cb9d44f49402e0d9d65cb4bc66ef2686dcb6 a3a6f245214c45bfb3e54e48e09397f3228d0631 leesaw <mai2131@gmail.com> 1441106917 +0700	commit: update 01092015
+a3a6f245214c45bfb3e54e48e09397f3228d0631 9a3d76d4d5123df1f6bf6f371ed096dd96e07d70 leesaw <mai2131@gmail.com> 1442921029 +0700	commit: done connect ms sql
+9a3d76d4d5123df1f6bf6f371ed096dd96e07d70 dc2b30e81300607232fb54d767cfd3c27f5e6b37 leesaw <mai2131@gmail.com> 1444389733 +0700	commit: done jes stock watch
+dc2b30e81300607232fb54d767cfd3c27f5e6b37 d0ad9746e4c79262033c4cc5e56cfb538f79b069 leesaw <mai2131@gmail.com> 1444908952 +0700	commit: coding new graph for timepieces
+d0ad9746e4c79262033c4cc5e56cfb538f79b069 0bd1a6ccdd4366a32dc3cb9c2d9256a653c54bdf leesaw <mai2131@gmail.com> 1445075913 +0700	commit: graph ok
+0bd1a6ccdd4366a32dc3cb9c2d9256a653c54bdf 21690ea89761d11fa7e2d5771c07ed74448c4e62 leesaw <mai2131@gmail.com> 1445339251 +0700	commit: coding report for timepiece
+21690ea89761d11fa7e2d5771c07ed74448c4e62 e7f44ec9e75bfc345e63ef1683c69dd22c80a02f leesaw <mai2131@gmail.com> 1445339460 +0700	commit: coding report for timepiece
+e7f44ec9e75bfc345e63ef1683c69dd22c80a02f 0822fa19096f2c3c858c26cc8e4f803b8e03eea4 leesaw <mai2131@gmail.com> 1445504948 +0700	commit: coding excel item list stock
+0822fa19096f2c3c858c26cc8e4f803b8e03eea4 c88e8fa7e40e81042b54c3dc29155b29dc31d6a5 leesaw <mai2131@gmail.com> 1449743204 +0700	commit: fix remark whtype
+c88e8fa7e40e81042b54c3dc29155b29dc31d6a5 a405238e3638b6dbe6392369049adcb54f49bd5b leesaw <mai2131@gmail.com> 1451906599 +0700	commit: coding jes to mysql
+a405238e3638b6dbe6392369049adcb54f49bd5b 1d0dd42ada240e3997b7365d7d01700b20a7d268 leesaw <mai2131@gmail.com> 1453116665 +0700	commit: search long description ok
+1d0dd42ada240e3997b7365d7d01700b20a7d268 de17bd80ee407aeba2c36fd112e944793a32db2a leesaw <mai2131@gmail.com> 1453895959 +0700	commit: done graph sale report
+de17bd80ee407aeba2c36fd112e944793a32db2a 90d5c603c3a4c8eac6201c89f285a8e2b2f4a1d4 leesaw <mai2131@gmail.com> 1454067215 +0700	commit: done change graph main watch
+90d5c603c3a4c8eac6201c89f285a8e2b2f4a1d4 2c6728c4e8efc0ee40f9bf1aea94d247232dab4a leesaw <mai2131@gmail.com> 1454326536 +0700	commit: editing export excel
+2c6728c4e8efc0ee40f9bf1aea94d247232dab4a b2ccbebcf4d01bf7a1d21977f7bb2f7e745a0a1e leesaw <mai2131@gmail.com> 1454751905 +0700	commit: add file pradit
+b2ccbebcf4d01bf7a1d21977f7bb2f7e745a0a1e e2308fa2a42996949271d0c01d1b5f5fc07b7b0f leesaw <mai2131@gmail.com> 1454897729 +0700	pull: Fast-forward
+e2308fa2a42996949271d0c01d1b5f5fc07b7b0f d31c69f704f57034522dec70fce8fd0798f07634 leesaw <mai2131@gmail.com> 1454932104 +0700	commit: coding add new item
+d31c69f704f57034522dec70fce8fd0798f07634 c5edde2dbeed38e81be034f27128ccf7f59d77e6 leesaw <mai2131@gmail.com> 1454984799 +0700	pull: Fast-forward
+c5edde2dbeed38e81be034f27128ccf7f59d77e6 e802c166a20d74d7069ab1d6830112dab279ca2f leesaw <mai2131@gmail.com> 1455189142 +0700	commit: 11022016
+e802c166a20d74d7069ab1d6830112dab279ca2f 2bb13c8d0a93491bceda427d94a3e67becfbdc7c leesaw <mai2131@gmail.com> 1455244108 +0700	pull: Fast-forward
+2bb13c8d0a93491bceda427d94a3e67becfbdc7c cda79cfa3fdaeb0480b10bbb260d8f77f89ca1a3 leesaw <mai2131@gmail.com> 1455275214 +0700	commit: coding wahrehouse transfer
+cda79cfa3fdaeb0480b10bbb260d8f77f89ca1a3 bf0ea5c31d9d1439f3b485877a792765ea1758f9 leesaw <mai2131@gmail.com> 1455589680 +0700	pull: Fast-forward
+bf0ea5c31d9d1439f3b485877a792765ea1758f9 4dede0e4803af967164a8e33be2c07183b1e9f3f leesaw <mai2131@gmail.com> 1455621250 +0700	commit: coding stock in 16022015
+4dede0e4803af967164a8e33be2c07183b1e9f3f 379fb3918ef8f9c208f5453a9c0124f41d28d286 leesaw <mai2131@gmail.com> 1455675384 +0700	pull: Fast-forward
+379fb3918ef8f9c208f5453a9c0124f41d28d286 ead814609eb2dec7df5a833ec5c4a9836e843943 leesaw <mai2131@gmail.com> 1455794970 +0700	commit: coding stock in
+ead814609eb2dec7df5a833ec5c4a9836e843943 7dbe42b063d6af188bfefe76495cbe3b49f37e3d leesaw <mai2131@gmail.com> 1455848358 +0700	pull: Fast-forward
+7dbe42b063d6af188bfefe76495cbe3b49f37e3d 101e5bc64a823e655d2664593395fd6e78f2affe leesaw <mai2131@gmail.com> 1455880440 +0700	commit: done transfer in
+101e5bc64a823e655d2664593395fd6e78f2affe 593dc1f9e43d9a405f5c18f6677417c0b69545d5 leesaw <mai2131@gmail.com> 1455962493 +0700	commit: coding transfer stock
+593dc1f9e43d9a405f5c18f6677417c0b69545d5 17cadeff5d8ac7384e65e4a9e519d60653826e8c leesaw <mai2131@gmail.com> 1456195021 +0700	pull: Fast-forward
+17cadeff5d8ac7384e65e4a9e519d60653826e8c b169e8dee1333a6fa13dfb3ea166cc73c818c8ed leesaw <mai2131@gmail.com> 1456318536 +0700	commit: coding confirm transfer stock serial
+b169e8dee1333a6fa13dfb3ea166cc73c818c8ed e3f2eacca5c2b59b9d04b5f872364cb761066054 leesaw <mai2131@gmail.com> 1456400680 +0700	commit: coding history
+e3f2eacca5c2b59b9d04b5f872364cb761066054 ce1b8b26e3f68884e13c2ac48b616cb4e72ab106 leesaw <mai2131@gmail.com> 1456711150 +0700	pull: Fast-forward
+ce1b8b26e3f68884e13c2ac48b616cb4e72ab106 5744f81257be580adb4a8aab7f856a7de3d2fd7f leesaw <mai2131@gmail.com> 1456745343 +0700	commit: coding POS
+5744f81257be580adb4a8aab7f856a7de3d2fd7f d845010fa49f52f26f1c45f4dec52689099b4ea2 leesaw <mai2131@gmail.com> 1456798388 +0700	pull: Fast-forward
+d845010fa49f52f26f1c45f4dec52689099b4ea2 822b6416db4fad1a45143b73f20a925291c6257b leesaw <mai2131@gmail.com> 1456832068 +0700	commit: coding POS
+822b6416db4fad1a45143b73f20a925291c6257b e87bcca29c393468c2889832f573b130bd6dd332 leesaw <mai2131@gmail.com> 1456920511 +0700	commit: done pos
+e87bcca29c393468c2889832f573b130bd6dd332 4cd9382e765a9ba54a1c596faf2f0d83635834f7 leesaw <mai2131@gmail.com> 1456971059 +0700	pull: Fast-forward
+4cd9382e765a9ba54a1c596faf2f0d83635834f7 fba7e03d1c3770ff75ee72956c7d44ab91520255 leesaw <mai2131@gmail.com> 1457005271 +0700	commit: prepare for first day of NGG udon
+fba7e03d1c3770ff75ee72956c7d44ab91520255 899250326b679b45882249151c7ede5511f23708 leesaw <mai2131@gmail.com> 1457320086 +0700	pull: Fast-forward
+899250326b679b45882249151c7ede5511f23708 f6802f7dcc0387612a8b3b86fecc6157b5d41cc1 leesaw <mai2131@gmail.com> 1457348570 +0700	commit: coding transfer serial
+f6802f7dcc0387612a8b3b86fecc6157b5d41cc1 dfaf1c6ab67bc05ee1ecd53c04d09a868a0d949f leesaw <mai2131@gmail.com> 1457436962 +0700	commit: coding confirm transfer
+dfaf1c6ab67bc05ee1ecd53c04d09a868a0d949f 4cc53151d1ad412a44a2f8918eab818be9f99390 leesaw <mai2131@gmail.com> 1457526733 +0700	commit: done return
+4cc53151d1ad412a44a2f8918eab818be9f99390 487bef9bb38b8586ef4262fba05a9f11283cec96 leesaw <mai2131@gmail.com> 1457609060 +0700	commit: change stock check rolex print
+487bef9bb38b8586ef4262fba05a9f11283cec96 402759c8e756f8517ce90ae1ee877e3d1b778d0e leesaw <mai2131@gmail.com> 1457695045 +0700	commit: coding pos rolex print out
+402759c8e756f8517ce90ae1ee877e3d1b778d0e a319b27dc0127d66ce0c32ee33ec16c829559e90 leesaw <mai2131@gmail.com> 1457955882 +0700	commit: coding rolex
+a319b27dc0127d66ce0c32ee33ec16c829559e90 d2038997ef901b2b6f2e754d153d906ba5a68954 leesaw <mai2131@gmail.com> 1458212468 +0700	commit: done confirm transfer
+d2038997ef901b2b6f2e754d153d906ba5a68954 cf67e933234ddac95f6c87a6824d3b710ac7f13a leesaw <mai2131@gmail.com> 1458380738 +0700	commit: -
+cf67e933234ddac95f6c87a6824d3b710ac7f13a 063cf59972d471a84dd57f87a63699af55be8a75 leesaw <mai2131@gmail.com> 1458562752 +0700	commit: coding print barcode rolex
+063cf59972d471a84dd57f87a63699af55be8a75 c3a7acb033abe7333d69d5b608a26c92596565cf leesaw <mai2131@gmail.com> 1458733506 +0700	commit: coding catalog
+c3a7acb033abe7333d69d5b608a26c92596565cf b88e0617d3f70e477f91337f6ef2e4f8bb0caeaa leesaw <mai2131@gmail.com> 1458784950 +0700	pull: Fast-forward
+b88e0617d3f70e477f91337f6ef2e4f8bb0caeaa a5843bf731713d1c4ba19ef00bf28694834826e8 leesaw <mai2131@gmail.com> 1458820081 +0700	commit: done catalog 23032016
+a5843bf731713d1c4ba19ef00bf28694834826e8 189117eb212e0fad696a1a2d1fcd465dfa766222 leesaw <mai2131@gmail.com> 1458820411 +0700	commit: done catalog 23032016
+189117eb212e0fad696a1a2d1fcd465dfa766222 7780c15b1bc62cd9e647d12c7aae6c7e8455fa78 leesaw <mai2131@gmail.com> 1459167719 +0700	commit: 28032016
+7780c15b1bc62cd9e647d12c7aae6c7e8455fa78 1067bc3990725d8b2453064262c30f414aff2c24 leesaw <mai2131@gmail.com> 1459303467 +0700	pull: Fast-forward
+1067bc3990725d8b2453064262c30f414aff2c24 940ad83eda3c4d3f5f21654e534414a4be3c8c26 leesaw <mai2131@gmail.com> 1459337444 +0700	commit: done suunto barcode
+940ad83eda3c4d3f5f21654e534414a4be3c8c26 de272cdfedfc70308d318a0622b8722661cdb6a0 leesaw <mai2131@gmail.com> 1459426074 +0700	commit: sale order history done
+de272cdfedfc70308d318a0622b8722661cdb6a0 937db5ad317b5ef9482bc686c2ace7c63c22a283 leesaw <mai2131@gmail.com> 1459511424 +0700	commit: edit count saleorder by dateadd and show month rolex sale report
+937db5ad317b5ef9482bc686c2ace7c63c22a283 4a97df836ff01ffefdb29b4d9fc8c087989a4912 leesaw <mai2131@gmail.com> 1459590449 +0700	commit: change stock transfer printing, counting
+4a97df836ff01ffefdb29b4d9fc8c087989a4912 7ff06b70e2ca92fdc7c5393135bc70c7c9dfa443 leesaw <mai2131@gmail.com> 1459771486 +0700	commit: add no sale barcode
+7ff06b70e2ca92fdc7c5393135bc70c7c9dfa443 9ebcb158a11e00140bf1d0138a4a114d7b81c0bc leesaw <mai2131@gmail.com> 1459858965 +0700	commit: export stock excel
+9ebcb158a11e00140bf1d0138a4a114d7b81c0bc b77677752c4dc6981a9821f8baa24c2d51296952 leesaw <mai2131@gmail.com> 1460030780 +0700	commit: coding saleorder by serial
+b77677752c4dc6981a9821f8baa24c2d51296952 6ef52cb45eb6373d9dab42305d3f4ef748899863 leesaw <mai2131@gmail.com> 1460081662 +0700	pull: Fast-forward
+6ef52cb45eb6373d9dab42305d3f4ef748899863 1b15b5577d113d7e0026aa79d75f2a932684d8db leesaw <mai2131@gmail.com> 1460340939 +0700	commit: backup_linux
+1b15b5577d113d7e0026aa79d75f2a932684d8db 147d8cf483587c65d8435a51dbafb379a83a63a5 leesaw <mai2131@gmail.com> 1460340988 +0700	pull: Merge made by the 'recursive' strategy.
+147d8cf483587c65d8435a51dbafb379a83a63a5 3cb2f267184a8157d8666e6961dfd8c8accc4cf9 leesaw <mai2131@gmail.com> 1460374858 +0700	commit: add dc/gp saleorder
+3cb2f267184a8157d8666e6961dfd8c8accc4cf9 6085325e56134f2885c953715d71cfb8f50c8699 leesaw <mai2131@gmail.com> 1460459404 +0700	commit: 12042016
+6085325e56134f2885c953715d71cfb8f50c8699 3c3881e5c196ac5803a33243dae8c4eec41f4152 leesaw <mai2131@gmail.com> 1460977950 +0700	commit: edit bug transfer print
+3c3881e5c196ac5803a33243dae8c4eec41f4152 11c7f7dda2aef44053fd03ea87b2b00432d407b6 leesaw <mai2131@gmail.com> 1461067437 +0700	commit: 19042016
+11c7f7dda2aef44053fd03ea87b2b00432d407b6 a2db7fa8a8d6388e003c8ad551aeb0ffda0e2511 leesaw <mai2131@gmail.com> 1461156007 +0700	commit: add sale report
+a2db7fa8a8d6388e003c8ad551aeb0ffda0e2511 1b52b265a2e0dcdebcd1cf8df0f5653c63ab1db0 leesaw <mai2131@gmail.com> 1461237692 +0700	commit: add export excel stock rolex
+1b52b265a2e0dcdebcd1cf8df0f5653c63ab1db0 99dfeacb9b7305d7252436ec3db37abafde3d38f leesaw <mai2131@gmail.com> 1461324359 +0700	commit: coding add new certificate
+99dfeacb9b7305d7252436ec3db37abafde3d38f d511b119407327c27bed7984a54d04feb8979592 leesaw <mai2131@gmail.com> 1461405739 +0700	commit: add search serial rolex
+d511b119407327c27bed7984a54d04feb8979592 2134160f0d5a90ddcdd2ce4df46f6ab5839de446 leesaw <mai2131@gmail.com> 1461668976 +0700	commit: adding disable transfer with dateadd and dateadd_by
+2134160f0d5a90ddcdd2ce4df46f6ab5839de446 15f76d4906bee4bb42bdecef86a8566077a20152 leesaw <mai2131@gmail.com> 1461669068 +0700	commit: adding disable transfer with dateadd and dateadd_by
+15f76d4906bee4bb42bdecef86a8566077a20152 d6956c58e33e7b4f5e0a84b78848acb97a7f1e9b leesaw <mai2131@gmail.com> 1461756509 +0700	commit: 27042016
+d6956c58e33e7b4f5e0a84b78848acb97a7f1e9b 500a60635fc9ac64eceef89de6e428298049547e leesaw <mai2131@gmail.com> 1461929860 +0700	commit: coding ss
+500a60635fc9ac64eceef89de6e428298049547e d9880502bd341cb4a8fadf0ca28aa8bb9e991859 leesaw <mai2131@gmail.com> 1462009387 +0700	commit: 30042016
+d9880502bd341cb4a8fadf0ca28aa8bb9e991859 fb4c8dde054c5c57a669a7ad9824c848cc24cf65 leesaw <mai2131@gmail.com> 1462241311 +0700	pull: Fast-forward
+fb4c8dde054c5c57a669a7ad9824c848cc24cf65 82665e593a26369e785e4502eecc713f88aa78e1 leesaw <mai2131@gmail.com> 1462279421 +0700	commit: done cert pdf and form
+82665e593a26369e785e4502eecc713f88aa78e1 b99ea8e9ed9624e751c03fe2380d78b9a9e233ae leesaw <mai2131@gmail.com> 1462361517 +0700	commit: 04052016
+b99ea8e9ed9624e751c03fe2380d78b9a9e233ae 3a751ca515ed976bb7ae4d221ed314885884af7c leesaw <mai2131@gmail.com> 1462361635 +0700	commit (merge): 04052016
+3a751ca515ed976bb7ae4d221ed314885884af7c 4d72b21eb64f13edb0b9748359a29c3a44f4bc03 leesaw <mai2131@gmail.com> 1462501291 +0700	pull: Fast-forward
+4d72b21eb64f13edb0b9748359a29c3a44f4bc03 fa8cff83dfc7bfbaac32924dc30c4c58f45d98ca leesaw <mai2131@gmail.com> 1462535743 +0700	commit: coding sell rolex by owner and done borrowed item list
+fa8cff83dfc7bfbaac32924dc30c4c58f45d98ca dd85c593d0eafdf7e1d920145af9811abb5cd8a9 leesaw <mai2131@gmail.com> 1462759918 +0700	pull: Fast-forward
+dd85c593d0eafdf7e1d920145af9811abb5cd8a9 17eae2f64dfd57ffc6b7ca140959237af96af5b4 leesaw <mai2131@gmail.com> 1462795446 +0700	commit: done borrowing item sold and coding view sale report rolex
+17eae2f64dfd57ffc6b7ca140959237af96af5b4 4061657c935155b0acba13b763c9787a94183cf7 leesaw <mai2131@gmail.com> 1462880034 +0700	commit: done rolex sale report
+4061657c935155b0acba13b763c9787a94183cf7 ed35dfff36f3bc8029b0ecf681f7a9307f4d2ad5 leesaw <mai2131@gmail.com> 1462967750 +0700	commit: editing ss cert by adding key of symbol
+ed35dfff36f3bc8029b0ecf681f7a9307f4d2ad5 43a59b5276796ef16d4989f1101570ac91833522 leesaw <mai2131@gmail.com> 1462967849 +0700	commit: editing ss cert by adding key of symbol
+43a59b5276796ef16d4989f1101570ac91833522 11f37996abaeb0f609361ac1700824c378b5a055 leesaw <mai2131@gmail.com> 1463055826 +0700	commit: done list symbol ss and change menu pos rolex by adding view borrow item
+11f37996abaeb0f609361ac1700824c378b5a055 2f28b578b47ed76f77120db399add21ace5eea07 leesaw <mai2131@gmail.com> 1463142566 +0700	commit: done ss cert but no testing
+2f28b578b47ed76f77120db399add21ace5eea07 4fc890a131f316ab6a18be8b3a31a383e9daaa5c leesaw <mai2131@gmail.com> 1463219562 +0700	commit: done transfer filter report
+4fc890a131f316ab6a18be8b3a31a383e9daaa5c 33239a59949ece9283514a1e2c85271f64ce34db leesaw <mai2131@gmail.com> 1463400430 +0700	commit: edit cert pdf and small , coding filter cert
+33239a59949ece9283514a1e2c85271f64ce34db a5f888cd958cc2d9b081a407d79b577a978f1b5e leesaw <mai2131@gmail.com> 1463487400 +0700	commit: coding filter certificate
+a5f888cd958cc2d9b081a407d79b577a978f1b5e 43c901283602f8c1aa2bf8090a086e4b712c24ef leesaw <mai2131@gmail.com> 1463537200 +0700	pull: Fast-forward
+43c901283602f8c1aa2bf8090a086e4b712c24ef f1984ffe7035db14af485f414a8ccd57e30ad60e leesaw <mai2131@gmail.com> 1463571032 +0700	commit: done view stock balance by serial
+f1984ffe7035db14af485f414a8ccd57e30ad60e 30140beee8026dd06597c64ee3d293ed4dc6c0dc leesaw <mai2131@gmail.com> 1463656508 +0700	commit: done view serial in sale report
+30140beee8026dd06597c64ee3d293ed4dc6c0dc 154dacbde3c6528a59e4984b04684e82b00a9c55 leesaw <mai2131@gmail.com> 1464004839 +0700	commit: add show number of product in each shop
+154dacbde3c6528a59e4984b04684e82b00a9c55 f09e1d4edf824146e40ea96631afa945feb4f549 leesaw <mai2131@gmail.com> 1464092553 +0700	commit: coding form warranty gold
+f09e1d4edf824146e40ea96631afa945feb4f549 415358265a3adb5f2e8bf31ca5f0b39aa49709fe leesaw <mai2131@gmail.com> 1464178603 +0700	commit: form gold ok
+415358265a3adb5f2e8bf31ca5f0b39aa49709fe b69d88f3b0931f48edd68acc3bd462736c1de50f leesaw <mai2131@gmail.com> 1464263903 +0700	commit: add gold warranty done and coding pdf
+b69d88f3b0931f48edd68acc3bd462736c1de50f a124f554ff7f0b8d5a6ea455fc3661d56b5b579e leesaw <mai2131@gmail.com> 1464428806 +0700	commit: pdf gold warranty ok and coding view warranty
+a124f554ff7f0b8d5a6ea455fc3661d56b5b579e 8bd60d9f84250bff36c12209040d5e098bc5e0e3 leesaw <mai2131@gmail.com> 1464613120 +0700	commit: coding return ho
+8bd60d9f84250bff36c12209040d5e098bc5e0e3 58042a1cbec9fbb5a507dd0aca17b0a7f3e6e071 leesaw <mai2131@gmail.com> 1464781852 +0700	commit: coding list gold tday
+58042a1cbec9fbb5a507dd0aca17b0a7f3e6e071 908d4fd0ec9417ba8ec9361deae9733eb952b792 leesaw <mai2131@gmail.com> 1464868752 +0700	commit: coding filter warranty
+908d4fd0ec9417ba8ec9361deae9733eb952b792 d355213531317485e6c25705d570b092a6aaf97b leesaw <mai2131@gmail.com> 1464952253 +0700	commit: done gold warranty and edit rolex invoice
+d355213531317485e6c25705d570b092a6aaf97b f1c0614052c895e06247db9cc1ae10a776d09474 leesaw <mai2131@gmail.com> 1465213309 +0700	commit: coding warranty pdf
+f1c0614052c895e06247db9cc1ae10a776d09474 cfe7fe08d360e7e69340745c659c18c7dfec51fe leesaw <mai2131@gmail.com> 1465298655 +0700	commit: done print warranty gold
+cfe7fe08d360e7e69340745c659c18c7dfec51fe c8bc6e4a99876ac369dcc8200e416ac5bedba4c3 leesaw <mai2131@gmail.com> 1465386899 +0700	commit: done warranty pdf 2
+c8bc6e4a99876ac369dcc8200e416ac5bedba4c3 0428a8abea8df9e66bb438e8bb1d61086a36b8c2 leesaw <mai2131@gmail.com> 1465558459 +0700	commit: edit adding shape and cutting cert
+0428a8abea8df9e66bb438e8bb1d61086a36b8c2 c3e07950f022458ad213979f8d52623b256749e3 leesaw <mai2131@gmail.com> 1465639935 +0700	commit: coding repair
+c3e07950f022458ad213979f8d52623b256749e3 019d88425818978b5c96c1b5918cf5b067bbe344 leesaw <mai2131@gmail.com> 1465906620 +0700	commit: coding repair search
+019d88425818978b5c96c1b5918cf5b067bbe344 bdcad28603b73949aacd323ca6608fe44cdcade5 leesaw <mai2131@gmail.com> 1465992209 +0700	commit: change status edit disable repair done
+bdcad28603b73949aacd323ca6608fe44cdcade5 6915207d51ce5c37a0d88484cc87826432fead20 leesaw <mai2131@gmail.com> 1465992843 +0700	commit: repair almost done
+6915207d51ce5c37a0d88484cc87826432fead20 ca89c46abb65db31d9b05e34ef8ff4ecdb368ead leesaw <mai2131@gmail.com> 1466077972 +0700	commit: testing repair
+ca89c46abb65db31d9b05e34ef8ff4ecdb368ead fdc9eb6b36ae351c7478bafcbcac729e5b37b6aa leesaw <mai2131@gmail.com> 1466165088 +0700	commit: coding upload excel for select item
+fdc9eb6b36ae351c7478bafcbcac729e5b37b6aa 4ad76ba7fa61363c116b8129f2036ea0c78be3f7 leesaw <mai2131@gmail.com> 1466423747 +0700	commit: coding read excel for transfer in
+4ad76ba7fa61363c116b8129f2036ea0c78be3f7 957ea9542f1bbd54c3e132010d5b31161f5ed8c9 leesaw <mai2131@gmail.com> 1466510125 +0700	commit: transfer in by uploading excel done
+957ea9542f1bbd54c3e132010d5b31161f5ed8c9 52210524d971cc97b8a16584dc86a6901b6bf6e0 leesaw <mai2131@gmail.com> 1466561881 +0700	pull: Fast-forward
+52210524d971cc97b8a16584dc86a6901b6bf6e0 2c095e8758f7b9dc606e84a9be46b6b355ec58ee leesaw <mai2131@gmail.com> 1466597096 +0700	commit: done import excel for transfer select item
+2c095e8758f7b9dc606e84a9be46b6b355ec58ee 5623933ceff3c379474955c2117a654d2498a384 leesaw <mai2131@gmail.com> 1466681645 +0700	commit: coding undo confirm transfer between
+5623933ceff3c379474955c2117a654d2498a384 5922730eefe7a51cbce975b454967246f1c41e48 leesaw <mai2131@gmail.com> 1466735335 +0700	pull: Fast-forward
+5922730eefe7a51cbce975b454967246f1c41e48 11406af9118dcce4c1e9c25c531f434f9ab8d9d9 leesaw <mai2131@gmail.com> 1466768874 +0700	commit: done undo confirm transfer between
+11406af9118dcce4c1e9c25c531f434f9ab8d9d9 0ceffe4146a3d960b049917e45180f76d4db8f2b leesaw <mai2131@gmail.com> 1467027827 +0700	commit: 27062016
+0ceffe4146a3d960b049917e45180f76d4db8f2b cba71285808da9804fb23babf8d90a79714c568f leesaw <mai2131@gmail.com> 1467200504 +0700	commit: done show summary repair
+cba71285808da9804fb23babf8d90a79714c568f e4293fafc0034a25abe54307a851baa5da931615 leesaw <mai2131@gmail.com> 1467288528 +0700	commit: 30062016
+e4293fafc0034a25abe54307a851baa5da931615 e362e7796a37f43ddf6f3064006cce829464f215 leesaw <mai2131@gmail.com> 1467377728 +0700	commit: 01072016
+e362e7796a37f43ddf6f3064006cce829464f215 56d8709df7c3f96319a282c5ff315dcf85e8362a Chaichan <chaichan@nggjewellery.com> 1467978226 +0700	commit: coding print tag
+56d8709df7c3f96319a282c5ff315dcf85e8362a d7bf8a1f39591a93fbb178fc25eed0c76eec02a4 Chaichan <chaichan@nggjewellery.com> 1468057788 +0700	commit: done print barcode without testing
+d7bf8a1f39591a93fbb178fc25eed0c76eec02a4 32fef0397ecf3c7e4577ad61e1f737070ddf61bf Chaichan <chaichan@nggjewellery.com> 1468204526 +0700	pull: Fast-forward
+32fef0397ecf3c7e4577ad61e1f737070ddf61bf 95390da258a181f80a533d22dc5ab70a922f8632 Chaichan <chaichan@nggjewellery.com> 1468239009 +0700	commit: 11072016
+95390da258a181f80a533d22dc5ab70a922f8632 b718bb55ee360a8c0b75b16c59f14309098bd5ff Chaichan <chaichan@nggjewellery.com> 1468324636 +0700	commit: 12072016
+                                                                                                                                                                       

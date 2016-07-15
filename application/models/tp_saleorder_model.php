@@ -110,7 +110,7 @@ Class Tp_saleorder_model extends CI_Model
     
  function getPOS_rolex($where)
  {
-	$this->db->select("posro_id, posro_number, posro_issuedate, posro_ontop_percent, posro_ontop_baht, posro_status, posro_shop_id, sh_name, sh_code, posro_dateadd, posro_sale_person_id, posro_customer_name, posro_customer_address, posro_customer_taxid, posro_customer_passport, posro_customer_tel, posro_payment, posro_payment_value, posro_remark, sp_firstname as firstname, sp_lastname as lastname, sp_barcode");
+	$this->db->select("posro_id, posro_number, posro_issuedate, posro_ontop_percent, posro_ontop_baht, posro_status, posro_shop_id, sh_name, sh_code, posro_dateadd, posro_sale_person_id, posro_customer_name, posro_customer_address, posro_customer_taxid, posro_customer_passport, posro_customer_tel, posro_refund, posro_payment, posro_payment_value, posro_remark, sp_firstname as firstname, sp_lastname as lastname, sp_barcode");
 	$this->db->from('tp_pos_rolex');
 	//$this->db->join('list_creditcard', 'cdc_id = so_creditcard_type','left');
     $this->db->join('tp_shop', 'sh_id = posro_shop_id', 'left');
