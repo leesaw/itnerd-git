@@ -24,6 +24,13 @@
             <li>
                 <a href="<?php echo site_url("ngg_gold/list_warranty_filter_all_shop"); ?>">แสดงบัตรรับประกันสินค้าทั้งหมด (ทอง)</a>
             </li>
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">รายงาน (Report)<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="<?php echo site_url("ngg_gold/form_report_evaluate_sale"); ?>"><i class="fa fa-circle-o"></i>ประเมินและเป้าหมายการขาย</a></li>
+                </ul>
+      
+            </li>
             <?php } ?>
           </ul>
         </div>

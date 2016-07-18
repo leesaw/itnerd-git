@@ -500,6 +500,123 @@ function ajaxViewWarranty_shop()
     ->edit_column("ngw_id",'<a href="'.site_url("ngg_gold/view_warranty").'/$1"'.' class="btn btn-primary btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a>',"ngw_id");
     echo $this->datatables->generate(); 
 }
+
+function main_report()
+{
+    $data['title'] = "NGG| Nerd - Report";
+    $this->load->view("NGG/gold/report/main_report", $data);
+}
+
+function form_report_evaluate_sale()
+{
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_category_id = '6'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+
+
+    $data['month'] = date('m/Y');
+
+    $data['title'] = "NGG| Nerd - Report";
+    $this->load->view("NGG/gold/report/form_evaluate_sale", $data);
+}
+
+function result_report_evaluate_sale()
+{
+    $shopid = $this->input->post("shopid");
+    $salepersonid = $this->input->post("salepersonid");
+    $month = $this->input->post("month");
+
+    $data["shopid"] = $shopid;
+    $data["salepersonid"] = $salepersonid;
+    $data["month"] = $month;
+
+    $month_array = explode("/", $month);
+    $startdate = $month_array[1]."-".$month_array[0]."-01 00:00:00";
+    $enddate = $month_array[1]."-".$month_array[0]."-31 23:59:59";
+
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_category_id = '6'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+
+    $where = "sp_shop_id = '".$shopid."'";
+    $this->load->model('tp_saleperson_model','',TRUE);
+    $data["saleperson_array"] = $this->tp_saleperson_model->getSalePerson_sort_name($where);
+
+    // เป้าหมาย 100k/วัน/คน
+    $data["daily_target"] = 100000;
+    $data["daily_customer"] = 10;
+    $data["daily_meet"] = 10;
+
+    $where = "(ngw_saleperson_id = '".$salepersonid."' or ngw_saleperson2_id = '".$salepersonid."') and ngw_status = 'N' and ngw_enable = '1' and ngw_issuedate >= '".$startdate."' and ngw_issuedate <= '".$enddate."'";
+    $data["day_array"] = $this->ngg_gold_model->get_month_saleperson($where);
+
+    $data['title'] = "NGG| Nerd - Report";
+    $this->load->view("NGG/gold/report/result_evaluate_sale", $data);
+}
+
+function view_sold_gold()
+{
+    $date = $this->uri->segment(3);
+    $salepersonid = $this->uri->segment(4);
+
+    $where = "ngw_issuedate = '".$date."' and (ngw_saleperson_id = '".$salepersonid."' or ngw_saleperson2_id = '".$salepersonid."') and ngw_status = 'N' and ngw_enable = '1'";
+    $data["item_array"] = $this->ngg_gold_model->get_warranty($where);
+
+    $data['title'] = "NGG| Nerd - Report";
+    $this->load->view("NGG/gold/report/view_sold_gold", $data);
+}
+
+function print_report_evaluate_sale()
+{
+    $shopid = $this->input->post("shopid");
+    $salepersonid = $this->input->post("salepersonid");
+    $month = $this->input->post("month");
+
+    $data["shopid"] = $shopid;
+    $data["salepersonid"] = $salepersonid;
+    $data["month"] = $month;
+
+    $month_array = explode("/", $month);
+    $startdate = $month_array[1]."-".$month_array[0]."-01 00:00:00";
+    $enddate = $month_array[1]."-".$month_array[0]."-31 23:59:59";
+
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_id = '".$shopid."'";
+    $shop_array = $this->tp_shop_model->getShop($where);
+    foreach($shop_array as $loop) {
+        if($loop->sh_id==$shopid) $shopname = $loop->sh_name;
+    }
+    $data["shopname"] = $shopname;
+
+    $where = "sp_id = '".$salepersonid."'";
+    $this->load->model('tp_saleperson_model','',TRUE);
+    $saleperson_array = $this->tp_saleperson_model->getSalePerson_sort_name($where);
+    foreach($saleperson_array as $loop) {
+        if($loop->sp_id==$salepersonid) $salename = $loop->sp_firstname." ".$loop->sp_lastname;
+    }
+    $data["salename"] = $salename;
+
+
+    // เป้าหมาย 100k/วัน/คน
+    $data["daily_target"] = 100000;
+    $data["daily_customer"] = 10;
+    $data["daily_meet"] = 10;
+
+    $where = "(ngw_saleperson_id = '".$salepersonid."' or ngw_saleperson2_id = '".$salepersonid."') and ngw_status = 'N' and ngw_enable = '1' and ngw_issuedate >= '".$startdate."' and ngw_issuedate <= '".$enddate."'";
+    $data["day_array"] = $this->ngg_gold_model->get_month_saleperson($where);
+
+    $data["item_array"] = $this->ngg_gold_model->get_warranty($where);
+
+    $this->load->library('mpdf/mpdf');                
+    $mpdf= new mPDF('th','A4-L','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/styleGold_report.css');
     
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("NGG/gold/report/print_report_evaluate_sale", $data, TRUE));
+    $mpdf->Output();
+}
+
 }
 ?>
