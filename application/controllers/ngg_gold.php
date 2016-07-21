@@ -601,6 +601,7 @@ function print_report_evaluate_sale()
     $data["daily_target"] = 100000;
     $data["daily_customer"] = 10;
     $data["daily_meet"] = 10;
+    $data["daily_product"] = 10;
 
     $where = "(ngw_saleperson_id = '".$salepersonid."' or ngw_saleperson2_id = '".$salepersonid."') and ngw_status = 'N' and ngw_enable = '1' and ngw_issuedate >= '".$startdate."' and ngw_issuedate <= '".$enddate."'";
     $data["day_array"] = $this->ngg_gold_model->get_month_saleperson($where);

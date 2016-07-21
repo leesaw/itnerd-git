@@ -79,7 +79,7 @@ function getBalance_shop()
     $query = $this->tp_shop_model->getShop($sql);
     foreach($query as $loop) {
         $data['shop_name'] = $loop->sh_name;
-        $sql_result = "stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
+        $sql_result = "stob_enable = 1 and stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
         $result = $this->tp_warehouse_model->getWarehouse_balance($sql_result);
     }
     
@@ -104,7 +104,7 @@ function stock_rolex_print()
     $query = $this->tp_shop_model->getShop($sql);
     foreach($query as $loop) {
         $data['shop_name'] = $loop->sh_name;
-        $sql_result = "stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
+        $sql_result = "stob_enable = 1 and stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
         $result = $this->tp_warehouse_model->getWarehouse_balance($sql_result);
     }
 
@@ -146,7 +146,7 @@ function stock_rolex_excel()
     $query = $this->tp_shop_model->getShop($sql);
     foreach($query as $loop) {
         $shopname = $loop->sh_name;
-        $sql_result = "stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
+        $sql_result = "stob_enable = 1 and stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
         $result = $this->tp_warehouse_model->getWarehouse_balance($sql_result);
     }
 

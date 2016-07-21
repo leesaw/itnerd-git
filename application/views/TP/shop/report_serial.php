@@ -53,12 +53,12 @@
                                     <tr>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
+                                    <td><a href="#" class="pop"><img src="<?php echo $loop->it_refcode; ?>" style="display: none;" /><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->posroit_item_srp; ?></td>
-                                    <td><?php echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; ?></td>
+                                    <td><?php if ($loop->posrot_status == 'N') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; else if ($loop->posrot_status == 'V') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button></a>"; ?></td>
                                     <td><?php 
                                         echo "ราคา ".number_format($loop->posroit_netprice)." บาท";
                                         if ($loop->posroit_dc_baht > 0)
@@ -74,12 +74,12 @@
                                     <tr>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
+                                    <td><a href="#" class="pop"><img src="<?php echo $loop->it_refcode; ?>" style="display: none;" /><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->posroi_item_srp; ?></td>
-                                    <td><?php echo "<button class='btn btn-success btn-xs'>ขายแล้ว</button>"; ?></td>
+                                    <td><?php if ($loop->posro_status == 'N') echo "<button class='btn btn-success btn-xs'>ขายแล้ว</button>"; else if ($loop->posro_status == 'V') echo "<button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button>"; ?></td>
                                     <td><?php 
                                         echo "ราคา ".number_format($loop->posroi_netprice)." บาท";
                                         if ($loop->posroi_dc_baht > 0)
@@ -95,7 +95,7 @@
                                     <tr>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
+                                    <td><a href="#" class="pop"><img src="<?php echo $loop->it_refcode; ?>" style="display: none;" /><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
@@ -109,7 +109,7 @@
                                     <tr>
                                     <td><?php echo $loop->itse_serial_number; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
+                                    <td><a href="#" class="pop"><img src="<?php echo $loop->it_refcode; ?>" style="display: none;" /><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
@@ -152,12 +152,14 @@
 	</div>
 
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" data-dismiss="modal">
-    <div class="modal-content"  >              
+  <div class="modal-dialog">
+    <div class="modal-content">              
       <div class="modal-body">
-      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <img src="" class="imagepreview" style="width: 100%;" >
-      </div> 
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <center><h3 id="showrefcode"></h3>
+        <img src="" class="imagepreview" style="width:80%; height: 60%;" >
+        </center>
+      </div>
     </div>
   </div>
 </div>
@@ -170,7 +172,14 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
-    
+    $('#tablebarcode').on('click', '.pop', function(e){
+        var imgsrc = '<?php echo base_url(); ?>'+'picture/rolex/'+$(this).find('img').attr('src')+"/1.png";
+        
+        //alert($(this).find('img').attr('src'));
+        $('.imagepreview').attr('src', imgsrc);
+        document.getElementById("showrefcode").innerHTML = $(this).find('img').attr('src');
+        $('#imagemodal').modal('show');   
+    }); 
 });
 </script>
 </body>

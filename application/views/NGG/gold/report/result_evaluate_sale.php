@@ -145,10 +145,12 @@
                                         <th><?php echo $sum_gold; ?></th>
                                         <th><?php echo number_format($sum_price, 2, '.', ','); ?></th>
                                         <th>100%</th>
-                                        <th><?php $sum_customer_percent = ($sum_customer/($sum_date*$daily_customer))*100; 
+                                        <th><?php if ($sum_date > 0) { $sum_customer_percent = ($sum_customer/($sum_date*$daily_customer))*100; }else{ $sum_customer_percent = 0; }
                                             echo number_format($sum_customer_percent, 2, '.', ',')."%"; ?></th>
-                                        <th><?php $sum_price_percent = ($sum_price/($sum_date*$daily_target))*100; 
+                                        
+                                        <th><?php if ($sum_date > 0) { $sum_price_percent = ($sum_price/($sum_date*$daily_target))*100; }else{ $sum_price_percent = 0; }
                                             echo number_format($sum_price_percent, 2, '.', ',')."%"; ?></th>
+                                        
                                     </tr>
                                 </tfoot>
                             </table>
