@@ -1725,6 +1725,22 @@ function saleorder_rolex_void_borrow()
 		
     redirect('pos/form_list_borrow_item', 'refresh');
 }
+
+function save_edit_remark()
+{
+    $remark = $this->input->post("remark");
+    $posro_id = $this->input->post("posro_id");
+    
+    $pos = array( 'id' => $posro_id,
+                    'posro_remark' => $remark
+            );
+    
+    $last_id = $this->tp_saleorder_model->editPOS_rolex($pos);
+
+    $result = array("b" => $last_id);
+    echo json_encode($result);
+    exit();
+}
     
 }
 ?>

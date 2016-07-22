@@ -46,7 +46,7 @@ function get_Maxnumber_warranty($month, $shop_id)
 
 function get_month_saleperson($where)
 {
-    $this->db->select("SUM(ngw_price) as sum_price, COUNT(ngw_id) as count_gold, COUNT(ngw_customertelephone) as count_customer, ngw_saleperson_id, sale1.sp_barcode as sp_barcode, sale1.sp_firstname as sp_firstname, sale1.sp_lastname as sp_lastname, ngw_saleperson2_id, sale2.sp_barcode as sp_barcode2, sale2.sp_firstname as sp_firstname2, sale2.sp_lastname as sp_lastname2, ngw_issuedate, ngw_shop_id, sh_name, sh_telephone");
+    $this->db->select("SUM(ngw_price) as sum_price, COUNT(ngw_id) as count_gold, COUNT(distinct ngw_customertelephone) as count_customer, ngw_saleperson_id, sale1.sp_barcode as sp_barcode, sale1.sp_firstname as sp_firstname, sale1.sp_lastname as sp_lastname, ngw_saleperson2_id, sale2.sp_barcode as sp_barcode2, sale2.sp_firstname as sp_firstname2, sale2.sp_lastname as sp_lastname2, ngw_issuedate, ngw_shop_id, sh_name, sh_telephone");
     $this->db->from("ngg_gold_warranty");
     $this->db->join("tp_shop", "sh_id = ngw_shop_id", "left");
     $this->db->join("nerd_users", "id = ngw_dateaddby", "left");

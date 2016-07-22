@@ -97,6 +97,7 @@
                         <?php $remark = $loop->posro_remark;
                               $sale_person = $loop->sp_barcode."-".$loop->firstname." ".$loop->lastname;
                               $pos_status = $loop->posro_status;
+                              $posro_id = $loop->posro_id;
                         } ?>
 						<br>
 						<div class="row">
@@ -149,21 +150,22 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm">
-                                    ชื่อ-นามสกุลพนักงานขาย                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>">
+                                    ชื่อ-นามสกุลพนักงานขาย                                    <input type="text" class="form-control" name="salename" id="salename" value="<?php echo $sale_person; ?>" readonly>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group-sm">
                                     Remark
-                                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $remark; ?>">
+                                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $remark; ?>" readonly>
                                 </div>
                             </div>
                         </div>
                         <hr>
                         <div class="row">
-							<div class="col-md-6">
+							<div class="col-md-12">
                                 <a href="<?php echo site_url("sale/saleorder_rolex_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบกำกับภาษี </button></a>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-danger" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบกำกับภาษี (Void) </button>&nbsp;&nbsp;
+                                <button data-toggle="modal" data-target="#myModal" type="button" class="btn btn-warning" name="printbtn" id="printbtn"><i class='fa fa-edit'></i>  แก้ไข Remark </button>
+                                <button type="button" class="btn btn-danger pull-right" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบกำกับภาษี (Void) </button>&nbsp;&nbsp;
                                 <form action="<?php echo site_url("sale/saleorder_rolex_void_pos")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
 							</div>
 						</div>
@@ -174,6 +176,36 @@
             </div></section>
 	</div>
 </div>
+
+<!-- datepicker modal for return status -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_return" aria-hidden="true">
+
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">                        
+                    <i class='fa fa-edit'></i>  แก้ไข Remark 
+                </h4>
+            </div>            <!-- /modal-header -->
+            <div class="modal-body">
+                <div class="row"><div class="col-md-12"><div class="form-group"><label class="col-md-3 control-label" for="remark">Remark</label><br><div class="col-md-12"> <input type="text" class="form-control" id="remark_edit" name="remark_edit" value="<?php echo $remark; ?>" /></div></div> </div>  </div>
+
+            </div>            <!-- /modal-body -->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="edit_remark()"><i class='fa fa-save'></i> บันทึก</button>          
+
+            </div>  
+            </form>                             
+        </div>
+    </div>
+</div>
+
+</div>
+<!-- close modal -->  
+
+
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
@@ -200,6 +232,30 @@ function del_confirm() {
 
 		});
 }
+
+function edit_remark()
+{
+    var remark = $('#remark_edit').val();
+    var posro_id = <?php echo $posro_id; ?>;
+
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("sale/save_edit_remark"); ?>" ,
+        data : {remark: remark, posro_id: posro_id} ,
+        dataType: 'json',
+        success : function(data) {
+            var message = "ทำการบันทึกเรียบร้อยแล้ว";
+            bootbox.alert(message, function() {
+                location.reload();
+            });
+            
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+        }
+    });
+}
+
 </script>
 </body>
 </html>
