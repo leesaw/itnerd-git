@@ -33,10 +33,10 @@
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         เข้าคลัง *
-                                        <select class="form-control" name="whid" id="whid">
+                                        <select class="form-control select2" name="whid" id="whid" style="width: 100%;">
                                             <option value='-1'>-- เลือกคลังสินค้า --</option>
 										<?php 	if(is_array($wh_array)) {
 												foreach($wh_array as $loop){
@@ -158,6 +158,9 @@ var count_list = 0;
 
 $(document).ready(function()
 {    
+    //Initialize Select2 Elements
+    $(".select2").select2();
+    
     get_datepicker("#datein");
     document.getElementById("savebtn").disabled = false;
     

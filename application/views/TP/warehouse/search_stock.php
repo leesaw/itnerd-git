@@ -24,7 +24,7 @@
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("warehouse/showBalance"); ?>" method="post">
-            <div class="col-xs-8 col-md-4">
+            <div class="col-md-4">
                 Ref. Number หรือ Description ที่ต้องการค้นหา
                 <div class="input-group">
                     <input type="text" class="form-control" name="refcode" id="refcode">
@@ -36,10 +36,10 @@
         </div> 
         <br>
         <div class="row">
-            <div class="col-xs-5 col-md-3">
-                เลือกยี่ห้อ
-                <div class="input-group">
-                    <select id="brand" name="brand" class="form-control">
+            <div class="col-md-3">
+                <div class="form-group-sm">
+                    เลือกยี่ห้อ
+                    <select id="brand" name="brand" class="form-control select2" style="width: 100%;">
                         <option value="0" selected>เลือกทั้งหมด</option>
                         <?php foreach($brand_array as $loop) { ?>
                         <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_name; ?></option>
@@ -47,10 +47,11 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-5 col-md-3">
-                เลือก Warehouse
-                <div class="input-group">
-                    <select id="warehouse" name="warehouse" class="form-control">
+            <div class="col-md-5">
+                <div class="form-group">
+                    เลือก Warehouse
+
+                    <select id="warehouse" name="warehouse" class="form-control select2" style="width: 100%;">
                         <option value="0" selected>เลือกทั้งหมด</option>
                         <?php 
                             foreach($whname_array as $loop) { 
@@ -61,13 +62,13 @@
                     </select>
                 </div>
             </div>
-            <div class="col-xs-3 col-md-2">
+            <div class="col-md-2">
                 ราคาต่ำสุด
                 <div class="input-group">
                     <input type="text" class="form-control" name="minprice" id="minprice">
                 </div>
             </div>
-            <div class="col-xs-3 col-md-2">
+            <div class="col-md-2">
                 ราคาสูงสุด
                 <div class="input-group">
                     <input type="text" class="form-control" name="maxprice" id="maxprice">
@@ -185,6 +186,9 @@
     
 $(document).ready(function()
 {    
+    //Initialize Select2 Elements
+    $(".select2").select2();
+
     $('#fancyboxall').fancybox({ 
     'width': '40%',
     'height': '70%', 

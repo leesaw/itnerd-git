@@ -33,10 +33,10 @@
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         สาขาที่ขาย *
-                                        <select class="form-control" name="shopid" id="shopid">
+                                        <select class="form-control select2" name="shopid" id="shopid" style="width: 100%;">
                                             <option value='-1'>-- เลือกสาขา --</option>
 										<?php 	if(is_array($shop_array)) {
 												foreach($shop_array as $loop){
@@ -72,6 +72,9 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
+    //Initialize Select2 Elements
+    $(".select2").select2();
+    
     get_datepicker("#datein");
 
 });

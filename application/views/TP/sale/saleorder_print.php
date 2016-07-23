@@ -20,7 +20,7 @@
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;">ใบสั่งขาย</div></td>
 </tr>
 <tr>
-    <td>เลขที่ <?php echo $so_id; ?><br>สาขาที่ขาย : <?php echo $shop; ?><br>Remark: <?php echo $so_remark; ?></td><td> </td><td> ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่บันทึก : <?php echo $dateadd; ?>
+    <td>สาขาที่ขาย : <?php echo $shop; ?><br>วันที่บันทึก : <?php echo $dateadd; ?><br>Remark: <?php echo $so_remark; ?></td><td> </td><td>เลขที่ <?php echo $so_id; ?><br>ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>วันที่ : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?>
     </td>
 </tr>
 </tbody>

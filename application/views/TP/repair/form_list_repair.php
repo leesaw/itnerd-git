@@ -46,7 +46,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                 ยี่ห้อ
-                <select id="brandid" name="brandid" class="form-control input-sm">
+                <select id="brandid" name="brandid" class="form-control select2" style="width: 100%;">
                     <option value="0" selected>เลือกทั้งหมด</option>
                     <?php foreach($brand_array as $loop) { ?>
                     <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_code."-".$loop->br_name; ?></option>
@@ -58,7 +58,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                 สาขาที่ส่งซ่อม
-                <select class="form-control input-sm" name="shopid" id="shopid">
+                <select class="form-control select2" name="shopid" id="shopid" style="width: 100%;">
                     <option value="0" selected>เลือกทั้งหมด</option>
                 <?php 	if(is_array($shop_array)) {
                         foreach($shop_array as $loop){
@@ -71,7 +71,7 @@
             <div class="col-md-2">
                 <div class="form-group">
                 สถานะการซ่อม
-                <select class="form-control input-sm" name="status" id="status">
+                <select class="form-control select2" name="status" id="status" style="width: 100%;">
                     <option value="0" selected>เลือกทั้งหมด</option>
                     <option value="G">รับเข้าซ่อม</option>
                     <option value="A">ประเมินการซ่อมแล้ว</option>
@@ -186,7 +186,8 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
-
+    //Initialize Select2 Elements
+    $(".select2").select2();
     get_datepicker_month("#month");
 });
 function submit_status(val1)

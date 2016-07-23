@@ -15,6 +15,9 @@
 <script src="<?php echo base_url(); ?>plugins/daterangepicker/daterangepicker.js" type="text/javascript"></script>
     <!-- datepicker -->
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker.js" type="text/javascript"></script>
+<!-- Select2 -->
+<script src="<?php echo base_url(); ?>plugins/select2/select2.full.min.js"></script>
+
 <script type="text/javascript">
 $(function () {
     setNavigation();

@@ -33,10 +33,10 @@
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         ออกจากคลัง *
-                                        <select class="form-control" name="whid_out" id="whid_out">
+                                        <select class="form-control select2" name="whid_out" id="whid_out" style="width: 100%;">
                                             <option value='-1'>-- เลือกคลังสินค้า --</option>
 										<?php 	if(is_array($wh_array)) {
 												foreach($wh_array as $loop){
@@ -48,10 +48,10 @@
                             <div class="col-md-1">
                                 <br><center><i class="fa fa-arrow-right"></i></center>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         เข้าคลัง *
-                                        <select class="form-control" name="whid_in" id="whid_in">
+                                        <select class="form-control select2" name="whid_in" id="whid_in" style="width: 100%;">
                                             <option value='-1'>-- เลือกคลังสินค้า --</option>
 										<?php 	if(is_array($wh_array)) {
 												foreach($wh_array as $loop){
@@ -82,7 +82,8 @@
 $(document).ready(function()
 {    
     get_datepicker("#datein");
-
+    //Initialize Select2 Elements
+    $(".select2").select2();
 });
     
 function get_datepicker(id)
