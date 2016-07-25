@@ -32,7 +32,7 @@
                             <div class="col-md-3">
 									<div class="form-group-sm">
                                         คลังสินค้า
-                                        <select class="form-control select2" name="whid" id="whid" style="width: 100%;">
+                                        <select class="form-control select2" name="whid" id="whid" style="width: 100%;" onchange="showdetail()">
                                             <option value='-1'>-- เลือกคลังสินค้า --</option>
                                         <?php   if(is_array($wh_array)) {
                                                 foreach($wh_array as $loop){
@@ -71,8 +71,8 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                 <br>
-                                <label class="radio-inline"><input type="radio" name="branch" id="branch" value="สำนักงานใหญ่">สำนักงานใหญ่</label>
-                                <label class="radio-inline"><input type="radio" name="branch" id="branch" value="สาขา">สาขาที่ <input type="text" name="txt_branch" id="txt_branch" value="" placeholder="00001"></label>
+                                <label class="radio-inline"><input type="radio" name="branch" id="branch_0" value="0">สำนักงานใหญ่</label>
+                                <label class="radio-inline"><input type="radio" name="branch" id="branch_1" value="-1">สาขาที่ <input type="text" name="branch_number" id="branch_number" value="" placeholder="00001"></label>
                                 </div>
                             </div>
                         </div>
@@ -97,7 +97,7 @@
 									<div class="panel-heading"><div class="input-group input-group col-md-6">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Number">
                                         <div class="input-group-btn">
-                                        <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้าจากเลขใบส่งของ</a>
+                                        <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้าจากเลขที่ใบส่งของ</a>
                                         </div>
                                         <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
@@ -119,7 +119,9 @@
 												</tbody>
                                                 <tfoot>
                                                     <tr style="font-size:200%;" class="text-red">
-                                                        <th colspan="5" style="text-align:right;"><label>ยอดรวม:</th>
+                                                        <th colspan="2" style="text-align:right;"><label>จำนวนรวม:</th>
+                                                        <th><div id="allcount"></div></th>
+                                                        <th colspan="2" style="text-align:right;"><label>ราคารวม:</th>
                                                         <th><div id="summary"></div></th>
                                                     </tr>
                                                 </tfoot>
@@ -139,8 +141,9 @@
                         </div>
                         <hr>
                         <div class="row">
-							<div class="col-md-6">
-								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  ชำระเงิน </button>&nbsp;&nbsp;
+							<div class="col-md-12">
+								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
+                                <a href="<?php echo site_url('tp_invoice/form_new_invoice'); ?>" type="button" class="btn btn-warning" name="resetbtn" id="resetbtn"><i class='fa fa-refresh'></i>  เริ่มใหม่ </a>&nbsp;&nbsp;
 							</div>
 						</div>
 						</form>
@@ -198,17 +201,16 @@ $(document).ready(function()
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
-            var shop_id = document.getElementById("shop_id").value;
             if(product_code_value != "")
 			{
-                check_product_code(product_code_value,shop_id);
+                check_product_code(product_code_value);
 			}
             
             $(this).val('');
             
             setTimeout(function(){
-                calSummary();
-            },100);
+                calculate();
+            },3000);
             //calSummary();
 		}
 	});
@@ -220,13 +222,57 @@ $(document).ready(function()
         }
     });
     
-    
+    $('#barcode').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var barcode = $.trim($(this).val());
+            if(barcode != "")
+            {
+                check_barcode(barcode);
+                calDiscount();
+            }
+
+        }
+    });
 });
+
+function showdetail()
+{
+    var select_value = document.getElementById("whid").value;
+    //alert(select_value);
+    
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("tp_invoice/check_warehouse_detail"); ?>" ,
+        data : {whid: select_value },
+        dataType: 'json',
+        success : function(data) {
+            document.getElementById("cusname").value = data.wh_detail;
+            document.getElementById("cusaddress1").value = data.wh_address1;   
+            document.getElementById("cusaddress2").value = data.wh_address2;  
+            document.getElementById("custax_id").value = data.wh_taxid;   
+            document.getElementById("vender").value = data.wh_vender;
+            if (data.wh_branch == 0) {
+                document.getElementById("branch_0").checked = true;
+            }else if(data.wh_branch > 0) {
+                document.getElementById("branch_1").checked = true;
+                document.getElementById("branch_number").value = ('00000'+data.wh_branch).slice(-5);
+            }else{
+                document.getElementById("branch_0").checked = false;
+                document.getElementById("branch_1").checked = false;
+                document.getElementById("branch_number").value = "";
+            }
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+        }
+    });
+
+}
 
 function check_transfer_number()
 {
     var tb_number = document.getElementById("tb_number").value;
-    alert(tb_number);
+    //alert(tb_number);
 
     $.ajax({
         type : "POST" ,
@@ -234,16 +280,33 @@ function check_transfer_number()
         data : {tb_number: tb_number},
         dataType: 'json',
         success : function(data) {
-            if(data.length > 0)
+            if(data.item.length > 0)
             {
-                for(var i=0; i<data.length; i++) {
-                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                for(var i=0; i<data.item.length; i++) {
+                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data.item[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                     //console.log(element);
                     $('table > tbody').append(element);
                     count_enter_form_input_product++;
                     count_list++;
                 }
                 document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+
+                document.getElementById("cusname").value = data.warehouse.wh_detail;
+                document.getElementById("cusaddress1").value = data.warehouse.wh_address1;   
+                document.getElementById("cusaddress2").value = data.warehouse.wh_address2;  
+                document.getElementById("custax_id").value = data.warehouse.wh_taxid;   
+                document.getElementById("vender").value = data.warehouse.wh_vender;
+                $('#whid').val(data.warehouse.wh_id).change();
+                if (data.warehouse.wh_branch == 0) {
+                    document.getElementById("branch_0").checked = true;
+                }else if(data.warehouse.wh_branch > 0) {
+                    document.getElementById("branch_1").checked = true;
+                    document.getElementById("branch_number").value = ('00000'+data.warehouse.wh_branch).slice(-5);
+                }else{
+                    document.getElementById("branch_0").checked = false;
+                    document.getElementById("branch_1").checked = false;
+                    document.getElementById("branch_number").value = "";
+                }
                 
                 var message = "ทำการนำเข้าข้อมูลเรียบร้อยแล้ว";
                 bootbox.alert(message, function() {
@@ -260,6 +323,10 @@ function check_transfer_number()
             alert("เกิดความผิดพลาด !!!");
         }
     });
+
+    setTimeout(function(){
+                calculate();
+            },3000);
 }
     
 function calSummary() {
@@ -272,6 +339,40 @@ function calSummary() {
     }
     document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 } 
+
+function calDiscount() {
+    var result = 0;
+    var srp = document.getElementsByName('it_srp');
+    var dc = document.getElementsByName('it_discount');
+    var net = document.getElementsByName('it_netprice');
+    var dc_value;
+
+    for(var i=0; i<dc.length; i++) {
+        if (dc[i].value == "") dc_value = 0; 
+        else dc_value = dc[i].value;
+        net[i].value = (parseFloat(srp[i].value.replace(/,/g, '')) * (100 - parseFloat(dc_value))/100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    }
+
+    setTimeout(function(){
+                calculate();
+            },3000);
+    
+} 
+
+function calculate() {
+    var count = 0;
+    var sum = 0;
+    var srp = document.getElementsByName('it_netprice');
+    var qty = document.getElementsByName('it_qty');
+    for(var i=0; i<qty.length; i++) {
+        if (qty[i].value == "") qty[i].value = 0; 
+        count += parseInt(qty[i].value);
+        sum += parseInt(qty[i].value)*parseFloat(srp[i].value.replace(/,/g, ''));
+    }
+    document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+} 
     
 function numberWithCommas(obj) {
 	var x=$(obj).val();
@@ -281,58 +382,69 @@ function numberWithCommas(obj) {
     $(obj).val(parts.join("."));
 }
 
-function check_product_code(refcode_input, shop_id)
+function check_product_code(refcode_input)
 {
 	if(refcode_input != "")
 	{
         $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("sale/check_rolex_serial"); ?>" ,
-            data : {refcode: refcode_input, shop_id: shop_id},
+            url : "<?php echo site_url("tp_invoice/check_item_refcode"); ?>" ,
+            data : {refcode: refcode_input},
+            dataType: 'json',
+            success : function(data) {
+                if(data.length > 0)
+                {
+                    for(var i=0; i<data.length; i++) {
+                        var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                        //console.log(element);
+                        $('table > tbody').append(element);
+                        count_enter_form_input_product++;
+                        count_list++;
+                    }
+                    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                }else{
+                    alert("ไม่พบ Refcode ที่ต้องการ");
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+	}
+    setTimeout(function(){
+                calculate();
+            },3000);
+}
+
+function check_barcode(barcode_input)
+{
+    if(barcode_input != "")
+    {
+        $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("tp_invoice/check_sale_barcode"); ?>" ,
+            data : {barcode: barcode_input},
             success : function(data) {
                 if(data != "")
                 {
-                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><input type="text" name="dc_thb" id="dc_thb" value="0" onChange="numberWithCommas(this); calSummary();"></td><td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
-                    $('table > tbody').append(element);
-                    count_enter_form_input_product++;
-                    count_list++;
-                    document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                    var dc = document.getElementsByName('it_discount');
+
+                    for(var i = 0; i <dc.length; i++) {
+                        dc[i].value = data;
+                    }
+                    calDiscount();
                 }else{
-                    alert("ไม่พบ Serial ที่ต้องการในคลัง");
+                    alert("ไม่พบ Barcode ที่ต้องการ");
                 }
             },
             error: function (textStatus, errorThrown) {
                 alert("เกิดความผิดพลาด !!!");
             }
         });
-	}
-
-}
-    
-function check_saleperson_code(saleperson_id, shop_id)
-{
-	if(saleperson_id != "")
-	{
-        $.ajax({
-            type : "POST" ,
-            dataType: 'json',
-            url : "<?php echo site_url("sale/check_saleperson_rolex"); ?>" ,
-            data : {saleperson_id: saleperson_id, shop_id: shop_id},
-            success : function(data) {
-                if(data.a != "")
-                {
-                    document.getElementById("salename").value = data.a;
-                    document.getElementById("saleperson_code").value = data.b;
-                }else{
-                    alert("ไม่พบรหัสพนักงาน");
-                }
-            },
-            error: function (textStatus, errorThrown) {
-                alert("เกิดความผิดพลาด !!!");
-            }
-        });
-	}
-
+    }
+    setTimeout(function(){
+                calculate();
+            },3000);
 }
 
 function delete_item_row(row1)

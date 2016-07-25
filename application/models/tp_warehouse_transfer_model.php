@@ -184,7 +184,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
     
  function getItem_transfer($where)
  {
-    $this->db->select("stot_datein, stot_number, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE);
+    $this->db->select("stot_datein, stot_number, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out, wh1.wh_id as wh_out_id, wh2.wh_id as wh_in_id", FALSE);
     $this->db->from('log_stock_transfer');
     $this->db->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left');
     $this->db->join('tp_item', 'it_id = log_stot_item_id','left');
