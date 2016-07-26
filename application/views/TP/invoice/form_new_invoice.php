@@ -23,11 +23,10 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <form action="<?php echo site_url("tp_invoice/save_new_invoice"); ?>" name="form1" id="form1" method="post">
-                                    <div class="form-group-sm">
-                                            วันที่ขาย
-                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
-                                    </div>
+                                <div class="form-group-sm">
+                                        วันที่ออกใบ Invoice
+                                        <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
+                                </div>
 							</div>
                             <div class="col-md-3">
 									<div class="form-group-sm">
@@ -146,8 +145,6 @@
                                 <a href="<?php echo site_url('tp_invoice/form_new_invoice'); ?>" type="button" class="btn btn-warning" name="resetbtn" id="resetbtn"><i class='fa fa-refresh'></i>  เริ่มใหม่ </a>&nbsp;&nbsp;
 							</div>
 						</div>
-						</form>
-
 					</div>
 				</div>
 			</div>	
@@ -185,7 +182,7 @@
 
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
-<script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>></script>
+<script src="<?php echo base_url(); ?>js/bootbox.min.js"></script></script>
 <script type="text/javascript">
 
 var count_enter_form_input_product = 0;
@@ -195,6 +192,7 @@ $(document).ready(function()
 {    
     //Initialize Select2 Elements
     $(".select2").select2();
+    get_datepicker("#datein");
     
     document.getElementById("savebtn").disabled = false;
     
@@ -234,6 +232,12 @@ $(document).ready(function()
         }
     });
 });
+
+function get_datepicker(id)
+{
+    $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
+}
 
 function showdetail()
 {
@@ -459,28 +463,32 @@ function delete_item_row(row1)
     
 function submitform()
 {
-    var cusname = document.getElementById('cusname').value;
-    var cusaddress = document.getElementById('cusaddress').value;
-    var custax_id = document.getElementById('custax_id').value;
-    var custelephone = document.getElementById('custelephone').value;
     var datein = document.getElementById('datein').value;
-    var saleperson_name = document.getElementById('salename').value;
-    var saleperson_code = document.getElementById('saleperson_code').value;
-    var itse_id = document.getElementsByName('itse_id');
+    var cusname = document.getElementById('cusname').value;
+    var cusaddress = document.getElementById('cusaddress1').value;
+    var custax_id = document.getElementById('custax_id').value;
+
+    var branch = $('input[name="branch"]:checked').val();
+    var wh_id = document.getElementById("whid").value;
+    var branch_number = document.getElementById('branch_number').value;
+    var it_id = document.getElementsByName('it_id');
+        
     if (datein == "") {
-        alert("กรุณาใส่วันที่ขาย");
-    }else if (itse_id.length < 1) {
-        alert("กรุณาใส่สินค้าที่ขาย");
+        alert("กรุณาใส่วันที่ออกใบ Invoice");
+    }else if (wh_id == -1) {
+        alert("กรุณาใส่เลือกคลังสินค้า");
+    }else if (it_id.length < 1) {
+        alert("กรุณาใส่รายการสินค้า");
     }else if (cusname == "") {
-        alert("กรุณาใส่ชื่อลูกค้า");
+        alert("กรุณาใส่นามผู้ซื้อ");
     }else if (cusaddress == "") {
-        alert("กรุณาใส่ที่อยู่ลูกค้า");
+        alert("กรุณาใส่ที่อยู่ผู้ซื้อ");
     }else if (custax_id == "") {
-        alert("กรุณาใส่เลขประจำตัวผู้เสียภาษีลูกค้า");
-    }else if (custelephone == "") {
-        alert("กรุณาใส่เบอร์ติดต่อลูกค้า");
-    }else if (saleperson_name == "" || saleperson_code =="") {
-        alert("กรุณาใส่รหัสพนักงานขาย");
+        alert("กรุณาใส่เลขประจำตัวผู้เสียภาษีผู้ซื้อ");
+    }else if (branch != 0 && branch != -1 ) {
+        alert("กรุณาเลือกสำนักงานใหญ่ หรือ สาขาที่");
+    }else if (branch == -1 && branch_number =="") {
+        alert("กรุณาใส่เลขที่สาขา");
     }else{
         var r = confirm("ยืนยันการขาย !!");
         if (r == true) {
@@ -493,65 +501,50 @@ function confirmform()
 {
     
     var cusname = document.getElementById('cusname').value;
-    var cusaddress = document.getElementById('cusaddress').value;
+    var cusaddress1 = document.getElementById('cusaddress1').value;
+    var cusaddress2 = document.getElementById('cusaddress2').value;
     var custax_id = document.getElementById('custax_id').value;
-    var cuspassport = document.getElementById('cuspassport').value;
-    var custelephone = document.getElementById('custelephone').value;
-    var refund = $('input[name="vat_refund"]:checked').val();
-    var payment = document.getElementById('payment').value;
-    var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
+    var branch = $('input[name="branch"]:checked').val();
+    var branch_number = document.getElementById('branch_number').value;
+
     var remark = document.getElementById('remark').value;
     
-    var shop_id = document.getElementById('shop_id').value;
+    var wh_id = document.getElementById("whid").value;
     var datein = document.getElementById('datein').value;
-    var saleperson_code = document.getElementById('saleperson_code').value;
+    var vender = document.getElementById('vender').value;
+    var barcode = document.getElementById('barcode').value;
     
-    var itse_id = document.getElementsByName('itse_id');
-    var stob_id = document.getElementsByName('stob_id');
     var it_id = document.getElementsByName('it_id');
+    var it_refcode = document.getElementsByName('it_refcode');
+    var it_brand = document.getElementsByName('br_name');
     var it_srp = document.getElementsByName('it_srp');
-    var dc_thb = document.getElementsByName('dc_thb');
+    var it_dc = document.getElementsByName('it_discount');
+    var it_net = document.getElementsByName('it_netprice');
+    var it_qty = document.getElementsByName('it_qty');
     var it_array = new Array();
-    var checked = 0;
     var index = 0;
 
     for(var i=0; i<it_id.length; i++){
-        for(var j=0; j<index; j++) {
-            if (it_id[i].value == it_array[j]['id']) {
-                //it_array[j]['qty'] = parseInt(it_array[j]['qty']) + 1;
-                
-                if (itse_id[i].value == it_array[j]['itse_id']) {
-                    alert("Serial ซ้ำกัน");
-                    return;
-                }
-                //checked++;
-            }
-
-        }
-        if (checked==0) {
-            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, dc_thb:(dc_thb[i].value).replace(/,/g, ''), it_srp:it_srp[i].value};
-            index++;
-        }else{
-            checked = 0;
-        }
+        it_array[index] = {id: it_id[i].value, refcode: it_refcode[i].value, brand: it_brand[i].value, qty: it_qty[i].value, dc: (it_dc[i].value).replace(/,/g, ''), net: (it_net[i].value).replace(/,/g, ''), srp: it_srp[i].value};
+        index++;
     }
     
     document.getElementById("savebtn").disabled = true;
     
     $.ajax({
         type : "POST" ,
-        url : "<?php echo site_url("sale/saleorder_rolex_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, item: it_array, cusname: cusname, cusaddress: cusaddress, custax_id: custax_id, cuspassport: cuspassport, custelephone: custelephone, refund: refund, payment: payment, payment_value: payment_value, saleperson_code:saleperson_code, remark: remark} ,
+        url : "<?php echo site_url("tp_invoice/save_new_invoice"); ?>" ,
+        data : {datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, remark: remark} ,
         dataType: 'json',
         success : function(data) {
-            var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
+            var message = "เอกสาร Invoice เลขที่ "+data.a+" ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
             bootbox.confirm(message, function(result) {
                     var currentForm = this;
                     if (result) {
-                        window.open("<?php echo site_url("sale/saleorder_rolex_print"); ?>"+"/"+data.b, "_blank");
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                        window.open("<?php echo site_url("tp_invoice/print_invoice"); ?>"+"/"+data.b, "_blank");
+                        window.location = "<?php echo site_url("tp_invoice/view_invoice"); ?>/"+data.b;
                     }else{
-                        window.location = "<?php echo site_url("sale/saleorder_rolex_pos_last"); ?>/"+data.b;
+                        window.location = "<?php echo site_url("tp_invoice/view_invoice"); ?>/"+data.b;
                     }
 
             });

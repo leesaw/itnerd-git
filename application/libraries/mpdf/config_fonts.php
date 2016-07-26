@@ -144,10 +144,10 @@ $this->fontdata = array(
 		),
 		
 	"thsaraban" => array(
-        'R' => "THSaraban.ttf",
-        'B' => "THSaraban-Bold.ttf",
-        'I'  => "THSaraban-Italic.ttf",
-        'BI'   =>  "THSaraban-BoldItalic.ttf"
+        'R' => "Angsa.ttf",
+        'B' => "Angsab.ttf",
+        'I'  => "Angsai.ttf",
+        'BI'   =>  "Angsabi.ttf"
         ),
     
     "ffdin" => array(
@@ -163,12 +163,14 @@ $this->fontdata = array(
         'I'  => "Angsai.ttf",
         'BI'   =>  "Angsabi.ttf"
         ),
+
     "dbth" => array(
         'R' => "DBHelvethaicaR.ttf",
         'B' => "DBHelvethaicaB.ttf",
         'I'  => "DBHelvethaicaI.ttf",
         'BI'   =>  "DBHelvethaicaBI.ttf"
         ),
+
 
 /* Indic fonts */
 	"ind_bn_1_001" => array(

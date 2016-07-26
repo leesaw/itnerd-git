@@ -4,9 +4,9 @@ Class Tp_invoice_model extends CI_Model
 
 function get_invoice_detail($where)
 {
-	$this->db->select("inv_id, inv_issuedate, inv_number, inv_shop_id, sh_name, sh_detail, sh_address, sh_number, sh_tax, inv_vender, inv_barcode, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, inv_enable");
+	$this->db->select("inv_id, inv_issuedate, inv_number, inv_warehouse_id, wh_code, wh_name, inv_warehouse_detail, inv_warehouse_address1, inv_warehouse_address2, inv_warehouse_taxid, inv_warehouse_branch, inv_vender, inv_barcode, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, inv_enable");
 	$this->db->from("tp_invoice");
-	$this->db->join("tp_shop", "sh_id = inv_shop_id", "left");
+	$this->db->join("tp_warehouse", "wh_id = inv_warehouse_id", "left");
 	if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
 	return $query->result();
@@ -21,6 +21,19 @@ function get_invoice_item($where)
 	if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
 	return $query->result();
+}
+
+function get_max_number($month)
+{
+	$start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    $this->db->select("inv_id");
+	$this->db->from('tp_invoice');
+    $this->db->where("inv_issuedate >=",$start);
+    $this->db->where("inv_issuedate <=",$end);
+    $this->db->where("inv_enable", 1);
+	$query = $this->db->get();		
+	return $query->num_rows();
 }
 
 function add_invoice_detail($insert=NULL)
