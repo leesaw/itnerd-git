@@ -9,9 +9,9 @@
 <tr>
 <td width="35"> </td>
 <td width="400">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
 </td> 
-<?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; 
+<?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $note=$loop->inv_note; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; 
 if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงานใหญ่"; $mainbranch=1; }else{ $cusbranch = "สาขาที่ ".str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); $mainbranch=0; $branch_number=str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); } } 
 
  $GGyear=substr($datetime,0,4); 
@@ -25,10 +25,9 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 </tr>
 </tbody>
 </table>
-<br>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td height="5"></td><td></td><td></td><td></td><td></td></tr>
+<tr><td height="12"></td><td></td><td></td><td></td><td></td></tr>
 <tr><td width="250"></td><td width="200"><?php echo $custaxid; ?></td><td><?php echo $GGdate."/".$GGmonth."/".$GGyear; ?></td><td width="120"></td><td><?php echo $number; ?></td></tr>
 <tr><td height="10"></td><td></td><td></td><td></td><td></td></tr>
 </tbody>
@@ -44,26 +43,30 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 </table>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td width="8"></td><td width="20"><?php if ($mainbranch==1) echo $checkmark; ?></td><td width="70"></td><td width="8"></td><td><?php if ($mainbranch==0) echo $checkmark; ?></td><td width="60"></td><td><?php if ($mainbranch==0) echo $branch_number; ?></td></tr>
-<tr><td colspan="7" height="120"></td></tr>
+<tr><td width="8"></td><td width="20"><?php if ($mainbranch==1) echo $checkmark; ?></td><td width="75"></td><td width="8"></td><td><?php if ($mainbranch==0) echo $checkmark; ?></td><td width="60"></td><td width="280"><?php if ($mainbranch==0) echo $branch_number; ?></td><td><?php echo $note; ?></td></tr>
+<?php if (($mainbranch==1)&&($note=="")) { ?>
+<tr><td colspan="8" height="120"></td></tr>
+<?php }else{ ?>
+<tr><td colspan="8" height="115"></td></tr>
+<?php } ?>
 </tbody>
 </table>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td width="10"></td><td width="120"></td><td width="270"></td><td width="90"></td><td width="90"></td><td width="80"></td><td width="80"></td></tr>
-<?php $no=1; $page_no = 0; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
-?>
-<tr style="border:0px solid black;"><td></td>
-<td align="left" valign="top" width="25"><?php echo $loop->invit_refcode; ?></td>
-<td style="border-left:0px solid black;" align="left" valign="top"><?php echo strtoupper($loop->invit_brand); ?></td>
-<td align="center" style="border-left:0px solid black;" valign="top"><?php echo $loop->invit_qty; ?></td>
-<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_srp, 2, ".", ","); ?></td>
-<td align="center" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_discount); ?> %</td>
-<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_netprice, 2, ".", ",")."&nbsp;&nbsp;"; $sum += $loop->invit_netprice; ?></td>
-</tr>
-<?php $no++; 
+<tr><td width="10"></td><td width="110"></td><td width="300"></td><td width="80"></td><td width="80"></td><td width="70"></td><td width="100"></td></tr>
+<!--
+<tr><td width="10" style="border-right:1px solid black;"></td><td width="110" style="border-right:1px solid black;"></td><td width="300" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="70" style="border-right:1px solid black;"></td><td width="100" style="border-right:1px solid black;"></td></tr>
+-->
+<?php $no=0; $page_no = 0; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
 
-if ($no >10) { $no=1; $page_no++; ?>
+// start pagebreak
+if (($no >=10)) { 
+	if (($page_no != $totalpage-1) || ($lastpage!=1) || ($no > 11)) {
+		$page_no++; 
+	
+
+	
+?>
 <tr><td height="20" colspan="7"></td></tr>
 
 <tr ><td></td><td align="center" valign="top"></td>
@@ -74,15 +77,15 @@ if ($no >10) { $no=1; $page_no++; ?>
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><?php echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?></td>
+<td align="center" valign="top"><b><?php echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><?php echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?></td>
-<td align="center" valign="top"></td>
+<td align="center" valign="top"><b><?php echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?></b></td>
+<td align="center" valign="top"><b><?php echo $sum_qty; $sum_qty=0; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
@@ -110,26 +113,15 @@ if ($no >10) { $no=1; $page_no++; ?>
 <tr>
 <td width="35"> </td>
 <td width="400">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 16pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
 </td> 
-<?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; 
-if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงานใหญ่"; $mainbranch=1; }else{ $cusbranch = "สาขาที่ ".str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); $mainbranch=0; $branch_number=str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); } } 
-
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
-
- $checkmark = '<img src="'.base_url().'dist/img/checkmark.png" width="15px" />';
-?>
-
     <td width="250" style="text-align: right;"></td>
 </tr>
 </tbody>
 </table>
-<br>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td height="5"></td><td></td><td></td><td></td><td></td></tr>
+<tr><td height="12"></td><td></td><td></td><td></td><td></td></tr>
 <tr><td width="250"></td><td width="200"><?php echo $custaxid; ?></td><td><?php echo $GGdate."/".$GGmonth."/".$GGyear; ?></td><td width="120"></td><td><?php echo $number; ?></td></tr>
 <tr><td height="10"></td><td></td><td></td><td></td><td></td></tr>
 </tbody>
@@ -145,24 +137,47 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 </table>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td width="8"></td><td width="20"><?php if ($mainbranch==1) echo $checkmark; ?></td><td width="70"></td><td width="8"></td><td><?php if ($mainbranch==0) echo $checkmark; ?></td><td width="60"></td><td><?php if ($mainbranch==0) echo $branch_number; ?></td></tr>
+<tr><td width="8"></td><td width="20"><?php if ($mainbranch==1) echo $checkmark; ?></td><td width="75"></td><td width="8"></td><td><?php if ($mainbranch==0) echo $checkmark; ?></td><td width="60"></td><td width="280"><?php if ($mainbranch==0) echo $branch_number; ?></td><td><?php echo $note; ?></td></tr>
+<?php if (($mainbranch==1)&&($note=="")) { ?>
 <tr><td colspan="7" height="120"></td></tr>
+<?php }else{ ?>
+<tr><td colspan="7" height="115"></td></tr>
+<?php } ?>
 </tbody>
 </table>
 
 <table style="border:0px solid black; border-spacing:0px 0px;">
-<tr><td width="10"></td><td width="120"></td><td width="270"></td><td width="90"></td><td width="90"></td><td width="80"></td><td width="80"></td></tr>
+<tr><td width="10"></td><td width="110"></td><td width="300"></td><td width="80"></td><td width="80"></td><td width="70"></td><td width="100"></td></tr>
+<!--
+<tr><td width="10" style="border-right:1px solid black;"></td><td width="110" style="border-right:1px solid black;"></td><td width="300" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="70" style="border-right:1px solid black;"></td><td width="100" style="border-right:1px solid black;"></td></tr>
+-->
 <?php
-}
+ $no=0; 
+} }
 
+// end pagebreak
+?>
+
+<tr style="border:0px solid black;"><td></td>
+<td align="left" valign="top" width="25"><?php echo $loop->invit_refcode; ?></td>
+<td style="border-left:0px solid black;" align="left" valign="top"><?php echo strtoupper($loop->invit_brand); ?></td>
+<td align="center" style="border-left:0px solid black;" valign="top"><?php echo $loop->invit_qty; $sum_qty+=$loop->invit_qty; ?></td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_srp, 2, ".", ","); ?></td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_discount); ?> %</td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_netprice*$loop->invit_qty, 2, ".", ",")."&nbsp;&nbsp;"; $sum += ($loop->invit_netprice*$loop->invit_qty); ?></td>
+</tr>
+<?php $no++; 
 
 } } $page_no++;  ?> 
 
-<?php if ($no<=10) {  ?>
-<tr><td height="20" colspan="7"> &nbsp;</td></tr>
-<?php  } ?>
+<?php if ($no<10) { for($i=10-$no; $i>0; $i--) { ?> 
+<tr><td colspan="7" > &nbsp;</td></tr>
+<?php  } } 
 
-
+if ($lastpage!=1) {
+?>
+<tr><td height="20" colspan="7"></td></tr>
+<?php } ?>
 
 <tr ><td></td><td align="center" valign="top"></td>
 <td align="center" valign="top"><?php echo "หน้าที่ ".$page_no." / ".$totalpage; ?></td>
@@ -172,20 +187,25 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><?php echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?></td>
+<td align="center" valign="top"><b><?php echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><?php echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?></td>
-<td align="center" valign="top"></td>
+<td align="center" valign="top"><b><?php echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?></b></td>
+<td align="center" valign="top"><b><?php echo $sum_qty; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
+<?php if ($lastpage!=1) {
+?>
 <tr><td height="60" colspan="7"></td></tr>
+<?php }else{ ?>
+<tr><td height="55" colspan="7"></td></tr>
+<?php } ?>
 </tbody>
 <tbody>
 <tr><td></td>
@@ -193,11 +213,11 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 </tr>
 <tr><td></td><td colspan="6" height="10"></td></tr>
 <tr><td></td>
-<td align="right" colspan=5 scope="row"><div style="font-size: 16pt;">7%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07, 2, '.', ','); ?></div></td>
+<td align="right" colspan=5 scope="row"><div style="font-size: 16pt;">7%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07*0.07, 2, '.', ','); ?></div></td>
 </tr>
 <tr><td></td>
 <td height="40" align="left" colspan="3" scope="row"><div style="font-size: 16pt;"><?php echo num2thai($sum); ?></div></td>
-<td align="right" colspan=2 scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07, 2, '.', ','); ?></div></td>
+<td align="right" colspan=2 scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum, 2, '.', ','); ?></div></td>
 </tr>
 </tbody>
 <?php

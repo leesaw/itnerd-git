@@ -11,9 +11,40 @@
         <div class="content-wrapper">
         <section class="content-header">
             
-            <h1>ออกใบ Invoice</h1>
+            <h1>แก้ไขใบ Invoice</h1>
         </section>
-            
+<?php 
+    foreach($inv_array as $loop) {
+        $inv_id = $loop->inv_id;
+        $inv_datein = $loop->inv_issuedate;
+        $inv_number = $loop->inv_number;
+        $datein_array = explode("-",$inv_datein);
+        $inv_datein = $datein_array[2]."/".$datein_array[1]."/".$datein_array[0];
+        $inv_warehouse_id = $loop->inv_warehouse_id;
+        $inv_whname = $loop->wh_code."-".$loop->wh_name;
+        $inv_cusname = $loop->inv_warehouse_detail;
+        $inv_address1 = $loop->inv_warehouse_address1;
+        $inv_address2 = $loop->inv_warehouse_address2;
+        $inv_taxid = $loop->inv_warehouse_taxid;
+        $inv_branch_number = $loop->inv_warehouse_branch;
+        $inv_branch = $loop->inv_warehouse_branch;
+        if ($inv_branch == 0) {
+            $inv_branch = "สำนักงานใหญ่";
+        }else{
+            $inv_branch = str_pad($inv_branch, 5, '0', STR_PAD_LEFT);
+        }
+
+        $inv_vender = $loop->inv_vender;
+        $inv_barcode = $loop->inv_barcode;
+        $inv_stot_number = $loop->inv_stot_number;
+        $inv_stot_id = $loop->inv_stot_id;
+        $inv_srp_discount = $loop->inv_srp_discount;
+        $inv_note = $loop->inv_note;
+        $inv_dateadd = $loop->inv_dateadd;
+        $inv_remark = $loop->inv_remark;
+        $inv_enable = $loop->inv_enable;
+    }
+?>
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
@@ -25,17 +56,27 @@
                             <div class="col-md-2">
                                 <div class="form-group-sm">
                                         วันที่ออกใบ Invoice
-                                        <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
+                                        <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $inv_datein; ?>">
                                 </div>
-							</div>
-                            <div class="col-md-3">
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group-sm">
+                                        เลขที่ Invoice
+                                        <input type="text" class="form-control" name="number" id="number" value="<?php echo $inv_number; ?>" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         คลังสินค้า
                                         <select class="form-control select2" name="whid" id="whid" style="width: 100%;" onchange="showdetail()">
                                             <option value='-1'>-- เลือกคลังสินค้า --</option>
                                         <?php   if(is_array($wh_array)) {
                                                 foreach($wh_array as $loop){
-                                                    echo "<option value='".$loop->wh_id."'>".$loop->wh_code."-".$loop->wh_name."</option>";
+                                                    echo "<option value='".$loop->wh_id."'";
+                                                    if ($loop->wh_id == $inv_warehouse_id) echo " selected";
+                                                    echo ">".$loop->wh_code."-".$loop->wh_name."</option>";
                                          } } ?>
                                         </select>
                                     </div>
@@ -43,13 +84,13 @@
                             <div class="col-md-4">
                                 <div class="form-group-sm">
                                     นามผู้ซื้อ *
-                                    <input type="text" class="form-control" name="cusname" id="cusname" value="">
+                                    <input type="text" class="form-control" name="cusname" id="cusname" value="<?php echo $inv_cusname; ?>">
                                 </div>
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group-sm">
                                     เลขประจำตัวผู้เสียภาษี *
-                                    <input type="text" class="form-control" name="custax_id" id="custax_id" value="">
+                                    <input type="text" class="form-control" name="custax_id" id="custax_id" value="<?php echo $inv_taxid; ?>">
                                 </div>
                             </div>
 						</div>
@@ -58,20 +99,20 @@
                             <div class="col-md-4">
                                 <div class="form-group-sm">
                                     ที่อยู่ผู้ซื้อ แถวที่ 1 *
-                                    <input type="text" class="form-control" name="cusaddress1" id="cusaddress1" value="">
+                                    <input type="text" class="form-control" name="cusaddress1" id="cusaddress1" value="<?php echo $inv_address1; ?>">
                                 </div>
 							</div>
                             <div class="col-md-4">
                                 <div class="form-group-sm">
                                     ที่อยู่ผู้ซื้อ แถวที่ 2 *
-                                    <input type="text" class="form-control" name="cusaddress2" id="cusaddress2" value="">
+                                    <input type="text" class="form-control" name="cusaddress2" id="cusaddress2" value="<?php echo $inv_address2; ?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                 <br>
-                                <label class="radio-inline"><input type="radio" name="branch" id="branch_0" value="0">สำนักงานใหญ่</label>
-                                <label class="radio-inline"><input type="radio" name="branch" id="branch_1" value="-1">สาขาที่ <input type="text" name="branch_number" id="branch_number" value="" placeholder="00001"></label>
+                                <label class="radio-inline"><input type="radio" name="branch" id="branch_0" value="0"<?php if ($inv_branch==0) echo " checked"; ?>>สำนักงานใหญ่</label>
+                                <label class="radio-inline"><input type="radio" name="branch" id="branch_1" value="-1"<?php if ($inv_branch_number>0) echo " checked"; ?>>สาขาที่ <input type="text" name="branch_number" id="branch_number" value="<?php if ($inv_branch_number>0) echo $inv_branch; ?>" placeholder="00001"></label>
                                 </div>
                             </div>
                         </div>
@@ -79,32 +120,32 @@
                             <div class="col-md-2">
                                 <div class="form-group-sm">
                                     Vender Code
-                                    <input type="text" class="form-control" name="vender" id="vender" value="">
+                                    <input type="text" class="form-control" name="vender" id="vender" value="<?php echo $inv_vender; ?>">
                                 </div>
 							</div>
                             <div class="col-md-2">
                                 <div class="form-group-sm">
                                     Barcode
-                                    <input type="text" class="form-control" name="barcode" id="barcode" value="">
+                                    <input type="text" class="form-control" name="barcode" id="barcode" value="<?php echo $inv_barcode; ?>">
                                 </div>
 							</div>
                             <div class="col-md-2">
                                 <div class="form-group-sm">
                                     เลขที่ใบส่งของอ้างอิง
-                                    <input type="text" class="form-control" name="tb_number_input" id="tb_number_input" value="">
-                                    <input type="hidden" class="form-control" name="stot_id" id="stot_id" value="0">
+                                    <input type="text" class="form-control" name="tb_number_input" id="tb_number_input" value="<?php echo $inv_stot_number; ?>">
+                                    <input type="hidden" class="form-control" name="stot_id" id="stot_id" value="<?php echo $inv_stot_id; ?>">
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group-sm">
                                     ส่วนลดราคาป้าย %
-                                    <input type="text" class="form-control" name="discount_srp" id="discount_srp" value="">
+                                    <input type="text" class="form-control" name="discount_srp" id="discount_srp" value="<?php echo number_format($inv_srp_discount); ?>">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group-sm">
                                     หมายเหตุ
-                                    <input type="text" class="form-control" name="note" id="note" value="" maxlength="45">
+                                    <input type="text" class="form-control" name="note" id="note" value="<?php echo $inv_note; ?>" maxlength="45">
                                 </div>
                             </div>
                         </div>
@@ -155,7 +196,7 @@
                             <div class="col-md-6">
                                 <div class="form-group-sm">
                                     Remark
-                                    <input type="text" class="form-control" name="remark" id="remark" value="">
+                                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $inv_remark; ?>">
                                 </div>
                             </div>
                         </div>
@@ -163,7 +204,7 @@
                         <div class="row">
 							<div class="col-md-12">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
-                                <a href="<?php echo site_url('tp_invoice/form_new_invoice'); ?>" type="button" class="btn btn-warning" name="resetbtn" id="resetbtn"><i class='fa fa-refresh'></i>  ยกเลิก </a>&nbsp;&nbsp;
+                                <a href="<?php echo site_url('tp_invoice/view_invoice').'/'.$inv_id; ?>" type="button" class="btn btn-warning" name="resetbtn" id="resetbtn"><i class='fa fa-refresh'></i>  ยกเลิก </a>&nbsp;&nbsp;
 							</div>
 						</div>
 					</div>
@@ -214,8 +255,12 @@ $(document).ready(function()
     //Initialize Select2 Elements
     $(".select2").select2();
     get_datepicker("#datein");
+
+    start_get_invoice_item();
     
     document.getElementById("savebtn").disabled = false;
+
+
     
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
@@ -309,6 +354,44 @@ function showdetail()
         }
     });
 
+}
+
+function start_get_invoice_item()
+{
+    var inv_id = <?php echo $inv_id; ?>;
+    var dc1 = document.getElementById("discount_srp").value;
+
+    $.ajax({
+        type : "POST" ,
+        url : "<?php echo site_url("tp_invoice/get_invoice_item"); ?>" ,
+        data : {inv_id: inv_id, dc1: dc1},
+        dataType: 'json',
+        success : function(data) {
+            if(data.length > 0)
+            {
+                for(var i=0; i<data.length; i++) {
+                    var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+                    //console.log(element);
+                    $('table > tbody').append(element);
+                    count_enter_form_input_product++;
+                    count_list++;
+                }
+                document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+                
+            }else{
+                alert("ไม่พบสินค้าใน Invoice");
+            }
+
+
+        },
+        error: function (textStatus, errorThrown) {
+            alert("เกิดความผิดพลาด !!!");
+        }
+    });
+
+    setTimeout(function(){
+                calculate();
+            },3000);
 }
 
 function check_transfer_number()
@@ -451,8 +534,8 @@ function numberWithCommas(obj) {
 
 function check_product_code(refcode_input)
 {
-	if(refcode_input != "")
-	{
+    if(refcode_input != "")
+    {
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("tp_invoice/check_item_refcode"); ?>" ,
@@ -477,7 +560,7 @@ function check_product_code(refcode_input)
                 alert("เกิดความผิดพลาด !!!");
             }
         });
-	}
+    }
     setTimeout(function(){
                 calculate();
             },3000);
@@ -526,6 +609,7 @@ function delete_item_row(row1)
     
 function submitform()
 {
+
     var datein = document.getElementById('datein').value;
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress1').value;
@@ -538,7 +622,7 @@ function submitform()
     var it_dc = document.getElementsByName('it_discount');
     var it_net = document.getElementsByName('it_netprice');
     var it_qty = document.getElementsByName('it_qty');
-        
+
     if (datein == "") {
         alert("กรุณาใส่วันที่ออกใบ Invoice");
         document.getElementById('datein').focus(); 
@@ -595,7 +679,7 @@ function submitform()
 
 function confirmform()
 {
-    
+    var inv_id = <?php echo $inv_id; ?>;
     var cusname = document.getElementById('cusname').value;
     var cusaddress1 = document.getElementById('cusaddress1').value;
     var cusaddress2 = document.getElementById('cusaddress2').value;
@@ -634,8 +718,8 @@ function confirmform()
     
     $.ajax({
         type : "POST" ,
-        url : "<?php echo site_url("tp_invoice/save_new_invoice"); ?>" ,
-        data : {datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
+        url : "<?php echo site_url("tp_invoice/save_edit_invoice"); ?>" ,
+        data : {inv_id: inv_id, datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "เอกสาร Invoice เลขที่ "+data.a+" ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";

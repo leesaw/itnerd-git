@@ -1104,7 +1104,7 @@ function transferstock_history()
     $sql = $this->no_rolex;
     $this->load->model('tp_item_model','',TRUE);
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
-    $sql = "wh_enable = '1'";
+    $sql = "";
     $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
     
     $data['title'] = "Nerd - Report Transfer Stock";

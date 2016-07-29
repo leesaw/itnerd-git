@@ -4,7 +4,7 @@ Class Tp_invoice_model extends CI_Model
 
 function get_invoice_detail($where)
 {
-	$this->db->select("inv_id, inv_issuedate, inv_number, inv_warehouse_id, wh_code, wh_name, inv_warehouse_detail, inv_warehouse_address1, inv_warehouse_address2, inv_warehouse_taxid, inv_warehouse_branch, inv_vender, inv_barcode, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, inv_enable");
+	$this->db->select("inv_id, inv_issuedate, inv_number, inv_warehouse_id, wh_code, wh_name, inv_warehouse_detail, inv_warehouse_address1, inv_warehouse_address2, inv_warehouse_taxid, inv_warehouse_branch, inv_vender, inv_barcode, inv_stot_number, inv_stot_id, inv_srp_discount, inv_note, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, inv_enable");
 	$this->db->from("tp_invoice");
 	$this->db->join("tp_warehouse", "wh_id = inv_warehouse_id", "left");
 	if ($where != "") $this->db->where($where);
@@ -50,16 +50,16 @@ function add_invoice_item($insert=NULL)
 
 function edit_invoice_detail($edit=NULL)
 {
-    $this->db->where('inv_id', $edit['inv_id']);
-    unset($edit['inv_id']);
+    $this->db->where('inv_id', $edit['id']);
+    unset($edit['id']);
     $query = $this->db->update('tp_invoice', $edit); 	
     return $query;
 }
 
 function edit_invoice_item($edit=NULL)
 {
-    $this->db->where('invit_id', $edit['invit_id']);
-    unset($edit['invit_id']);
+    $this->db->where('invit_id', $edit['id']);
+    unset($edit['id']);
     $query = $this->db->update('tp_invoice_item', $edit); 	
     return $query;
 }

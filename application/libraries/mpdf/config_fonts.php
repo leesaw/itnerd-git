@@ -144,10 +144,10 @@ $this->fontdata = array(
 		),
 		
 	"thsaraban" => array(
-        'R' => "Angsa.ttf",
-        'B' => "Angsab.ttf",
-        'I'  => "Angsai.ttf",
-        'BI'   =>  "Angsabi.ttf"
+        'R' => "THSaraban.ttf",
+        'B' => "THSaraban-Bold.ttf",
+        'I'  => "THSaraban-Italic.ttf",
+        'BI'   =>  "THSaraban-BoldItalic.ttf"
         ),
     
     "ffdin" => array(
