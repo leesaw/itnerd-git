@@ -40,6 +40,8 @@
         $inv_dateadd = $loop->inv_dateadd;
         $inv_remark = $loop->inv_remark;
         $inv_enable = $loop->inv_enable;
+
+        $editor_view = $loop->firstname." ".$loop->lastname." ".$loop->inv_dateadd;
     }
 ?>
 		<section class="content">
@@ -183,6 +185,12 @@
                                 <div class="form-group-sm">
                                     Remark
                                     <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $inv_remark; ?>" readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    แก้ไขล่าสุด
+                                    <input type="text" class="form-control" name="editor" id="editor" value="<?php echo $editor_view; ?>" readonly>
                                 </div>
                             </div>
                         </div>

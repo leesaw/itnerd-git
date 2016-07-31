@@ -287,7 +287,7 @@ function print_invoice()
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/invoice/print_invoice_noline", $data, TRUE));
-    $mpdf->Output('Invoice_'.$datetime.'.pdf','D');
+    $mpdf->Output('Invoice_'.$datetime.'.pdf','I');
 }
 
 function void_invoice()
@@ -344,6 +344,7 @@ function save_edit_invoice()
 {
     $inv_id = $this->input->post("inv_id");
     $datein = $this->input->post("datein");
+    $number = $this->input->post("number");
     $wh_id = $this->input->post("wh_id");
     $cusname = $this->input->post("cusname");
     $cusaddress1 = $this->input->post("cusaddress1");
@@ -392,16 +393,19 @@ function save_edit_invoice()
     
     $last_id = $this->tp_invoice_model->edit_invoice_detail($invoice);
 
+    
     $sql = "invit_invoice_id = '".$inv_id."'";
     $query_item = $this->tp_invoice_model->get_invoice_item($sql);
-    foreach($query_item as $loop3) {
-        $item = array("id" => $loop3->invit_id, "invit_enable" => 0);
-        $disable_item = $this->tp_invoice_model->edit_invoice_item($item);
-    }
-
+    
     for($i=0; $i<count($it_array); $i++){
-        
-        $item = array( 'invit_invoice_id' => $inv_id,
+        $duplicate = 0;
+        foreach($query_item as $loop3) {
+            if ($loop3->invit_item_id == $it_array[$i]["id"]) {
+                $duplicate = $loop3->invit_id;   
+            }
+        }
+        if ($duplicate > 0) {
+            $item = array( 'id' => $duplicate,
                         'invit_qty' => $it_array[$i]["qty"],
                         'invit_refcode' => $it_array[$i]["refcode"],
                         'invit_brand' => $it_array[$i]["brand"],
@@ -409,9 +413,23 @@ function save_edit_invoice()
                         'invit_srp' => $it_array[$i]["srp"],
                         'invit_discount' => $it_array[$i]["dc"],
                         'invit_netprice' => $it_array[$i]["net"]
-        );
-        $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
+            );
+            $inv_item_id = $this->tp_invoice_model->edit_invoice_item($item);
+        }else{
+            $item = array( 'invit_invoice_id' => $inv_id,
+                        'invit_qty' => $it_array[$i]["qty"],
+                        'invit_refcode' => $it_array[$i]["refcode"],
+                        'invit_brand' => $it_array[$i]["brand"],
+                        'invit_item_id' => $it_array[$i]["id"],
+                        'invit_srp' => $it_array[$i]["srp"],
+                        'invit_discount' => $it_array[$i]["dc"],
+                        'invit_netprice' => $it_array[$i]["net"]
+            );
+            $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
+        }
+        
     }
+    
     
     $result = array("a" => $number, "b" => $inv_id);
     //$result = array("a" => 1, "b" => 2);

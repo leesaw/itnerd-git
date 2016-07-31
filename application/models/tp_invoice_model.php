@@ -4,9 +4,10 @@ Class Tp_invoice_model extends CI_Model
 
 function get_invoice_detail($where)
 {
-	$this->db->select("inv_id, inv_issuedate, inv_number, inv_warehouse_id, wh_code, wh_name, inv_warehouse_detail, inv_warehouse_address1, inv_warehouse_address2, inv_warehouse_taxid, inv_warehouse_branch, inv_vender, inv_barcode, inv_stot_number, inv_stot_id, inv_srp_discount, inv_note, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, inv_enable");
+	$this->db->select("inv_id, inv_issuedate, inv_number, inv_warehouse_id, wh_code, wh_name, inv_warehouse_detail, inv_warehouse_address1, inv_warehouse_address2, inv_warehouse_taxid, inv_warehouse_branch, inv_vender, inv_barcode, inv_stot_number, inv_stot_id, inv_srp_discount, inv_note, inv_day, inv_paydate, inv_remark, inv_dateadd, inv_dateadd_by, firstname, lastname, inv_enable");
 	$this->db->from("tp_invoice");
 	$this->db->join("tp_warehouse", "wh_id = inv_warehouse_id", "left");
+	$this->db->join("nerd_users", "inv_dateadd_by = id", "left");
 	if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
 	return $query->result();

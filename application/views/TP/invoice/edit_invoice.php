@@ -43,6 +43,8 @@
         $inv_dateadd = $loop->inv_dateadd;
         $inv_remark = $loop->inv_remark;
         $inv_enable = $loop->inv_enable;
+
+        $editor_view = $loop->firstname." ".$loop->lastname." ".$loop->inv_dateadd;
     }
 ?>
 		<section class="content">
@@ -197,6 +199,12 @@
                                 <div class="form-group-sm">
                                     Remark
                                     <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $inv_remark; ?>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    แก้ไขล่าสุด
+                                    <input type="text" class="form-control" name="editor" id="editor" value="<?php echo $editor_view; ?>" readonly>
                                 </div>
                             </div>
                         </div>
@@ -680,6 +688,7 @@ function submitform()
 function confirmform()
 {
     var inv_id = <?php echo $inv_id; ?>;
+    var number = document.getElementById('number').value;
     var cusname = document.getElementById('cusname').value;
     var cusaddress1 = document.getElementById('cusaddress1').value;
     var cusaddress2 = document.getElementById('cusaddress2').value;
@@ -715,11 +724,11 @@ function confirmform()
     }
     
     document.getElementById("savebtn").disabled = true;
-    
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_invoice/save_edit_invoice"); ?>" ,
-        data : {inv_id: inv_id, datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
+        data : {inv_id: inv_id, number: number, datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "เอกสาร Invoice เลขที่ "+data.a+" ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
