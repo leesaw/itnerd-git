@@ -27,7 +27,7 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 </table>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td height="12"></td><td></td><td></td><td></td><td></td></tr>
+<tr><td height="18"></td><td></td><td></td><td></td><td></td></tr>
 <tr><td width="250"></td><td width="200"><?php echo $custaxid; ?></td><td><?php echo $GGdate."/".$GGmonth."/".$GGyear; ?></td><td width="120"></td><td><?php echo $number; ?></td></tr>
 <tr><td height="10"></td><td></td><td></td><td></td><td></td></tr>
 </tbody>
@@ -121,7 +121,7 @@ if (($no >=10)) {
 </table>
 <table style="border:0px solid black; border-spacing:0px 0px;">
 <tbody>
-<tr><td height="12"></td><td></td><td></td><td></td><td></td></tr>
+<tr><td height="18"></td><td></td><td></td><td></td><td></td></tr>
 <tr><td width="250"></td><td width="200"><?php echo $custaxid; ?></td><td><?php echo $GGdate."/".$GGmonth."/".$GGyear; ?></td><td width="120"></td><td><?php echo $number; ?></td></tr>
 <tr><td height="10"></td><td></td><td></td><td></td><td></td></tr>
 </tbody>
@@ -206,8 +206,6 @@ if ($lastpage!=1) {
 <?php }else{ ?>
 <tr><td height="55" colspan="7"></td></tr>
 <?php } ?>
-</tbody>
-<tbody>
 <tr><td></td>
 <td align="right" colspan="5" scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07, 2, '.', ','); ?></div></td>
 </tr>
@@ -215,8 +213,9 @@ if ($lastpage!=1) {
 <tr><td></td>
 <td align="right" colspan=5 scope="row"><div style="font-size: 16pt;">7%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07*0.07, 2, '.', ','); ?></div></td>
 </tr>
+<tr><td height="3" colspan="7"></td></tr>
 <tr><td></td>
-<td height="40" align="left" colspan="3" scope="row"><div style="font-size: 16pt;"><?php echo num2thai($sum); ?></div></td>
+<td height="40" align="left" colspan="3" scope="row"><div style="font-size: 14pt;"><?php echo num2thai($sum); ?></div></td>
 <td align="right" colspan=2 scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum, 2, '.', ','); ?></div></td>
 </tr>
 </tbody>

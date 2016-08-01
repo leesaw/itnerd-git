@@ -10,8 +10,8 @@ $i = 0;
 foreach($serial_array as $loop) { ?>
 <table border="0">
 <tbody>
-<tr>
-<td style="text-align: top;" width="240"><b><?php echo $loop->br_name." ".$loop->itse_serial_number; ?></b>
+<tr><td style="text-align: top;" width="40"></td>
+<td style="text-align: top;" width="200"><b><?php echo $loop->br_name." ".$loop->itse_serial_number; ?></b>
 <br/>
 <b><?php echo $loop->it_refcode; ?></b>
 <br/>
