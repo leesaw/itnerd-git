@@ -243,6 +243,13 @@ function view_invoice()
 
     $data['inv_id'] = $id;
 
+    if ($this->session->userdata('sessstatus') == 6 || $this->session->userdata('sessstatus') == 1) {
+        $data['auth_edit'] = true;
+    }else{
+        $data['auth_edit'] = false;
+    }
+    
+
     $data['title'] = "NGG| Nerd - View Invoice";
     $this->load->view("TP/invoice/view_invoice", $data);
 }
@@ -288,6 +295,115 @@ function print_invoice()
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/invoice/print_invoice_noline", $data, TRUE));
     $mpdf->Output('Invoice_'.$datetime.'.pdf','I');
+}
+
+function excel_invoice()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "inv_id = '".$id."' and inv_enable = '1'";
+    $inv_array = $this->tp_invoice_model->get_invoice_detail($sql);
+    
+    $sql = "invit_invoice_id = '".$id."' and invit_enable=1";
+    $item_array = $this->tp_invoice_model->get_invoice_item($sql);
+
+    foreach($inv_array as $loop) {
+        $inv_id = $loop->inv_id;
+        $inv_datein = $loop->inv_issuedate;
+        $datein_array = explode("-",$inv_datein);
+        $inv_datein = $datein_array[2]."/".$datein_array[1]."/".$datein_array[0];
+        $inv_number = $loop->inv_number;
+        $inv_whname = $loop->wh_code."-".$loop->wh_name;
+        $inv_cusname = $loop->inv_warehouse_detail;
+        $inv_address1 = $loop->inv_warehouse_address1;
+        $inv_address2 = $loop->inv_warehouse_address2;
+        $inv_taxid = $loop->inv_warehouse_taxid;
+        $inv_branch = $loop->inv_warehouse_branch;
+        if ($inv_branch == 0) {
+            $inv_branch = "สำนักงานใหญ่";
+        }else{
+            $inv_branch = "สาขาที่ ".str_pad($inv_branch, 5, '0', STR_PAD_LEFT);
+        }
+
+        $inv_vender = $loop->inv_vender;
+        $inv_barcode = $loop->inv_barcode;
+        $inv_stot_number = $loop->inv_stot_number;
+        $inv_srp_discount = $loop->inv_srp_discount;
+        $inv_note = $loop->inv_note;
+        $inv_dateadd = $loop->inv_dateadd;
+        $inv_remark = $loop->inv_remark;
+        $inv_enable = $loop->inv_enable;
+
+        $editor_view = $loop->firstname." ".$loop->lastname." ".$loop->inv_dateadd;
+    }
+
+
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Invoice');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'วันที่ออกใบ Invoice');
+    $this->excel->getActiveSheet()->setCellValue('B1', $inv_datein);
+    $this->excel->getActiveSheet()->setCellValue('D1', 'เลขที่ Invoice');
+    $this->excel->getActiveSheet()->setCellValue('E1', $inv_number);
+
+    $this->excel->getActiveSheet()->setCellValue('A2', 'นามผู้ซื้อ');
+    $this->excel->getActiveSheet()->setCellValue('B2', $inv_cusname);
+    $this->excel->getActiveSheet()->setCellValue('C2', 'เลขประจำตัวผู้เสียภาษี ');
+    $this->excel->getActiveSheet()->setCellValue('D2', $inv_taxid);
+    $this->excel->getActiveSheet()->setCellValue('F2', 'ที่อยู่ผู้ซื้อ ');
+    $this->excel->getActiveSheet()->setCellValue('G2', $inv_address1." ".$inv_address2);
+    $this->excel->getActiveSheet()->setCellValue('H2', $inv_branch);
+
+    $this->excel->getActiveSheet()->setCellValue('A3', 'Vender Code');
+    $this->excel->getActiveSheet()->setCellValue('B3', $inv_vender);
+    $this->excel->getActiveSheet()->setCellValue('C3', 'Barcode');
+    $this->excel->getActiveSheet()->setCellValue('D3', $inv_barcode);
+    $this->excel->getActiveSheet()->setCellValue('E3', 'เลขที่ใบส่งของอ้างอิง');
+    $this->excel->getActiveSheet()->setCellValue('F3', $inv_stot_number);
+    $this->excel->getActiveSheet()->setCellValue('G3', 'ส่วนลดราคาป้าย '.$inv_srp_discount.' %');
+    
+    $this->excel->getActiveSheet()->setCellValue('A5', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('B5', 'รายละเอียด');
+    $this->excel->getActiveSheet()->setCellValue('C5', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('D5', 'หน่วยละ');
+    $this->excel->getActiveSheet()->setCellValue('E5', 'ส่วนลด %');
+    $this->excel->getActiveSheet()->setCellValue('F5', 'จำนวนเงิน');
+    
+    $row = 6;
+    $sum = 0;
+    $sum_qty = 0;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->invit_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, strtoupper($loop->invit_brand));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->invit_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->invit_srp);  
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, number_format($loop->invit_discount));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->invit_netprice*$loop->invit_qty);
+        $row++;
+        $sum += $loop->invit_netprice*$loop->invit_qty; 
+        $sum_qty += $loop->invit_qty;
+    }
+    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, "รวมจำนวน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "รวมเงิน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $sum);
+    
+
+    $filename='invoice_'.$inv_number.'.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
 
 function void_invoice()

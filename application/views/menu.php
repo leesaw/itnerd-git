@@ -229,7 +229,7 @@
 
             </li>
             <?php } ?>
-            <?php if ($this->session->userdata('sessstatus') == 1 ) { ?>
+            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-shopping-cart"></i> <span> Invoice</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
@@ -238,6 +238,17 @@
                     </li>
                     <li>
                         <a href="<?php echo site_url("tp_invoice/form_new_invoice"); ?>"><i class="fa fa-circle-o"></i> เพิ่ม Invoice ใหม่</a>
+                    </li>
+                </ul>
+
+            </li>
+            <?php } ?>
+            <?php if ($this->session->userdata('sessstatus') == 2 || $this->session->userdata('sessstatus') == 3 ) { ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-shopping-cart"></i> <span> Invoice</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
                     </li>
                 </ul>
 

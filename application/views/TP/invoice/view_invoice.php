@@ -198,9 +198,13 @@
                         <div class="row">
 							<div class="col-md-12">
 								<a href="<?php echo site_url("tp_invoice/print_invoice")."/".$inv_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบ Invoice </button></a>&nbsp;&nbsp;
+                                <a href="<?php echo site_url("tp_invoice/excel_invoice")."/".$inv_id; ?>"><button type="button" class="btn btn-success" name="excelbtn" id="excelbtn"><i class='fa fa-file-excel-o'></i>  Export Excel </button></a>&nbsp;&nbsp;
+                                <?php if($auth_edit) { ?>
                                 <a href="<?php echo site_url("tp_invoice/edit_invoice")."/".$inv_id; ?>"><button type="button" class="btn btn-warning" name="editbtn" id="editbtn" <?php if ($inv_enable == 0) { echo "disabled"; } ?>><i class='fa fa-edit'></i>  แก้ไขใบ Invoice </button></a>&nbsp;&nbsp;
                                 <button type="button" class="btn btn-danger pull-right" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if ($inv_enable == 0) { echo "disabled"; } ?>><i class='fa fa-close'></i>  ยกเลิก Invoice (Void) </button>&nbsp;&nbsp;
                                 <form action="<?php echo site_url("tp_invoice/void_invoice")."/".$inv_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
+                                <?php }else{ ?>
+                                <?php } ?>
 							</div>
 						</div>
 					</div>
