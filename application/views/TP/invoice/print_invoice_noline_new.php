@@ -81,14 +81,14 @@ if (($no >=10)) {
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><b><?php if ($vender!='' || $vender!='-') echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?> &nbsp;</b></td>
+<td align="center" valign="top"><b><?php if ($vender!='' && $vender!='-') echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?> &nbsp;</b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><b><?php if ($barcode!='' || $barcode!='-') echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?> &nbsp;</b></td>
+<td align="center" valign="top"><b><?php if ($barcode!='' && $barcode!='-') echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?> &nbsp;</b></td>
 <td align="center" valign="top"><b><?php echo $sum_qty; $sum_qty=0; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
@@ -181,10 +181,9 @@ if (($no >=10)) {
 <?php if ($no<10) { for($i=10-$no; $i>0; $i--) { ?> 
 <tr><td colspan="7" > &nbsp;</td></tr>
 <?php  } } 
-
-if ($lastpage!=1 || $count_item ==1) {
+if ($lastpage!=1) {
 ?>
-<tr><td height="20" colspan="7"></td></tr>
+
 <?php } ?>
 
 <tr ><td></td><td align="center" valign="top"></td>
@@ -195,24 +194,24 @@ if ($lastpage!=1 || $count_item ==1) {
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><b><?php if ($vender!='' || $vender!='-') echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?> &nbsp;</b></td>
+<td align="center" valign="top"><b><?php if ($vender!='' && $vender!='-') echo "VENDER CODE &nbsp;&nbsp;&nbsp;&nbsp; ".$vender; ?> &nbsp;</b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
 <tr ><td></td><td align="center" valign="top"></td>
-<td align="center" valign="top"><b><?php if ($barcode!='' || $barcode!='-') echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?> &nbsp;</b></td>
+<td align="center" valign="top"><b><?php if ($barcode!='' && $barcode!='-') echo "BARCODE &nbsp;&nbsp;&nbsp;&nbsp; ".$barcode; ?> &nbsp;</b></td>
 <td align="center" valign="top"><b><?php echo $sum_qty; $sum_qty=0; ?></b></td>
 <td align="center" valign="top"></td>
 <td align="center" valign="top"></td>
 <td align="right" valign="top"></td>
 </tr>
-<?php if ($lastpage!=1 || $count_item ==1) {
+<?php if ($lastpage!=1 || $count_item < 10 ) {
 ?>
 <tr><td height="60" colspan="7"></td></tr>
 <?php }else{ ?>
-<tr><td height="55" colspan="7"></td></tr>
+<tr><td height="40" colspan="7"></td></tr>
 <?php } ?>
 <tr><td></td>
 <td align="right" colspan="5" scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07, 2, '.', ','); ?></div></td>

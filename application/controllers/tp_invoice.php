@@ -65,7 +65,14 @@ function check_transfer_number()
             $index++;
         }
     }
-    $final = array("item" => $output, "warehouse" => $warehouse);
+
+    // check transfer number was created Invoice, or not
+    $sql = "inv_stot_number like '%".$tb_number."%'";
+    $query = $this->tp_invoice_model->get_invoice_detail($sql);
+    if (count($query) > 0) $exist_number = true;
+    else $exist_number = false;
+
+    $final = array("item" => $output, "warehouse" => $warehouse, "exist_number" => $exist_number);
     echo json_encode($final);
     exit();
 }
@@ -274,15 +281,16 @@ function print_invoice()
         $data['item_array'] = array();
     }
 
-    if (count($query) % 10 != 1) {
+    if (count($query) % 10 != 1 || count($query) == 1) {
         $data["totalpage"] = ceil(count($query)/10);
     }else{
         $data["totalpage"] = floor(count($query)/10);
     }
 
     $data["lastpage"] = count($query) % 10;
+    $data['count_item'] = count($query);
 
-    $this->load->library('mpdf/mpdf');                
+    $this->load->library('mpdf/mpdf');               
     $mpdf= new mPDF('th',array(203,278),'0', 'thangsana');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style_dotprint_invoice.css');
 
@@ -442,7 +450,7 @@ function edit_invoice()
         $data['inv_array'] = array();
     }
     
-    $sql = "invit_invoice_id = '".$id."' and invit_enable=1";
+    $sql = "invit_invoice_id = '".$id."' and invit_enable = 1";
     $query = $this->tp_invoice_model->get_invoice_item($sql);
     if($query){
         $data['item_array'] =  $query;
@@ -512,12 +520,17 @@ function save_edit_invoice()
     
     $sql = "invit_invoice_id = '".$inv_id."'";
     $query_item = $this->tp_invoice_model->get_invoice_item($sql);
+
+    $new_item = array();
+    $index = 0;
     
     for($i=0; $i<count($it_array); $i++){
         $duplicate = 0;
         foreach($query_item as $loop3) {
             if ($loop3->invit_item_id == $it_array[$i]["id"]) {
                 $duplicate = $loop3->invit_id;   
+                $new_item[$index] = $it_array[$i]["id"];
+                $index++;
             }
         }
         if ($duplicate > 0) {
@@ -542,10 +555,23 @@ function save_edit_invoice()
                         'invit_netprice' => $it_array[$i]["net"]
             );
             $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
-        }
-        
+        }   
     }
     
+    foreach($query_item as $loop4) {
+        $exist = 0;
+        for($i=0; $i<count($new_item); $i++) {
+            if ($loop4->invit_item_id == $new_item[$i]) {
+                $exist = 1;
+            }
+        }
+        if ($exist == 0) {
+            $item = array( 'id' => $loop4->invit_id,
+                        'invit_enable' => 0
+            );
+            $inv_item_id = $this->tp_invoice_model->edit_invoice_item($item);
+        }
+    }
     
     $result = array("a" => $number, "b" => $inv_id);
     //$result = array("a" => 1, "b" => 2);
