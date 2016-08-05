@@ -14,7 +14,13 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงสินค้า <B><U><?php if ($refcode !="NULL") echo $refcode; ?></U></B> <?php if ($brand!=0) { foreach($brand_array as $b) echo "ยี่ห้อ ".$b->br_name; } ?> <?php if ($warehouse!=0) { foreach($whname_array as $w) echo "ในคลัง ".$w->wh_name; } ?>
+            สินค้าที่มีการรับเข้าคลัง : <?php 
+            if ($refcode != "NULL") echo $refcode;
+            echo " ยี่ห้อ : ".$brand_name; 
+            echo " คลังสินค้า : ".$wh_name; 
+            echo " ช่วงเวลา : ";
+            if ($startdate != '1970-01-01') $startdate;
+            echo " ถึง ".$enddate;  ?>
         </h1>
     </section>
 	
@@ -30,48 +36,29 @@
 			<div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">
-                        <form name="exportexcel" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist"); ?>" method="post">
-                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel จำนวน</button>
+                        <form name="exportexcel" action="<?php echo site_url("warehouse_transfer/exportExcel_transfer_in_report"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
-                        <input type="hidden" name="brand" value="<?php echo $brand; ?>">
-                        <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
-                        <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
-                        <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byquantity" id="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน 
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Caseback
-                        <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Excel Caseback</button>
+                        <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
+                        <input type="hidden" name="warehouse" value="<?php echo $wh_id; ?>">
+                        <input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
+                        <input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
                         </form>
-                        <form name="exportcaseback" id="exportcaseback" action="<?php echo site_url("warehouse/exportExcel_stock_itemlist_caseback"); ?>" method="post">
-                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
-                        <input type="hidden" name="brand" value="<?php echo $brand; ?>">
-                        <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
-                        <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
-                        <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
-                        </form>
-                        <form name="viewbyquantity" id="viewbyquantity" action="<?php echo site_url("warehouse/showBalance"); ?>" method="post">
-                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
-                        <input type="hidden" name="brand" value="<?php echo $brand; ?>">
-                        <input type="hidden" name="warehouse" value="<?php echo $warehouse; ?>">
-                        <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
-                        <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
-                        </form>
+                        
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="100">Ref. Number</th>
-                                        <th width="100">Serial</th>
+                                        <th width="80">วันที่รับเข้าคลัง</th>
+                                        <th width="100">เลขที่</th>
+                                        <th width="120">Ref. Number</th>
                                         <th>Brand</th>
                                         <th>Family</th>
-                                        <th>Warehouse Code</th>
-                                        <th>Warehouse</th>
-                                        <th width="50">Qty</th>
+                                        <th>Description</th>
                                         <th>SRP</th>
-                                        <th width="200">Short Description</th>
-                                        <!-- <th width="50">Caseback</th> -->
+                                        <th>Qty (Pcs.)</th>
+                                        <th>เข้าคลัง</th>
                                     </tr>
                                 </thead>
                                 
@@ -79,9 +66,9 @@
 								</tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="6" style="text-align:right">จำนวนทั้งหมด:</th>
+                                        <th colspan="7" style="text-align:right">จำนวนทั้งหมด:</th>
                                         <th></th>
-                                        <th colspan="2"></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
 							</table>
@@ -94,7 +81,7 @@
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("warehouse/getBalance"); ?>" class="btn btn-primary">ค้นหา</a>    
+            <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>" class="btn btn-primary">ค้นหา</a>    
             </div>
         </div>
                         
@@ -134,7 +121,7 @@ $(document).ready(function()
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("warehouse/ajaxViewStock_serial")."/".$refcode."/".$brand."/".$warehouse."/".$minprice."/".$maxprice; ?>',
+        'sAjaxSource'    : '<?php echo site_url("warehouse_transfer/ajaxView_seach_transfer_in")."/".$refcode."/".$brand_id."/".$wh_id."/".$startdate."/".$enddate; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',
@@ -156,30 +143,26 @@ $(document).ready(function()
                         i : 0;
             };
  
-            var countVal = function (i) {
-                return typeof i === 'string' ? 1 : 0;
-            }
             // Total over all pages
-            var total_row = 0;
-            total_count = api
-                .column( 6 )
+            total = api
+                .column( 7 )
                 .data()
                 .reduce( function (a, b) {
-                    return total_row+=countVal(a)+countVal(b);
+                    return intVal(a) + intVal(b);
                 }, 0 );
             
             // Total over this page
-            var total_row_current = 0;
-            pageTotal_count = api
-                .column( 6, { page: 'current'} )
+            pageTotal = api
+                .column( 7, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
-                    return total_row_current+=countVal(a)+countVal(b);
+                    return intVal(a) + intVal(b);
                 }, 0 );
+            
  
             // Update footer
-            $( api.column( 6 ).footer() ).html(
-                total_count+'('+pageTotal_count+')'
+            $( api.column( 7 ).footer() ).html(
+                total+' ('+pageTotal+')'
             );
         }
     });
@@ -192,17 +175,24 @@ $(document).ready(function()
     'transitionOut':'none', 
     'type':'iframe'}); 
     
-    $('#byquantity').on('click', function(){            
-        document.getElementById('byquantity').checked = false;
-        document.getElementById("viewbyquantity").submit();
-    });
+    
 });
     
+Number.prototype.formatMoney = function(c, d, t){
+    var n = this, 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+     };
 function showcaseback()
 {
+
     document.getElementById("exportcaseback").submit();
 }
-
 </script>
 </body>
 </html>

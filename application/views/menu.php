@@ -443,6 +443,9 @@
             <li>
                 <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
             </li>
+            <li>
+                <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+            </li>
             <?php } ?>
               
             <?php 

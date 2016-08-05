@@ -515,6 +515,7 @@ function calSRP() {
         srp[i].value = (parseFloat(srp1[i].value.replace(/,/g, '')) * (100 - parseFloat(dc_value))/100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    calDiscount();
     setTimeout(function(){
                 calculate();
             },3000);

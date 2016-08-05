@@ -864,6 +864,11 @@ function transferstock_final_excel()
 
     $sql = "log_stot_transfer_id = '".$id."'";
     $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
+
+    $waiting = "";
+    foreach($query1 as $loop) {
+        if ($loop->stot_status == 1) $waiting = "รอยืนยันจำนวนสินค้า";
+    }
 		
     //load our new PHPExcel library
     $this->load->library('excel');
@@ -877,8 +882,17 @@ function transferstock_final_excel()
      $GGmonth=substr($datetime,5,2); 
      $GGdate=substr($datetime,8,2);
 
+    $styleArray = array(
+        'font'  => array(
+            'bold'  => true,
+            'color' => array('rgb' => 'FF0000'),
+            'size'  => 15
+    ));
+
     $this->excel->getActiveSheet()->setCellValue('A1', 'ใบส่งของ เลขที่');
     $this->excel->getActiveSheet()->setCellValue('B1', $si_id);
+    $this->excel->getActiveSheet()->setCellValue('C1', $waiting);
+    $this->excel->getActiveSheet()->getStyle('C1')->applyFromArray($styleArray);
 
     $this->excel->getActiveSheet()->setCellValue('A2', 'ย้ายคลังจาก');
     $this->excel->getActiveSheet()->setCellValue('B2', $stock_out);
@@ -1053,6 +1067,12 @@ function importstock_history()
     $currentdate = $currentdate[1]."/".$currentdate[0];
     $data["currentdate"] = $currentdate;
     $data['month'] = $currentdate;
+
+    $sql = $this->no_rolex;
+    $this->load->model('tp_item_model','',TRUE);
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = "";
+    $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
     
     $data['title'] = "Nerd - Report Transfer In";
     $this->load->view("TP/warehouse/report_stockin_item", $data);
@@ -1150,6 +1170,51 @@ function checkSerial_warehouse()
     $result = array("a" => $result1, "b" => $result2, "c" => $result3);
     echo json_encode($result);
     exit();
+}
+
+function result_search_transfer_in_item()
+{
+    $refcode = $this->input->post("refcode");
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+
+    if ($refcode == "") $refcode = "NULL";
+    $data['refcode'] = $refcode;
+    
+    $brand_array = explode("-", $brand);
+    $brand_code = $brand_array[0];
+    $brand_name = $brand_array[1];
+    $data['brand_id'] = $brand_code;
+    $data['brand_name'] = $brand_name;
+    
+    $wh_array = explode("-", $warehouse);
+    $wh_code = $wh_array[0];
+    $wh_name = $wh_array[1];
+    $data['wh_id'] = $wh_code;
+    $data['wh_name'] = $wh_name;
+
+    
+    
+    $start = $this->input->post("startdate");
+    if ($start != "") {
+        $start = explode('/', $start);
+        $start= $start[2]."-".$start[1]."-".$start[0];
+    }else{
+        $start = "1970-01-01";
+    }
+    $end = $this->input->post("enddate");
+    if ($end != "") {
+        $end = explode('/', $end);
+        $end= $end[2]."-".$end[1]."-".$end[0];
+    }else{
+        $end = date('Y-m-d');
+    }
+    
+    $data['startdate'] = $start;
+    $data['enddate'] = $end;
+
+    $data['title'] = "Nerd - Search Stock Transfer";
+    $this->load->view('TP/warehouse/result_search_transfer_in_item',$data);
 }
     
 function result_search_transfer_item()
@@ -1260,6 +1325,69 @@ function ajaxView_seach_transfer()
     ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/transferstock_final_print").'$1',"transfer_id");
     echo $this->datatables->generate(); 
 }
+
+function ajaxView_seach_transfer_in()
+{
+    $refcode = $this->uri->segment(3);
+    $keyword = explode("%20", $refcode);
+    $brand = $this->uri->segment(4);
+    $warehouse = $this->uri->segment(5);
+    $startdate = $this->uri->segment(6);
+    $enddate = $this->uri->segment(7);
+    
+    $sql = "";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= $this->no_rolex;
+    }else{ $sql .= "br_id != 888"; }
+    
+    $sql .= " and stoi_datein >= '".$startdate."' and stoi_datein <= '".$enddate."'";
+    
+    if (($brand=="0") && ($warehouse=="0")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) {
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($warehouse!="0") $sql .= " and (stoi_warehouse_out_id = '".$warehouse."' or     stoi_warehouse_in_id = '".$warehouse."')";
+        else $sql .= " and stoi_warehouse_out_id != '0'";
+
+    }
+    
+    $this->load->library('Datatables');
+    $this->datatables
+    ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp,    log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
+    ->from('log_stock_balance')
+    ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
+    ->join('tp_item', 'it_id = log_stob_item_id','left')
+    ->join('tp_brand', 'br_id = it_brand_id','left')
+    ->join('tp_warehouse', 'wh_id = log_stob_warehouse_id','left')
+    ->where('stoi_enable',1)
+    ->where('log_stob_qty_update >',0)
+    ->where($sql)
+    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/importstock_print").'$1',"transfer_id");
+    echo $this->datatables->generate(); 
+}
     
 function ajaxView_seach_transfer_serial()
 {
@@ -1287,6 +1415,100 @@ function ajaxView_seach_transfer_serial()
     ->where($sql)
     ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/transferstock_final_print").'$1',"transfer_id");
     echo $this->datatables->generate(); 
+}
+    
+function exportExcel_transfer_in_report()
+{
+    $refcode = $this->input->post("refcode");
+    $keyword = explode(" ", $refcode);
+    $brand = $this->input->post("brand");
+    $warehouse = $this->input->post("warehouse");
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+    
+    $sql = "";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= $this->no_rolex;
+    }else{ $sql .= "br_id != 888"; }
+    
+    $sql .= " and stoi_datein >= '".$startdate."' and stoi_datein <= '".$enddate."'";
+    
+    if (($brand=="0") && ($warehouse=="0")){
+        if ($keyword[0]!="NULL") {
+            if (count($keyword) < 2) { 
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }
+    }else {
+        if ($keyword[0]!="NULL") {
+            $keyword = explode(" ",$refcode);
+            if (count($keyword) < 2) {
+                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+            }else{
+                for($i=0; $i<count($keyword); $i++) {
+                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+                }
+            }
+        }else{
+            $sql .= " and it_refcode like '%%'";
+        }
+        
+        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+        else $sql .= " and br_id != '0'";
+            
+        if ($warehouse!="0") $sql .= " and (stoi_warehouse_out_id = '".$warehouse."' or     stoi_warehouse_in_id = '".$warehouse."')";
+        else $sql .= " and stoi_warehouse_out_id != '0'";
+
+    }
+    
+    $item_array = $this->tp_warehouse_transfer_model->getItem_transfer_in($sql);
+    
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Transfer Report');
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'วันที่รับเข้าคลัง');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'เลขที่');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Brand');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Family');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Description');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'เข้าคลัง');
+    
+    $row = 2;
+    foreach($item_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->stoi_datein);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->stoi_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->log_stob_qty_update);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->wh_in);
+        $row++;
+    }
+    
+
+    $filename='stock_in_report.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 function exportExcel_transfer_report()

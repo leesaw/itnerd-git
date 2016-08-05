@@ -186,7 +186,7 @@
                 </h4>
             </div>            <!-- /modal-header -->
             <div class="modal-body">
-                <div class="row"><div class="col-md-12"><div class="form-group"><label class="col-md-4 control-label" for="tb_number">เลขที่ใบส่งของ</label><div class="col-md-8"> <input type="text" class="form-control" id="tb_number" name="tb_number" /></div></div></form> </div>  </div>
+                <div class="row"><div class="col-md-12"><div class="form-group"><label class="col-md-4 control-label" for="tb_number">เลขที่ใบส่งของ</label><div class="col-md-8"> <input type="text" class="form-control" id="tb_number" name="tb_number" focus /></div></div></form> </div>  </div>
 
             </div>            <!-- /modal-body -->
 
@@ -315,6 +315,7 @@ function showdetail()
 function check_transfer_number()
 {
     var tb_number = document.getElementById("tb_number").value;
+    var confirm_number;
     //alert(tb_number);
 
     $.ajax({
@@ -323,10 +324,19 @@ function check_transfer_number()
         data : {tb_number: tb_number},
         dataType: 'json',
         success : function(data) {
+
             if(data.item.length > 0)
             {
-                if (data.exist_number) if(confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) {
+                
+                if (data.exist_number) { 
+                    if( confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) { 
+                        confirm_number = true; 
+                    }else{
+                        confirm_number = false;
+                    }
+                }else{ confirm_number = true; }
 
+                if (confirm_number) {
                     for(var i=0; i<data.item.length; i++) {
                         var element = '<tr id="row'+count_enter_form_input_product+'">'+data.item[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                         //console.log(element);
@@ -424,6 +434,7 @@ function calSRP() {
         srp[i].value = (parseFloat(srp1[i].value.replace(/,/g, '')) * (100 - parseFloat(dc_value))/100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    calDiscount();
     setTimeout(function(){
                 calculate();
             },3000);

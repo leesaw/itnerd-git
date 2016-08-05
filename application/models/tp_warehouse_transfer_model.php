@@ -197,6 +197,21 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	$query = $this->db->get();		
 	return $query->result();
  }
+
+ function getItem_transfer_in($where)
+ {
+    $this->db->select("stoi_id, stoi_datein, stoi_number, it_id, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
+    $this->db->from('log_stock_balance');
+    $this->db->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left');
+    $this->db->join('tp_item', 'it_id = log_stob_item_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    $this->db->join('tp_warehouse', 'wh_id = log_stob_warehouse_id','left');
+    $this->db->where('stoi_enable',1);
+    $this->db->where('log_stob_qty_update >',0);
+    if ($where != "") $this->db->where($where);
+    $query = $this->db->get();      
+    return $query->result();
+ }
     
  function addWarehouse_transfer($insert=NULL)
  {		

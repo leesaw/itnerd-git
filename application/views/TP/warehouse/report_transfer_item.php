@@ -140,6 +140,8 @@
                                         <a href="<?php echo site_url("warehouse_transfer/transferstock_final_print")."/".$final_array[$i]['stot_id']; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
                                         &nbsp;
                                         <a href="<?php if($final_array[$i]['stot_has_serial']==0) echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; else echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
+                                        <?php } if ($final_array[$i]['stot_status']==1) { ?>
+                                            <a href="<?php if($final_array[$i]['stot_has_serial']==0) echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; else echo site_url("warehouse_transfer/transferstock_final_excel")."/".$final_array[$i]['stot_id']; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
                                         <?php } ?>
                                         </td>
                                     </tr>

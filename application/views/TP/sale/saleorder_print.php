@@ -32,7 +32,7 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
+<?php $no=1; $sum=0; $sum_qty=0; $serial_exist = array(); $serial_index = 0; if(isset($item_array)) { foreach($item_array as $loop) { 
 ?>
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
@@ -41,7 +41,7 @@
 <td align="center" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="center" style="border-left:1px solid black;">
 <?php 
-if ($loop->soi_sale_barcode_id > 0) echo "Discount".$loop->sb_discount_percent."% GP".$loop->sb_gp."%(".$loop->sb_number.")"; 
+if ($loop->soi_sale_barcode_id > 0) echo "Discount".$loop->sb_discount_percent."% GP".$loop->sb_gp."%(".$loop->sb_number.")";
 else if ($loop->soi_sale_barcode_id == 0) echo "ไม่มีบาร์โค้ดห้าง";
 else if ($loop->soi_sale_barcode_id == -1) echo "Discount".$loop->soi_dc_percent."% GP".$loop->soi_gp."% Discount".$loop->soi_dc_baht."บาท"; 
 ?>
@@ -54,12 +54,17 @@ else if ($loop->soi_sale_barcode_id == -1) { $cal = (($loop->soi_qty*$loop->it_s
 </tr>
 <?php
 // print serial number
+$current_qty = $loop->soi_qty;
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
-        if ($loop->soi_item_id==$loop2->sos_item_id) { ?>
+        if ($loop->soi_item_id==$loop2->sos_item_id && $current_qty>0) { 
+            $check_exist = true;
+            for($k=0; $k<count($serial_exist); $k++) { 
+                if ($loop2->itse_serial_number == $serial_exist[$k]) { $check_exist = false; } }
+            if ($check_exist) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
-<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; ?>   
+<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; $serial_exist[$serial_index]=$loop2->itse_serial_number; $serial_index++; $current_qty--; ?>   
 </td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="right" style="border-left:1px solid black;"></td>
@@ -67,7 +72,7 @@ if(isset($serial_array)) {
 <td align="right" style="border-left:1px solid black;"></td>
 </tr>
     <?php
-        }
+        } }
     }
 }
 ?> 

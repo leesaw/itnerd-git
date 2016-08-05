@@ -121,7 +121,10 @@ function check_item_refcode()
     
     if (count($result) >0) {
         foreach($result as $loop) {
-            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();' readonly></td><td><input type='text' name='it_qty' id='it_qty' value='1' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->it_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->it_srp, 2, ".", ",")."' onChange='calculate();'></td>";
+            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();'";
+            // repair item can edit
+            if ($loop->it_id > 1) $output[$index] .= " readonly";
+            $output[$index] .= "></td><td><input type='text' name='it_qty' id='it_qty' value='1' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->it_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->it_srp, 2, ".", ",")."' onChange='calculate();'></td>";
             $index++;
         }
     }
@@ -524,6 +527,26 @@ function save_edit_invoice()
     $new_item = array();
     $index = 0;
     
+    foreach($query_item as $loop3) {
+        $item = array( 'id' => $loop3->invit_id,
+                    'invit_enable' => 0
+            );
+        $inv_item_id = $this->tp_invoice_model->edit_invoice_item($item);
+    }
+
+    for($i=0; $i<count($it_array); $i++){
+        $item = array( 'invit_invoice_id' => $inv_id,
+                        'invit_qty' => $it_array[$i]["qty"],
+                        'invit_refcode' => $it_array[$i]["refcode"],
+                        'invit_brand' => $it_array[$i]["brand"],
+                        'invit_item_id' => $it_array[$i]["id"],
+                        'invit_srp' => $it_array[$i]["srp"],
+                        'invit_discount' => $it_array[$i]["dc"],
+                        'invit_netprice' => $it_array[$i]["net"]
+            );
+        $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
+    }
+    /*  ok if item id is not duplicate
     for($i=0; $i<count($it_array); $i++){
         $duplicate = 0;
         foreach($query_item as $loop3) {
@@ -572,6 +595,8 @@ function save_edit_invoice()
             $inv_item_id = $this->tp_invoice_model->edit_invoice_item($item);
         }
     }
+
+    */
     
     $result = array("a" => $number, "b" => $inv_id);
     //$result = array("a" => 1, "b" => 2);
@@ -586,12 +611,14 @@ function get_invoice_item()
 
     $output = array();
     $index = 0 ;
-    $sql = "invit_invoice_id = '".$inv_id."'";
+    $sql = "invit_invoice_id = '".$inv_id."' and invit_enable = 1";
     $result = $this->tp_invoice_model->get_invoice_item($sql);
     
     if (count($result) >0) {
         foreach($result as $loop) {
-            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->invit_item_id."'><input type='hidden' name='it_refcode' value='".$loop->invit_refcode."'>".$loop->invit_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->invit_brand."'>".$loop->invit_brand."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='".number_format($dc1)."' onChange='calSRP();' readonly></td><td><input type='text' name='it_qty' id='it_qty' value='".$loop->invit_qty."' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->invit_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='".number_format($loop->invit_discount)."' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->invit_netprice, 2, ".", ",")."' onChange='calculate();'></td>";
+            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->invit_item_id."'><input type='hidden' name='it_refcode' value='".$loop->invit_refcode."'>".$loop->invit_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->invit_brand."'>".$loop->invit_brand."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='".number_format($dc1)."' onChange='calSRP();'";
+            if ($loop->invit_item_id > 1) $output[$index] .= " readonly";
+            $output[$index] .= "></td><td><input type='text' name='it_qty' id='it_qty' value='".$loop->invit_qty."' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->invit_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='".number_format($loop->invit_discount)."' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->invit_netprice, 2, ".", ",")."' onChange='calculate();'></td>";
             $index++;
         }
     }
