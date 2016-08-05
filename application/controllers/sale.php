@@ -1185,7 +1185,10 @@ function exportExcel_sale_report()
     $startdate = $this->input->post("startdate");
     $enddate = $this->input->post("enddate");
     
-    $sql = $this->no_rolex;
+    $sql = "";
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= $this->no_rolex;
+    }else{ $sql .= "br_id != 888"; }
     
     $sql .= " and so_enable = '1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
     
@@ -1231,32 +1234,34 @@ function exportExcel_sale_report()
     $this->excel->getActiveSheet()->setTitle('Sale Report');
 
     $this->excel->getActiveSheet()->setCellValue('A1', 'Sold Date');
-    $this->excel->getActiveSheet()->setCellValue('B1', 'Shop');
-    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref. Number');
-    $this->excel->getActiveSheet()->setCellValue('D1', 'Caseback');
-    $this->excel->getActiveSheet()->setCellValue('E1', 'Brand');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'Qty (Pcs.)');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'SRP');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'BAR');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'Discount (%)');
-    $this->excel->getActiveSheet()->setCellValue('J1', 'On Top (บาท)');
-    $this->excel->getActiveSheet()->setCellValue('K1', 'GP (%)');
-    $this->excel->getActiveSheet()->setCellValue('L1', 'Receive on Inv.');
+    $this->excel->getActiveSheet()->setCellValue('B1', 'Shop Code');
+    $this->excel->getActiveSheet()->setCellValue('C1', 'Shop');
+    $this->excel->getActiveSheet()->setCellValue('D1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Caseback');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Brand');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Qty (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'BAR');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'Discount (%)');
+    $this->excel->getActiveSheet()->setCellValue('K1', 'On Top (บาท)');
+    $this->excel->getActiveSheet()->setCellValue('L1', 'GP (%)');
+    $this->excel->getActiveSheet()->setCellValue('M1', 'Receive on Inv.');
     
     $row = 2;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->so_issuedate);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->sh_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->itse_serial_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->br_name);    
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->soi_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->sb_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->dc);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, number_format($loop->soi_dc_baht, 2, '.', ','));
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->gp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, number_format($loop->netprice, 2, '.', ','));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->sh_code);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->sh_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->br_name);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->soi_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->sb_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->dc);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->soi_dc_baht);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->gp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->netprice);
         $row++;
     }
     
