@@ -52,6 +52,7 @@ function save_repair()
     $datein = $this->input->post("datein");
     $cusname = $this->input->post("cusname");
     $custelephone = $this->input->post("custelephone");
+    $customer = $this->input->post("customer");
     $datecs = $this->input->post("datecs");
     $shopid = $this->input->post("shopid");
     $number = $this->input->post("number");
@@ -71,6 +72,7 @@ function save_repair()
     $repair = array( 'rep_datein' => $datein,
                     'rep_cusname' => $cusname,
                     'rep_custelephone' => $custelephone,
+                    'rep_customer' => $customer,
                     'rep_datecs' => $datecs,
                     'rep_number' => $number,
                     'rep_shop_id' => $shopid,
@@ -155,6 +157,26 @@ function result_list_repair()
         $data['month'] = "";
         $data['month_ajax'] = "NULL";
     }
+
+    if ($this->input->post("month_cs") != "") {
+        $data['month_cs'] = $this->input->post("month_cs");
+        $month = explode('/',$this->input->post("month_cs"));
+        $data['month_cs_ajax'] = $month[1]."-".$month[0];
+    }
+    else {
+        $data['month_cs'] = "";
+        $data['month_cs_ajax'] = "NULL";
+    }
+
+    if ($this->input->post("month_return") != "") {
+        $data['month_return'] = $this->input->post("month_return");
+        $month = explode('/',$this->input->post("month_return"));
+        $data['month_return_ajax'] = $month[1]."-".$month[0];
+    }
+    else {
+        $data['month_return'] = "";
+        $data['month_return_ajax'] = "NULL";
+    }
     
     $data['brandid'] = $this->input->post("brandid");
     $data['shopid'] = $this->input->post("shopid");
@@ -187,6 +209,8 @@ function ajaxView_seach_repair()
     $shopid = $this->uri->segment(6);
     $status = $this->uri->segment(7);
     $month = $this->uri->segment(8);
+    $month_cs = $this->uri->segment(9);
+    $month_return = $this->uri->segment(10);
     
     $where = "";
     $where .= "rep_enable = 1";
@@ -213,11 +237,23 @@ function ajaxView_seach_repair()
         $end_date = $month."-31 23:59:59";
         $where .= " and rep_datein >= '".$start_date."' and rep_datein <= '".$end_date."'";
     }
+
+    if ($month_cs != "NULL") {
+        $start_date = $month_cs."-01 00:00:00";
+        $end_date = $month_cs."-31 23:59:59";
+        $where .= " and rep_datecs >= '".$start_date."' and rep_datecs <= '".$end_date."'";
+    }
+
+    if ($month_return != "NULL") {
+        $start_date = $month_return."-01 00:00:00";
+        $end_date = $month_return."-31 23:59:59";
+        $where .= " and rep_datereturn >= '".$start_date."' and rep_datereturn <= '".$end_date."'";
+    }
     
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), rep_case,
+    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), IF(rep_customer = 1 , 'ลูกค้า', 'สต็อก') as customer, rep_case,
         (CASE WHEN rep_warranty = '1' THEN 'หมดประกัน' WHEN rep_warranty = '2' THEN 'อยู่ในประกัน' ELSE '-' END)
     , rep_price,
     (CASE 
@@ -395,6 +431,7 @@ function edit_repair()
     $datein = $this->input->post("datein");
     $cusname = $this->input->post("cusname");
     $custelephone = $this->input->post("custelephone");
+    $customer = $this->input->post("customer");
     $datecs = $this->input->post("datecs");
     $shopid = $this->input->post("shopid");
     $number = $this->input->post("number");
@@ -415,6 +452,7 @@ function edit_repair()
                     'rep_datein' => $datein,
                     'rep_cusname' => $cusname,
                     'rep_custelephone' => $custelephone,
+                    'rep_customer' => $customer,
                     'rep_datecs' => $datecs,
                     'rep_number' => $number,
                     'rep_shop_id' => $shopid,
@@ -445,6 +483,8 @@ function exportExcel_repair_report()
     $shopid = $this->input->post("excel_shopid");
     $status = $this->input->post("excel_status");
     $month = $this->input->post("excel_month");
+    $month_cs = $this->input->post("excel_month_cs");
+    $month_return = $this->input->post("excel_month_return");
     
     $where = "";
     $where .= "rep_enable = 1";
@@ -471,6 +511,18 @@ function exportExcel_repair_report()
         $end_date = $month."-31 23:59:59";
         $where .= " and rep_datein >= '".$start_date."' and rep_datein <= '".$end_date."'";
     }
+
+    if ($month_cs != "NULL") {
+        $start_date = $month_cs."-01 00:00:00";
+        $end_date = $month_cs."-31 23:59:59";
+        $where .= " and rep_datecs >= '".$start_date."' and rep_datecs <= '".$end_date."'";
+    }
+
+    if ($month_return != "NULL") {
+        $start_date = $month_return."-01 00:00:00";
+        $end_date = $month_return."-31 23:59:59";
+        $where .= " and rep_datereturn >= '".$start_date."' and rep_datereturn <= '".$end_date."'";
+    }
     
     $item_array = $this->tp_repair_model->get_repair($where);
     
@@ -487,10 +539,11 @@ function exportExcel_repair_report()
     $this->excel->getActiveSheet()->setCellValue('D1', 'ยี่ห้อ');
     $this->excel->getActiveSheet()->setCellValue('E1', 'สาขาที่ส่งซ่อม');
     $this->excel->getActiveSheet()->setCellValue('F1', 'รายละเอียดลูกค้า');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'อาการ');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'ประกัน');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'ราคาซ่อม');
-    $this->excel->getActiveSheet()->setCellValue('J1', 'สถานะ');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'ที่มา');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'อาการ');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'ประกัน');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'ราคาซ่อม');
+    $this->excel->getActiveSheet()->setCellValue('K1', 'สถานะ');
     
     $row = 2;
     foreach($item_array as $loop) {
@@ -500,14 +553,17 @@ function exportExcel_repair_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->shopin_name);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->rep_cusname." ".$loop->rep_custelephone);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->rep_case);
+
+        if ($loop->rep_customer == 1) $customer = "ลูกค้า"; else if ($loop->rep_customer == 0) $customer = "สต็อก";
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $customer);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->rep_case);
         
         if ($loop->rep_warranty == '1') $rep_warranty = "หมดประกัน";
         else if ($loop->rep_warranty == '2') $rep_warranty = "อยู่ในประกัน";
         else $rep_warranty = "-";
         
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $rep_warranty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->rep_price);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $rep_warranty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->rep_price);
         
         switch ($loop->rep_status) {
             case 'G' : $rep_status = "รับเข้าซ่อม"; break;
@@ -517,7 +573,7 @@ function exportExcel_repair_report()
             case 'R' : $rep_status = "ส่งกลับแล้ว"; break;
         }
         
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $rep_status);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $rep_status);
         $row++;
     }
     

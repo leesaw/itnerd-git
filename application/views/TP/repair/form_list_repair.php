@@ -25,12 +25,6 @@
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formfilter" id="formfilter" method="post">
-            <div class="col-md-1">
-                <div class="form-group">
-                เดือน
-                <input type="text" class="form-control input-sm" name="month" id="month">
-                </div>
-            </div>
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
@@ -82,6 +76,26 @@
                 </div>
             </div>
         </div> 
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ส่งซ่อม
+                <input type="text" class="form-control input-sm" name="month" id="month">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ CS รับ
+                <input type="text" class="form-control input-sm" name="month_cs" id="month_cs">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ส่งกลับ
+                <input type="text" class="form-control input-sm" name="month_return" id="month_return">
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-3 col-md-2">
                 <button type="submit" name="action" value="0" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> ค้นหา</button>
@@ -189,6 +203,8 @@ $(document).ready(function()
     //Initialize Select2 Elements
     $(".select2").select2();
     get_datepicker_month("#month");
+    get_datepicker_month("#month_cs");
+    get_datepicker_month("#month_return");
 });
 function submit_status(val1)
 {

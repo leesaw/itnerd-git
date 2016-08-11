@@ -29,6 +29,7 @@
                 $rep_remark = $loop->rep_remark;
                 $rep_cusname = $loop->rep_cusname;
                 $rep_custelephone = $loop->rep_custelephone;
+                $rep_customer = $loop->rep_customer;
                 $rep_number = $loop->rep_number;
                 $rep_shopin = $loop->shopin_code."-".$loop->shopin_name;
                 $rep_brand = $loop->br_code."-".$loop->br_name;
@@ -111,6 +112,13 @@
                                 <div class="form-group">
                                 <label>เบอร์ติดต่อลูกค้า</label>
                                 <input type="text" class="form-control" name="custelephone" id="custelephone" value="<?php echo $rep_custelephone; ?>" readonly>
+                                </div>
+                            </div>   
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                ที่มา * &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="customer" id="customer" value="1" <?php if ($rep_customer == 1) echo " checked"; ?> disabled> ลูกค้า&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="customer" id="customer" value="0" <?php if ($rep_customer == 0) echo " checked"; ?> disabled> สต็อก
                                 </div>
                             </div>   
                         </div>

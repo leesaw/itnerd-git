@@ -331,6 +331,7 @@ function importstock_save()
 	$datein = $this->input->post("datein");
 	$wh_id = $this->input->post("whid");
     $it_array = $this->input->post("item");
+    $remark = $this->input->post("remark");
     
     if ($luxury == 1) {
         $this->load->model('tp_item_model','',TRUE);
@@ -369,6 +370,7 @@ function importstock_save()
                     'stoi_is_rolex' => $this->session->userdata('sessrolex'),
                     'stoi_has_serial' => $luxury,
                     'stoi_dateadd' => $currentdate,
+                    'stoi_remark' => $remark,
                     'stoi_dateadd_by' => $this->session->userdata('sessid')
             );
     
@@ -1369,7 +1371,7 @@ function ajaxView_seach_transfer_in()
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
             
-        if ($warehouse!="0") $sql .= " and (stoi_warehouse_out_id = '".$warehouse."' or     stoi_warehouse_in_id = '".$warehouse."')";
+        if ($warehouse!="0") $sql .= " and stoi_warehouse_id = '".$warehouse."'";
         else $sql .= " and stoi_warehouse_out_id != '0'";
 
     }
@@ -1460,8 +1462,8 @@ function exportExcel_transfer_in_report()
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
             
-        if ($warehouse!="0") $sql .= " and (stoi_warehouse_out_id = '".$warehouse."' or     stoi_warehouse_in_id = '".$warehouse."')";
-        else $sql .= " and stoi_warehouse_out_id != '0'";
+        if ($warehouse!="0") $sql .= " and stoi_warehouse_id = '".$warehouse."'";
+        else $sql .= " and stoi_warehouse_id != '0'";
 
     }
     

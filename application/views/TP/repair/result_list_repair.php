@@ -25,12 +25,6 @@
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formfilter" id="formfilter" method="post">
-            <div class="col-md-1">
-                <div class="form-group">
-                เดือน
-                <input type="text" class="form-control input-sm" name="month" id="month" value="<?php echo $month; ?>">
-                </div>
-            </div>
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
@@ -83,6 +77,26 @@
             </div>
         </div> 
         <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ส่งซ่อม
+                <input type="text" class="form-control input-sm" name="month" id="month" value="<?php echo $month; ?>">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ CS รับ
+                <input type="text" class="form-control input-sm" name="month_cs" id="month_cs" value="<?php echo $month_cs; ?>">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                เดือนที่ส่งกลับ
+                <input type="text" class="form-control input-sm" name="month_return" id="month_return" value="<?php echo $month_return; ?>">
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-xs-3 col-md-2">
                 <button type="submit" name="action" value="0" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
@@ -110,6 +124,8 @@
                         <input type="hidden" name="excel_shopid" value="<?php echo $shopid; ?>">
                         <input type="hidden" name="excel_status" value="<?php echo $status; ?>">
                         <input type="hidden" name="excel_month" value="<?php echo $month_ajax; ?>">
+                        <input type="hidden" name="excel_month_cs" value="<?php echo $month_cs_ajax; ?>">
+                        <input type="hidden" name="excel_month_return" value="<?php echo $month_return_ajax; ?>">
                         </form>
                     </div>
                     <div class="panel-body table-responsive">
@@ -122,6 +138,7 @@
                                     <th>ยี่ห้อ</th>
                                     <th>สาขาที่ส่งซ่อม</th>
                                     <th>รายละเอียดลูกค้า</th>
+                                    <th width="50">ที่มา</th>
                                     <th>อาการ</th>
                                     <th>ประกัน</th>
                                     <th>ราคาซ่อม</th>
@@ -164,12 +181,14 @@
 $(document).ready(function()
 {    
     get_datepicker_month("#month");
+    get_datepicker_month("#month_cs");
+    get_datepicker_month("#month_return");
 
     var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("tp_repair/ajaxView_seach_repair")."/".$number."/".$refcode."/".$brandid."/".$shopid."/".$status."/".$month_ajax; ?>',
+        'sAjaxSource'    : '<?php echo site_url("tp_repair/ajaxView_seach_repair")."/".$number."/".$refcode."/".$brandid."/".$shopid."/".$status."/".$month_ajax."/".$month_cs_ajax."/".$month_return_ajax; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',

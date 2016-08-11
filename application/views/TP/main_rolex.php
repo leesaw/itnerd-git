@@ -43,7 +43,9 @@
                         <br>
                         <div class="row">
                             <div class="col-md-4">
-
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/form_rolex_warrantycard_comfirm"); ?>"><button type="button" class="btn bg-navy btn-lg btn-block"><h4>แจ้งรูดใบรับประกัน</h4></button></a>
+                                </div>
                             </div>
                             <div class="col-md-4">
 
@@ -85,6 +87,11 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <a href="<?php echo site_url("pos/form_list_borrow_item"); ?>"><button type="button" class="btn bg-orange btn-lg btn-block"><h4>รายการสินค้ายืม</h4></button></a>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>รายการใบรับประกันที่รูดแล้ว</h4></button></a>
                                 </div>
                             </div>
 						</div>

@@ -56,6 +56,10 @@ function getSerial_detail_shop()
     
     $query = $this->tp_shop_model->getItem_borrow_serial($where." and posrobi_enable=1");
     $data["borrow_array"] = $query;
+
+    $this->load->model('tp_rolex_warrantycard_model','',TRUE);
+    $where = "rowa_serial_number = '".$serial."'";
+    $data["warranty_array"] = $this->tp_rolex_warrantycard_model->get_warrantycard($where);
     
     $data["serial"] = $serial;
     
@@ -242,10 +246,6 @@ function stock_rolex_borrow_save()
 {
     $borrower = $this->input->post("borrower");
 
-    $borrower_array = explode("-", $borrower);
-    $borrower = $borrower_array[1];
-    $borrower_id = $borrower_array[0];
-
     $remark = $this->input->post("remark");
     
     $shop_id = $this->input->post("shop_id");
@@ -287,23 +287,6 @@ function stock_rolex_borrow_save()
                         'posrobi_stock_balance_id' => $it_array[$i]["stob_id"]
             );
         $query = $this->tp_shop_model->addPOS_rolex_borrow_item($sale);
-
-        // add item to rolex_transfer table
-        $transfer = array( "rot_posrob_id" => $last_id,
-                            "rot_itse_id" => $it_array[$i]["itse_id"],
-                            "rot_warehouse_out_id" => $shop_id,
-                            "rot_warehouse_in_id" => 0,
-                            "rot_borrower_out_id" => 0,
-                            "rot_borrower_in_id" => $borrower_id,
-                            "rot_dateadd" => $currentdate,
-                            "rot_dateadd_by" => $this->session->userdata('sessid'),
-                            "rot_remark" => $remark,
-                            "rot_status" => 'N'
-                        );
-
-        $this->load->model('tp_rolex_transfer_model','',TRUE);
-        $query = $this->tp_rolex_transfer_model->add_rolex_transfer($transfer);
-
         $count += $it_array[$i]["qty"];
         // decrease stock warehouse out
         $this->load->model('tp_warehouse_transfer_model','',TRUE);
@@ -325,7 +308,7 @@ function stock_rolex_borrow_save()
             }
         }
         
-        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 1, "itse_warehouse_id" => 0, "itse_rolex_borrower_id" => $borrower_id, "itse_dateadd" => $currentdate);
+        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 0, "itse_dateadd" => $currentdate);
         
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
@@ -343,8 +326,8 @@ function stock_rolex_borrow_print()
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th','A4','0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
-    //$mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
-    $mpdf->showWatermarkImage = true;
+    $mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    //$mpdf->showWatermarkImage = true;
 
     $sql = "posrob_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
@@ -540,13 +523,13 @@ function check_rolex_borrow_serial()
     $shop_id = $this->input->post("shop_id");
     
     $output = "";
-    $sql = "itse_serial_number = '".$refcode."' and itse_rolex_borrower_id > 0 and itse_enable = 1";
+    $sql = "itse_serial_number = '".$refcode."' and posrobi_enable = '1' and posrob_status != 'V'";
     
-    $result = $this->tp_shop_model->getItem_borrower($sql);
+    $result = $this->tp_shop_model->getItem_borrow_serial($sql);
     
     if (count($result) >0) {
         foreach($result as $loop) {
-            $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1 ".$loop->it_uom."' style='width: 50px;' readonly></td><td>".number_format($loop->it_srp)."</td><td>".$loop->posbor_name."</td>";
+            $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->posrobi_stock_balance_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='posrobi_id' id='posrobi_id' value='".$loop->posrobi_id."'>".$loop->it_refcode."</td><td>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1 ".$loop->it_uom."' style='width: 50px;' readonly></td><td>".number_format($loop->it_srp)."</td><td>".$loop->posrob_borrower_name."</td>";
         }
     }
     
@@ -590,50 +573,15 @@ function stock_rolex_borrow_return_save()
     $count = 0;
     for($i=0; $i<count($it_array); $i++){
         // add item to so
-        $sale = array(  'posrobi_pos_rolex_borrow_id' => $last_id,
-                        'posrobi_item_id' => $it_array[$i]["id"],
-                        'posrobi_qty' => $it_array[$i]["qty"],
-                        'posrobi_item_serial_number_id' => $it_array[$i]["itse_id"]
-            );
-        $query = $this->tp_shop_model->addPOS_rolex_borrow_item($sale);
-
-        /*
         $sale = array(  'id' => $it_array[$i]["posrobi_id"],
                         'posrobi_return_id' => $last_id,
                         'posrobi_enable' => 0
             );
         $query = $this->tp_shop_model->editPOS_rolex_borrow_item($sale);
-        */
-
-        // search serial to get borrower id
-        $this->load->model('tp_item_model','',TRUE);
-        $where = "itse_id = ".$it_array[$i]["itse_id"];
-        $query = $this->tp_item_model->getItem_caseback($where);
-        foreach($query as $loop) {
-            $borrower_id = $loop->itse_rolex_borrower_id;
-        }
-
-        // add item to rolex_transfer table
-        $transfer = array( "rot_posrob_id" => $last_id,
-                            "rot_itse_id" => $it_array[$i]["itse_id"],
-                            "rot_warehouse_out_id" => 0,
-                            "rot_warehouse_in_id" => $shop_id,
-                            "rot_borrower_out_id" => $borrower_id,
-                            "rot_borrower_in_id" => 0,
-                            "rot_dateadd" => $currentdate,
-                            "rot_dateadd_by" => $this->session->userdata('sessid'),
-                            "rot_remark" => $remark,
-                            "rot_status" => 'N'
-                        );
-
-        $this->load->model('tp_rolex_transfer_model','',TRUE);
-        $query = $this->tp_rolex_transfer_model->add_rolex_transfer($transfer);
-
-
         $count += $it_array[$i]["qty"];
         // decrease stock warehouse out
         $this->load->model('tp_warehouse_transfer_model','',TRUE);
-        $sql = "stob_warehouse_id = '".$shop_id."' and stob_item_id = '".$it_array[$i]["id"]."'";
+        $sql = "stob_id = '".$it_array[$i]["stob_id"]."'";
         $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
 
         $qty_update = $it_array[$i]["qty"];
@@ -650,16 +598,17 @@ function stock_rolex_borrow_return_save()
                 break;
             }
         }
-
-        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 1, "itse_warehouse_id" => $shop_id, "itse_rolex_borrower_id" => 0, "itse_dateadd" => $currentdate);
         
+        $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 1, "itse_dateadd" => $currentdate);
         
+        $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
     }
     $result = array("a" => $count, "b" => $last_id);
     //$result = array("a" => $shop_id, "b" => $month);
     echo json_encode($result);
     exit();
+
 }
     
 function stock_rolex_borrow_return_print()
@@ -680,8 +629,8 @@ function stock_rolex_borrow_return_print()
         $data['pos_array'] = array();
     }
 
-    $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
-    $query = $this->tp_shop_model->getPOS_rolex_borrow_item($sql);
+    $sql = "posrobi_return_id = '".$id."'";
+    $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
     if($query){
         $data['item_array'] =  $query;
     }else{
@@ -707,7 +656,7 @@ function stock_rolex_pos_borrow_return_last()
         $data['pos_array'] = array();
     }
 
-    $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
+    $sql = "posrobi_return_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow_return_item($sql);
     if($query){
         $data['item_array'] =  $query;
@@ -754,7 +703,7 @@ function get_borrow_item()
 {
     $borrower_name = $this->input->post("borrower");
     
-    $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_return_id=0";
+    $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_return_id=0 and posrob_status != 'V'";
     
     $query = $this->tp_shop_model->getItem_borrow_serial($where);
     $data["borrow_array"] = $query;
@@ -820,6 +769,107 @@ function print_rolex_cn()
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/document/rolex_cn_print", $data, TRUE));
     $mpdf->Output();
+}
+
+function form_rolex_warrantycard_comfirm()
+{
+    $datein = date("d/m/Y");
+    
+    // shop rolex
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+
+    $data['datein'] = $datein;
+    $data['title'] = "Rolex - Warranty Card Comfirmation";
+    $this->load->view("TP/shop/form_warrantcard_confirm", $data);
+}
+
+function check_rolex_detail()
+{
+    $refcode = $this->input->post("refcode");
+    $shop_id = $this->input->post("shop_id");
+    
+    $output = "";
+    $sql = "itse_serial_number = '".$refcode."' and sh_id = '".$shop_id."'";
+    
+    $result = $this->tp_shop_model->getItem_serial($sql);
+    
+    if (count($result) >0) {
+        foreach($result as $loop) {
+            $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td><input type='hidden' name='itse_serial_number' id='itse_serial_number' value='".$loop->itse_serial_number."'>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td>";
+        }
+    }
+    
+    
+    echo $output;
+}
+
+function save_rolex_warrantycard_confirm()
+{  
+    $shop_id = $this->input->post("shop_id");
+    $it_array = $this->input->post("item");
+    $datein = $this->input->post("datein");
+    
+    $currentdate = date("Y-m-d H:i:s");
+    
+    $datein = explode('/', $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+
+    $count = 0;
+    for($i=0; $i<count($it_array); $i++){
+        // add item to rowa
+
+        $warranty = array(  'rowa_itse_id' => $it_array[$i]["itse_id"],
+                        'rowa_shop_id' => $shop_id,
+                        'rowa_issuedate' => $datein,
+                        'rowa_serial_number' => $it_array[$i]["itse_serial_number"],
+                        'rowa_dateadd' => $currentdate,
+                        'rowa_dateadd_by' => $this->session->userdata('sessid')
+            );
+
+        $this->load->model('tp_rolex_warrantycard_model','',TRUE);
+        $query = $this->tp_rolex_warrantycard_model->add_warrantycard($warranty);
+        $count++;
+    }
+
+    $result = array("a" => $count);
+    echo json_encode($result);
+    exit();
+}
+
+function list_rolex_warrantycard()
+{
+    $shopid = $this->session->userdata('sessshopid');
+
+    $datein = $this->input->post("datein");
+    if ($datein !="") {
+        $month = explode('/',$datein);
+        $currentdate = $month[1]."-".$month[0];
+    }else{
+        $currentdate = date("Y-m");
+    }
+    
+    $start = $currentdate."-01 00:00:00";
+    $end = $currentdate."-31 23:59:59";
+
+    $currentdate = explode('-', $currentdate);
+    $currentdate = $currentdate[1]."/".$currentdate[0];
+    $data["currentdate"] = $currentdate;
+    $data['month'] = $currentdate;
+    
+    $this->load->model('tp_rolex_warrantycard_model','',TRUE);
+
+    $where = "rowa_enable = '1' and rowa_issuedate >= '".$start."' and rowa_issuedate <= '".$end."'";
+    if ($shopid > 0)  $where .= " and rowa_shop_id = '".$shopid."'";
+    $data["warranty_array"] = $this->tp_rolex_warrantycard_model->get_warrantycard($where);
+
+    $this->load->model('tp_shop_model','',TRUE);
+    $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
+    $data['shop_array'] = $this->tp_shop_model->getShop($where);
+
+    $data['title'] = "NGG| Nerd - Search Warranty Card";
+    $this->load->view('TP/shop/list_rolex_warrantycard',$data);
 }
     
 }

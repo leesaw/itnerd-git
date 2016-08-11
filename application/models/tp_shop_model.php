@@ -74,11 +74,10 @@ Class Tp_shop_model extends CI_Model
 
  function getItem_borrower($where)
  {
- 	$this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code, posbor_name");
+ 	$this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, br_name, br_code");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_item', 'itse_item_id = it_id', 'left');
     $this->db->join('tp_brand', 'it_brand_id = br_id','left');	
-    $this->db->join('tp_pos_rolex_borrower', 'posbor_id = itse_rolex_borrower_id', 'left');
     if ($where != "") $this->db->where($where);
 	$query = $this->db->get();		
 	return $query->result();
@@ -133,10 +132,9 @@ Class Tp_shop_model extends CI_Model
     
  function getPOS_rolex_borrow_return_item($where)
  {
-	$this->db->select("posrobi_id, posrobi_pos_rolex_borrow_id, posrobi_item_id, posrobi_item_serial_number_id, posrobi_qty,  it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description, posbor_name");
+	$this->db->select("posrobi_id, posrobi_pos_rolex_borrow_id, posrobi_item_id, posrobi_item_serial_number_id, posrobi_qty,  it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_remark, it_srp, it_short_description, posrobi_stock_balance_id, posrob_borrower_name");
 	$this->db->from('tp_pos_rolex_borrow_item');
-	$this->db->join('tp_rolex_transfer', 'rot_posrob_id = posrobi_pos_rolex_borrow_id and rot_itse_id = posrobi_item_serial_number_id', 'left');
-	$this->db->join('tp_pos_rolex_borrower', 'rot_borrower_out_id = posbor_id', 'left');
+    $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
     $this->db->join('tp_item', 'it_id = posrobi_item_id','left');	
     $this->db->join('tp_item_serial', 'itse_id = posrobi_item_serial_number_id','left');	
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');

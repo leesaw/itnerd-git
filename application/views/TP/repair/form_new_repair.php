@@ -78,6 +78,13 @@
                                 <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
                                 </div>
                             </div>   
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                ที่มา * &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="customer" id="customer" value="1"> ลูกค้า&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                <input type="radio" name="customer" id="customer" value="0"> สต็อก
+                                </div>
+                            </div>   
                         </div>
                         <div class="row">
                             <div class="col-md-3">
@@ -152,6 +159,7 @@ function submitform()
     var cusname = document.getElementById('cusname').value;
     var custelephone = document.getElementById('custelephone').value;
     custelephone = custelephone.replace(/[-,/#\s]/g, "");
+    var customer = $('input[name="customer"]:checked').val();
     var datein = document.getElementById('datein').value;
     var datecs = document.getElementById('datecs').value;
     var shopid = document.getElementById('shopid').value;
@@ -185,6 +193,8 @@ function submitform()
     }else if ((Math.floor(custelephone)*1000) % 1 != 0) {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า ที่เป็นตัวเลขเท่านั้น");
         document.getElementById('custelephone').focus(); 
+    }else if (customer != 0 && customer != 1) {
+        alert("กรุณาเลือกที่มาของซ่อม");
     }else if (refcode == "") {
         alert("กรุณาใส่ Ref. Number");
         document.getElementById('refcode').focus();
@@ -208,6 +218,7 @@ function confirmform()
     var cusname = document.getElementById('cusname').value;
     var custelephone = document.getElementById('custelephone').value;
     custelephone = custelephone.replace(/[-/#\s]/g, "");
+    var customer = $('input[name="customer"]:checked').val();
     var datein = document.getElementById('datein').value;
     var datecs = document.getElementById('datecs').value;
     var shopid = document.getElementById('shopid').value;
@@ -218,12 +229,13 @@ function confirmform()
     var case1 = document.getElementById('case').value;
     var remark = document.getElementById('remark').value;
      
+    //alert(customer);
     document.getElementById("savebtn").disabled = true;
     
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_repair"); ?>" ,
-        data : {datein: datein, cusname: cusname, custelephone: custelephone, datecs: datecs, shopid: shopid, number: number, getfrom: getfrom, refcode: refcode, brandid: brandid, case: case1, remark: remark} ,
+        data : {datein: datein, cusname: cusname, custelephone: custelephone, customer: customer, datecs: datecs, shopid: shopid, number: number, getfrom: getfrom, refcode: refcode, brandid: brandid, case: case1, remark: remark} ,
         dataType: 'json',
         success : function(data) {
             var message = "ทำการบันทึกเรียบร้อยแล้ว";

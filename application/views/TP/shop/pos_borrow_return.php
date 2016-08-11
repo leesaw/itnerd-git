@@ -5,21 +5,21 @@
 </head>
 
 <body class="skin-red">
-	<div class="wrapper">
-	<?php $this->load->view('menu'); ?>
-	
+    <div class="wrapper">
+    <?php $this->load->view('menu'); ?>
+    
         <div class="content-wrapper">
         <section class="content-header">
             
             <h1>ออกใบรับสินค้าคืน</h1>
         </section>
             
-		<section class="content">
-		<div class="row">
+        <section class="content">
+        <div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-info">
-					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+                    <div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
+                    
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -28,44 +28,44 @@
                                             วันที่รับของ
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>">
                                     </div>
-							</div>
+                            </div>
                             <div class="col-md-2">
-									<div class="form-group-sm">
+                                    <div class="form-group-sm">
                                         สาขา
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php foreach($shop_array as $loop) {  echo $loop->sh_name; $shop_id = $loop->sh_id; } ?>" readonly>
                                         <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $shop_id; ?>">
                                     </div>
-							</div>
-						</div>
-						<br>
-						<div class="row">
-							<div class="col-md-12">
-				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group-lg col-lg-6">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><div class="input-group input-group-lg col-lg-6">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Serial ที่ต้องการ">
                                         <div class="input-group-btn">
 
                                         </div>
                                         <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
                                         </div></div>
-				                    <div class="panel-body">
-				                        <div class="table-responsive">
-				                            <table class="table table-bordered table-hover" id="tablebarcode" width="100%">
-				                                <thead>
-				                                    <tr>
-				                                        <th>RMC</th>
+                                    <div class="panel-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-hover" id="tablebarcode" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>RMC</th>
                                                         <th>Serial No.</th>
                                                         <th>Description</th>
                                                         <th>Family</th>
                                                         <th>Bracelet</th>
-														<th width="105">Quantity</th>
+                                                        <th width="105">Quantity</th>
                                                         <th>Retail Price</th>
                                                         <th>รับคืนจาก</th>
-														<th> </th>
-				                                    </tr>
-				                                </thead>
-												<tbody>
-												</tbody>
+                                                        <th> </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
                                                 <tfoot>
                                                     <tr style="font-size:200%;" class="text-red">
                                                         <th colspan="5" style="text-align:right;"><label>จำนวนรวม:</th>
@@ -73,12 +73,12 @@
                                                         <th> </th><th> </th>
                                                     </tr>
                                                 </tfoot>
-											</table>
-										</div>
-									</div>
-								</div>
-							</div>	
-						</div>	
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  
+                        </div>  
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group-sm">
@@ -102,17 +102,17 @@
                         </div>
                         <hr>
                         <div class="row">
-							<div class="col-md-6">
-								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึกใบรับสินค้าคืน </button>&nbsp;&nbsp;
-							</div>
-						</div>
-						</form>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึกใบรับสินค้าคืน </button>&nbsp;&nbsp;
+                            </div>
+                        </div>
+                        </form>
 
-					</div>
-				</div>
-			</div>	
+                    </div>
+                </div>
+            </div>  
             </div></section>
-	</div>
+    </div>
 </div>
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
@@ -136,9 +136,9 @@ $(document).ready(function()
             var product_code_value = $.trim($(this).val());
             var shop_id = document.getElementById("shop_id").value;
             if(product_code_value != "")
-			{
+            {
                 check_product_code(product_code_value,shop_id);
-			}
+            }
             
             $(this).val('');
             
@@ -146,20 +146,20 @@ $(document).ready(function()
                 calSummary();
             },5000);
             //calSummary();
-		}
-	});
+        }
+    });
     
     $('#salepersonid').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var person_id = $.trim($(this).val());
             var shop_id = document.getElementById("shop_id").value;
             if(person_id != "")
-			{
+            {
                 check_saleperson_code(person_id,shop_id);
-			}
+            }
             //calSummary();
-		}
-	});
+        }
+    });
     
 });
     
@@ -176,17 +176,17 @@ function calSummary() {
 } 
     
 function numberWithCommas(obj) {
-	var x=$(obj).val();
+    var x=$(obj).val();
     var parts = x.toString().split(".");
-	parts[0] = parts[0].replace(/,/g,"");
+    parts[0] = parts[0].replace(/,/g,"");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     $(obj).val(parts.join("."));
 }
 
 function check_product_code(refcode_input, shop_id)
 {
-	if(refcode_input != "")
-	{
+    if(refcode_input != "")
+    {
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("pos/check_rolex_borrow_serial"); ?>" ,
@@ -207,14 +207,14 @@ function check_product_code(refcode_input, shop_id)
                 alert("เกิดความผิดพลาด !!!");
             }
         });
-	}
+    }
 
 }
     
 function check_saleperson_code(saleperson_id, shop_id)
 {
-	if(saleperson_id != "")
-	{
+    if(saleperson_id != "")
+    {
         $.ajax({
             type : "POST" ,
             dataType: 'json',
@@ -233,7 +233,7 @@ function check_saleperson_code(saleperson_id, shop_id)
                 alert("เกิดความผิดพลาด !!!");
             }
         });
-	}
+    }
 
 }
 
@@ -276,8 +276,8 @@ function confirmform()
     var saleperson_code = document.getElementById('saleperson_code').value;
     
     var itse_id = document.getElementsByName('itse_id');
-    //var stob_id = document.getElementsByName('stob_id');
-    //var posrobi_id = document.getElementsByName('posrobi_id');
+    var stob_id = document.getElementsByName('stob_id');
+    var posrobi_id = document.getElementsByName('posrobi_id');
     var it_id = document.getElementsByName('it_id');
     var it_array = new Array();
     var checked = 0;
@@ -297,8 +297,7 @@ function confirmform()
 
         }
         if (checked==0) {
-            //it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, posrobi_id: posrobi_id[i].value};
-            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value};
+            it_array[index] = {id: it_id[i].value, qty: 1, itse_id: itse_id[i].value, stob_id: stob_id[i].value, posrobi_id: posrobi_id[i].value};
             index++;
         }else{
             checked = 0;

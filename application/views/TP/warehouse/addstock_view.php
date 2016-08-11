@@ -103,6 +103,15 @@
 							</div>	
 						</div>	
                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group-sm">
+                                    Remark
+                                    <input type="text" class="form-control" name="stoiremark" id="stoiremark" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
 							<div class="col-md-6">
 									<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $remark; ?>)"><i class='fa fa-save'></i>  บันทึก </button>
 							</div>
@@ -312,6 +321,7 @@ function confirmform(luxury)
         var datein = document.getElementById("datein").value;
         var whid = document.getElementById('whid').value;
         var it_id = document.getElementsByName('it_id');
+        var remark = document.getElementById('stoiremark').value;
         var it_array = new Array();
         var it_code = document.getElementsByName('it_code');
         for(var i=0; i<it_code.length; i++){
@@ -327,7 +337,7 @@ function confirmform(luxury)
             $.ajax({
                 type : "POST" ,
                 url : "<?php echo site_url("warehouse_transfer/importstock_save/1"); ?>" ,
-                data : {datein: datein, whid: whid, item: it_array} ,
+                data : {datein: datein, whid: whid, item: it_array, remark: remark} ,
                 dataType: 'json',
                 success : function(data) {
                     if (data.b == 0) {
@@ -360,6 +370,7 @@ function confirmform(luxury)
         var whid = document.getElementById('whid').value;
         var it_id = document.getElementsByName('it_id');
         var it_quantity = document.getElementsByName('it_quantity');
+        var remark = document.getElementById('stoiremark').value;
         var it_array = new Array();
         
         for(var i=0; i<it_quantity.length; i++){
@@ -376,7 +387,7 @@ function confirmform(luxury)
             $.ajax({
                 type : "POST" ,
                 url : "<?php echo site_url("warehouse_transfer/importstock_save/0"); ?>" ,
-                data : {datein: datein, whid: whid, item: it_array} ,
+                data : {datein: datein, whid: whid, item: it_array, remark: remark} ,
                 dataType: 'json',
                 success : function(data) {
                     var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับเข้าคลัง ใช่หรือไม่";

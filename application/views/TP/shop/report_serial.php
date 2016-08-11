@@ -18,6 +18,13 @@
         </h1>
     </section>
 	
+    <?php $warranty_status = array(); $index=0; 
+    foreach($warranty_array as $loop) { 
+        $warranty_status[$index] = array("issuedate" => $loop->rowa_issuedate, "enable" => $loop->rowa_enable);
+        $index++;
+    } ?>
+
+
 	<section class="content">
 		<div class="row">
             <div class="col-md-12">
@@ -30,7 +37,15 @@
 			<div class="col-xs-12">
                 <div class="panel panel-success">
 					<div class="panel-heading">
-                        
+                        <?php if ($index==0) {
+                            echo "<button class='btn btn-primary'>ยังไม่ได้รูด</button>";
+                            }else{ for($i=0; $i<count($warranty_status); $i++) { 
+                                if ($warranty_status[$i]["enable"] == 0) { 
+                                    echo "<button class='btn btn-warning'><b>รูดแล้วยกเลิก ".$warranty_status[$i]["issuedate"]."</b></button> ";
+                                }else{
+                                    echo "<button class='btn btn-danger'><b>รูดแล้ว ".$warranty_status[$i]["issuedate"]."</b></button> ";
+                                } 
+                     } } ?>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table" id="tablebarcode" width="100%">
@@ -58,7 +73,9 @@
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->posroit_item_srp; ?></td>
-                                    <td><?php if ($loop->posrot_status == 'N') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; else if ($loop->posrot_status == 'V') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button></a>"; ?></td>
+                                    <td><?php if ($loop->posrot_status == 'N') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; else if ($loop->posrot_status == 'V') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button></a>";      
+
+                                     ?></td>
                                     <td><?php 
                                         echo "ราคา ".number_format($loop->posroit_netprice)." บาท";
                                         if ($loop->posroit_dc_baht > 0)
@@ -134,7 +151,7 @@
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>" class="btn btn-primary">ค้นหา</a>    
+            <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>" class="btn btn-success">ค้นหา</a>    
             </div>
         </div>
                         

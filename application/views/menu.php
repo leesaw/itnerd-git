@@ -344,6 +344,11 @@
                 <i class="fa fa-circle-o text-red"></i><span>ออกใบรับสินค้าคืน</span>
               </a>
             </li>
+            <li>
+              <a href="<?php echo site_url("pos/form_rolex_warrantycard_comfirm"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>แจ้งรูดใบรับประกัน</span>
+              </a>
+            </li>
             <li class="header">รายงาน</li>
             <li>
               <a href="<?php echo site_url("sale/saleorder_POS_today"); ?>">
@@ -372,6 +377,9 @@
             </li>
             <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+            </a></li>
+            <li><a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
             </a></li>
             <?php } ?>
               
@@ -424,6 +432,9 @@
             <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
             </a></li>
+            <li><a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
+            </a></li>
             <li>
               
             </li>
@@ -445,6 +456,9 @@
             </li>
             <li>
                 <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+            </li>
+            <li>
+                <a href="<?php echo site_url("tp_repair/form_list_repair"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลส่งซ่อม</a>
             </li>
             <?php } ?>
               
@@ -496,7 +510,9 @@
             <li><a href="<?php echo site_url("sale/report_rolex_sale_form"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>รายงานการขาย Rolex</span>
             </a></li>
-
+            <li><a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
+            </a></li>
             <?php } ?>
             <?php 
               // only Sesto
