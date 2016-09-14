@@ -258,6 +258,7 @@ function confirmform(caseback)
     var gp_value = document.getElementsByName('gp_value');
     
     var it_id = document.getElementsByName('it_id');
+    var it_srp = document.getElementsByName('it_srp');
     var stob_id = document.getElementsByName('stob_id');
     
     var saleorder_remark =  document.getElementById("saleorder_remark").value;
@@ -281,16 +282,18 @@ function confirmform(caseback)
         */
         //if (checked==0) {
             
-        it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, barcode_id: barcode_id[i].value, discount_value: discount_value[i].value, discount_baht: discount_baht[i].value, gp_value: gp_value[i].value, stob_id: stob_id[i].value};
+        it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, barcode_id: barcode_id[i].value, discount_value: discount_value[i].value, discount_baht: discount_baht[i].value, gp_value: gp_value[i].value, stob_id: stob_id[i].value, srp: it_srp[i].value};
         
+        if (caseback==1) {
+            serial_array[index] = {id: it_id[i].value, stob_id: stob_id[i].value, serial: it_serial[i].value};
+        }
+
         index++;
         //}else{
         //    checked = 0;
         //}
         
-        if (caseback==1) {
-            serial_array[i] = {id: it_id[i].value, stob_id: stob_id[i].value, serial: it_serial[i].value};
-        }
+        
     }
     $.ajax({
         type : "POST" ,

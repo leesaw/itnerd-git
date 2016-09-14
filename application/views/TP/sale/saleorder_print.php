@@ -57,7 +57,7 @@ else if ($loop->soi_sale_barcode_id == -1) { $cal = (($loop->soi_qty*$loop->it_s
 $current_qty = $loop->soi_qty;
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
-        if ($loop->soi_item_id==$loop2->sos_item_id && $current_qty>0) { 
+        if ($loop->soi_id==$loop2->sos_soi_id && $current_qty>0) { 
             $check_exist = true;
             for($k=0; $k<count($serial_exist); $k++) { 
                 if ($loop2->itse_serial_number == $serial_exist[$k]) { $check_exist = false; } }

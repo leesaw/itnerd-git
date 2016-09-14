@@ -593,7 +593,7 @@ function submitform()
 
             
 
-            if ((it_net[i].value).replace(/,/g, '')*1000 %  1 != 0) {
+            if (Math.round((it_net[i].value).replace(/,/g, '')*1000) %  1 != 0) {
                 alert("กรุณาใส่จำนวนเฉพาะตัวเลขเท่านั้น");
                 it_net[i].focus();
                 return;

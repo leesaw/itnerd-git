@@ -85,7 +85,7 @@ function check_code()
 
     if (count($result) >0) {
         foreach($result as $loop) {
-            $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->stob_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td>".number_format($loop->it_srp)."</td>";
+            $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->stob_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
             
             if ($loop->it_has_caseback != '1') {
                 $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='1' style='width: 50px;'></td>";
@@ -156,13 +156,32 @@ function saleorder_save()
         $sale = array(  'soi_saleorder_id' => $last_id,
                         'soi_item_id' => $it_array[$i]["id"],
                         'soi_qty' => $it_array[$i]["qty"],
+                        'soi_item_srp' => $it_array[$i]["srp"],
                         'soi_sale_barcode_id' => $it_array[$i]["barcode_id"],
                         'soi_dc_percent' => $it_array[$i]["discount_value"],
                         'soi_dc_baht' => $it_array[$i]["discount_baht"],
                         'soi_gp' => $it_array[$i]["gp_value"]
             );
-        $query = $this->tp_saleorder_model->addSaleItem($sale);
+        $last_soi_id = $this->tp_saleorder_model->addSaleItem($sale);
         $count += $it_array[$i]["qty"];
+
+        // add serial
+        if ($caseback == 1) {
+            $serial = array( 'sos_saleorder_id' => $last_id,
+                            'sos_soi_id' => $last_soi_id,
+                            'sos_item_id' => $serial_array[$i]["id"],
+                            'sos_item_serial_id' => $serial_array[$i]["serial"]
+            );
+
+            $query = $this->tp_saleorder_model->addSaleOrder_serial($serial);
+            $this->load->model('tp_item_model','',TRUE);
+            $serial_item = array( 'id' => $serial_array[$i]["serial"],
+                                     'itse_enable' => 0
+                                );
+            $query = $this->tp_item_model->editItemSerial($serial_item);
+
+        }
+
         // decrease stock warehouse out
         $this->load->model('tp_warehouse_transfer_model','',TRUE);
         $sql = "stob_id = '".$it_array[$i]["stob_id"]."'";
@@ -185,22 +204,7 @@ function saleorder_save()
         
     }
     
-    if ($caseback == 1) {
-        for($i=0; $i<count($serial_array); $i++){
-            $stock = array( 'sos_saleorder_id' => $last_id,
-                            'sos_item_id' => $serial_array[$i]["id"],
-                            'sos_item_serial_id' => $serial_array[$i]["serial"]
-            );
-
-            $query = $this->tp_saleorder_model->addSaleOrder_serial($stock);
-            $this->load->model('tp_item_model','',TRUE);
-            $serial_item = array( 'id' => $serial_array[$i]["serial"],
-                                 'itse_enable' => 0
-                            );
-            $query = $this->tp_item_model->editItemSerial($serial_item);
-
-        }
-    }
+    
 
     $result = array("a" => $count, "b" => $last_id);
     echo json_encode($result);
@@ -1162,10 +1166,10 @@ function ajaxViewSaleReport()
     
     $this->load->library('Datatables');
     $this->datatables
-    ->select("so_issuedate, sh_code, sh_name, it_refcode, itse_serial_number, br_name, soi_qty, it_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
+    ->select("so_issuedate, sh_code, sh_name, it_refcode, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice")
     ->from('tp_saleorder_item')
     ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
-    ->join('tp_saleorder_serial', 'sos_saleorder_id = so_id and sos_item_id = soi_item_id', 'left')
+    ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
     ->join('tp_shop', 'so_shop_id = sh_id','left')
     ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
     ->join('tp_item', 'it_id = soi_item_id','left')
@@ -1256,7 +1260,7 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->br_name);    
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->soi_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->soi_item_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->sb_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->dc);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->soi_dc_baht);

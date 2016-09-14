@@ -1372,7 +1372,7 @@ function ajaxView_seach_transfer_in()
         else $sql .= " and br_id != '0'";
             
         if ($warehouse!="0") $sql .= " and stoi_warehouse_id = '".$warehouse."'";
-        else $sql .= " and stoi_warehouse_out_id != '0'";
+        else $sql .= " and stoi_warehouse_id != '0'";
 
     }
     
