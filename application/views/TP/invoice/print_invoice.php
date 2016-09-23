@@ -47,7 +47,7 @@ if ($loop->inv_warehouse_branch == 0) $cusbranch = "สำนักงานใ�
 <td style="border-left:1px solid black;" align="center" valign="top"><?php echo $loop->invit_brand; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->invit_qty; ?></td>
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->invit_srp; ?></td>
-<td align="center" style="border-left:1px solid black;" valign="top"><?php echo $loop->invit_discount; ?> %</td>
+<td align="center" style="border-left:1px solid black;" valign="top"><?php if ($loop->invit_discount>0) echo $loop->invit_discount."%"; ?></td>
 <td align="right" style="border-left:1px solid black;" valign="top"><?php echo $loop->invit_netprice."&nbsp;&nbsp;"; $sum += $loop->invit_netprice; ?></td>
 </tr>
 <?php $no++; 

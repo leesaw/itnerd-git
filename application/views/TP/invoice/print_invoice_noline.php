@@ -11,7 +11,7 @@
 <td width="400">
 <div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
 </td> 
-<?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $note=$loop->inv_note; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; 
+<?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $note=$loop->inv_note; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; $discount_percent = $loop->inv_discount_percent;
 if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงานใหญ่"; $mainbranch=1; }else{ $cusbranch = "สาขาที่ ".str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); $mainbranch=0; $branch_number=str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); } } 
 
  $GGyear=substr($datetime,0,4); 
@@ -171,12 +171,25 @@ if (($no >=10)) {
 <td style="border-left:0px solid black;" align="left" valign="top"><?php echo strtoupper($loop->invit_brand); ?></td>
 <td align="center" style="border-left:0px solid black;" valign="top"><?php echo $loop->invit_qty; $sum_qty+=$loop->invit_qty; ?></td>
 <td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_srp, 2, ".", ","); ?></td>
-<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_discount); ?> %</td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php if ($loop->invit_discount>0) echo $loop->invit_discount."%"; ?></td>
 <td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_netprice*$loop->invit_qty, 2, ".", ",")."&nbsp;&nbsp;"; $sum += ($loop->invit_netprice*$loop->invit_qty); ?></td>
 </tr>
 <?php $no++; 
 
 } } $page_no++;  ?> 
+
+<?php  if ($discount_percent > 0) { ?>
+<tr style="border:0px solid black;"><td></td>
+<td align="center" valign="top" width="25"></td>
+<td style="border-left:0px solid black;" align="center" valign="top">ส่วนลดท้ายบิล</td>
+<td align="center" style="border-left:0px solid black;" valign="top"></td>
+<td align="right" style="border-left:0px solid black;" valign="top"></td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php echo $discount_percent."%"; ?></td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($sum*$discount_percent/100, 2, ".", ",")."&nbsp;&nbsp;"; ?></td>
+</tr>
+
+<?php $no++; } ?>
+
 
 <?php if ($no<10) { for($i=10-$no; $i>0; $i--) { ?> 
 <tr><td colspan="7" > &nbsp;</td></tr>
@@ -215,16 +228,16 @@ if ($lastpage!=1 || $count_item ==1) {
 <tr><td height="55" colspan="7"></td></tr>
 <?php } ?>
 <tr><td></td>
-<td align="right" colspan="5" scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07, 2, '.', ','); ?></div></td>
+<td align="right" colspan="5" scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format(($sum*(100-$discount_percent)/100)/1.07, 2, '.', ','); ?></div></td>
 </tr>
 <tr><td></td><td colspan="6" height="10"></td></tr>
 <tr><td></td>
-<td align="right" colspan=5 scope="row"><div style="font-size: 16pt;">7%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum/1.07*0.07, 2, '.', ','); ?></div></td>
+<td align="right" colspan=5 scope="row"><div style="font-size: 16pt;">7%&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format(($sum*(100-$discount_percent)/100)/1.07*0.07, 2, '.', ','); ?></div></td>
 </tr>
 <tr><td height="3" colspan="7"></td></tr>
 <tr><td></td>
-<td height="40" align="left" colspan="3" scope="row"><div style="font-size: 14pt;"><?php echo num2thai($sum); ?></div></td>
-<td align="right" colspan=2 scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format($sum, 2, '.', ','); ?></div></td>
+<td height="40" align="left" colspan="3" scope="row"><div style="font-size: 14pt;"><?php echo num2thai(($sum*(100-$discount_percent)/100)); ?></div></td>
+<td align="right" colspan=2 scope="row"></td><td align="right"><div style="font-size: 16pt;"><?php  echo number_format(($sum*(100-$discount_percent)/100), 2, '.', ','); ?></div></td>
 </tr>
 </tbody>
 <?php

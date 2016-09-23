@@ -41,6 +41,8 @@
         $inv_remark = $loop->inv_remark;
         $inv_enable = $loop->inv_enable;
 
+        $inv_discount_percent = $loop->inv_discount_percent;
+
         $editor_view = $loop->firstname." ".$loop->lastname." ".$loop->inv_dateadd;
     }
 ?>
@@ -130,6 +132,14 @@
                                     <input type="text" class="form-control" name="discount_srp" id="discount_srp" value="<?php echo number_format($inv_srp_discount); ?>" readonly>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    ส่วนลดท้ายบิล %
+                                    <input type="text" class="form-control" name="discount_percent" id="discount_percent" value="<?php echo number_format($inv_discount_percent); ?>" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     หมายเหตุ
@@ -171,7 +181,9 @@
                                                         <th colspan="2" style="text-align:right;"><label>จำนวนรวม:</th>
                                                         <th><div id="allcount"><?php echo $count_qty; ?></div></th>
                                                         <th colspan="2" style="text-align:right;"><label>ราคารวม:</th>
-                                                        <th><div id="summary"><?php echo number_format($sum_netprice, 2, ".", ","); ?></div></th>
+                                                        <th><div id="summary"><?php if($inv_discount_percent<=0) echo number_format($sum_netprice, 2, ".", ","); 
+                                                                                    else echo number_format($sum_netprice*(100-$inv_discount_percent)/100, 2, ".", ","); 
+                                                         ?></div></th>
                                                     </tr>
                                                 </tfoot>
 											</table>

@@ -344,6 +344,7 @@ function excel_invoice()
         $inv_dateadd = $loop->inv_dateadd;
         $inv_remark = $loop->inv_remark;
         $inv_enable = $loop->inv_enable;
+        $inv_discount_percent = $loop->inv_discount_percent;
 
         $editor_view = $loop->firstname." ".$loop->lastname." ".$loop->inv_dateadd;
     }
@@ -398,11 +399,16 @@ function excel_invoice()
         $sum += $loop->invit_netprice*$loop->invit_qty; 
         $sum_qty += $loop->invit_qty;
     }
-    
+    if ($inv_discount_percent > 0) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, "ส่วนลดท้ายบิล");
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $inv_discount_percent."%");
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $sum*$inv_discount_percent/100);
+        $row++;
+    }
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, "รวมจำนวน");
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $sum_qty);    
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "รวมเงิน");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $sum);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $sum*(100-$inv_discount_percent)/100);
     
 
     $filename='invoice_'.$inv_number.'.xlsx'; //save our workbook as this file name
@@ -644,10 +650,10 @@ function list_invoice_month()
     
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
-    $sql = "inv_enable = '1'";
+    $sql = "inv_enable = '1' and invit_enable = '1'";
     $sql .= " and inv_issuedate >= '".$start."' and inv_issuedate <= '".$end."'";
     
-    $data['inv_array'] = $this->tp_invoice_model->get_invoice_detail($sql);
+    $data['inv_array'] = $this->tp_invoice_model->get_invoice_detail_sumnetprice_list($sql);
     
     $data['title'] = "Nerd - Invoice List";
     $this->load->view("TP/invoice/list_invoice_month", $data);

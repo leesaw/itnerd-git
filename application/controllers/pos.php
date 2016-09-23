@@ -62,6 +62,7 @@ function getSerial_detail_shop()
     $data["warranty_array"] = $this->tp_rolex_warrantycard_model->get_warrantycard($where);
     
     $data["serial"] = $serial;
+    $data["sessuserstatus"] = $this->session->userdata('sessstatus');
     
     $data['title'] = "NGG| Nerd - Search Serial";
     $this->load->view('TP/shop/report_serial',$data);
@@ -447,6 +448,7 @@ function saleorder_rolex_void_pos_borrow()
                 );
     $query = $this->tp_shop_model->editPOS_rolex_borrow($pos);
 
+    /*
     $this->load->model('tp_rolex_transfer_model','',TRUE);
     $where = "rot_posrob_id = '".$id."'";
     $query = $this->tp_rolex_transfer_model->get_rolex_transfer($where);
@@ -459,6 +461,7 @@ function saleorder_rolex_void_pos_borrow()
     $transfer = array("id" => $rot_id, "rot_status" => 'V', "rot_remark" => $remark,
                 "rot_dateadd" => $currentdate, "rot_dateadd_by" => $this->session->userdata('sessid'));
     $query = $this->tp_rolex_transfer_model->edit_rolex_transfer($transfer);
+    */
     
     $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow_item($sql);
@@ -485,9 +488,7 @@ function saleorder_rolex_void_pos_borrow()
         
         $serial = array("id" => $itse_id, 
                         "itse_enable" => 1, 
-                        "itse_dateadd" => $currentdate, 
-                        "itse_warehouse_id" => $rot_warehouse_out_id,
-                        "itse_rolex_borrower_id" => 0);
+                        "itse_dateadd" => $currentdate);
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
     }

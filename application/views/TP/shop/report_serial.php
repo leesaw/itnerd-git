@@ -73,17 +73,27 @@
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->posroit_item_srp; ?></td>
-                                    <td><?php if ($loop->posrot_status == 'N') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; else if ($loop->posrot_status == 'V') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button></a>";      
+                                    <td><?php if ($loop->posrot_status == 'N' || $loop->posrot_status == 'D') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-success btn-xs'>ขายแล้ว</button></a>"; else if ($loop->posrot_status == 'V') echo "<a href='".site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id."'><button class='btn btn-danger btn-xs'>ยกเลิกการขายแล้ว (Void)</button></a>";      
 
                                      ?></td>
                                     <td><?php 
-                                        echo "ราคา ".number_format($loop->posroit_netprice)." บาท";
+                                        /*echo "ราคา ".number_format($loop->posroit_netprice)." บาท";
                                         if ($loop->posroit_dc_baht > 0)
                                             echo "(ส่วนลด ".number_format($loop->posroit_dc_baht).")";
+                                            */
                                         $dateadd = explode("-", $loop->posrot_issuedate);
-                                                                     
-                                        echo "<br>วันที่ ".$dateadd[2]."/".$dateadd[1]."/".$dateadd[0];
-                                    ?><br><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียดการขาย"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการขาย</a> </td>
+                                                                    
+                                        echo "วันที่ ".$dateadd[2]."/".$dateadd[1]."/".$dateadd[0];
+
+                                        if ($loop->posrot_status!='D') {
+
+                                    ?><br><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียดการขาย"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการขาย</a> 
+
+                                    <?php }else if (($sessuserstatus!=8) && ($loop->posrot_status=='D')) { ?>
+                                    <br><a href="<?php echo site_url("sale/saleorder_rolex_pos_temp_last")."/".$loop->posroit_pos_rolex_temp_id; ?>" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียดการขาย"><span class="glyphicon glyphicon-search"></span>ดูรายละเอียดการขาย</a> 
+
+                                    <?php } ?>
+                                        </td>
                                     </tr>
                                 <?php } ?>
                                     
@@ -131,7 +141,7 @@
                                     <td><?php echo $loop->it_remark; ?></td>
                                     <td><?php echo $loop->it_short_description; ?></td>
                                     <td><?php echo $loop->it_srp; ?></td>
-                                    <td><?php echo "<button class='btn btn-danger btn-xs'>ถูกส่งออกจากร้าน</button>"; ?></td>
+                                    <td><?php if ($loop->posrob_status == 'N') echo "<button class='btn btn-danger btn-xs'>ถูกส่งออกจากร้าน</button>"; else if ($loop->posrob_status == 'V') echo "<button class='btn bg-navy btn-xs'>ถูกส่งออกจากร้าน<br>(ยกเลิกแล้ว)</button>"; ?></td>
                                     <td><?php echo "ผู้รับของ : ".$loop->posrob_borrower_name; 
                                         $dateadd = explode("-", $loop->posrob_issuedate);
                                                                      
