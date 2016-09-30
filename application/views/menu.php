@@ -119,6 +119,9 @@
                     <li>
                         <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("sale/report_sale_item_rank"); ?>"><i class="fa fa-circle-o"></i> รายงาน-อันดับยอดขาย</a>
+                    </li>
                 </ul>
             </li>
             <?php } ?>
@@ -211,6 +214,9 @@
                 <?php } ?>
                     <li>
                         <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("sale/report_sale_item_rank"); ?>"><i class="fa fa-circle-o"></i> รายงาน-อันดับยอดขาย</a>
                     </li>
                 </ul>
 
@@ -453,6 +459,9 @@
             </li>
             <li>
                 <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
+            </li>
+            <li>
+                <a href="<?php echo site_url("sale/report_sale_item_rank"); ?>"><i class="fa fa-circle-o"></i> รายงาน-อันดับยอดขาย</a>
             </li>
             <li>
                 <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>

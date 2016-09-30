@@ -171,7 +171,7 @@ if (($no >=10)) {
 <td style="border-left:0px solid black;" align="left" valign="top"><?php echo strtoupper($loop->invit_brand); ?></td>
 <td align="center" style="border-left:0px solid black;" valign="top"><?php echo $loop->invit_qty; $sum_qty+=$loop->invit_qty; ?></td>
 <td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_srp, 2, ".", ","); ?></td>
-<td align="right" style="border-left:0px solid black;" valign="top"><?php if ($loop->invit_discount>0) echo $loop->invit_discount."%"; ?></td>
+<td align="right" style="border-left:0px solid black;" valign="top"><?php if ($loop->invit_discount>0) echo number_format($loop->invit_discount)."%"; ?></td>
 <td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_netprice*$loop->invit_qty, 2, ".", ",")."&nbsp;&nbsp;"; $sum += ($loop->invit_netprice*$loop->invit_qty); ?></td>
 </tr>
 <?php $no++; 

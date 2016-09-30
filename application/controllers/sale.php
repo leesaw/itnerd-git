@@ -1019,6 +1019,10 @@ function saleorder_rolex_void_pos_temp()
 function saleorder_history()
 {
     $datein = $this->input->post("datein");
+    $shop = $this->input->post("shop");
+    $brand = $this->input->post("brand");
+    $refcode = $this->input->post("refcode");
+
     if ($datein !="") {
         $month = explode('/',$datein);
         $currentdate = $month[1]."-".$month[0];
@@ -1034,12 +1038,50 @@ function saleorder_history()
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
     $sql = "so_enable = '1'";
-    if ($this->session->userdata('sessstatus') != '88') {
-        $sql .= " and ".$this->shop_rolex;
-    }
+
     $sql .= " and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
     
-    $data['final_array'] = $this->tp_saleorder_model->getSaleOrder($sql);
+    if (($brand==0) && ($shop==0)){
+        if ($refcode!="") {
+            $sql .= " and it_refcode like '%".$refcode."%'";
+        }
+    }else {
+        if ($refcode!="") {
+            $sql .= " and it_refcode like '%".$refcode."%'";
+        }
+        
+        if ($brand!=0) $sql .= " and br_id = '".$brand."'";
+            
+        if ($shop!=0) $sql .= " and so_shop_id = '".$shop."'";
+    }
+
+    $query = $this->tp_saleorder_model->getSaleItem($sql);
+
+    $sql = "so_enable = '1'";
+    $count = 0;
+    foreach ($query as $loop) {
+        if ($count < 1)  $sql .= " and (so_id = ".$loop->soi_saleorder_id;
+        else $sql .= " or so_id = ".$loop->soi_saleorder_id;
+        $count++;
+    }
+    if ($count > 0) { 
+        $sql .= ")";
+        $data['final_array'] = $this->tp_saleorder_model->getSaleOrder($sql);
+    }else{
+        $data['final_array'] = array();
+    }
+
+    
+
+    $sql = $this->no_rolex;
+    $this->load->model('tp_item_model','',TRUE);
+    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $sql = $this->shop_rolex;
+    $data['shop_array'] = $this->tp_shop_model->getShop($sql);
+
+    $data['shop_id'] = $shop;
+    $data['brand_id'] = $brand;
+    $data['refcode'] = $refcode;
     
     $data['title'] = "Nerd - Report Sale Order";
     $this->load->view("TP/sale/report_sale_order_list", $data);
@@ -1055,13 +1097,70 @@ function report_sale_form()
     if ($this->session->userdata('sessstatus') != '88') {
         $sql .= $this->no_rolex;
     }else{ $sql .= "br_id != 888"; }
-    $data['brand_array'] = $this->tp_item_model->getBrand($sql);
+    $query = $this->tp_item_model->getBrand($sql);
+    $data['brand_array'] = $query;
     //$sql = "sh_enable = '1'";
     $sql = "";
     $data['shop_array'] = $this->tp_shop_model->getShop($sql);
 
+
     $data['title'] = "Nerd - Search Sale Report";
     $this->load->view('TP/sale/search_salereport',$data);
+}
+
+function report_sale_item_rank()
+{
+    $this->load->model('tp_item_model','',TRUE);
+    
+    $sql = "";
+    
+    if ($this->session->userdata('sessstatus') != '88') {
+        $sql .= $this->no_rolex;
+    }else{ $sql .= "br_id != 888"; }
+    $query = $this->tp_item_model->getBrand($sql);
+    $data['brand_array'] = $query;
+
+    $startdate = $this->input->post("startdate");
+    $enddate = $this->input->post("enddate");
+
+    if ($startdate == "" and $enddate == "") {
+        $currentdate = date("Y-m-d");
+    
+        $currentdate = explode('-', $currentdate);
+        $data['startdate'] = "01/".$currentdate[1]."/".$currentdate[0];
+        $data['enddate'] = $currentdate[2]."/".$currentdate[1]."/".$currentdate[0];
+        
+        $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
+        $end = $currentdate[0]."-".$currentdate[1]."-".$currentdate[2]." 23:59:59";
+    }else{
+        if ($startdate != "") {
+            $start = explode('/', $startdate);
+            $start= $start[2]."-".$start[1]."-".$start[0]." 00:00:00";
+        }else{
+            $start = "1970-01-01 00:00:00";
+        }
+
+        if ($enddate != "") {
+            $end = explode('/', $enddate);
+            $end= $end[2]."-".$end[1]."-".$end[0]." 23:59:59";
+        }else{
+            $end = date('Y-m-d')." 23:59:59";
+        }
+        $data['startdate'] = $startdate;
+        $data['enddate'] = $enddate;
+    }
+
+    
+
+    foreach($query as $loop){
+        $sql = "so_enable = 1 AND soi_dc_percent != 100";
+        $sql .= " AND br_id = '".$loop->br_id."' AND so_issuedate >= '".$start."' AND so_issuedate <= '".$end."'";
+
+        $data["rank_brand".$loop->br_id] = $this->tp_saleorder_model->getTop5_qty_sale_brand($sql);
+    }
+
+    $data['title'] = "Nerd - Sale Report Ranking";
+    $this->load->view('TP/sale/report_sale_item_rank',$data);
 }
     
 function report_sale_filter()

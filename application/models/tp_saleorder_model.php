@@ -17,6 +17,7 @@ Class Tp_saleorder_model extends CI_Model
  {
 	$this->db->select("soi_id, soi_saleorder_id, soi_item_id, soi_item_refcode, soi_item_name,  soi_item_srp, soi_qty, soi_dc_percent, soi_dc_baht, soi_sale_barcode_id, soi_gp, soi_netprice, soi_remark, it_refcode, it_barcode, br_name, it_model, it_uom, soi_item_srp as it_srp, sb_number, sb_discount_percent, sb_gp");
 	$this->db->from('tp_saleorder_item');	
+	$this->db->join('tp_saleorder', 'so_id = soi_saleorder_id','left');
     $this->db->join('tp_item', 'it_id = soi_item_id','left');	
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     $this->db->join('tp_sale_barcode', 'sb_id = soi_sale_barcode_id','left');
@@ -168,6 +169,22 @@ Class Tp_saleorder_model extends CI_Model
     $this->db->join('tp_pos_rolex_borrow', 'posrob_id = posrobi_pos_rolex_borrow_id', 'left');
     $this->db->join('tp_pos_rolex_borrower', 'posbor_name = posrob_borrower_name', 'left');
     if ($where != "") $this->db->where($where);
+	$query = $this->db->get();		
+	return $query->result();
+ }
+
+ // view product ranking 
+ function getTop5_qty_sale_brand($where)
+ {
+ 	$this->db->select("it_id,it_refcode, it_model,br_name,sum(soi_qty) as sum1");
+	$this->db->from('tp_saleorder_item');
+	$this->db->join('tp_saleorder', 'soi_saleorder_id = so_id','left');
+	$this->db->join('tp_item', 'it_id = soi_item_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by("soi_item_id");
+    $this->db->order_by("sum1", "desc");
+    $this->db->limit(5);
 	$query = $this->db->get();		
 	return $query->result();
  }

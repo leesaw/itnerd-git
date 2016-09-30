@@ -18,37 +18,81 @@
     </section>
 	
 	<section class="content">
-		<div class="row">
+            <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                        
+                <div class="box-body">
+                <div class="row">
+                    <form action="<?php echo site_url("sale/saleorder_history"); ?>" name="formfilter" id="formfilter" method="post">
+                    <div class="col-md-2">
+                        Ref. Number ที่ต้องการค้นหา
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="refcode" id="refcode" value="<?php echo $refcode; ?>">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        เลือกเดือน
+                        <div class="input-group">
+                        <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $month; ?>" autocomplete="off" readonly></div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            เลือกยี่ห้อ
+
+                            <select id="brand" name="brand" class="form-control select2" style="width: 100%;">
+                                <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
+                                <?php foreach($brand_array as $loop) { ?>
+                                <option value="<?php echo $loop->br_id; ?>"<?php if($loop->br_id == $brand_id) echo " selected"; ?>><?php echo $loop->br_name; ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            เลือก Shop
+
+                            <select id="shop" name="shop" class="form-control select2" style="width: 100%;">
+                                <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
+                                <?php 
+                                    foreach($shop_array as $loop) { 
+                                ?>
+                                <option value="<?php echo $loop->sh_id; ?>"<?php if($loop->sh_id == $shop_id) echo " selected"; ?>><?php echo $loop->sh_code."-".$loop->sh_name; ?>
+                                </option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <br>
+                        <div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div>
+                    </div>
+                </div>
+            
+                                
+                </form> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
 
                         
         <div class="box-body">
             <div class="row">
-                <div class="col-md-6">
-                    <form action="<?php echo site_url("sale/saleorder_history"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
-                        <div class="form-group-sm">
-                                <label class="col-sm-2 control-label">เลือกเดือน</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $month; ?>" onChange="submitform();" autocomplete="off" readonly>
-                            </div>  
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <br>
-            <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-success">
-					<div class="panel-heading">
+					<!-- <div class="panel-heading">
                         <h4>รายการใบสั่งขายของเดือน <?php echo $month; ?></h4>
                     </div>
+                    -->
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablefinal" width="100%">
                                 <thead>
                                     <tr>
                                         <th>เลขที่ใบสั่งขาย</th>
-                                        <th>วันที่</th>
+                                        <th>วันที่ขาย</th>
                                         <th>สาขาที่ขาย</th>
                                         <th>ผู้ทำรายการ</th>
                                         <th>วันเวลาทำรายการ</th>
@@ -72,8 +116,6 @@
 							</table>
                         
 					</div>
-                    
-				</div>
 			</div>	
             
 		</div>                
@@ -98,7 +140,7 @@
 <script type="text/javascript">
 $(document).ready(function()
 {    
-    
+    $(".select2").select2();
     get_datepicker("#datein");
     
     var oTable = $('#tablefinal').DataTable();

@@ -46,7 +46,7 @@ function get_max_number($month)
 	$this->db->from('tp_invoice');
     $this->db->where("inv_issuedate >=",$start);
     $this->db->where("inv_issuedate <=",$end);
-    $this->db->where("inv_enable", 1);
+    //$this->db->where("inv_enable", 1);
 	$query = $this->db->get();		
 	return $query->num_rows();
 }

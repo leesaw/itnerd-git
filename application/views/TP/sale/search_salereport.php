@@ -42,7 +42,7 @@
 
                     <select id="brand" name="brand" class="form-control select2" style="width: 100%;">
                         <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
-                        <?php foreach($brand_array as $loop) { ?>
+                        <?php foreach($brand_array as $loop) { if ($loop->br_name =="สินค้าซ่อม") continue; ?>
                         <option value="<?php echo $loop->br_id."-".$loop->br_name; ?>"><?php echo $loop->br_name; ?></option>
                         <?php } ?>
                     </select>
@@ -80,6 +80,7 @@
                 </div>
             </div>
         </div>
+
         </section>
           
           
@@ -97,6 +98,8 @@ $(document).ready(function()
     
     get_datepicker("#startdate");
     get_datepicker("#enddate");
+    get_datepicker("#startdate_count");
+    get_datepicker("#enddate_count");
     
     $('#fancyboxall').fancybox({ 
     'width': '40%',
