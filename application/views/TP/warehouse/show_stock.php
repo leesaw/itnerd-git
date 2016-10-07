@@ -14,7 +14,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            แสดงสินค้า <B><U><?php if ($refcode !="NULL") echo $refcode; ?></U></B> <?php if ($brand!=0) { foreach($brand_array as $b) echo "ยี่ห้อ ".$b->br_name; } ?> <?php if ($warehouse!=0) { foreach($whname_array as $w) echo "ในคลัง ".$w->wh_name; } ?>
+            แสดงสินค้า <B><U><?php if ($refcode !="NULL") echo $refcode_show; ?></U></B> <?php if ($brand!=0) { foreach($brand_array as $b) echo "ยี่ห้อ ".$b->br_name; } ?> <?php if ($warehouse!=0) { foreach($whname_array as $w) echo "ในคลัง ".$w->wh_name; } ?>
         </h1>
     </section>
 	

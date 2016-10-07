@@ -32,7 +32,8 @@
                             <div class="col-md-2">
                                     <div class="form-group-sm">
                                             วันที่กำหนดส่ง
-                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $loop->stot_datein; ?>" readonly>
+                                            <input type="text" class="form-control" name="datein" id="datein" value="<?php $datein = explode('-', $loop->stot_datein);
+    echo $datein[2]."/".$datein[1]."/".$datein[0]; ?>" readonly>
                                     </div>
 							</div>
                             <div class="col-md-2">
@@ -162,6 +163,8 @@
 $(document).ready(function()
 {    
     document.getElementById("savebtn").disabled = false;
+    get_datepicker("#datein");
+
     
     setTimeout(function(){
                 calculate();
@@ -186,6 +189,12 @@ $(document).ready(function()
 	});
 });
     
+function get_datepicker(id)
+{
+    $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
+    $(this).datepicker('hide'); });
+}
+
 function check_product_code(refcode_input, wh_id)
 {
 	if(refcode_input != "")
@@ -247,10 +256,14 @@ function submitform()
             return;
         }
     }
-    
-    var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-    if (r == true) {
-        confirmform();
+    if (document.getElementById('datein').value == "") {
+        alert("กรุณาเลือกวันที่รับเข้า");
+        document.getElementById('datein').focus();
+    }else{    
+        var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
+        if (r == true) {
+            confirmform();
+        }
     }
 }
     

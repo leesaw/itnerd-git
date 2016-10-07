@@ -143,6 +143,8 @@ function showBalance()
     $maxprice = $this->input->post("maxprice");
 
     if ($refcode == "") $refcode = "NULL";
+    $data['refcode_show'] = $refcode;
+    $refcode = str_replace('/', '_2F_', $refcode);
     $data['refcode'] = $refcode;
     $data['brand'] = $brand;
     $data['warehouse'] = $warehouse;
@@ -317,6 +319,7 @@ function view_serial()
 function ajaxViewStock()
 {
     $refcode = $this->uri->segment(3);
+    $refcode = str_replace('_2F_', '/', $refcode);
     $keyword = explode("%20", $refcode);
     $brand = $this->uri->segment(4);
     $warehouse = $this->uri->segment(5);

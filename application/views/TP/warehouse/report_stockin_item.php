@@ -129,7 +129,8 @@
                                         <td><?php echo $loop->stoi_datein; ?></td>
                                         <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_print")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_print")."/".$loop->stoi_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> 
+                                        <td><a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_print")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_print")."/".$loop->stoi_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a>
+                                        <a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_excel")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_excel")."/".$loop->stoi_id; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a> 
                                         </td>
                                     </tr>
                                     <?php } ?>

@@ -19,7 +19,7 @@
         <div class="box-body">
         <div class="row">
             <div class="col-md-12">
-                <center><img class="img-responsive" src="<?php echo base_url()."picture/rolex/".$loop->it_refcode."/1.png"; ?>" alt="<?php echo $loop->it_refcode; ?>"></center>    
+                <center><img class="img-responsive" src="<?php echo base_url()."picture/rolex/".$loop->it_refcode."/1.jpg"; ?>" alt="<?php echo $loop->it_refcode; ?>"></center>    
             </div>
             
         </div>  

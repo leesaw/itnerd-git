@@ -172,7 +172,7 @@ $(document).ready(function()
     'type':'iframe'}); 
 
     $('#tablebarcode').on('click', '.pop', function(e){
-        var imgsrc = '<?php echo base_url(); ?>'+'picture/rolex/'+$(this).find('img').attr('src')+"/1.png";
+        var imgsrc = '<?php echo base_url(); ?>'+'picture/rolex/'+$(this).find('img').attr('src')+"/1.jpg";
         
         //alert($(this).find('img').attr('src'));
         $('.imagepreview').attr('src', imgsrc);

@@ -28,22 +28,22 @@
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
-                <input type="text" class="form-control input-sm" name="number" id="number">
+                <input type="text" class="form-control input-sm" name="number" id="number" value="<?php if ($number!="NULL") echo $number; ?>">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                 Ref. Number
-                <input type="text" class="form-control input-sm" name="refcode" id="refcode">
+                <input type="text" class="form-control input-sm" name="refcode" id="refcode" value="<?php if ($refcode!="NULL") echo $refcode; ?>">
                 </div>
             </div>
             <div class="col-md-2">
                 <div class="form-group">
                 ยี่ห้อ
-                <select id="brandid" name="brandid" class="form-control input-sm">
-                    <option value="0" selected>เลือกทั้งหมด</option>
+                <select id="brandid" name="brandid" class="form-control select2">
+                    <option value="0"<?php if($brandid==0) echo " selected"; ?>>เลือกทั้งหมด</option>
                     <?php foreach($brand_array as $loop) { ?>
-                    <option value="<?php echo $loop->br_id; ?>"><?php echo $loop->br_code."-".$loop->br_name; ?></option>
+                    <option value="<?php echo $loop->br_id; ?>" <?php if($loop->br_id==$brandid) echo " selected"; ?>><?php echo $loop->br_code."-".$loop->br_name; ?></option>
                     <?php } ?>
                     <option value='99999'>-- อื่น ๆ --</option>
                 </select>
@@ -52,11 +52,13 @@
             <div class="col-md-3">
                 <div class="form-group">
                 สาขาที่ส่งซ่อม
-                <select class="form-control input-sm" name="shopid" id="shopid">
-                    <option value="0" selected>เลือกทั้งหมด</option>
+                <select class="form-control select2" name="shopid" id="shopid">
+                    <option value="0"<?php if($shopid==0) echo " selected"; ?>>เลือกทั้งหมด</option>
                 <?php   if(is_array($shop_array)) {
                         foreach($shop_array as $loop){
-                            echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
+                            echo "<option value='".$loop->sh_id."'";
+                            if($loop->sh_id==$shopid) echo " selected";
+                            echo ">".$loop->sh_code."-".$loop->sh_name."</option>";
                  } } ?>
                     <option value='99999'>-- อื่น ๆ --</option>
                 </select>
@@ -65,13 +67,13 @@
             <div class="col-md-2">
                 <div class="form-group">
                 สถานะการซ่อม
-                <select class="form-control input-sm" name="status" id="status">
-                    <option value="0" selected>เลือกทั้งหมด</option>
-                    <option value="G">รับเข้าซ่อม</option>
-                    <option value="A">ประเมินการซ่อมแล้ว</option>
-                    <option value="D">ซ่อมเสร็จ</option>
-                    <option value="C">ซ่อมไม่ได้</option>
-                    <option value="R">ส่งกลับแล้ว</option>
+                <select class="form-control select2" name="status" id="status">
+                    <option value="0"<?php if($status=="0") echo " selected"; ?>>เลือกทั้งหมด</option>
+                    <option value="G"<?php if($status=="G") echo " selected"; ?>>รับเข้าซ่อม</option>
+                    <option value="A"<?php if($status=="A") echo " selected"; ?>>ประเมินการซ่อมแล้ว</option>
+                    <option value="D"<?php if($status=="D") echo " selected"; ?>>ซ่อมเสร็จ</option>
+                    <option value="C"<?php if($status=="C") echo " selected"; ?>>ซ่อมไม่ได้</option>
+                    <option value="R"<?php if($status=="R") echo " selected"; ?>>ส่งกลับแล้ว</option>
                 </select>
                 </div>
             </div>
@@ -183,6 +185,8 @@ $(document).ready(function()
     get_datepicker_month("#month");
     get_datepicker_month("#month_cs");
     get_datepicker_month("#month_return");
+
+    $(".select2").select2();
 
     var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,

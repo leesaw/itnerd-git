@@ -406,6 +406,7 @@ function start_get_invoice_item()
 function check_transfer_number()
 {
     var tb_number = document.getElementById("tb_number").value;
+    var confirm_number;
     //alert(tb_number);
 
     $.ajax({
@@ -416,7 +417,17 @@ function check_transfer_number()
         success : function(data) {
             if(data.item.length > 0)
             {
-                if (data.exist_number) if(confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) {
+
+                if (data.exist_number) { 
+                    if( confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) { 
+                        confirm_number = true; 
+                    }else{
+                        confirm_number = false;
+                    }
+                }else{ confirm_number = true; }
+
+                if (confirm_number) {
+
                     for(var i=0; i<data.item.length; i++) {
                         var element = '<tr id="row'+count_enter_form_input_product+'">'+data.item[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                         //console.log(element);
@@ -426,11 +437,12 @@ function check_transfer_number()
                     }
                     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
 
-                    document.getElementById("cusname").value = data.warehouse.wh_detail;
+                    /*document.getElementById("cusname").value = data.warehouse.wh_detail;
                     document.getElementById("cusaddress1").value = data.warehouse.wh_address1;   
                     document.getElementById("cusaddress2").value = data.warehouse.wh_address2;  
                     document.getElementById("custax_id").value = data.warehouse.wh_taxid;   
                     document.getElementById("vender").value = data.warehouse.wh_vender;
+                    */
                     var tb = document.getElementById("tb_number_input").value;
                     if (tb == "") {
                         document.getElementById("tb_number_input").value = data.warehouse.stot_number;
@@ -438,6 +450,7 @@ function check_transfer_number()
                         document.getElementById("tb_number_input").value = tb+","+data.warehouse.stot_number;
                     }
                     document.getElementById("stot_id").value = data.warehouse.stot_id;
+                    /*
                     $('#whid').val(data.warehouse.wh_id).change();
                     if (data.warehouse.wh_branch == 0) {
                         document.getElementById("branch_0").checked = true;
@@ -449,7 +462,7 @@ function check_transfer_number()
                         document.getElementById("branch_1").checked = false;
                         document.getElementById("branch_number").value = "";
                     }
-                    
+                    */
                     var message = "ทำการนำเข้าข้อมูลเรียบร้อยแล้ว";
                     bootbox.alert(message, function() {
                         $('#myModal').modal('hide');

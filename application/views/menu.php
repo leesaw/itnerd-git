@@ -134,6 +134,22 @@
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
+            <?php if ($this->session->userdata('sessstatus') == 4) { ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("item/form_print_tag"); ?>"><i class="fa fa-circle-o"></i> พิมพ์ป้ายราคา</a>
+                    </li>
+                    <!--
+                    <li>
+                        <a href="<?php echo site_url("managecat"); ?>"><i class="fa fa-circle-o"></i> จัดการประเภทสินค้า</a>
+                    </li>
+                    -->
+                </ul>
+
+            </li>
+            <?php } ?>
             <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2) || ($this->session->userdata('sessstatus') == 3)) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>

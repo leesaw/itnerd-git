@@ -294,6 +294,89 @@ function importstock_print()
         $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_in_print", $data, TRUE));
         $mpdf->Output();
 }
+
+function importstock_excel()
+{
+    $id = $this->uri->segment(3);
+   
+    $sql = "stoi_id = '".$id."'";
+    $stock_array = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
+        
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_In');
+    
+    foreach($stock_array as $loop) { $datetime = $loop->stoi_datein; $si_id = $loop->stoi_number; $editor = $loop->firstname." ".$loop->lastname; $stock_name = $loop->wh_code."-".$loop->wh_name; $dateadd = $loop->stoi_dateadd; $remark = $loop->stoi_remark; break; } 
+
+     $GGyear=substr($datetime,0,4); 
+     $GGmonth=substr($datetime,5,2); 
+     $GGdate=substr($datetime,8,2); 
+
+    $styleArray = array(
+        'font'  => array(
+            'bold'  => true,
+            'color' => array('rgb' => 'FF0000'),
+            'size'  => 15
+    ));
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'ใบรับเข้าคลัง เลขที่');
+    $this->excel->getActiveSheet()->setCellValue('B1', $si_id);
+
+    $this->excel->getActiveSheet()->setCellValue('A2', 'คลังที่รับเข้า');
+    $this->excel->getActiveSheet()->setCellValue('B2', $stock_name);
+    
+    $this->excel->getActiveSheet()->setCellValue('D1', 'วันที่');
+    $this->excel->getActiveSheet()->setCellValue('E1', $GGdate."/".$GGmonth."/".$GGyear);
+    
+    
+    $this->excel->getActiveSheet()->setCellValue('A4', 'No.');
+    $this->excel->getActiveSheet()->setCellValue('B4', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('C4', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('D4', 'รายละเอียดสินค้า');
+    $this->excel->getActiveSheet()->setCellValue('E4', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('F4', 'หน่วย');
+    $this->excel->getActiveSheet()->setCellValue('G4', 'หน่วยละ');
+    $this->excel->getActiveSheet()->setCellValue('H4', 'จำนวนเงิน');
+    
+    $row = 5;
+    $no = 1;
+    $sum = 0;
+    $sum_qty = 0;
+    foreach($stock_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, strtoupper($loop->br_name));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->qty_update);  
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_uom);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->qty_update*$loop->it_srp);
+        $row++;
+        $no++;
+        $sum += $loop->qty_update*$loop->it_srp; 
+        $sum_qty += $loop->qty_update;
+    }
+    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "รวมจำนวน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, "รวมเงิน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $sum);
+    
+
+    $filename='nerd_stock_in.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
+}
     
 function importstock_serial_print()
 {
@@ -322,6 +405,97 @@ function importstock_serial_print()
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/warehouse/stock_in_print", $data, TRUE));
     $mpdf->Output();
+}
+
+function importstock_serial_excel()
+{
+    $id = $this->uri->segment(3);
+
+    $sql = "stoi_id = '".$id."'";
+    $stock_array = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
+
+    $serial_array = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in_serial($sql);
+
+    //load our new PHPExcel library
+    $this->load->library('excel');
+    //activate worksheet number 1
+    $this->excel->setActiveSheetIndex(0);
+    //name the worksheet
+    $this->excel->getActiveSheet()->setTitle('Stock_In');
+    
+    foreach($stock_array as $loop) { $datetime = $loop->stoi_datein; $si_id = $loop->stoi_number; $editor = $loop->firstname." ".$loop->lastname; $stock_name = $loop->wh_code."-".$loop->wh_name; $dateadd = $loop->stoi_dateadd; $remark = $loop->stoi_remark; break; } 
+
+     $GGyear=substr($datetime,0,4); 
+     $GGmonth=substr($datetime,5,2); 
+     $GGdate=substr($datetime,8,2); 
+
+    $styleArray = array(
+        'font'  => array(
+            'bold'  => true,
+            'color' => array('rgb' => 'FF0000'),
+            'size'  => 15
+    ));
+
+    $this->excel->getActiveSheet()->setCellValue('A1', 'ใบรับเข้าคลัง เลขที่');
+    $this->excel->getActiveSheet()->setCellValue('B1', $si_id);
+
+    $this->excel->getActiveSheet()->setCellValue('A2', 'คลังที่รับเข้า');
+    $this->excel->getActiveSheet()->setCellValue('B2', $stock_name);
+    
+    $this->excel->getActiveSheet()->setCellValue('D1', 'วันที่');
+    $this->excel->getActiveSheet()->setCellValue('E1', $GGdate."/".$GGmonth."/".$GGyear);
+    
+    
+    $this->excel->getActiveSheet()->setCellValue('A4', 'No.');
+    $this->excel->getActiveSheet()->setCellValue('B4', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('C4', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('D4', 'รายละเอียดสินค้า');
+    $this->excel->getActiveSheet()->setCellValue('E4', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('F4', 'หน่วย');
+    $this->excel->getActiveSheet()->setCellValue('G4', 'หน่วยละ');
+    $this->excel->getActiveSheet()->setCellValue('H4', 'จำนวนเงิน');
+    
+    $row = 5;
+    $no = 1;
+    $sum = 0;
+    $sum_qty = 0;
+    foreach($stock_array as $loop) {
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, strtoupper($loop->br_name));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->qty_update);  
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_uom);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->qty_update*$loop->it_srp);
+        $row++;
+        $no++;
+        $sum += $loop->qty_update*$loop->it_srp; 
+        $sum_qty += $loop->qty_update;
+        foreach ($serial_array as $loop2) {
+            if ($loop->log_stob_item_id==$loop2->log_stob_item_id) { 
+                $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "Caseback : ".$loop2->itse_serial_number);
+                $row++;
+            }
+        }
+    }
+    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, "รวมจำนวน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, "รวมเงิน");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $sum);
+    
+
+    $filename='nerd_stock_in.xlsx'; //save our workbook as this file name
+    header('Content-Type: application/vnd.ms-excel'); //mime type
+    header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+    header('Cache-Control: max-age=0'); //no cache
+
+    //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+    //if you want to save it as .XLSX Excel 2007 format
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    //force user to download the Excel file without writing it to server's HD
+    $objWriter->save('php://output');
 }
     
 function importstock_save()
@@ -737,11 +911,13 @@ function transferstock_save_confirm()
     $wh_out_id = $this->input->post("wh_out_id");
     $wh_in_id = $this->input->post("wh_in_id");
     $datein = $this->input->post("datein");
+    $datein = explode("/", $datein);
+    $datein = $datein[2]."-".$datein[1]."-".$datein[0];
     $stot_remark = $this->input->post("stot_remark");
     
     $currentdate = date("Y-m-d H:i:s");
     
-    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'), "stot_remark" => $stot_remark);
+    $stock = array("id" => $stot_id, "stot_status" => 2, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'), "stot_remark" => $stot_remark, "stot_datein" => $datein);
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
     
     
