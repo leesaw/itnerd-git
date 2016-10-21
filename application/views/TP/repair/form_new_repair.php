@@ -7,23 +7,23 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>เพิ่มข้อมูลส่งซ่อม (New Repair Order)</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; 
+                    <?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>';
 						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
-					
+
 					?>
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -44,6 +44,7 @@
                                         สาขาที่ส่งซ่อม *
                                         <select class="form-control" name="shopid" id="shopid">
                                             <option value='0'>-- เลือกสาขา --</option>
+																						<option value="1">HO-Head Office นราธิวาสราชนครินทร์</option>
 										<?php 	if(is_array($shop_array)) {
 												foreach($shop_array as $loop){
 													echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
@@ -71,20 +72,20 @@
                                 ชื่อลูกค้า *
                                 <input type="text" class="form-control" name="cusname" id="cusname" value="">
                                 </div>
-                            </div>    
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                 เบอร์ติดต่อลูกค้า *
                                 <input type="text" class="form-control" name="custelephone" id="custelephone" value="">
                                 </div>
-                            </div>   
+                            </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                 ที่มา * &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 <input type="radio" name="customer" id="customer" value="1"> ลูกค้า&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 <input type="radio" name="customer" id="customer" value="0"> สต็อก
                                 </div>
-                            </div>   
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
@@ -131,7 +132,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -142,12 +143,12 @@
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     get_datepicker("#datein");
     get_datepicker("#datecs");
     document.getElementById("savebtn").disabled = false;
 });
-    
+
 function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
@@ -174,16 +175,16 @@ function submitform()
         document.getElementById('datein').focus();
     }else if (number == "") {
         alert("กรุณาใส่เลขที่ใบรับ");
-        document.getElementById('number').focus(); 
+        document.getElementById('number').focus();
     }else if (shopid == 0) {
         alert("กรุณาเลือกสาขาที่ส่งซ่อม");
-        document.getElementById('shopid').focus(); 
+        document.getElementById('shopid').focus();
     }else if (datecs == "") {
         alert("กรุณาใส่วันที่ CS รับ");
         document.getElementById('datecs').focus();
     }else if (getfrom == "") {
         alert("กรุณาใส่รับของจาก");
-        document.getElementById('getfrom').focus(); 
+        document.getElementById('getfrom').focus();
     }else if (cusname == "") {
         alert("กรุณาใส่ชื่อลูกค้า");
         document.getElementById('cusname').focus();
@@ -192,7 +193,7 @@ function submitform()
         document.getElementById('custelephone').focus();
     }else if ((Math.floor(custelephone)*1000) % 1 != 0) {
         alert("กรุณาใส่เบอร์ติดต่อลูกค้า ที่เป็นตัวเลขเท่านั้น");
-        document.getElementById('custelephone').focus(); 
+        document.getElementById('custelephone').focus();
     }else if (customer != 0 && customer != 1) {
         alert("กรุณาเลือกที่มาของซ่อม");
     }else if (refcode == "") {
@@ -200,19 +201,19 @@ function submitform()
         document.getElementById('refcode').focus();
     }else if (brandid == 0) {
         alert("กรุณาเลือกยี่ห้อ");
-        document.getElementById('brandid').focus(); 
+        document.getElementById('brandid').focus();
     }else if (case1 == "") {
         alert("กรุณาระบุอาการ");
-        document.getElementById('case').focus(); 
+        document.getElementById('case').focus();
     }else{
         var r = confirm("ยืนยันการบันทึก !!");
         if (r == true) {
             confirmform();
         }
     }
-    
+
 }
-    
+
 function confirmform()
 {
     var cusname = document.getElementById('cusname').value;
@@ -228,10 +229,10 @@ function confirmform()
     var brandid = document.getElementById('brandid').value;
     var case1 = document.getElementById('case').value;
     var remark = document.getElementById('remark').value;
-     
+
     //alert(customer);
     document.getElementById("savebtn").disabled = true;
-    
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_repair"); ?>" ,
@@ -250,9 +251,9 @@ function confirmform()
             document.getElementById("savebtn").disabled = false;
         }
     });
-    
+
 }
-    
+
 </script>
 </body>
 </html>

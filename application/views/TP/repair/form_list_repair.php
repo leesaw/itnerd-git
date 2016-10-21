@@ -8,7 +8,7 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -16,12 +16,12 @@
             รายการสินค้าส่งซ่อม
         </h1>
     </section>
-	
+
 	<section class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                        
+
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formfilter" id="formfilter" method="post">
@@ -54,6 +54,7 @@
                 สาขาที่ส่งซ่อม
                 <select class="form-control select2" name="shopid" id="shopid" style="width: 100%;">
                     <option value="0" selected>เลือกทั้งหมด</option>
+										<option value="1">HO-Head Office นราธิวาสราชนครินทร์</option>
                 <?php 	if(is_array($shop_array)) {
                         foreach($shop_array as $loop){
                             echo "<option value='".$loop->sh_id."'>".$loop->sh_code."-".$loop->sh_name."</option>";
@@ -75,7 +76,7 @@
                 </select>
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="row">
             <div class="col-md-2">
                 <div class="form-group">
@@ -101,18 +102,18 @@
                 <button type="submit" name="action" value="0" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
-    
-                        
-        </form>               
-                        
+
+
+        </form>
+
 					</div>
                 </div>
             </div>
         </div>
 
-        <?php 
+        <?php
         $status_got = 0; $status_assess = 0; $status_done = 0; $status_cancel = 0;
-        foreach($summary_array as $loop) { 
+        foreach($summary_array as $loop) {
                 if ($loop->rep_status == 'G') $status_got = $loop->count1;
                 if ($loop->rep_status == 'A') $status_assess = $loop->count1;
                 if ($loop->rep_status == 'D') $status_done = $loop->count1;
@@ -187,8 +188,8 @@
           <!-- /.row -->
         </section>
 		</div>
-    
-    
+
+
 	</div>
 
 
@@ -199,7 +200,7 @@
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     //Initialize Select2 Elements
     $(".select2").select2();
     get_datepicker_month("#month");
@@ -214,7 +215,7 @@ function submit_status(val1)
 
 function get_datepicker_month(id)
 {
-    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
+    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months",
     minViewMode: "months" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 }

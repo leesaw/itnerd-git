@@ -10,16 +10,16 @@
 <td width="100"><img src="<?php echo base_url(); ?>dist/img/logo-nggtp.jpg" width="100px" /></td>
 <td width="320">
 <div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">Sathon Bangkok 10120 </div>
-</td> 
-<?php foreach($pos_array as $loop) { $datetime = $loop->posrot_issuedate; $so_id = $loop->posrot_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posrot_customer_name; $cusaddress = $loop->posrot_customer_address; $remark=$loop->posrot_remark; break; } 
+</td>
+<?php foreach($pos_array as $loop) { $datetime = $loop->posrot_issuedate; $so_id = $loop->posrot_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_name; $cusname = $loop->posrot_customer_name; $cusaddress = $loop->posrot_customer_address; $remark=$loop->posrot_remark; break; }
 
 foreach($borrow_array as $loop) {
     $borrower_name = $loop->posrob_borrower_name;
 }
 
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
+ $GGyear=substr($datetime,0,4);
+ $GGmonth=substr($datetime,5,2);
+ $GGdate=substr($datetime,8,2);
 ?>
 <td width="50"> </td>
     <td width="200" style="text-align: right;"><div style="font-weight: bold; font-size: 16pt;">ใบแจ้งขาย</div></td>
@@ -38,7 +38,7 @@ foreach($borrow_array as $loop) {
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
+<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) {
 ?>
 <tr style="border:1px solid black;"><td align="center" valign="top"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;" valign="top"><?php echo $loop->itse_serial_number; ?></td>
@@ -47,9 +47,9 @@ foreach($borrow_array as $loop) {
 <td align="center" style="border-left:1px solid black;" valign="top"><?php echo number_format($loop->posroit_netprice, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="right" style="border-left:1px solid black;" valign="top"><?php $cal = $loop->posroit_qty*$loop->posroit_netprice; echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->posroit_qty; ?></td>
 </tr>
-<?php $no++; } } ?> 
+<?php $no++; } } ?>
 
-<?php if ($no*2<=24) { for($i=24-$no*2; $i>0; $i--) {?> 
+<?php if ($no*2<=24) { for($i=24-$no*2; $i>0; $i--) {?>
 <tr><td>&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td><td style="border-left:1px solid black;">&nbsp;</td></tr>
 <?php } } ?>
 
@@ -62,10 +62,10 @@ foreach($borrow_array as $loop) {
 <td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
-<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row">จำนวนเงินหลังหักส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum/1.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
-<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format($sum*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row">จำนวนภาษีมูลค่าเพิ่ม&nbsp;&nbsp;7 %&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(($sum/1.07)*0.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
 <td height="40" align="left" colspan=3 scope="row" style="border-top:1px solid black;">( <?php echo num2thai($sum); ?> )</td>
@@ -107,7 +107,7 @@ $elen = 6;
 }
 $var[$i][] = substr($number[$i], $slen, $elen);
 }
-}	
+}
 
 $nstring[$i] = "";
 for($k=0; $k<count($var[$i]); $k++){

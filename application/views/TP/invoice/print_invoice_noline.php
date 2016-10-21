@@ -9,14 +9,14 @@
 <tr>
 <td width="35"> </td>
 <td width="400">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
-</td> 
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES CO., LTD. </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Tax ID : 0105555081331  (Head Office)<br>Tel : 02-678-9988  Fax : 02-678-5566</div>
+</td>
 <?php foreach($inv_array as $loop) { $datetime = $loop->inv_issuedate; $number = $loop->inv_number; $cusname = $loop->inv_warehouse_detail; $cusaddress1 = $loop->inv_warehouse_address1; $cusaddress2 = $loop->inv_warehouse_address2; $custaxid = $loop->inv_warehouse_taxid; $note=$loop->inv_note; $vender=$loop->inv_vender; $barcode=$loop->inv_barcode; $discount_percent = $loop->inv_discount_percent;
-if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงานใหญ่"; $mainbranch=1; }else{ $cusbranch = "สาขาที่ ".str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); $mainbranch=0; $branch_number=str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); } } 
+if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงานใหญ่"; $mainbranch=1; }else{ $cusbranch = "สาขาที่ ".str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); $mainbranch=0; $branch_number=str_pad($loop->inv_warehouse_branch, 5, '0', STR_PAD_LEFT); } }
 
- $GGyear=substr($datetime,0,4); 
- $GGmonth=substr($datetime,5,2); 
- $GGdate=substr($datetime,8,2); 
+ $GGyear=substr($datetime,0,4);
+ $GGmonth=substr($datetime,5,2);
+ $GGdate=substr($datetime,8,2);
 
  $checkmark = '<img src="'.base_url().'dist/img/checkmark.png" width="15px" />';
 ?>
@@ -61,15 +61,15 @@ if ($loop->inv_warehouse_branch == 0) { $cusbranch = "สำนักงาน�
 <!--
 <tr><td width="10" style="border-right:1px solid black;"></td><td width="110" style="border-right:1px solid black;"></td><td width="300" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="70" style="border-right:1px solid black;"></td><td width="100" style="border-right:1px solid black;"></td></tr>
 -->
-<?php $no=0; $page_no = 0; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
+<?php $no=0; $page_no = 0; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) {
 
 // start pagebreak
-if (($no >=10)) { 
+if (($no >=10)) {
 	if (($page_no != $totalpage-1) || ($lastpage!=1) || ($no > 11)) {
-		$page_no++; 
-	
+		$page_no++;
 
-	
+
+
 ?>
 <tr><td height="20" colspan="7"></td></tr>
 
@@ -118,7 +118,7 @@ if (($no >=10)) {
 <td width="35"> </td>
 <td width="400">
 <div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
-</td> 
+</td>
     <td width="250" style="text-align: right;"></td>
 </tr>
 </tbody>
@@ -160,7 +160,7 @@ if (($no >=10)) {
 <tr><td width="10" style="border-right:1px solid black;"></td><td width="110" style="border-right:1px solid black;"></td><td width="300" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="80" style="border-right:1px solid black;"></td><td width="70" style="border-right:1px solid black;"></td><td width="100" style="border-right:1px solid black;"></td></tr>
 -->
 <?php
- $no=0; 
+ $no=0;
 } }
 
 // end pagebreak
@@ -174,9 +174,9 @@ if (($no >=10)) {
 <td align="right" style="border-left:0px solid black;" valign="top"><?php if ($loop->invit_discount>0) echo number_format($loop->invit_discount)."%"; ?></td>
 <td align="right" style="border-left:0px solid black;" valign="top"><?php echo number_format($loop->invit_netprice*$loop->invit_qty, 2, ".", ",")."&nbsp;&nbsp;"; $sum += ($loop->invit_netprice*$loop->invit_qty); ?></td>
 </tr>
-<?php $no++; 
+<?php $no++;
 
-} } $page_no++;  ?> 
+} } $page_no++;  ?>
 
 <?php  if ($discount_percent > 0) { ?>
 <tr style="border:0px solid black;"><td></td>
@@ -191,9 +191,9 @@ if (($no >=10)) {
 <?php $no++; } ?>
 
 
-<?php if ($no<10) { for($i=10-$no; $i>0; $i--) { ?> 
+<?php if ($no<10) { for($i=10-$no; $i>0; $i--) { ?>
 <tr><td colspan="7" > &nbsp;</td></tr>
-<?php  } } 
+<?php  } }
 
 if ($lastpage!=1 || $count_item ==1) {
 ?>
@@ -275,7 +275,7 @@ $elen = 6;
 }
 $var[$i][] = substr($number[$i], $slen, $elen);
 }
-}	
+}
 
 $nstring[$i] = "";
 for($k=0; $k<count($var[$i]); $k++){

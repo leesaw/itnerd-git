@@ -8,7 +8,7 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -16,19 +16,19 @@
             รายการสินค้าส่งซ่อม
         </h1>
     </section>
-	
+
 	<section class="content">
         <div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                        
+
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("tp_repair/result_list_repair"); ?>" name="formfilter" id="formfilter" method="post">
             <div class="col-md-2">
                 <div class="form-group">
                 เลขที่ใบรับ
-                <input type="text" class="form-control input-sm" name="number" id="number" value="<?php if ($number!="NULL") echo $number; ?>">
+                <input type="text" class="form-control input-sm" name="number" id="number" value="<?php echo $number_show; ?>">
                 </div>
             </div>
             <div class="col-md-2">
@@ -45,7 +45,7 @@
                     <?php foreach($brand_array as $loop) { ?>
                     <option value="<?php echo $loop->br_id; ?>" <?php if($loop->br_id==$brandid) echo " selected"; ?>><?php echo $loop->br_code."-".$loop->br_name; ?></option>
                     <?php } ?>
-                    <option value='99999'>-- อื่น ๆ --</option>
+                    <option value='99999'<?php if($brandid==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>
@@ -54,13 +54,14 @@
                 สาขาที่ส่งซ่อม
                 <select class="form-control select2" name="shopid" id="shopid">
                     <option value="0"<?php if($shopid==0) echo " selected"; ?>>เลือกทั้งหมด</option>
+										<option value="1"<?php if($shopid==1) echo " selected"; ?>>HO-Head Office นราธิวาสราชนครินทร์</option>
                 <?php   if(is_array($shop_array)) {
                         foreach($shop_array as $loop){
                             echo "<option value='".$loop->sh_id."'";
                             if($loop->sh_id==$shopid) echo " selected";
                             echo ">".$loop->sh_code."-".$loop->sh_name."</option>";
                  } } ?>
-                    <option value='99999'>-- อื่น ๆ --</option>
+                    <option value='99999'<?php if($shopid==99999) echo " selected"; ?>>-- อื่น ๆ --</option>
                 </select>
                 </div>
             </div>
@@ -77,7 +78,7 @@
                 </select>
                 </div>
             </div>
-        </div> 
+        </div>
         <div class="row">
             <div class="col-md-2">
                 <div class="form-group">
@@ -103,17 +104,17 @@
                 <button type="submit" name="action" value="0" class="btn btn-primary btn-sm"><i class="fa fa-search"></i> ค้นหา</button>
             </div>
         </div>
-    
-                        
-        </form>               
-                        
+
+
+        </form>
+
 					</div>
                 </div>
             </div>
         </div>
-        
 
-            
+
+
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-default">
@@ -148,29 +149,29 @@
                                     <th> </th>
                                 </tr>
                             </thead>
-                            
+
 							<tbody>
 							</tbody>
                             <tfoot>
-                               
+
                             </tfoot>
 						</table>
-                        
-					</div>
-                    
-				</div>
-			</div>	
-            
-		</div>
-                        
-                        
-                        
 
-        
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+
         </section>
 		</div>
-    
-    
+
+
 	</div>
 
 
@@ -181,7 +182,7 @@
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     get_datepicker_month("#month");
     get_datepicker_month("#month_cs");
     get_datepicker_month("#month_return");
@@ -208,7 +209,7 @@ $(document).ready(function()
 
 function get_datepicker_month(id)
 {
-    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
+    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months",
     minViewMode: "months" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 }

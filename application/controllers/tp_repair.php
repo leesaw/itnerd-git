@@ -4,7 +4,7 @@ class Tp_repair extends CI_Controller {
 
 public $no_rolex = "";
 public $shop_rolex = "";
-    
+
 function __construct()
 {
      parent::__construct();
@@ -12,7 +12,7 @@ function __construct()
      $this->load->model('tp_shop_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
-    
+
      if ($this->session->userdata('sessrolex') == 0) {
          $this->no_rolex = "br_id != 888";
          $this->shop_rolex = "sh_id != 888";
@@ -24,16 +24,16 @@ function __construct()
 
 function index()
 {
-    
+
 }
- 
+
 function form_new_repair()
 {
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
 	$data['currentdate'] = date("d/m/Y");
-    
+
     $this->load->model('tp_item_model','',TRUE);
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
@@ -42,11 +42,11 @@ function form_new_repair()
 	}else{
 		$data['brand_array'] = array();
 	}
-    
+
     $data['title'] = "Nerd | New Repair";
     $this->load->view('TP/repair/form_new_repair',$data);
 }
-    
+
 function save_repair()
 {
     $datein = $this->input->post("datein");
@@ -61,14 +61,14 @@ function save_repair()
     $brandid = $this->input->post("brandid");
     $case = $this->input->post("case");
     $remark = $this->input->post("remark");
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein_array = explode('/', $datein);
     $datein = $datein_array[2]."-".$datein_array[1]."-".$datein_array[0];
     $datecs_array = explode('/', $datecs);
     $datecs = $datecs_array[2]."-".$datecs_array[1]."-".$datecs_array[0];
-    
+
     $repair = array( 'rep_datein' => $datein,
                     'rep_cusname' => $cusname,
                     'rep_custelephone' => $custelephone,
@@ -86,9 +86,9 @@ function save_repair()
                     'rep_status' => 'G',
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->add_repair($repair);
-    
+
     $tmp_array = array("rep_id" => $last_id);
     $tmp_array = array_merge($tmp_array,$repair);
     $log_result = $this->tp_repair_model->add_log_repair($tmp_array);
@@ -97,28 +97,28 @@ function save_repair()
     echo json_encode($result);
     exit();
 }
-    
+
 function view_repair()
 {
     $id = $this->uri->segment(3);
-    
+
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
-    
+
     $where = "rep_id = '".$id."'";
     $data['repair_array'] = $this->tp_repair_model->get_repair($where);
-    
+
     $data['title'] = "Nerd | View Repair";
     $this->load->view('TP/repair/view_repair',$data);
 }
-    
+
 function form_list_repair()
 {
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
-    
+
     $this->load->model('tp_item_model','',TRUE);
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
@@ -135,14 +135,16 @@ function form_list_repair()
     $data['title'] = "NGG| Nerd - Repair List";
     $this->load->view("TP/repair/form_list_repair", $data);
 }
-    
+
 function result_list_repair()
 {
     if ($this->input->post("number") != "")
         $data['number'] = str_replace("/","_",$this->input->post("number"));
     else
         $data['number'] = "NULL";
-    
+
+    $data['number_show'] = $this->input->post("number");
+
     if ($this->input->post("refcode") != "")
         $data['refcode'] = $this->input->post("refcode");
     else
@@ -177,7 +179,7 @@ function result_list_repair()
         $data['month_return'] = "";
         $data['month_return_ajax'] = "NULL";
     }
-    
+
     $data['brandid'] = $this->input->post("brandid");
     $data['shopid'] = $this->input->post("shopid");
     $data['status'] = $this->input->post("status");
@@ -185,7 +187,7 @@ function result_list_repair()
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
-    
+
     $this->load->model('tp_item_model','',TRUE);
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
@@ -197,9 +199,9 @@ function result_list_repair()
 
     $data['title'] = "NGG| Nerd - Repair List";
     $this->load->view("TP/repair/result_list_repair", $data);
-    
+
 }
-    
+
 function ajaxView_seach_repair()
 {
     $number = $this->uri->segment(3);
@@ -211,17 +213,17 @@ function ajaxView_seach_repair()
     $month = $this->uri->segment(8);
     $month_cs = $this->uri->segment(9);
     $month_return = $this->uri->segment(10);
-    
+
     $where = "";
     $where .= "rep_enable = 1";
-    
+
     if ($number != "NULL") {
         $where .= " and rep_number like '".$number."'";
     }
     if ($refcode != "NULL") {
         $where .= " and rep_refcode like '".$refcode."'";
     }
-    
+
     if ($brandid > 0) {
         $where .= " and rep_brand_id = '".$brandid."'";
     }
@@ -249,14 +251,14 @@ function ajaxView_seach_repair()
         $end_date = $month_return."-31 23:59:59";
         $where .= " and rep_datereturn >= '".$start_date."' and rep_datereturn <= '".$end_date."'";
     }
-    
-    
+
+
     $this->load->library('Datatables');
     $this->datatables
-    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, IF(rep_shop_id = 99999 , 'อื่น ๆ', sh1.sh_name) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), IF(rep_customer = 1 , 'ลูกค้า', 'สต็อก') as customer, rep_case,
+    ->select("rep_datein, rep_number, rep_refcode, IF(rep_brand_id = 99999 , 'อื่น ๆ', br_name) as br_name, (CASE WHEN rep_shop_id = 99999 THEN 'อื่น ๆ' WHEN rep_shop_id = 1 THEN 'Head Office นราธิวาสราชนครินทร์' ELSE sh1.sh_name END) as shopname, CONCAT(rep_cusname,' ', rep_custelephone), IF(rep_customer = 1 , 'ลูกค้า', 'สต็อก') as customer, rep_case,
         (CASE WHEN rep_warranty = '1' THEN 'หมดประกัน' WHEN rep_warranty = '2' THEN 'อยู่ในประกัน' ELSE '-' END)
     , rep_price,
-    (CASE 
+    (CASE
         WHEN rep_status = 'G' THEN '<button class=\'btn btn-danger btn-xs\'>รับเข้าซ่อม</button>'
         WHEN rep_status = 'A' THEN '<button class=\'btn btn-warning btn-xs\'>ประเมินการซ่อมแล้ว</button>'
         WHEN rep_status = 'D'THEN '<button class=\'btn btn-primary btn-xs\'>ซ่อมเสร็จ</button>'
@@ -268,12 +270,12 @@ function ajaxView_seach_repair()
 	->join('tp_shop sh1', 'rep_shop_id = sh1.sh_id','left')
     ->join('tp_shop sh2', 'rep_return_shop_id = sh2.sh_id','left')
     ->join('tp_brand', 'rep_brand_id = br_id','left')
-    ->join('nerd_users', 'rep_dateaddby = id','left')	
+    ->join('nerd_users', 'rep_dateaddby = id','left')
     ->where($where)
     ->edit_column("rep_id",'<a href="'.site_url("tp_repair/view_repair"."/$1").'" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-search"></span></a>',"rep_id");
-    echo $this->datatables->generate(); 
+    echo $this->datatables->generate();
 }
-    
+
 function save_fix_status()
 {
     $assess = $this->input->post("assess");
@@ -282,10 +284,10 @@ function save_fix_status()
     $price = $this->input->post("price");
     $response = $this->input->post("response");
     $rep_id = $this->input->post("rep_id");
-    
+
     $currentdate = date("Y-m-d H:i:s");
     $dateassess = date("Y-m-d");
-    
+
     $repair = array( 'rep_id' => $rep_id,
                     'rep_assess' => $assess,
                     'rep_warranty' => $warranty,
@@ -296,9 +298,9 @@ function save_fix_status()
                     'rep_status' => 'A',
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->edit_repair($repair);
-    
+
     $tmp_array = array("rep_enable" => 1);
     $tmp_array = array_merge($tmp_array,$repair);
     $log_result = $this->tp_repair_model->add_log_repair($tmp_array);
@@ -318,13 +320,13 @@ function save_done_status()
     $price = $this->input->post("price");
     $response = $this->input->post("response");
     $rep_id = $this->input->post("rep_id");
-    
-    
+
+
     $datedone_array = explode('/', $datedone);
     $datedone = $datedone_array[2]."-".$datedone_array[1]."-".$datedone_array[0];
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $repair = array( 'rep_id' => $rep_id,
                     'rep_remark' => $remark,
                     'rep_warranty' => $warranty,
@@ -335,9 +337,9 @@ function save_done_status()
                     'rep_status' => $status,
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->edit_repair($repair);
-    
+
     $tmp_array = array("rep_enable" => 1);
     $tmp_array = array_merge($tmp_array,$repair);
     $log_result = $this->tp_repair_model->add_log_repair($tmp_array);
@@ -346,20 +348,20 @@ function save_done_status()
     echo json_encode($result);
     exit();
 }
-    
+
 function save_return_status()
 {
     $returndate = $this->input->post("returndate");
     $shop_return = $this->input->post("shop_return");
     $remark = $this->input->post("remark");
     $rep_id = $this->input->post("rep_id");
-    
-    
+
+
     $returndate_array = explode('/', $returndate);
     $returndate = $returndate_array[2]."-".$returndate_array[1]."-".$returndate_array[0];
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $repair = array( 'rep_id' => $rep_id,
                     'rep_remark' => $remark,
                     'rep_return_shop_id' => $shop_return,
@@ -368,9 +370,9 @@ function save_return_status()
                     'rep_status' => 'R',
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->edit_repair($repair);
-    
+
     $tmp_array = array("rep_enable" => 1);
     $tmp_array = array_merge($tmp_array,$repair);
     $log_result = $this->tp_repair_model->add_log_repair($tmp_array);
@@ -379,18 +381,18 @@ function save_return_status()
     echo json_encode($result);
     exit();
 }
-    
+
 function disable_repair()
 {
     $rep_id = $this->input->post("rep_id");
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $repair = array( 'rep_id' => $rep_id,
                     'rep_enable' => 0,
                     'rep_dateadd' => $currentdate,
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->edit_repair($repair);
 
     $log_result = $this->tp_repair_model->add_log_repair($repair);
@@ -399,15 +401,15 @@ function disable_repair()
     echo json_encode($result);
     exit();
 }
-    
+
 function form_edit_repair()
 {
     $id = $this->uri->segment(3);
-    
+
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
 	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
-    
+
     $this->load->model('tp_item_model','',TRUE);
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
@@ -416,14 +418,14 @@ function form_edit_repair()
 	}else{
 		$data['brand_array'] = array();
 	}
-    
+
     $where = "rep_id = '".$id."'";
     $data['repair_array'] = $this->tp_repair_model->get_repair($where);
-    
+
     $data['title'] = "Nerd | View Repair";
     $this->load->view('TP/repair/form_edit_repair',$data);
 }
-    
+
 function edit_repair()
 {
     $rep_id = $this->input->post("rep_id");
@@ -440,15 +442,15 @@ function edit_repair()
     $brandid = $this->input->post("brandid");
     $case = $this->input->post("case");
     $remark = $this->input->post("remark");
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein_array = explode('/', $datein);
     $datein = $datein_array[2]."-".$datein_array[1]."-".$datein_array[0];
     $datecs_array = explode('/', $datecs);
     $datecs = $datecs_array[2]."-".$datecs_array[1]."-".$datecs_array[0];
-    
-    $repair = array( 'rep_id' => $rep_id, 
+
+    $repair = array( 'rep_id' => $rep_id,
                     'rep_datein' => $datein,
                     'rep_cusname' => $cusname,
                     'rep_custelephone' => $custelephone,
@@ -464,7 +466,7 @@ function edit_repair()
                     'rep_dateadd' => $currentdate,
                     'rep_dateaddby' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_repair_model->edit_repair($repair);
 
     $log_result = $this->tp_repair_model->add_log_repair($repair);
@@ -473,7 +475,7 @@ function edit_repair()
     echo json_encode($result);
     exit();
 }
-    
+
 function exportExcel_repair_report()
 {
     $number = $this->input->post("excel_number");
@@ -485,17 +487,17 @@ function exportExcel_repair_report()
     $month = $this->input->post("excel_month");
     $month_cs = $this->input->post("excel_month_cs");
     $month_return = $this->input->post("excel_month_return");
-    
+
     $where = "";
     $where .= "rep_enable = 1";
-    
+
     if ($number != "NULL") {
         $where .= " and rep_number like '".$number."'";
     }
     if ($refcode != "NULL") {
         $where .= " and rep_refcode like '".$refcode."'";
     }
-    
+
     if ($brandid > 0) {
         $where .= " and rep_brand_id = '".$brandid."'";
     }
@@ -523,9 +525,9 @@ function exportExcel_repair_report()
         $end_date = $month_return."-31 23:59:59";
         $where .= " and rep_datereturn >= '".$start_date."' and rep_datereturn <= '".$end_date."'";
     }
-    
+
     $item_array = $this->tp_repair_model->get_repair($where);
-    
+
     //load our new PHPExcel library
     $this->load->library('excel');
     //activate worksheet number 1
@@ -544,27 +546,27 @@ function exportExcel_repair_report()
     $this->excel->getActiveSheet()->setCellValue('I1', 'ประกัน');
     $this->excel->getActiveSheet()->setCellValue('J1', 'ราคาซ่อม');
     $this->excel->getActiveSheet()->setCellValue('K1', 'สถานะ');
-    
+
     $row = 2;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->rep_datein);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->rep_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->rep_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);    
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->shopin_name);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->rep_cusname." ".$loop->rep_custelephone);
 
         if ($loop->rep_customer == 1) $customer = "ลูกค้า"; else if ($loop->rep_customer == 0) $customer = "สต็อก";
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $customer);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->rep_case);
-        
+
         if ($loop->rep_warranty == '1') $rep_warranty = "หมดประกัน";
         else if ($loop->rep_warranty == '2') $rep_warranty = "อยู่ในประกัน";
         else $rep_warranty = "-";
-        
+
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $rep_warranty);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->rep_price);
-        
+
         switch ($loop->rep_status) {
             case 'G' : $rep_status = "รับเข้าซ่อม"; break;
             case 'A' : $rep_status = "ประเมินการซ่อมแล้ว"; break;
@@ -572,11 +574,11 @@ function exportExcel_repair_report()
             case 'C' : $rep_status = "ซ่อมไม่ได้"; break;
             case 'R' : $rep_status = "ส่งกลับแล้ว"; break;
         }
-        
+
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $rep_status);
         $row++;
     }
-    
+
 
     $filename='repair_report.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -585,10 +587,10 @@ function exportExcel_repair_report()
 
     //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
     //if you want to save it as .XLSX Excel 2007 format
-    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
-    
+
 }
 ?>
