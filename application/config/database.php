@@ -51,7 +51,7 @@ $active_record = TRUE;
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'root';
 $db['default']['password'] = 'root';
-$db['default']['database'] = 'hostgator_nerd';
+$db['default']['database'] = 'hostgator_nerd_25102016';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
@@ -65,8 +65,8 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
 
-$db['db2']['hostname'] = "jes"; 
-//$db['db2']['port'] = "1433"; 
+$db['db2']['hostname'] = "jes";
+//$db['db2']['port'] = "1433";
 $db['db2']['username'] = 'viewonly';
 $db['db2']['password'] = 'justview890';
 $db['db2']['database'] = 'JES_NGG';

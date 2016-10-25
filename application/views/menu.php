@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-            
+
           <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
               <!-- User Account: style can be found in dropdown.less -->
@@ -55,7 +55,7 @@
               </a>
             </li>
             <?php } ?>
-            
+
             <?php if ($this->session->userdata('sessstatus') == 5) { ?>
             <li class="header">MAIN NAVIGATION</li>
             <li>
@@ -82,6 +82,11 @@
             <li>
               <a href="<?php echo site_url("timepieces/main"); ?>">
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
+              </a>
+            </li>
+            <li>
+              <a href="<?php echo site_url("tp_stockmovement/form_stockmovement"); ?>">
+                <i class="fa fa-dashboard"></i> <span>รายงานยอดเคลื่อนไหวสินค้า</span>
               </a>
             </li>
             <li class="treeview">
@@ -125,7 +130,7 @@
                 </ul>
             </li>
             <?php } ?>
-              
+
             <?php if (($this->session->userdata('sessstatus') > 0) && ($this->session->userdata('sessstatus') <= 4)) { ?>
             <?php if ($this->session->userdata('sessrolex') == 0) { ?>
             <li class="header">MAIN NAVIGATION</li>
@@ -134,6 +139,13 @@
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
+            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
+            <li>
+              <a href="<?php echo site_url("tp_stockmovement/form_stockmovement"); ?>">
+                <i class="fa fa-dashboard"></i> <span>รายงานยอดเคลื่อนไหวสินค้า</span>
+              </a>
+            </li>
+            <?php } ?>
             <?php if ($this->session->userdata('sessstatus') == 4) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
@@ -325,18 +337,18 @@
                     <li>
                         <a href="<?php echo site_url("managecustomer"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลลูกค้า</a>
                     </li>
-                    
+
 				    <li>
                         <a href="<?php echo site_url("managecustomer/addcustomer"); ?>"><i class="fa fa-circle-o"></i> เพิ่มข้อมูลลูกค้า</a>
                     </li>
                 </ul>
 
             </li>
-            
+
             <?php  } ?>
             <?php } ?>
-            
-            <?php 
+
+            <?php
               // only POS user
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) { ?>
             <li class="header">ROLEX POS</li>
@@ -404,8 +416,8 @@
                 <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
             </a></li>
             <?php } ?>
-              
-            <?php 
+
+            <?php
               // only Rolex Manager
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) { ?>
             <li class="header">รายงาน ROLEX</li>
@@ -430,7 +442,7 @@
                     </ul>
 
             </li>
-            
+
             <!--
             <li>
               <a href="<?php echo site_url("pos/stock_POS_sale_history"); ?>">
@@ -458,7 +470,7 @@
                 <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
             </a></li>
             <li>
-              
+
             </li>
             <li class="header">NGG Timepieces Office</li>
             <li>
@@ -486,8 +498,8 @@
                 <a href="<?php echo site_url("tp_repair/form_list_repair"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลส่งซ่อม</a>
             </li>
             <?php } ?>
-              
-            <?php 
+
+            <?php
               // only view rolex sale
               if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==89) { ?>
             <li class="header">รายงาน ROLEX</li>
@@ -539,7 +551,7 @@
                 <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
             </a></li>
             <?php } ?>
-            <?php 
+            <?php
               // only Sesto
               if (($this->session->userdata('sessstatus') >= 50) && ($this->session->userdata('sessstatus') <= 59)) { ?>
             <li class="header">Certificate Menu</li>

@@ -9,29 +9,29 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            สินค้าที่มีการรับเข้าคลัง : <?php 
+            สินค้าที่มีการรับเข้าคลัง : <?php
             if ($refcode != "NULL") echo $refcode;
-            echo " ยี่ห้อ : ".$brand_name; 
-            echo " คลังสินค้า : ".$wh_name; 
+            echo " ยี่ห้อ : ".$brand_name;
+            echo " คลังสินค้า : ".$wh_name;
             echo " ช่วงเวลา : ";
-            if ($startdate != '1970-01-01') $startdate;
+            if ($startdate != '1970-01-01') echo $startdate;
             echo " ถึง ".$enddate;  ?>
         </h1>
     </section>
-	
+
 	<section class="content">
 		<div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
 
-                        
+
         <div class="box-body">
-            
+
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-default">
@@ -44,7 +44,7 @@
                         <input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
                         <input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
                         </form>
-                        
+
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablebarcode" width="100%">
@@ -61,7 +61,7 @@
                                         <th>เข้าคลัง</th>
                                     </tr>
                                 </thead>
-                                
+
 								<tbody>
 								</tbody>
                                 <tfoot>
@@ -72,39 +72,39 @@
                                     </tr>
                                 </tfoot>
 							</table>
-                        
+
 					</div>
-                    
+
 				</div>
-			</div>	
-            
+			</div>
+
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>" class="btn btn-primary">ค้นหา</a>    
+            <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>" class="btn btn-primary">ค้นหา</a>
             </div>
         </div>
-                        
-                        
-                        
-                        
+
+
+
+
 					</div>
                 </div>
             </div>
         </div>
         </section>
 		</div>
-    
-    
+
+
 	</div>
 
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
-    <div class="modal-content"  >              
+    <div class="modal-content"  >
       <div class="modal-body">
       	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <img src="" class="imagepreview" style="width: 100%;" >
-      </div> 
+      </div>
     </div>
   </div>
 </div>
@@ -116,7 +116,7 @@
 <script src="<?php echo base_url(); ?>plugins/fancybox/jquery.fancybox.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,
         'bServerSide'    : false,
@@ -134,7 +134,7 @@ $(document).ready(function()
         },
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
- 
+
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -142,7 +142,7 @@ $(document).ready(function()
                     typeof i === 'number' ?
                         i : 0;
             };
- 
+
             // Total over all pages
             total = api
                 .column( 7 )
@@ -150,7 +150,7 @@ $(document).ready(function()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
-            
+
             // Total over this page
             pageTotal = api
                 .column( 7, { page: 'current'} )
@@ -158,33 +158,33 @@ $(document).ready(function()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
-            
- 
+
+
             // Update footer
             $( api.column( 7 ).footer() ).html(
                 total+' ('+pageTotal+')'
             );
         }
     });
-    
-    $('#fancyboxall').fancybox({ 
+
+    $('#fancyboxall').fancybox({
     'width': '30%',
-    'height': '80%', 
+    'height': '80%',
     'autoScale':false,
-    'transitionIn':'none', 
-    'transitionOut':'none', 
-    'type':'iframe'}); 
-    
-    
+    'transitionIn':'none',
+    'transitionOut':'none',
+    'type':'iframe'});
+
+
 });
-    
+
 Number.prototype.formatMoney = function(c, d, t){
-    var n = this, 
-        c = isNaN(c = Math.abs(c)) ? 2 : c, 
-        d = d == undefined ? "." : d, 
-        t = t == undefined ? "," : t, 
-        s = n < 0 ? "-" : "", 
-        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
+    var n = this,
+        c = isNaN(c = Math.abs(c)) ? 2 : c,
+        d = d == undefined ? "." : d,
+        t = t == undefined ? "," : t,
+        s = n < 0 ? "-" : "",
+        i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
         j = (j = i.length) > 3 ? j % 3 : 0;
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
      };
