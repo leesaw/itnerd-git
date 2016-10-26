@@ -1,4 +1,6 @@
-    <header class="main-header">
+<!-- Bottom Left -->
+<img src="<?php echo base_url(); ?>dist/img/black_ribbon_top_right.png" class="black-ribbon stick-top stick-right"/>
+<header class="main-header">
         <a href="#" class="logo"><b>NGG | </b><?php if ($this->session->userdata('sessrolex') == 0) echo "Nerd"; else echo "ROLEX"; if ($this->session->userdata('sessstatus') == 8) echo " POS"; ?> </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top" role="navigation">
@@ -473,6 +475,11 @@
 
             </li>
             <li class="header">NGG Timepieces Office</li>
+            <li>
+              <a href="<?php echo site_url("tp_stockmovement/form_stockmovement"); ?>">
+                <i class="fa fa-dashboard"></i> <span>รายงานยอดเคลื่อนไหวสินค้า</span>
+              </a>
+            </li>
             <li>
                <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
             </li>

@@ -17,6 +17,8 @@
 <link href="<?php echo base_url(); ?>plugins/datepicker/datepicker3.css" rel="stylesheet" type="text/css" />
     <!-- Select2 -->
 <link href="<?php echo base_url(); ?>plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <!-- Black Ribbon -->
+<link href="<?php echo base_url(); ?>dist/css/blackribbon.min.css" rel="stylesheet" type="text/css" />
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
