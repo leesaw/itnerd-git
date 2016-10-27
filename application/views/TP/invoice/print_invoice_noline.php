@@ -117,7 +117,7 @@ if (($no >=10)) {
 <tr>
 <td width="35"> </td>
 <td width="400">
-<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES COMPANY LIMITED </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">เลขประจำตัวผู้เสียภาษี 0105555081331  สำนักงานใหญ่<br>เบอร์โทร 02-678-9988 เบอร์แฟกซ์ 02-678-5566</div>
+<div style="text-align: left; font-weight: bold; font-size: 18pt;">NGG TIMEPIECES CO., LTD. </div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">27 Soi Pattanasin, Naradhiwas Rajanagarindra Rd.</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Thungmahamek Sathon Bangkok 10120</div><br\><div style="text-align: left; font-weight: bold;  font-size: 14pt;">Tax ID : 0105555081331  (Head Office)<br>Tel : 02-678-9988  Fax : 02-678-5566</div>
 </td>
     <td width="250" style="text-align: right;"></td>
 </tr>

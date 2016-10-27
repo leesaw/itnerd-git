@@ -45,8 +45,8 @@
             <div class="col-md-4">
                 <div class="form-group">
                     เลือก Warehouse
-                    <select id="warehouse" name="warehouse" class="form-control select2" style="width: 100%;">
-                        <option value="0" selected>เลือกทั้งหมด</option>
+                    <select id="warehouse" name="warehouse" class="form-control select2" style="width: 100%;" required>
+                        <option value="" selected>-- กรุณาเลือก --</option>
                         <?php
                             foreach($whname_array as $loop) {
                         ?>
