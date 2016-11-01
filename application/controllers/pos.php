@@ -5,7 +5,7 @@ class Pos extends CI_Controller {
 public $no_rolex = "";
 public $shop_rolex = "";
 public $qty_limit = " and stob_qty > 0";
-    
+
 function __construct()
 {
      parent::__construct();
@@ -14,7 +14,7 @@ function __construct()
      $this->load->model('tp_warehouse_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
-    
+
      if ($this->session->userdata('sessrolex') == 0) {
          $this->no_rolex = "br_id != 888";
          $this->shop_rolex = "sh_id != 888";
@@ -22,48 +22,48 @@ function __construct()
          $this->no_rolex = "br_id = 888";
          $this->shop_rolex = "sh_id = 888";
      }
-    
+
 }
 
 function index()
 {
-    
+
 }
-    
+
 function formSerial_detail_shop()
 {
     $data['title'] = "NGG| Nerd - Search Serial";
     $this->load->view('TP/shop/search_serial',$data);
 }
-    
+
 function getSerial_detail_shop()
 {
     $serial = $this->input->post("serial");
-    
+
     $serial = preg_replace('/\s+/', '', $serial);
-    
+
     $where = "itse_serial_number = '".$serial."'";
     $where .= " and ".$this->no_rolex;
-    
+
     $query = $this->tp_shop_model->getPOS_rolex_sold_temp_item($where." and posrot_enable=1");
     $data["temp_array"] = $query;
-    
+
     $query = $this->tp_shop_model->getPOS_rolex_sold_tax_item($where." and posro_enable=1");
     $data["tax_array"] = $query;
-    
+
     $query = $this->tp_shop_model->getItem_serial($where." and itse_enable=1");
     $data["udon_array"] = $query;
-    
-    $query = $this->tp_shop_model->getItem_borrow_serial($where." and posrobi_enable=1");
+
+    $query = $this->tp_shop_model->getItem_borrow_serial($where." and posrobi_enable=1 and posrobi_pos_rolex_borrow_id > 0");
     $data["borrow_array"] = $query;
 
     $this->load->model('tp_rolex_warrantycard_model','',TRUE);
     $where = "rowa_serial_number = '".$serial."'";
     $data["warranty_array"] = $this->tp_rolex_warrantycard_model->get_warrantycard($where);
-    
+
     $data["serial"] = $serial;
     $data["sessuserstatus"] = $this->session->userdata('sessstatus');
-    
+
     $data['title'] = "NGG| Nerd - Search Serial";
     $this->load->view('TP/shop/report_serial',$data);
 }
@@ -75,11 +75,11 @@ function getBalance_shop()
     if ($remark=="all") $stock = "";
     else if ($remark=="have") $stock = " and stob_qty > 0";
     else if ($remark=="no") $stock = " and stob_qty <= 0";
-    
+
     $sql = $this->no_rolex;
     $this->load->model('tp_item_model','',TRUE);
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
-    
+
     $sql = $this->shop_rolex;
     $query = $this->tp_shop_model->getShop($sql);
     foreach($query as $loop) {
@@ -87,21 +87,21 @@ function getBalance_shop()
         $sql_result = "stob_enable = 1 and stob_warehouse_id = '".$loop->sh_warehouse_id."'".$stock;
         $result = $this->tp_warehouse_model->getWarehouse_balance($sql_result);
     }
-    
+
     $data['item_array'] = $result;
     $data['remark'] = $remark;
     $data['title'] = "NGG| Nerd - Search Stock";
     $this->load->view('TP/shop/search_stock',$data);
 }
-    
+
 function stock_rolex_print()
 {
     $remark = $this->uri->segment(3);
     if ($remark=="all") { $stock = ""; $data['detail'] = "สินค้าทั้งหมด"; }
     else if ($remark=="have") { $stock = " and stob_qty > 0"; $data['detail'] = "เฉพาะสินค้าที่มีของ(จำนวน > 0)"; }
     else if ($remark=="no") { $stock = " and stob_qty <= 0"; $data['detail'] = "เฉพาะสินค้าที่หมด(จำนวน = 0)"; }
-		
-    $this->load->library('mpdf/mpdf');                
+
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th','A4','0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
 
@@ -114,7 +114,7 @@ function stock_rolex_print()
     }
 
     $data['item_array'] = $result;
-    
+
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
     //$sql_result .= " and itse_enable = '1'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
@@ -123,29 +123,29 @@ function stock_rolex_print()
     }else{
         $data['serial_array'] = array();
     }
-    
+
     $sql = "";
     $query_sold_tax = $this->tp_saleorder_model->getPOS_rolex_item($sql);
     $query_sold_bill = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
     $data['sold_array'] = array_merge($query_sold_tax,$query_sold_bill);
-    
+
     $sql = "";
     $data['borrow_array'] = $this->tp_shop_model->getItem_borrow_serial($sql);
-    
+
     //echo $html;
     $mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/shop/stock_rolex_print", $data, TRUE));
     $mpdf->Output();
 }
-    
+
 function stock_rolex_excel()
 {
     /*$remark = $this->uri->segment(3);
     if ($remark=="all") { $stock = ""; $detail = "สินค้าทั้งหมด"; }
     else if ($remark=="have") { $stock = " and stob_qty > 0"; $detail = "เฉพาะสินค้าที่มีของ(จำนวน > 0)"; }
     else if ($remark=="no") { $stock = " and stob_qty <= 0"; $detail = "เฉพาะสินค้าที่หมด(จำนวน = 0)"; }
-	*/	
+	*/
     $stock = " and stob_qty > 0";
     $sql = $this->shop_rolex;
     $query = $this->tp_shop_model->getShop($sql);
@@ -161,15 +161,15 @@ function stock_rolex_excel()
     //$sql_result .= " and itse_enable = '1'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
     $serial_array = $query;
-    
+
     $sql = "";
     $query_sold_tax = $this->tp_saleorder_model->getPOS_rolex_item($sql);
     $query_sold_bill = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
     $sold_array = array_merge($query_sold_tax,$query_sold_bill);
-    
+
     $sql = "";
     $borrow_array = $this->tp_shop_model->getItem_borrow_serial($sql);
-    
+
     //load our new PHPExcel library
     $this->load->library('excel');
     //activate worksheet number 1
@@ -177,7 +177,7 @@ function stock_rolex_excel()
     //name the worksheet
     $this->excel->getActiveSheet()->setTitle('Stock_Balance');
     $this->excel->getActiveSheet()->setCellValue('A1', '** จำนวนยอดคงเหลือ เฉพาะที่อยู่ใน Shop Rolex Central Udonthani เท่านั้น');
-    
+
     $this->excel->getActiveSheet()->setCellValue('A2', 'No.');
     $this->excel->getActiveSheet()->setCellValue('B2', 'Product Code');
     $this->excel->getActiveSheet()->setCellValue('C2', 'Brand');
@@ -187,7 +187,7 @@ function stock_rolex_excel()
     $this->excel->getActiveSheet()->setCellValue('G2', 'จำนวน (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('H2', 'ราคาป้าย');
     $this->excel->getActiveSheet()->setCellValue('I2', 'Serial');
-    
+
     $row = 3;
     $no = 1;
     foreach($item_array as $loop) {
@@ -199,7 +199,7 @@ function stock_rolex_excel()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
-        
+
         $serial_temp = "";
         $count = 0;
         foreach ($serial_array as $loop2) {
@@ -213,7 +213,7 @@ function stock_rolex_excel()
         $row++;
         $no++;
     }
-    
+
 
     $filename='rolex_stock_shoponly.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -222,19 +222,19 @@ function stock_rolex_excel()
 
     //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
     //if you want to save it as .XLSX Excel 2007 format
-    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
-    
+
 function stock_rolex_borrow()
 {
     $datein = date("d/m/Y");
-    
+
     // shop rolex
     $sql = "sh_id = '888'";
     $data['shop_array'] = $this->tp_shop_model->getShop($sql);
-    
+
     $this->load->model('tp_saleperson_model','',TRUE);
     $data['borrower_array'] = $this->tp_saleperson_model->getBorrowerName($sql);
 
@@ -242,29 +242,29 @@ function stock_rolex_borrow()
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/shop/pos_borrow", $data);
 }
-    
+
 function stock_rolex_borrow_save()
 {
     $borrower = $this->input->post("borrower");
 
     $remark = $this->input->post("remark");
-    
+
     $shop_id = $this->input->post("shop_id");
     $saleperson_code = $this->input->post("saleperson_code");
     $it_array = $this->input->post("item");
     $datein = $this->input->post("datein");
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein = explode('/', $datein);
     $datein = $datein[2]."-".$datein[1]."-".$datein[0];
     $month = date("Y-m");
     $month_array = explode('-',date("y-m"));
-    
+
     $number = $this->tp_shop_model->getMaxNumber_rolex_borrow_shop($month, $shop_id);
-    
+
     $number++;
-    
+
     $number = "NGGTP-TD".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
 
     $sale = array( 'posrob_number' => $number,
@@ -276,7 +276,7 @@ function stock_rolex_borrow_save()
                     'posrob_remark' => $remark,
                     'posrob_dateadd_by' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_shop_model->addPOS_rolex_borrow($sale);
     $count = 0;
     for($i=0; $i<count($it_array); $i++){
@@ -308,9 +308,9 @@ function stock_rolex_borrow_save()
                 break;
             }
         }
-        
+
         $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 0, "itse_dateadd" => $currentdate);
-        
+
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
     }
@@ -319,7 +319,7 @@ function stock_rolex_borrow_save()
     echo json_encode($result);
     exit();
 }
-   
+
 function stock_rolex_borrow_print()
 {
     $id = $this->uri->segment(3);
@@ -352,7 +352,7 @@ function stock_rolex_borrow_print()
     $mpdf->WriteHTML($this->load->view("TP/shop/bill_borrow_rolex_print", $data, TRUE));
     $mpdf->Output();
 }
-    
+
 function stock_rolex_pos_borrow_last()
 {
     $id = $this->uri->segment(3);
@@ -378,18 +378,18 @@ function stock_rolex_pos_borrow_last()
     }else{
         $data['item_array'] = array();
     }
-    
+
     $data['pos_rolex_id'] = $id;
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/shop/stock_pos_borrow_view", $data);
 }
-    
+
 function stock_POS_borrow_today()
 {
     $currentdate = date("Y-m-d");
     $start = $currentdate." 00:00:00";
     $end = $currentdate." 23:59:59";
-    
+
     $sql = "posrob_dateadd >= '".$start."' and posrob_dateadd <= '".$end."' and posrob_shop_id = '888'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
     if($query){
@@ -403,7 +403,7 @@ function stock_POS_borrow_today()
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/shop/report_stock_POS_borrow_today", $data);
 }
-    
+
 function stock_POS_borrow_history()
 {
     $datein = $this->input->post("datein");
@@ -415,7 +415,7 @@ function stock_POS_borrow_history()
     }
     $start = $currentdate."-01 00:00:00";
     $end = $currentdate."-31 23:59:59";
-    
+
     $sql = "posrob_dateadd >= '".$start."' and posrob_dateadd <= '".$end."' and posrob_shop_id = '888'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
     if($query){
@@ -429,13 +429,13 @@ function stock_POS_borrow_history()
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/shop/report_stock_POS_borrow_history", $data);
 }
-    
+
 function saleorder_rolex_void_pos_borrow()
 {
     $id = $this->uri->segment(3);
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $sql = "posrob_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
     foreach($query as $loop) {
@@ -462,7 +462,7 @@ function saleorder_rolex_void_pos_borrow()
                 "rot_dateadd" => $currentdate, "rot_dateadd_by" => $this->session->userdata('sessid'));
     $query = $this->tp_rolex_transfer_model->edit_rolex_transfer($transfer);
     */
-    
+
     $sql = "posrobi_pos_rolex_borrow_id = '".$id."'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow_item($sql);
     foreach($query as $loop) {
@@ -485,30 +485,30 @@ function saleorder_rolex_void_pos_borrow()
                 break;
             }
         }
-        
-        $serial = array("id" => $itse_id, 
-                        "itse_enable" => 1, 
+
+        $serial = array("id" => $itse_id,
+                        "itse_enable" => 1,
                         "itse_dateadd" => $currentdate);
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
     }
-		
+
     redirect('pos/stock_POS_borrow_today', 'refresh');
 }
-    
+
 function stock_POS_sale_history()
 {
     $month = date("Y-m");
     $start = $month."-01 00:00:00";
     $end = $month."-31 23:59:59";
-    
-    
+
+
 }
-    
+
 function stock_rolex_borrow_return()
 {
     $datein = date("d/m/Y");
-    
+
     // shop rolex
     $sql = "sh_id = '888'";
     $data['shop_array'] = $this->tp_shop_model->getShop($sql);
@@ -517,47 +517,47 @@ function stock_rolex_borrow_return()
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/shop/pos_borrow_return", $data);
 }
-    
+
 function check_rolex_borrow_serial()
 {
     $refcode = $this->input->post("refcode");
     $shop_id = $this->input->post("shop_id");
-    
+
     $output = "";
     $sql = "itse_serial_number = '".$refcode."' and posrobi_enable = '1' and posrob_status != 'V'";
-    
+
     $result = $this->tp_shop_model->getItem_borrow_serial($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output .= "<td><input type='hidden' name='stob_id' id='stob_id' value='".$loop->posrobi_stock_balance_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='posrobi_id' id='posrobi_id' value='".$loop->posrobi_id."'>".$loop->it_refcode."</td><td>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td><td><input type='text' name='it_quantity' id='it_quantity' value='1 ".$loop->it_uom."' style='width: 50px;' readonly></td><td>".number_format($loop->it_srp)."</td><td>".$loop->posrob_borrower_name."</td>";
         }
     }
-    
-    
+
+
     echo $output;
 }
-    
+
 function stock_rolex_borrow_return_save()
 {
     $remark = $this->input->post("remark");
-    
+
     $shop_id = $this->input->post("shop_id");
     $saleperson_code = $this->input->post("saleperson_code");
     $it_array = $this->input->post("item");
     $datein = $this->input->post("datein");
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein = explode('/', $datein);
     $datein = $datein[2]."-".$datein[1]."-".$datein[0];
     $month = date("Y-m");
     $month_array = explode('-',date("y-m"));
-    
+
     $number = $this->tp_shop_model->getMaxNumber_rolex_borrow_shop($month, $shop_id);
-    
+
     $number++;
-    
+
     $number = "NGGTP-TD".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
 
     $sale = array( 'posrob_number' => $number,
@@ -569,7 +569,7 @@ function stock_rolex_borrow_return_save()
                     'posrob_remark' => $remark,
                     'posrob_dateadd_by' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_shop_model->addPOS_rolex_borrow($sale);
     $count = 0;
     for($i=0; $i<count($it_array); $i++){
@@ -599,9 +599,9 @@ function stock_rolex_borrow_return_save()
                 break;
             }
         }
-        
+
         $serial = array("id" => $it_array[$i]["itse_id"], "itse_enable" => 1, "itse_dateadd" => $currentdate);
-        
+
         $this->load->model('tp_item_model','',TRUE);
         $query = $this->tp_item_model->editItemSerial($serial);
     }
@@ -611,7 +611,7 @@ function stock_rolex_borrow_return_save()
     exit();
 
 }
-    
+
 function stock_rolex_borrow_return_print()
 {
     $id = $this->uri->segment(3);
@@ -644,7 +644,7 @@ function stock_rolex_borrow_return_print()
     $mpdf->WriteHTML($this->load->view("TP/shop/bill_borrow_return_rolex_print", $data, TRUE));
     $mpdf->Output();
 }
-    
+
 function stock_rolex_pos_borrow_return_last()
 {
     $id = $this->uri->segment(3);
@@ -664,18 +664,18 @@ function stock_rolex_pos_borrow_return_last()
     }else{
         $data['item_array'] = array();
     }
-    
+
     $data['pos_rolex_id'] = $id;
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/shop/stock_pos_borrow_return_view", $data);
 }
-    
+
 function stock_POS_borrow_return_today()
 {
     $currentdate = date("Y-m-d");
     $start = $currentdate." 00:00:00";
     $end = $currentdate." 23:59:59";
-    
+
     $sql = "posrob_dateadd >= '".$start."' and posrob_dateadd <= '".$end."' and posrob_shop_id = '888'";
     $query = $this->tp_shop_model->getPOS_rolex_borrow($sql);
     if($query){
@@ -689,30 +689,30 @@ function stock_POS_borrow_return_today()
     $data['title'] = "Nerd - Report";
     $this->load->view("TP/shop/report_stock_POS_borrow_today", $data);
 }
-    
+
 function form_list_borrow_item()
 {
     $sql = "";
     $this->load->model('tp_saleperson_model','',TRUE);
     $data['borrower_array'] = $this->tp_saleperson_model->getBorrowerName($sql);
-    
+
     $data['title'] = "Rolex - List of Borrowed Item";
     $this->load->view("TP/shop/form_search_borrow_item", $data);
 }
-    
+
 function get_borrow_item()
 {
     $borrower_name = $this->input->post("borrower");
-    
+
     $where = "posrob_borrower_name like '".$borrower_name."' and posrobi_return_id=0 and posrob_status != 'V'";
-    
+
     $query = $this->tp_shop_model->getItem_borrow_serial($where);
     $data["borrow_array"] = $query;
-    
+
     $data["borrower"] = $borrower_name;
-    
+
     $data['title'] = "Rolex - List of Borrowed Item";
-    
+
     if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==8) {
         $this->load->view("TP/shop/result_search_borrow_item_only_view", $data);
     }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==89) {
@@ -721,19 +721,83 @@ function get_borrow_item()
         $this->load->view("TP/shop/result_search_borrow_item", $data);
     }
 }
-    
+
+function stock_rolex_borrow_excel()
+{
+  $where = "posrobi_return_id = 0 and posrob_status != 'V' and posrobi_enable = 1";
+
+  $serial_array = $this->tp_shop_model->getItem_borrow_serial($where);
+  $item_array = $this->tp_shop_model->getItem_borrow_serial_group_item($where);
+
+  //load our new PHPExcel library
+  $this->load->library('excel');
+  //activate worksheet number 1
+  $this->excel->setActiveSheetIndex(0);
+  //name the worksheet
+  $this->excel->getActiveSheet()->setTitle('Stock_Balance');
+  $this->excel->getActiveSheet()->setCellValue('A1', '** จำนวนยอดคงเหลือ เฉพาะสินค้าที่ยืมและยังไม่ได้แจ้งขาย เท่านั้น');
+
+  $this->excel->getActiveSheet()->setCellValue('A2', 'No.');
+  $this->excel->getActiveSheet()->setCellValue('B2', 'Product Code');
+  $this->excel->getActiveSheet()->setCellValue('C2', 'Brand');
+  $this->excel->getActiveSheet()->setCellValue('D2', 'Description');
+  $this->excel->getActiveSheet()->setCellValue('E2', 'Family');
+  $this->excel->getActiveSheet()->setCellValue('F2', 'Bracelet');
+  $this->excel->getActiveSheet()->setCellValue('G2', 'จำนวน (Pcs.)');
+  $this->excel->getActiveSheet()->setCellValue('H2', 'ราคาป้าย');
+  $this->excel->getActiveSheet()->setCellValue('I2', 'Serial');
+
+  $row = 3;
+  $no = 1;
+  foreach($item_array as $loop) {
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->qty);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
+
+      $serial_temp = "";
+      $count = 0;
+      foreach ($serial_array as $loop2) {
+          if ($loop->it_id==$loop2->it_id) {
+              if ($count != 0) $serial_temp .= " , ";
+              $serial_temp .= $loop2->itse_serial_number;
+              $count++;
+          }
+      }
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $serial_temp);
+      $row++;
+      $no++;
+  }
+
+
+  $filename='rolex_stock_borrow.xlsx'; //save our workbook as this file name
+  header('Content-Type: application/vnd.ms-excel'); //mime type
+  header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+  header('Cache-Control: max-age=0'); //no cache
+
+  //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+  //if you want to save it as .XLSX Excel 2007 format
+  $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+  //force user to download the Excel file without writing it to server's HD
+  $objWriter->save('php://output');
+}
+
 function form_rolex_borrow_sold()
 {
     $borrow_id = $this->uri->segment(3);
-    
+
     $datein = date("d/m/Y");
     $data['datein'] = $datein;
-    
+
     $where = "posrobi_id = '".$borrow_id."'";
-    
+
     $query = $this->tp_shop_model->getItem_borrow_serial($where);
     $data["borrow_array"] = $query;
-    
+
     $data['title'] = "Rolex - Sale Memo";
     $this->load->view("TP/sale/form_rolex_saleorder_borrow", $data);
 }
@@ -775,7 +839,7 @@ function print_rolex_cn()
 function form_rolex_warrantycard_comfirm()
 {
     $datein = date("d/m/Y");
-    
+
     // shop rolex
     $this->load->model('tp_shop_model','',TRUE);
     $where = "sh_id = '".$this->session->userdata('sessshopid')."'";
@@ -790,30 +854,30 @@ function check_rolex_detail()
 {
     $refcode = $this->input->post("refcode");
     $shop_id = $this->input->post("shop_id");
-    
+
     $output = "";
     $sql = "itse_serial_number = '".$refcode."' and sh_id = '".$shop_id."'";
-    
+
     $result = $this->tp_shop_model->getItem_serial($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output .= "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'>".$loop->it_refcode."</td><td><input type='hidden' name='itse_serial_number' id='itse_serial_number' value='".$loop->itse_serial_number."'>".$loop->itse_serial_number."</td><td>".$loop->it_short_description."</td><td>".$loop->it_model."</td><td>".$loop->it_remark."</td>";
         }
     }
-    
-    
+
+
     echo $output;
 }
 
 function save_rolex_warrantycard_confirm()
-{  
+{
     $shop_id = $this->input->post("shop_id");
     $it_array = $this->input->post("item");
     $datein = $this->input->post("datein");
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein = explode('/', $datein);
     $datein = $datein[2]."-".$datein[1]."-".$datein[0];
 
@@ -850,7 +914,7 @@ function list_rolex_warrantycard()
     }else{
         $currentdate = date("Y-m");
     }
-    
+
     $start = $currentdate."-01 00:00:00";
     $end = $currentdate."-31 23:59:59";
 
@@ -858,7 +922,7 @@ function list_rolex_warrantycard()
     $currentdate = $currentdate[1]."/".$currentdate[0];
     $data["currentdate"] = $currentdate;
     $data['month'] = $currentdate;
-    
+
     $this->load->model('tp_rolex_warrantycard_model','',TRUE);
 
     $where = "rowa_enable = '1' and rowa_issuedate >= '".$start."' and rowa_issuedate <= '".$end."'";
@@ -872,6 +936,6 @@ function list_rolex_warrantycard()
     $data['title'] = "NGG| Nerd - Search Warranty Card";
     $this->load->view('TP/shop/list_rolex_warrantycard',$data);
 }
-    
+
 }
 ?>

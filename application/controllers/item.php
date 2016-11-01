@@ -1,27 +1,27 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class Item extends CI_Controller {
-    
+
 public $no_rolex = "";
-    
+
 function __construct()
 {
      parent::__construct();
      $this->load->model('tp_item_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
-    
+
      if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
      else $this->no_rolex = "br_id = 888";
 }
 
 function index()
 {
-    
+
 }
-    
+
 function manage()
-{   
+{
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
 	if($query){
@@ -29,7 +29,7 @@ function manage()
 	}else{
 		$data['brand_array'] = array();
 	}
-    
+
     $sql = "itc_enable = 1";
 	$query = $this->tp_item_model->getItemCategory($sql);
 	if($query){
@@ -37,15 +37,15 @@ function manage()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $data['title'] = "NGG| Nerd - All Product";
     $this->load->view('TP/item/allitem_view',$data);
 }
-    
+
 function additem()
 {
 	$this->load->helper(array('form'));
-	
+
     $sql = "itc_enable = 1";
 	$query = $this->tp_item_model->getItemCategory($sql);
 	if($query){
@@ -53,7 +53,7 @@ function additem()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
 	if($query){
@@ -61,14 +61,14 @@ function additem()
 	}else{
 		$data['brand_array'] = array();
 	}
-	
+
 	$data['title'] = "NGG| Nerd - Add Product";
 	$this->load->view('TP/item/additem_view',$data);
 }
 
 function refcode_is_exist($id)
 {
-    
+
     if($this->id_validate($id)>0)
     {
 		$this->form_validation->set_message('refcode_is_exist', 'รหัสสินค้านี้มีอยู่ในระบบแล้ว');
@@ -88,7 +88,7 @@ function id_validate($id)
 
 function number_is_money($str)
 {
-    
+
     if(!$this->is_money($str))
     {
 		$this->form_validation->set_message('number_is_money', 'กรุณาใส่จำนวนเงินเท่านั้น');
@@ -150,18 +150,18 @@ function save()
         );
 
         $item_id = $this->tp_item_model->addItem($product);
-        
+
         $currentdate = date("Y-m-d H:i:s");
-        
+
         $temp = array('it_id' => $item_id, 'it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
-        
+
         $product = array_merge($product, $temp);
-        
+
         $result_log = $this->tp_item_model->addItem_log($product);
-        
+
         //array_push($product);
-            
-        if ($item_id) 
+
+        if ($item_id)
             $this->session->set_flashdata('showresult', 'success');
         else
             $this->session->set_flashdata('showresult', 'fail');
@@ -175,7 +175,7 @@ function save()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
 	if($query){
@@ -187,7 +187,7 @@ function save()
     $data['title'] = "NGG| Nerd - Add Product";
 	$this->load->view('TP/item/additem_view',$data);
 }
-    
+
 function edit_save()
 {
     $this->form_validation->set_rules('refcode', 'refcode', 'trim|xss_clean|required');
@@ -203,7 +203,7 @@ function edit_save()
     $this->form_validation->set_error_delimiters('<code>', '</code>');
 
     $it_id= $this->input->post('it_id');
-    
+
     if($this->form_validation->run() == TRUE) {
         $refcode= ($this->input->post('refcode'));
         $catid= ($this->input->post('catid'));
@@ -231,22 +231,22 @@ function edit_save()
         );
 
         $item_id = $this->tp_item_model->editItem($product);
-        
+
         $currentdate = date("Y-m-d H:i:s");
-        
+
         unset($product['id']);
         $temp = array('it_id' => $it_id, 'it_dateadd' => $currentdate,'it_by_user' => $this->session->userdata('sessid'));
-        
+
         $product = array_merge($product, $temp);
-        
+
         $result_log = $this->tp_item_model->addItem_log($product);
-            
+
         if ($item_id)
             $this->session->set_flashdata('showresult', 'success');
         else
             $this->session->set_flashdata('showresult', 'fail');
-        
-        
+
+
         redirect('item/editproduct/'.$it_id, 'refresh');
     }
 
@@ -255,7 +255,7 @@ function edit_save()
     if($query){
         $data['product_array'] =  $query;
     }
-    
+
     $sql = "itc_enable = 1";
 	$query = $this->tp_item_model->getItemCategory($sql);
 	if($query){
@@ -263,7 +263,7 @@ function edit_save()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
 	if($query){
@@ -282,7 +282,7 @@ public function ajaxViewAllItem()
     $this->datatables
     ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
     ->from('tp_item')
-    ->join('tp_item_category', 'it_category_id = itc_id','left')		
+    ->join('tp_item_category', 'it_category_id = itc_id','left')
     ->join('tp_brand', 'it_brand_id = br_id','left')
     ->where('it_enable',1)
     ->where($this->no_rolex)
@@ -291,20 +291,20 @@ public function ajaxViewAllItem()
 <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 <a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
 </div>',"it_id");
-    echo $this->datatables->generate(); 
+    echo $this->datatables->generate();
 }
-    
+
 public function ajaxViewFilterItem()
 {
     $refcode = $this->uri->segment(3);
     $keyword = explode("%20", $refcode);
     $brandid = $this->uri->segment(4);
     $catid = $this->uri->segment(5);
-    
+
     $where = "";
-    
+
     if ($keyword[0] != "NULL") {
-        if (count($keyword) > 1) { 
+        if (count($keyword) > 1) {
             for($i=0; $i<count($keyword); $i++) {
                 if ($i != 0) $where .= " or it_short_description like '%".$keyword[$i]."%'";
                 else if ($keyword[$i] != "") $where .= "( it_short_description like '%".$keyword[$i]."%'";
@@ -313,19 +313,19 @@ public function ajaxViewFilterItem()
         }else{
             $where .= "( it_refcode like '%".$keyword[0]."%' or it_short_description like '%".$keyword[0]."%' )";
         }
-        
+
         $where .= " and ";
     }
     if (($brandid != 0) && ($catid != 0)) $where .= "it_brand_id = '".$brandid."' and it_category_id = '".$catid."' and ";
     else if (($brandid != 0) && ($catid == 0)) $where .= "it_brand_id = '".$brandid."' and ";
     else if (($brandid == 0) && ($catid != 0)) $where .= "it_category_id = '".$catid."' and ";
     $where .= $this->no_rolex;
-    
+
     $this->load->library('Datatables');
     $this->datatables
     ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
     ->from('tp_item')
-    ->join('tp_item_category', 'it_category_id = itc_id','left')		
+    ->join('tp_item_category', 'it_category_id = itc_id','left')
     ->join('tp_brand', 'it_brand_id = br_id','left')
     ->where('it_enable',1)
     ->where($where)
@@ -334,7 +334,7 @@ public function ajaxViewFilterItem()
 <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 <a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
 </div>',"it_id");
-    echo $this->datatables->generate(); 
+    echo $this->datatables->generate();
 }
 
 function viewproduct()
@@ -348,8 +348,8 @@ function viewproduct()
 
     $data['title'] = "NGG| Nerd - View Product";
     $this->load->view('TP/item/viewitem_view',$data);
-}    
-    
+}
+
 function editproduct()
 {
     $id = $this->uri->segment(3);
@@ -358,7 +358,7 @@ function editproduct()
     if($query){
         $data['product_array'] =  $query;
     }
-    
+
     $sql = "itc_enable = 1";
 	$query = $this->tp_item_model->getItemCategory($sql);
 	if($query){
@@ -366,7 +366,7 @@ function editproduct()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $sql = "br_enable = 1 and ".$this->no_rolex;
     $query = $this->tp_item_model->getBrand($sql);
 	if($query){
@@ -378,12 +378,12 @@ function editproduct()
     $data['title'] = "NGG| Nerd - Edit Product";
     $this->load->view('TP/item/edititem_view',$data);
 }
-    
+
 function getRefcode()
 {
     $refcode = $this->input->post("refcode");
     $luxury = $this->input->post("luxury");
-    
+
     $sql = "it_enable = 1 and it_refcode = '".$refcode."' and ".$this->no_rolex;
     $sql .= " and it_has_caseback = '".$luxury."'";
     $result = $this->tp_item_model->getItem($sql);
@@ -399,11 +399,11 @@ function getRefcode()
     }
     echo $output;
 }
-    
+
 function getCaseback()
 {
     $refcode = $this->input->post("refcode");
-    
+
     $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and ".$this->no_rolex;
     $result = $this->tp_item_model->getItem_caseback($sql);
     $output = "";
@@ -418,7 +418,7 @@ function getCaseback()
 function getCaseback_lockCaseback()
 {
     $refcode = $this->input->post("refcode");
-    
+
     $sql = "itse_serial_number = '".$refcode."' and ".$this->no_rolex;
     $result = $this->tp_item_model->getItem_caseback($sql);
     $output = "";
@@ -429,11 +429,11 @@ function getCaseback_lockCaseback()
     }
     echo $output;
 }
-    
+
 function getCaseback_warehouse()
 {
     $refcode = $this->input->post("caseback");
-    
+
     $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and ".$this->no_rolex;
     $result = $this->tp_item_model->getItem_caseback($sql);
     $output = "";
@@ -444,22 +444,22 @@ function getCaseback_warehouse()
     }
     echo $output;
 }
-    
+
 function getRefcode_caseback_warehouse()
 {
-    
+
 }
-    
+
 function rolex_barcode_print()
 {
     $id = $this->uri->segment(3);
-    
-    $this->load->library('mpdf/mpdf');                
+
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
-    $sql_result = "br_id = '888' and itse_dateadd > '2016-09-01 15:00:00' and itse_dateadd < '2016-09-01 23:00:00'";
+    $sql_result = "br_id = '888' and itse_serial_number like '27t12326' or itse_serial_number like '6v0357x6'";
     //$sql_result .= " and itse_serial_number = '63S0J540'";
     $query = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql_result);
     if($query){
@@ -467,8 +467,8 @@ function rolex_barcode_print()
     }else{
         $data['serial_array'] = array();
     }
-    
-    
+
+
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
@@ -478,10 +478,10 @@ function rolex_barcode_print()
 
 function rolex_refcode_price_print(){
 
-    $this->load->library('mpdf/mpdf');                
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
     $result = array();
@@ -501,15 +501,15 @@ function rolex_refcode_price_print(){
     $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
     $mpdf->Output();
 }
-    
+
 function item_barcode_print()
 {
     $id = $this->uri->segment(3);
-    
-    $this->load->library('mpdf/mpdf');                
+
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $currentdate = date('Y-m-d');
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
     $sql_result = "br_id = '896' and itse_dateadd >= '2016-07-09 00:00:00' and itse_dateadd <= '2016-07-09 23:00:00'";
@@ -521,15 +521,15 @@ function item_barcode_print()
     }else{
         $data['serial_array'] = array();
     }
-    
-    
+
+
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print", $data, TRUE));
     $mpdf->Output();
 }
-    
+
 function filter_item()
 {
     $refcode = $this->input->post("refcode");
@@ -545,7 +545,7 @@ function filter_item()
 	}else{
 		$data['brand_array'] = array();
 	}
-    
+
     $sql = "itc_enable = 1";
 	$query = $this->tp_item_model->getItemCategory($sql);
 	if($query){
@@ -553,7 +553,7 @@ function filter_item()
 	}else{
 		$data['cat_array'] = array();
 	}
-    
+
     $data['title'] = "NGG| Nerd - All Product";
     $this->load->view('TP/item/filteritem_view',$data);
 }
@@ -579,10 +579,10 @@ function result_print_tag_ean()
 {
     $caseback = $this->input->post("caseback");
 
-    $this->load->library('mpdf/mpdf');                
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
     $sql_result = "";
@@ -597,8 +597,8 @@ function result_print_tag_ean()
     }else{
         $data['serial_array'] = array();
     }
-    
-    
+
+
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
@@ -611,10 +611,10 @@ function result_print_tag_refcode()
     $it_id = $this->input->post("it_id");
     $it_qty = $this->input->post("it_qty");
 
-    $this->load->library('mpdf/mpdf');                
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
     $result = array();
@@ -640,10 +640,10 @@ function result_print_tag_caseback()
 {
     $caseback = $this->input->post("caseback");
 
-    $this->load->library('mpdf/mpdf');                
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
-    
+
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
     $sql_result = "";
@@ -658,8 +658,8 @@ function result_print_tag_caseback()
     }else{
         $data['serial_array'] = array();
     }
-    
-    
+
+
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
@@ -671,9 +671,9 @@ function upload_excel_item()
 {
     $luxury = $this->uri->segment(3);
     $whid_out = $this->uri->segment(4);
-    
+
     $this->load->helper(array('form', 'url'));
-    
+
     $config['upload_path']          = './uploads/excel';
     $config['allowed_types']        = 'xls|xlsx';
     $config['max_size']             = '5000';
@@ -700,9 +700,9 @@ function upload_excel_item()
 
             if ($row != 1) {
                 $arr_data[$row-2][$column] = $data_value;
-                
+
             }
-            
+
         }
 
         for($i=0; $i<count($arr_data); $i++) {
@@ -715,7 +715,7 @@ function upload_excel_item()
                     foreach ($result as $loop) {
                         $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
                         $output .= "<input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
-                        
+
                         $arr[$index] = $output;
                         $index++;
                     }
@@ -733,16 +733,16 @@ function upload_excel_item()
                     }
                 }
             }
-            
+
         }
 
         unlink($data['full_path']);
-        
+
         echo json_encode($arr);
         exit();
     }
 
 }
-    
+
 }
 ?>

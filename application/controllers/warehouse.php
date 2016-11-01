@@ -3,7 +3,7 @@
 class Warehouse extends CI_Controller {
 
 public $no_rolex = "";
-    
+
 function __construct()
 {
      parent::__construct();
@@ -13,16 +13,16 @@ function __construct()
      $this->load->model('tp_item_model','',TRUE);
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
-    
+
      if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
      else $this->no_rolex = "br_id = 888";
 }
 
 function index()
 {
-    
+
 }
-    
+
 function manage()
 {
     $sql = "";
@@ -31,19 +31,19 @@ function manage()
     $data['title'] = "NGG| Nerd - Warehouse Manage";
     $this->load->view('TP/warehouse/manage_view',$data);
 }
-    
+
 function addwarehouse()
 {
     $sql = "";
     $data['whgroup_array'] = $this->tp_warehouse_model->getWarehouseGroup($sql);
-    
+
     $data['title'] = "NGG| Nerd - Add New Warehouse";
     $this->load->view('TP/warehouse/addwarehouse_view',$data);
 }
-    
+
 function whname_is_exist($id)
 {
-    
+
     if($this->id_validate($id)>0)
     {
 		$this->form_validation->set_message('whname_is_exist', 'ชื่อคลังสินค้านี้มีอยู่ในระบบแล้ว');
@@ -80,8 +80,8 @@ function newwarehouse_save()
         );
 
         $warehouse_id = $this->tp_warehouse_model->addWarehouse($warehouse);
-            
-        if ($warehouse_id) 
+
+        if ($warehouse_id)
             $this->session->set_flashdata('showresult', 'success');
         else
             $this->session->set_flashdata('showresult', 'fail');
@@ -90,28 +90,28 @@ function newwarehouse_save()
 
     $sql = "";
     $data['whgroup_array'] = $this->tp_warehouse_model->getWarehouseGroup($sql);
-    
+
     $data['title'] = "NGG| Nerd - Add New Warehouse";
     $this->load->view('TP/warehouse/addwarehouse_view',$data);
 }
-    
+
 function disable_warehouse()
 {
     $wh_id = $this->uri->segment(3);
-    
+
     $warehouse = array("id" => $wh_id, "wh_enable" => 0);
     $result = $this->tp_warehouse_model->editWarehouse($warehouse);
-    
+
     redirect('warehouse/manage', 'refresh');
 }
-    
+
 function getBalance()
-{   
+{
     $sql = "br_id != 888";
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
     $sql = "wh_enable = '1'";
     $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
-    
+
     // get total in each shops
     $sql = "br_id != 888";
     $sql .= " and it_enable = 1 and stob_enable = 1 and wh_enable = 1";
@@ -120,20 +120,20 @@ function getBalance()
     $data['title'] = "NGG| Nerd - Search Stock";
     $this->load->view('TP/warehouse/search_stock',$data);
 }
-    
+
 function showSerial()
 {
     $serial = $this->input->post("serial");
-    
+
     $where = "itse_serial_number like '".$serial."'";
     $data['stock_array'] = $this->tp_warehouse_model->getWarehouse_balance_caseback($where);
-    
+
     $data['serial'] = $serial;
-    
+
     $data['title'] = "NGG| Nerd - Search Stock";
     $this->load->view('TP/warehouse/result_serial',$data);
 }
-    
+
 function showBalance()
 {
     $refcode = $this->input->post("refcode");
@@ -152,9 +152,9 @@ function showBalance()
     $data['minprice'] = $minprice;
     if ($maxprice == "") $maxprice = 0;
     $data['maxprice'] = $maxprice;
-    
+
     $data['viewby'] = 0;
-    
+
     $sql = "br_id = '".$brand."'";
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
     $sql = "wh_id = '".$warehouse."'";
@@ -163,11 +163,11 @@ function showBalance()
     $data['title'] = "NGG| Nerd - Stock";
     $this->load->view('TP/warehouse/show_stock',$data);
 }
-    
+
 function show_all_product_warehouse()
 {
     $warehouse = $this->input->post("wh_id");
-    
+
     $sql = "stob_warehouse_id = '".$warehouse."' and stob_qty > 0";
     $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);
 
@@ -175,26 +175,26 @@ function show_all_product_warehouse()
     $index = 0;
     foreach ($result as $loop) {
         $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
-        
-        if ($loop->stob_qty > 0) { 
+
+        if ($loop->stob_qty > 0) {
             $output .= "<td style='width: 120px;'>";
         }else{
             $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
         }
         $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
         $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$loop->stob_qty."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
-        
+
         $arr[$index] = $output;
         $index++;
     }
     echo json_encode($arr);
     exit();
 }
-    
+
 function show_all_product_warehouse_onlyfashion()
 {
     $warehouse = $this->input->post("wh_id");
-    
+
     $sql = "stob_warehouse_id = '".$warehouse."' and stob_qty > 0 and it_has_caseback = '0'";
     $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);
 
@@ -202,26 +202,26 @@ function show_all_product_warehouse_onlyfashion()
     $index = 0;
     foreach ($result as $loop) {
         $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
-        
-        if ($loop->stob_qty > 0) { 
+
+        if ($loop->stob_qty > 0) {
             $output .= "<td style='width: 120px;'>";
         }else{
             $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
         }
         $output .= "<input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
         $output .= "<td><input type='text' name='it_quantity' id='it_quantity' value='".$loop->stob_qty."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
-        
+
         $arr[$index] = $output;
         $index++;
     }
     echo json_encode($arr);
     exit();
 }
-    
+
 function show_all_product_warehouse_caseback()
 {
     $warehouse = $this->input->post("wh_id");
-    
+
     $sql = "itse_warehouse_id = '".$warehouse."' and itse_enable = '1' and it_has_caseback = '1'";
     $result = $this->tp_warehouse_model->getAll_Item_warehouse_caseback($sql);
 
@@ -231,35 +231,35 @@ function show_all_product_warehouse_caseback()
        $output = "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
        $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
-        
+
        $arr[$index] = $output;
        $index++;
     }
     echo json_encode($arr);
     exit();
 }
-    
+
 function show_all_product_transfer_id()
 {
     $transfer_id = $this->input->post("transfer_id");
     $warehouse = $this->input->post("whid_out");
-    
+
     $sql = "log_stot_transfer_id = '".$transfer_id."'";
     $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between($sql);
-    
+
     $arr = array();
     $index = 0;
-    
+
     foreach($query as $loop1) {
-        
+
         $sql = "stob_warehouse_id = '".$warehouse."' and stob_item_id = '".$loop1->log_stot_item_id."'";
-        
-        $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);   
-        
+
+        $result = $this->tp_warehouse_model->getAll_Item_warehouse($sql);
+
         foreach ($result as $loop) {
             $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->stob_item_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
 
-            if ($loop->stob_qty > 0) { 
+            if ($loop->stob_qty > 0) {
                 $output .= "<td style='width: 120px;'>";
             }else{
                 $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
@@ -271,13 +271,13 @@ function show_all_product_transfer_id()
             $arr[$index] = $output;
             $index++;
         }
-        
+
     }
-    
+
     echo json_encode($arr);
     exit();
 }
-    
+
 function showBalance_byserial()
 {
     $refcode = $this->input->post("refcode");
@@ -294,9 +294,9 @@ function showBalance_byserial()
     $data['minprice'] = $minprice;
     if ($maxprice == "") $maxprice = 0;
     $data['maxprice'] = $maxprice;
-    
+
     $data['viewby'] = 1;
-    
+
     $sql = "br_id = '".$brand."'";
     $data['brand_array'] = $this->tp_item_model->getBrand($sql);
     $sql = "wh_id = '".$warehouse."'";
@@ -305,17 +305,17 @@ function showBalance_byserial()
     $data['title'] = "NGG| Nerd - Stock";
     $this->load->view('TP/warehouse/show_stock_byserial',$data);
 }
-    
+
 function view_serial()
 {
     $stob_id = $this->uri->segment(3);
     $sql = "stob_id = '".$stob_id."' and itse_enable = '1'";
     $data['serial_array'] = $this->tp_item_model->getCaseback_stock($sql);
-    
+
     $data['title'] = "NGG| Nerd - Caseback";
     $this->load->view('TP/item/show_serial',$data);
 }
-    
+
 function ajaxViewStock()
 {
     $refcode = $this->uri->segment(3);
@@ -325,12 +325,12 @@ function ajaxViewStock()
     $warehouse = $this->uri->segment(5);
     $minprice = $this->uri->segment(6);
     $maxprice = $this->uri->segment(7);
-    
+
     $sql = "br_id != '888'";
-    
+
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -351,20 +351,20 @@ function ajaxViewStock()
         }else{
             $sql .= " and it_refcode like '%%'";
         }
-        
+
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
-            
+
         if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
         else $sql .= " and wh_id != '0'";
 
         if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
         else $sql .= " and it_srp >=0";
-            
+
         if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
-    
+
     $this->load->library('Datatables');
     $this->datatables
     ->select("it_refcode, br_name, it_model, wh_code, wh_name, stob_qty, it_srp, it_short_description")
@@ -375,9 +375,9 @@ function ajaxViewStock()
     ->where('stob_qty >', 0)
     ->where('it_enable',1)
     ->where($sql);
-    echo $this->datatables->generate(); 
+    echo $this->datatables->generate();
 }
-    
+
 function ajaxViewStock_serial()
 {
     $refcode = $this->uri->segment(3);
@@ -386,12 +386,12 @@ function ajaxViewStock_serial()
     $warehouse = $this->uri->segment(5);
     $minprice = $this->uri->segment(6);
     $maxprice = $this->uri->segment(7);
-    
+
     $sql = "br_id != '888'";
-    
+
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -412,21 +412,21 @@ function ajaxViewStock_serial()
         }else{
             $sql .= " and it_refcode like '%%'";
         }
-        
+
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
-            
+
         if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
         else $sql .= " and wh_id != '0'";
 
         if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
         else $sql .= " and it_srp >=0";
-            
+
         if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
     $sql .= " and itse_enable=1";
-    
+
     $this->load->library('Datatables');
     $this->datatables
     ->select("it_refcode, itse_serial_number, br_name, it_model, wh_code, wh_name, '1', it_srp, it_short_description", false)
@@ -436,9 +436,9 @@ function ajaxViewStock_serial()
     ->join('tp_brand', 'br_id = it_brand_id','left')
     ->where('it_enable',1)
     ->where($sql);
-    echo $this->datatables->generate(); 
+    echo $this->datatables->generate();
 }
-    
+
 function exportExcel_stock_itemlist()
 {
     $refcode = $this->input->post("refcode");
@@ -447,13 +447,13 @@ function exportExcel_stock_itemlist()
     $warehouse = $this->input->post("warehouse");
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
-    
+
     $sql = "br_id != '888'";
     $sql .= " and stob_qty >0 and it_enable = 1";
-    
+
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -464,7 +464,7 @@ function exportExcel_stock_itemlist()
     }else {
         if ($keyword[0]!="NULL") {
             $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -474,22 +474,22 @@ function exportExcel_stock_itemlist()
         }else{
             $sql .= " and it_refcode like '%%'";
         }
-        
+
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
-            
+
         if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
         else $sql .= " and wh_id != '0'";
 
         if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
         else $sql .= " and it_srp >=0";
-            
+
         if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
-    
+
     $item_array = $this->tp_warehouse_model->getWarehouse_balance($sql);
-    
+
     //load our new PHPExcel library
     $this->load->library('excel');
     //activate worksheet number 1
@@ -505,7 +505,7 @@ function exportExcel_stock_itemlist()
     $this->excel->getActiveSheet()->setCellValue('F1', 'จำนวน (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('G1', 'ราคาป้าย');
     $this->excel->getActiveSheet()->setCellValue('H1', 'รายละเอียด');
-    
+
     $row = 2;
     $count_qty = 0;
     foreach($item_array as $loop) {
@@ -520,11 +520,11 @@ function exportExcel_stock_itemlist()
         $row++;
         $count_qty += $loop->stob_qty;
     }
-    
+
     // count all qty
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "จำนวนรวม");
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $count_qty);
-    
+
     //--------
 
     $filename='timepieces_search.xlsx'; //save our workbook as this file name
@@ -534,11 +534,11 @@ function exportExcel_stock_itemlist()
 
     //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
     //if you want to save it as .XLSX Excel 2007 format
-    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
-    
+
 function exportExcel_stock_itemlist_caseback()
 {
     $refcode = $this->input->post("refcode");
@@ -547,14 +547,14 @@ function exportExcel_stock_itemlist_caseback()
     $warehouse = $this->input->post("warehouse");
     $minprice = $this->input->post("minprice");
     $maxprice = $this->input->post("maxprice");
-    
+
     $sql = "br_id != '888'";
-    
+
     $sql .= " and it_enable = 1";
-    
+
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -565,7 +565,7 @@ function exportExcel_stock_itemlist_caseback()
     }else {
         if ($keyword[0]!="NULL") {
             $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) { 
+            if (count($keyword) < 2) {
                 $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
             }else{
                 for($i=0; $i<count($keyword); $i++) {
@@ -575,23 +575,23 @@ function exportExcel_stock_itemlist_caseback()
         }else{
             $sql .= " and it_refcode like '%%'";
         }
-        
+
         if ($brand!="0") $sql .= " and br_id = '".$brand."'";
         else $sql .= " and br_id != '0'";
-            
+
         if ($warehouse!="0") $sql .= " and wh_id = '".$warehouse."'";
         else $sql .= " and wh_id != '0'";
 
         if (($minprice >"0") && ($minprice>=0)) $sql .= " and it_srp >= '".$minprice."'";
         else $sql .= " and it_srp >=0";
-            
+
         if (($maxprice >"0") && ($maxprice>=0)) $sql .= " and it_srp <= '".$maxprice."'";
         else $sql .= " and it_srp >=0";
     }
     $sql .= " and itse_enable=1";
-    
+
     $item_array = $this->tp_warehouse_model->getWarehouse_balance_caseback($sql);
-    
+
     //load our new PHPExcel library
     $this->load->library('excel');
     //activate worksheet number 1
@@ -608,7 +608,7 @@ function exportExcel_stock_itemlist_caseback()
     $this->excel->getActiveSheet()->setCellValue('G1', 'จำนวน');
     $this->excel->getActiveSheet()->setCellValue('H1', 'ราคาป้าย');
     $this->excel->getActiveSheet()->setCellValue('I1', 'รายละเอียด');
-    
+
     $row = 2;
     $count_qty = 0;
     foreach($item_array as $loop) {
@@ -624,13 +624,13 @@ function exportExcel_stock_itemlist_caseback()
         $row++;
         $count_qty++;
     }
-    
+
     // count all qty
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, "จำนวนรวม");
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $count_qty);
-    
+
     //--------
-    
+
     $filename='caseback.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
     header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
@@ -638,10 +638,10 @@ function exportExcel_stock_itemlist_caseback()
 
     //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
     //if you want to save it as .XLSX Excel 2007 format
-    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
-    
+
     //echo "OK";
 }
 
