@@ -16,8 +16,13 @@ function __construct()
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
 
      if ($this->session->userdata('sessrolex') == 0) {
+        if ($this->session->userdata('sessstatus') == 2) {
+          $this->no_rolex = "br_id = 888";
+          $this->shop_rolex = "sh_id = 888";
+        }else{
          $this->no_rolex = "br_id != 888";
          $this->shop_rolex = "sh_id != 888";
+       }
      }else{
          $this->no_rolex = "br_id = 888";
          $this->shop_rolex = "sh_id = 888";
@@ -718,6 +723,8 @@ function get_borrow_item()
     }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==89) {
         $this->load->view("TP/shop/result_search_borrow_item_only_view", $data);
     }else if ($this->session->userdata('sessrolex') == 1 && $this->session->userdata('sessstatus')==88) {
+        $this->load->view("TP/shop/result_search_borrow_item", $data);
+    }else if ($this->session->userdata('sessstatus')==2) {
         $this->load->view("TP/shop/result_search_borrow_item", $data);
     }
 }

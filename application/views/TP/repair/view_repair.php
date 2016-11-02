@@ -10,18 +10,18 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ข้อมูลส่งซ่อม (Repair Order)</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <?php 
+                    <?php
             foreach($repair_array as $loop) {
                 $rep_id = $loop->rep_id;
                 $rep_dateadd = $loop->rep_dateadd;
@@ -44,19 +44,29 @@
                 $rep_responsename = $loop->rep_responsename;
                 $rep_status = $loop->rep_status;
                 $rep_enable = $loop->rep_enable;
-                
+								$rep_repairable = $loop->rep_repairable;
+								$rep_customer_repair = $loop->rep_customer_repair;
+
+								if ($rep_repairable == 0) $rep_repairable_view = "";
+								else if ($rep_repairable == 1) $rep_repairable_view = "ซ่อมได้";
+								else if ($rep_repairable == 2) $rep_repairable_view = "ซ่อมไม่ได้";
+
+								if ($rep_customer_repair == 0) $rep_customer_repair_view = "";
+								else if ($rep_customer_repair == 1) $rep_customer_repair_view = "ลูกค้าให้ซ่อม";
+								else if ($rep_customer_repair == 2) $rep_customer_repair_view = "ลูกค้าไม่ให้ซ่อม";
+
                 $datein = explode("-", $loop->rep_datein);
                 $rep_datein = $datein[2]."/".$datein[1]."/".$datein[0];
                 $datecs = explode("-", $loop->rep_datecs);
                 $rep_datecs = $datecs[2]."/".$datecs[1]."/".$datecs[0];
-                
+
                 if ($loop->rep_datedone != "0000-00-00") {
                     $datedone = explode("-", $loop->rep_datedone);
                     $rep_datedone = $datedone[2]."/".$datedone[1]."/".$datedone[0];
                 }else{
                     $rep_datedone = "";
                 }
-                
+
                 if ($loop->rep_datereturn != "0000-00-00") {
                     $datereturn = explode("-", $loop->rep_datereturn);
                     $rep_datereturn = $datereturn[2]."/".$datereturn[1]."/".$datereturn[0];
@@ -67,7 +77,7 @@
             }
 					?>
 					<div class="panel-heading"><strong>รายละเอียด</strong> <h2 class="text-red" id="enable" name="enable"><?php if($rep_enable==0) echo "ยกเลิกแล้ว"; ?></h2></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -107,20 +117,20 @@
                                 <label>ชื่อลูกค้า</label>
                                 <input type="text" class="form-control" name="cusname" id="cusname" value="<?php echo $rep_cusname; ?>" readonly>
                                 </div>
-                            </div>    
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                 <label>เบอร์ติดต่อลูกค้า</label>
                                 <input type="text" class="form-control" name="custelephone" id="custelephone" value="<?php echo $rep_custelephone; ?>" readonly>
                                 </div>
-                            </div>   
+                            </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                 ที่มา * &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 <input type="radio" name="customer" id="customer" value="1" <?php if ($rep_customer == 1) echo " checked"; ?> disabled> ลูกค้า&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                 <input type="radio" name="customer" id="customer" value="0" <?php if ($rep_customer == 0) echo " checked"; ?> disabled> สต็อก
                                 </div>
-                            </div>   
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
@@ -142,6 +152,20 @@
                                 </div>
                             </div>
                         </div>
+												<div class="row">
+													<div class="col-md-3">
+															<div class="form-group">
+															<label>สถานะการซ่อม</label>
+															<input type="text" class="form-control" name="repairable" id="repairable" value="<?php echo $rep_repairable_view; ?>" readonly>
+															</div>
+													</div>
+													<div class="col-md-3">
+															<div class="form-group">
+															<label>ความเห็นลูกค้า</label>
+															<input type="text" class="form-control" name="customer_repair" id="customer_repair" value="<?php echo $rep_customer_repair_view; ?>" readonly>
+															</div>
+													</div>
+												</div>
                         <div class="row">
                             <div class="col-md-5">
                                 <div class="form-group">
@@ -200,7 +224,7 @@
                             <div class="col-md-4">
                                 <div class="form-group-lg">
                                     <label>สถานะ</label>
-                                    <input type="text" class="form-control text-red" name="case" id="case" value="<?php 
+                                    <input type="text" class="form-control text-red" name="case" id="case" value="<?php
                                         if ($rep_status == 'G') echo "รับเข้าซ่อม";
                                         if ($rep_status == 'A') echo "ประเมินการซ่อมแล้ว";
                                         if ($rep_status == 'D') echo "ซ่อมเสร็จ";
@@ -222,7 +246,7 @@
 								<button type="button" class="btn bg-orange" name="fixbtn" id="fixbtn" onclick="fix_status()" <?php if ($rep_status == 'R' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-wrench'></i> แจ้งประเมินการซ่อม </button>&nbsp;&nbsp;
                                 <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-primary" name="donebtn" id="donebtn" <?php if ($rep_status == 'G' || $rep_status == 'R' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-thumbs-up'></i> แจ้งจบงาน </a>&nbsp;&nbsp;
                                 <a data-toggle="modal" data-target="#myModal_return" type="button" class="btn btn-success" name="returnbtn" id="returnbtn"<?php if ($rep_status == 'G' || $rep_status=='A' || $rep_enable==0) echo " disabled"; ?>><i class='fa fa-check-square-o'></i> แจ้งส่งกลับ </a>&nbsp;&nbsp;
-                                
+
 							</div>
                             <div class="col-md-6">
                                 <div class="pull-right">
@@ -234,11 +258,11 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
- 
+
 
 <!-- datepicker modal for done status -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -247,26 +271,42 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">	                 	
+                <h4 class="modal-title">
                     <i class='fa fa-thumbs-up'></i> แจ้งจบงาน
                 </h4>
             </div>            <!-- /modal-header -->
             <div class="modal-body">
-                <div class="row"><div class="col-md-12"><form class="form-horizontal"><div class="form-group"><label class="col-md-4 control-label" for="donedate_done">วันที่จบงาน</label><div class="col-md-4"> <input type="text" class="form-control" id="donedate_done" name="donedate_done" value="<?php echo $rep_datedone; ?>" /></div></div><div class="form-group"><label class="col-md-4 control-label" for="status_done">ผลการซ่อม</label><div class="col-md-4"> <div class="radio"> <label for="status_done-D"><input type="radio" name="status_done" id="status_done-D" value="D" <?php if ($rep_status == 'D') echo "checked"; ?>> ซ่อมได้ </label></div><div class="radio"> <label for="status_done-C"><input type="radio" name="status_done" id="status_done-C" value="C" <?php if ($rep_status == 'C') echo "checked"; ?>> ซ่อมไม่ได้ </label> </div></div> </div><div class="form-group"><label class="col-md-4 control-label" for="remark_done">Remark</label><div class="col-md-8"><input id="remark_done" name="remark_done" type="text" placeholder="" class="form-control input-md" value="<?php echo $rep_remark; ?>"></div></div><div class="form-group"><label class="col-md-4 control-label" for="warranty_done">ประกัน</label><div class="col-md-4"> <div class="radio"> <label for="warranty_done-1"><input type="radio" name="warranty_done" id="warranty_done-1" value="1" <?php if ($rep_warranty == 1) echo "checked"; ?>>หมดประกัน </label></div><div class="radio"> <label for="warranty_done-2"><input type="radio" name="warranty_done" id="warranty_done-2" value="2" <?php if ($rep_warranty == 2) echo "checked"; ?>> อยู่ในประกัน </label></div></div> </div><div class="form-group"><label class="col-md-4 control-label" for="price_done">ราคา</label><div class="col-md-4"><div class="input-group"><input id="price_done" name="price_done" type="text" placeholder="" class="form-control input-md"  value="<?php echo $rep_price; ?>"> <span class="input-group-addon">บาท</span></div></div></div><div class="form-group"><label class="col-md-4 control-label" for="response_done">ผู้รับผิดชอบ</label><div class="col-md-8"><input id="response_done" name="response_done" type="text" placeholder="" class="form-control input-md" value="<?php echo $rep_responsename; ?>"></div></div></form> </div>  </div>
+                <div class="row"><div class="col-md-12"><form class="form-horizontal">
+									<div class="form-group">
+										<label class="col-md-4 control-label" for="donedate_done">วันที่จบงาน</label>
+										<div class="col-md-4"> <input type="text" class="form-control" id="donedate_done" name="donedate_done" value="<?php echo $rep_datedone; ?>" /></div></div>
+										<div class="form-group"><label class="col-md-4 control-label" for="status_done">ผลการซ่อม</label>
+											<div class="col-md-4"> <div class="radio"> <label for="status_done-D"><input type="radio" name="status_done" id="status_done-D" value="D" <?php if ($rep_status == 'D') echo "checked"; ?>> ซ่อมได้ </label></div>
+											<div class="radio"> <label for="status_done-C"><input type="radio" name="status_done" id="status_done-C" value="C" <?php if ($rep_status == 'C') echo "checked"; ?>> ซ่อมไม่ได้ </label> </div></div> </div>
+
+										<div class="form-group"><label class="col-md-4 control-label" for="customer_repair">ความเห็นลูกค้า</label>
+											<div class="col-md-4"> <div class="radio"> <label for="customer_repair-D"><input type="radio" name="customer_repair" id="customer_repair-D" value="1" <?php if ($rep_customer_repair == '1') echo "checked"; ?>> อนุญาตให้ซ่อม </label></div>
+											<div class="radio"> <label for="customer_repair-C"><input type="radio" name="customer_repair" id="customer_repair-C" value="2" <?php if ($rep_customer_repair == '2') echo "checked"; ?>> ไม่อนุญาตให้ซ่อม </label> </div></div> </div>
+
+											<div class="form-group"><label class="col-md-4 control-label" for="remark_done">Remark</label><div class="col-md-8"><input id="remark_done" name="remark_done" type="text" placeholder="" class="form-control input-md" value="<?php echo $rep_remark; ?>"></div></div>
+											<div class="form-group"><label class="col-md-4 control-label" for="warranty_done">ประกัน</label><div class="col-md-4"> <div class="radio"> <label for="warranty_done-1"><input type="radio" name="warranty_done" id="warranty_done-1" value="1" <?php if ($rep_warranty == 1) echo "checked"; ?>>หมดประกัน </label></div>
+											<div class="radio"> <label for="warranty_done-2"><input type="radio" name="warranty_done" id="warranty_done-2" value="2" <?php if ($rep_warranty == 2) echo "checked"; ?>> อยู่ในประกัน </label></div></div> </div>
+											<div class="form-group"><label class="col-md-4 control-label" for="price_done">ราคา</label><div class="col-md-4"><div class="input-group"><input id="price_done" name="price_done" type="text" placeholder="" class="form-control input-md"  value="<?php echo $rep_price; ?>"> <span class="input-group-addon">บาท</span></div></div></div>
+											<div class="form-group"><label class="col-md-4 control-label" for="response_done">ผู้รับผิดชอบ</label><div class="col-md-8"><input id="response_done" name="response_done" type="text" placeholder="" class="form-control input-md" value="<?php echo $rep_responsename; ?>"></div></div></form> </div>  </div>
 
             </div>            <!-- /modal-body -->
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="done_status()"><i class='fa fa-save'></i> บันทึก</button>			
+                <button type="button" class="btn btn-success" onclick="done_status()"><i class='fa fa-save'></i> บันทึก</button>
 
-            </div> 	
-            </form>								
+            </div>
+            </form>
         </div>
     </div>
 </div>
 
 </div>
-<!-- close modal -->    
+<!-- close modal -->
 
 <!-- datepicker modal for return status -->
     <div class="modal fade" id="myModal_return" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_return" aria-hidden="true">
@@ -275,7 +315,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">	                 	
+                <h4 class="modal-title">
                     <i class='fa fa-thumbs-up'></i> แจ้งส่งกลับ
                 </h4>
             </div>            <!-- /modal-header -->
@@ -285,17 +325,17 @@
             </div>            <!-- /modal-body -->
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="return_status()"><i class='fa fa-save'></i> บันทึก</button>			
+                <button type="button" class="btn btn-success" onclick="return_status()"><i class='fa fa-save'></i> บันทึก</button>
 
-            </div> 	
-            </form>								
+            </div>
+            </form>
         </div>
     </div>
 </div>
 
 </div>
-<!-- close modal -->  
-    
+<!-- close modal -->
+
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script src="<?php echo base_url(); ?>plugins/datepicker/bootstrap-datepicker-thai.js"></script>
@@ -303,12 +343,12 @@
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     get_datepicker("#donedate_done");
     get_datepicker("#returndate_return");
 });
-    
-  
+
+
 function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
@@ -359,7 +399,7 @@ function fix_status()
                     var warranty = $("input[name='warranty_fix']:checked").val();
                     var price = $('#price_fix').val();
                     var response = $('#response_fix').val();
-                    
+
                     if (assess == "") {
                         alert("กรุณาใส่ประเมินการซ่อม");
                         document.getElementById("assess_fix").focus();
@@ -367,14 +407,14 @@ function fix_status()
                     }else{
                         save_fix_status();
                     }
-                    
+
                     },
                 }
             }
         }
     );
 }
-    
+
 function save_fix_status()
 {
     var assess = $('#assess_fix').val();
@@ -382,7 +422,7 @@ function save_fix_status()
     var price = $('#price_fix').val();
     var response = $('#response_fix').val();
     var rep_id = <?php echo $rep_id; ?>;
-     
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_fix_status"); ?>" ,
@@ -393,7 +433,7 @@ function save_fix_status()
             bootbox.alert(message, function() {
                 location.reload();
             });
-            
+
         },
         error: function (textStatus, errorThrown) {
             alert("เกิดความผิดพลาด !!!");
@@ -401,11 +441,12 @@ function save_fix_status()
     });
 
 }
-    
+
 function done_status()
 {
     var datedone = $('#donedate_done').val();
     var status = $("input[name='status_done']:checked").val();
+		var customer = $("input[name='customer_repair']:checked").val();
     var remark = $('#remark_done').val();
     var warranty = $("input[name='warranty_fix']:checked").val();
     var price = $('#price_fix').val();
@@ -418,32 +459,36 @@ function done_status()
     }else if (status != 'D' && status != 'C') {
         alert("กรุณาเลือกผลการซ่อม");
         return false;
+		}else if (customer != '1' && customer != '2') {
+        alert("กรุณาเลือกความเห็นลูกค้า");
+        return false;
     }else{
         save_done_status();
     }
 }
-    
+
 function save_done_status()
 {
     var datedone = $('#donedate_done').val();
     var status = $("input[name='status_done']:checked").val();
+		var customer = $("input[name='customer_repair']:checked").val();
     var remark = $('#remark_done').val();
     var warranty = $("input[name='warranty_done']:checked").val();
     var price = $('#price_done').val();
     var response = $('#response_done').val();
     var rep_id = <?php echo $rep_id; ?>;
-     
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_done_status"); ?>" ,
-        data : {datedone: datedone, status: status, remark: remark, warranty: warranty, price: price, response: response, rep_id: rep_id} ,
+        data : {datedone: datedone, status: status, remark: remark, warranty: warranty, price: price, response: response, rep_id: rep_id, customer: customer} ,
         dataType: 'json',
         success : function(data) {
             var message = "ทำการบันทึกเรียบร้อยแล้ว";
             bootbox.alert(message, function() {
                 location.reload();
             });
-            
+
         },
         error: function (textStatus, errorThrown) {
             alert("เกิดความผิดพลาด !!!");
@@ -451,7 +496,7 @@ function save_done_status()
     });
 
 }
-    
+
 function return_status()
 {
     var returndate = $('#returndate_return').val();
@@ -469,14 +514,14 @@ function return_status()
         save_return_status();
     }
 }
-    
+
 function save_return_status()
 {
     var returndate = $('#returndate_return').val();
     var shop_return = $('#shop_return').val();
     var remark = $('#remark_return').val();
     var rep_id = <?php echo $rep_id; ?>;
-     
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_repair/save_return_status"); ?>" ,
@@ -487,7 +532,7 @@ function save_return_status()
             bootbox.alert(message, function() {
                 location.reload();
             });
-            
+
         },
         error: function (textStatus, errorThrown) {
             alert("เกิดความผิดพลาด !!!");
@@ -495,11 +540,11 @@ function save_return_status()
     });
 
 }
-    
+
 function disable_repair()
 {
     var rep_id = <?php echo $rep_id; ?>;
-    
+
     bootbox.confirm("ยืนยันการยกเลิก ?", function(result) {
       if(result) {
           $.ajax({
@@ -515,10 +560,10 @@ function disable_repair()
                 }
             });
       }
-    }); 
+    });
 
 }
-    
+
 </script>
 </body>
 </html>

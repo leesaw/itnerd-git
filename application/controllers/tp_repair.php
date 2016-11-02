@@ -263,7 +263,7 @@ function ajaxView_seach_repair()
         WHEN rep_status = 'A' THEN '<button class=\'btn btn-warning btn-xs\'>ประเมินการซ่อมแล้ว</button>'
         WHEN rep_status = 'D'THEN '<button class=\'btn btn-primary btn-xs\'>ซ่อมเสร็จ</button>'
         WHEN rep_status = 'C'THEN '<button class=\'btn bg-purple btn-xs\'>ซ่อมไม่ได้</button>'
-        WHEN rep_status = 'R' THEN '<button class=\'btn btn-success btn-xs\'>ส่งกลับแล้ว</button>'
+        WHEN rep_status = 'R' THEN IF(rep_repairable=1, IF(rep_customer_repair=1, '<button class=\'btn btn-success btn-xs\'>ส่งกลับแล้ว<br>[ซ่อมแล้ว]</button>', '<button class=\'btn bg-orange btn-xs\'>ส่งกลับแล้ว<br>[ไม่ได้ซ่อม]</button>' ), '<button class=\'btn bg-maroon btn-xs\'>ส่งกลับแล้ว<br>[ซ่อมไม่ได้]</button>')
         ELSE 1
     END) AS status, rep_id", FALSE)
     ->from('tp_repair')
@@ -314,6 +314,7 @@ function save_done_status()
 {
     $datedone = $this->input->post("datedone");
     $status = $this->input->post("status");
+    $customer = $this->input->post("customer");
     $remark = $this->input->post("remark");
     $warranty = $this->input->post("warranty");
     if($warranty != 1 && $warranty !=2) $warranty = 0;
@@ -321,6 +322,9 @@ function save_done_status()
     $response = $this->input->post("response");
     $rep_id = $this->input->post("rep_id");
 
+    $repairable = 0;
+    if ($status == 'D') $repairable = 1;
+    if ($status == 'C') $repairable = 2;
 
     $datedone_array = explode('/', $datedone);
     $datedone = $datedone_array[2]."-".$datedone_array[1]."-".$datedone_array[0];
@@ -329,6 +333,8 @@ function save_done_status()
 
     $repair = array( 'rep_id' => $rep_id,
                     'rep_remark' => $remark,
+                    'rep_repairable' => $repairable,
+                    'rep_customer_repair' => $customer,
                     'rep_warranty' => $warranty,
                     'rep_price' => $price,
                     'rep_responsename' => $response,
@@ -572,7 +578,16 @@ function exportExcel_repair_report()
             case 'A' : $rep_status = "ประเมินการซ่อมแล้ว"; break;
             case 'D' : $rep_status = "ซ่อมเสร็จ"; break;
             case 'C' : $rep_status = "ซ่อมไม่ได้"; break;
-            case 'R' : $rep_status = "ส่งกลับแล้ว"; break;
+            case 'R' : $rep_status = "ส่งกลับแล้ว";
+                      if ($loop->rep_repairable == 1) {
+                        if($loop->rep_customer_repair == 1) {
+                          $rep_status .= " [ซ่อมแล้ว]";
+                        }else{
+                          $rep_status .= " [ไม่ได้ซ่อม]";
+                        }
+                      }else{
+                        $rep_status .= " [ซ่อมไม่ได้]";
+                      }
         }
 
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $rep_status);

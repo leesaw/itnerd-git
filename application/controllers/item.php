@@ -11,8 +11,15 @@ function __construct()
      $this->load->library('form_validation');
      if (!($this->session->userdata('sessusername'))) redirect('login', 'refresh');
 
-     if ($this->session->userdata('sessrolex') == 0) $this->no_rolex = "br_id != 888";
-     else $this->no_rolex = "br_id = 888";
+     if ($this->session->userdata('sessrolex') == 0) {
+       if ($this->session->userdata('sessstatus') == 2) {
+         $this->no_rolex = "br_id > 0";
+       }else{
+         $this->no_rolex = "br_id != 888";
+       }
+     }else{
+       $this->no_rolex = "br_id = 888";
+     }
 }
 
 function index()

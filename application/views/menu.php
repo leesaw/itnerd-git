@@ -264,6 +264,7 @@
                 </ul>
 
             </li>
+
             <?php } ?>
             <?php if ($this->session->userdata('sessstatus') == 1) { ?>
             <li class="treeview">
@@ -287,6 +288,30 @@
                         <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
                     </li>
                 </ul>
+
+            </li>
+            <?php } ?>
+
+            <!--  ROLEX for stock -->
+            <?php if ($this->session->userdata('sessstatus') == 1 || $this->session->userdata('sessstatus') == 2 ) { ?>
+            <li class="header">ROLEX</li>
+                  <li>
+                    <a href="<?php echo site_url("pos/getBalance_shop"); ?>">
+                      <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบสินค้าในร้าน</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url("pos/formSerial_detail_shop"); ?>">
+                      <i class="fa fa-circle-o text-red"></i><span>ตรวจสอบ Serial</span>
+                    </a>
+                  </li>
+                  <li><a href="<?php echo site_url("pos/form_list_borrow_item"); ?>">
+                      <i class="fa fa-circle-o text-red"></i><span>รายการสินค้ายืม</span>
+                  </a></li>
+                  <li><a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>">
+                      <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
+                  </a></li>
+
 
             </li>
             <?php } ?>
