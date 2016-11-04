@@ -702,7 +702,58 @@ function transferstock_save()
             $query = $this->tp_log_model->addLogStockTransfer_serial($stock);
             $count++;
         }
+
+
+        // decrease stock warehouse out
+        $sql = "stob_item_id = '".$it_array[$i]["id"]."' and stob_warehouse_id = '".$whid_out."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        $qty_update = $it_array[$i]["qty"];
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+
+                $qty_new = $loop->stob_qty - $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }
+
+        // increase stock warehouse in
+        $sql = "stob_item_id = '".$it_array[$i]["item_id"]."' and stob_warehouse_id = '".$wh_in_id."'";
+        $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+        if (!empty($query)) {
+            foreach($query as $loop) {
+                $stock_id = $loop->stob_id;
+
+                $qty_new = $loop->stob_qty + $qty_update;
+                $stock = array( 'id' => $loop->stob_id,
+                                'stob_qty' => $qty_new,
+                                'stob_lastupdate' => $currentdate,
+                                'stob_lastupdate_by' => $this->session->userdata('sessid')
+                            );
+                $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+                break;
+            }
+        }else{
+            $stock = array( 'stob_qty' => $qty_update,
+                            'stob_lastupdate' => $currentdate,
+                            'stob_lastupdate_by' => $this->session->userdata('sessid'),
+                            'stob_warehouse_id' => $wh_in_id,
+                            'stob_item_id' => $it_array[$i]["item_id"]
+                     );
+            $query = $this->tp_warehouse_transfer_model->addWarehouse_transfer($stock);
+
+        }
     }
+
     $result = array("a" => $count, "b" => $last_id);
     echo json_encode($result);
     exit();
