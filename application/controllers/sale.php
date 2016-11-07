@@ -1265,7 +1265,7 @@ function ajaxViewSaleReport()
 
     $this->load->library('Datatables');
     $this->datatables
-    ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, (((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100) as netprice", FALSE)
+    ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
     ->from('tp_saleorder_item')
     ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
     ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
