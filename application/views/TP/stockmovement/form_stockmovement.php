@@ -57,11 +57,11 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <label for="">เลือกวันที่เริ่มต้น : </label>
+                เลือกวันที่เริ่มต้น :
                 <input type="text" class="form-control input-sm" id="startdate" name="startdate" value="" />
             </div>
             <div class="col-md-2">
-                <label for="">สิ้นสุด : </label>
+                สิ้นสุด :
                 <input type="text" class="form-control input-sm" id="enddate" name="enddate" value="" />
             </div>
         </div>

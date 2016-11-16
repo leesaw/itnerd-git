@@ -91,6 +91,7 @@
                         <input type="hidden" name="excel_warehouse" value="<?php echo $warehouse; ?>">
                         <input type="hidden" name="excel_startdate" value="<?php echo $start_ajax; ?>">
                         <input type="hidden" name="excel_enddate" value="<?php echo $end_ajax; ?>">
+												<input type="hidden" name="excel_showcost" value="<?php echo $showcost; ?>">
                         </form>
                     </div>
                     <div class="panel-body table-responsive">
@@ -99,7 +100,7 @@
                                 <tr>
                                     <th>Ref. Number</th>
                                     <th>ยี่ห้อ</th>
-                                    <th>ราคาทุน</th>
+																		<th>ราคาป้าย</th>
                                     <th>ชื่อคลัง</th>
                                     <th>ยอดยกมา</th>
                                     <th>รับเข้า</th>
@@ -107,6 +108,7 @@
                                     <th>ย้ายเข้า</th>
                                     <th>ย้ายออก</th>
                                     <th>ยอดคงเหลือ</th>
+																		<?php if ($showcost ==1) { ?><th>ราคาทุน</th><?php } ?>
                                 </tr>
                             </thead>
 
@@ -121,6 +123,7 @@
                                   <th></th>
                                   <th></th>
                                   <th></th>
+																	<?php if ($showcost ==1) { ?><th></th><?php } ?>
                               </tr>
                             </tfoot>
             </table>
@@ -155,7 +158,7 @@ $(document).ready(function()
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("tp_stockmovement/ajaxView_stockmovement")."/".$refcode."/".$brandid."/".$warehouse."/".$start_ajax."/".$end_ajax; ?>',
+        'sAjaxSource'    : '<?php echo site_url("tp_stockmovement/ajaxView_stockmovement")."/".$refcode."/".$brandid."/".$warehouse."/".$start_ajax."/".$end_ajax."/".$showcost; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',

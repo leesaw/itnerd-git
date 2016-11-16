@@ -1023,6 +1023,8 @@ function saleorder_history()
     $brand = $this->input->post("brand");
     $refcode = $this->input->post("refcode");
 
+    $data['user_status'] = $this->session->userdata('sessstatus');
+
     if ($datein !="") {
         $month = explode('/',$datein);
         $currentdate = $month[1]."-".$month[0];
@@ -1265,7 +1267,7 @@ function ajaxViewSaleReport()
 
     $this->load->library('Datatables');
     $this->datatables
-    ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
+    ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
     ->from('tp_saleorder_item')
     ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
     ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
@@ -1341,15 +1343,16 @@ function exportExcel_sale_report()
     $this->excel->getActiveSheet()->setCellValue('B1', 'Shop Code');
     $this->excel->getActiveSheet()->setCellValue('C1', 'Shop');
     $this->excel->getActiveSheet()->setCellValue('D1', 'Ref. Number');
-    $this->excel->getActiveSheet()->setCellValue('E1', 'Caseback');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'Brand');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'Qty (Pcs.)');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'SRP');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'BAR');
-    $this->excel->getActiveSheet()->setCellValue('J1', 'Discount (%)');
-    $this->excel->getActiveSheet()->setCellValue('K1', 'On Top (บาท)');
-    $this->excel->getActiveSheet()->setCellValue('L1', 'GP (%)');
-    $this->excel->getActiveSheet()->setCellValue('M1', 'Receive on Inv.');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Model');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'Caseback');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Brand');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'SRP');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'BAR');
+    $this->excel->getActiveSheet()->setCellValue('K1', 'Discount (%)');
+    $this->excel->getActiveSheet()->setCellValue('L1', 'On Top (บาท)');
+    $this->excel->getActiveSheet()->setCellValue('M1', 'GP (%)');
+    $this->excel->getActiveSheet()->setCellValue('N1', 'Receive on Inv.');
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -1357,15 +1360,17 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->sh_code);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->sh_name);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itse_serial_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->br_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->soi_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->soi_item_srp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->sb_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->dc);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->soi_dc_baht);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->gp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->netprice);
+        if($loop->it_refcode!=$loop->it_model) $model = $loop->it_model; else $model = "";
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $model);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->itse_serial_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->br_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->soi_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->soi_item_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->sb_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->dc);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->soi_dc_baht);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->gp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->netprice);
         $row++;
     }
 
@@ -1849,6 +1854,110 @@ function save_edit_remark()
     $result = array("b" => $last_id);
     echo json_encode($result);
     exit();
+}
+
+// Admin function
+function view_saleorder()
+{
+  $id = $this->uri->segment(3);
+
+  $sql = "so_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleOrder($sql);
+  if($query){
+      $data['so_array'] =  $query;
+  }else{
+      $data['so_array'] = array();
+  }
+
+  $sql = "soi_saleorder_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleItem($sql);
+  if($query){
+      $data['item_array'] =  $query;
+  }else{
+      $data['item_array'] = array();
+  }
+
+  $sql = "sos_saleorder_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleItemSerial($sql);
+  if($query){
+      $data['serial_array'] =  $query;
+  }else{
+      $data['serial_array'] = array();
+  }
+  $data['user_status'] = $this->session->userdata('sessstatus');
+  $data['title'] = "Nerd - View Sale Order";
+  $this->load->view("TP/sale/view_saleorder", $data);
+}
+
+function void_saleorder()
+{
+  $id = $this->uri->segment(3);
+
+  $currentdate = date("Y-m-d H:i:s");
+
+  $sql = "so_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleOrder($sql);
+  foreach($query as $loop) {
+      $remark = $loop->so_remark;
+      $shop_id = $loop->so_shop_id;
+  }
+
+  $remark .= "##VOID##".$this->input->post("remarkvoid");
+  $sale = array("id" => $id, "so_enable" => 0, "so_remark" => $remark, "so_status" => 'V',
+              "so_dateadd" => $currentdate, "so_dateadd_by" => $this->session->userdata('sessid')
+              );
+  $query = $this->tp_saleorder_model->editSaleOrder($sale);
+
+  $sql = "sh_id = '".$shop_id."'";
+  $query = $this->tp_shop_model->getShop($sql);
+  foreach($query as $loop) {
+      $warehouse_id = $loop->sh_warehouse_id;
+  }
+
+  $sql = "soi_saleorder_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleItem($sql);
+  foreach($query as $loop) {
+    // increase stock warehouse
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    $sql = "stob_item_id = '".$loop->soi_item_id."' and stob_warehouse_id = '".$warehouse_id."'";
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+    $qty_update = $loop->soi_qty;
+
+    if (!empty($query)) {
+        foreach($query as $loop) {
+            $qty_new = $loop->stob_qty + $qty_update;
+            $stock = array( 'id' => $loop->stob_id,
+                            'stob_qty' => $qty_new,
+                            'stob_lastupdate' => $currentdate,
+                            'stob_lastupdate_by' => $this->session->userdata('sessid')
+                        );
+            $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+            break;
+        }
+    }
+  }
+
+  $sql = "sos_saleorder_id = '".$id."'";
+  $query = $this->tp_saleorder_model->getSaleItemSerial($sql);
+
+  foreach($query as $loop) {
+    $this->load->model('tp_item_model','',TRUE);
+    $serial_item = array( 'id' => $loop->sos_item_serial_id,
+                             'itse_enable' => 1,
+                             'itse_dateadd' => $currentdate,
+                        );
+    $query = $this->tp_item_model->editItemSerial($serial_item);
+  }
+
+
+  redirect('sale/view_saleorder/'.$id, 'refresh');
+}
+
+function edit_saleorder()
+{
+  $id = $this->uri->segment(3);
+
 }
 
 }

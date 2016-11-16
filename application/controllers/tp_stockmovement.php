@@ -73,6 +73,13 @@ function result_stockmovement()
   $this->load->model('tp_warehouse_model','',TRUE);
   $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
+  // show cost or not
+  if ($this->session->userdata('sessstatus') == 6 || $this->session->userdata('sessstatus') == 1)
+    $data['showcost'] = 1;
+  else {
+    $data['showcost'] = 0;
+  }
+
   $data['title'] = "NGG| Nerd - Stock Movement";
   $this->load->view("TP/stockmovement/result_stockmovement", $data);
 }
@@ -84,6 +91,7 @@ function ajaxView_stockmovement()
   $warehouse = $this->uri->segment(5);
   $startdate = $this->uri->segment(6);
   $enddate = $this->uri->segment(7);
+  $showcost = $this->uri->segment(8);
 
   $where_out = "tp_stock_transfer.stot_enable=1";
   $where_in = "tp_stock_transfer.stot_enable=1";
@@ -180,9 +188,14 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
 // where for all
   $sql .= " left join ".$now_sql;
 
+  if ($showcost == 1) $showcost_msg = ", it_cost_baht";
+  else $showcost_msg = "";
+  // view only not zero
+  $where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or now_qty > 0)";
+
   $this->load->library('Datatables');
   $this->datatables
-  ->select("it_refcode,br_name,it_cost_baht,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty", FALSE)
+  ->select("it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty".$showcost_msg, FALSE)
   ->from($sql)
   // ->join('tp_shop sh1', 'rep_shop_id = sh1.sh_id','left')
   // ->join('tp_shop sh2', 'rep_return_shop_id = sh2.sh_id','left')
@@ -199,6 +212,10 @@ function exportExcel_stockmovement()
   $warehouse = $this->input->post("excel_warehouse");
   $startdate = $this->input->post("excel_startdate");
   $enddate = $this->input->post("excel_enddate");
+  $showcost = $this->input->post("excel_showcost");
+
+  if ($showcost == 1) $showcost_msg = ", it_cost_baht";
+  else $showcost_msg = "";
 
   $where_out = "tp_stock_transfer.stot_enable=1";
   $where_in = "tp_stock_transfer.stot_enable=1";
@@ -271,7 +288,7 @@ function exportExcel_stockmovement()
   $now_sql .= " group by tp_shop.sh_warehouse_id, tp_saleorder_item.soi_item_id ) now_dd on it_id=now_sale_item_id and stob_warehouse_id=now_sale_wh_id";
   $now_sql .= " where ".$where." ) now_stock on it_id=now_item_id and stob_warehouse_id=now_wh_id";
 
- $sql = "select it_refcode,br_name,it_cost_baht,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty";
+  $sql = "select it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty".$showcost_msg;
   $sql .= " from tp_stock_balance left join tp_item on it_id=stob_item_id left join tp_warehouse on wh_id=stob_warehouse_id left join tp_brand on tp_item.it_brand_id=tp_brand.br_id";
 // transfer out from warehouse
   $sql .= " left join ( select stot_warehouse_out_id as out_wh_id,log_stock_transfer.log_stot_item_id as out_item_id,sum(log_stock_transfer.log_stot_qty_final) as out_sum_qty from log_stock_transfer
@@ -292,6 +309,9 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
   $sql .= " where ".$where_sale;
   $sql .= " group by tp_shop.sh_warehouse_id, tp_saleorder_item.soi_item_id ) dd on it_id=sale_item_id and stob_warehouse_id=sale_wh_id";
 // where for all
+// view only not zero
+$where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or now_qty > 0)";
+
   $sql .= " left join ".$now_sql." where ".$where;
 
 
@@ -307,7 +327,7 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
 
   $this->excel->getActiveSheet()->setCellValue('A1', 'Ref. Number');
   $this->excel->getActiveSheet()->setCellValue('B1', 'ยี่ห้อ');
-  $this->excel->getActiveSheet()->setCellValue('C1', 'ราคาทุน');
+  $this->excel->getActiveSheet()->setCellValue('C1', 'ราคาป้าย');
   $this->excel->getActiveSheet()->setCellValue('D1', 'ชื่อคลัง');
   $this->excel->getActiveSheet()->setCellValue('E1', 'ยอดยกมา');
   $this->excel->getActiveSheet()->setCellValue('F1', 'รับเข้า');
@@ -315,6 +335,7 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
   $this->excel->getActiveSheet()->setCellValue('H1', 'ย้ายเข้า');
   $this->excel->getActiveSheet()->setCellValue('I1', 'ย้ายออก');
   $this->excel->getActiveSheet()->setCellValue('J1', 'ยอดคงเหลือ');
+  if ($showcost == 1) $this->excel->getActiveSheet()->setCellValue('K1', 'ราคาทุน');
 
   $row = 2;
   $count_last_qty = 0;
@@ -326,7 +347,7 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
   foreach($item_array as $loop) {
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->it_refcode);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->br_name);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_cost_baht);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_srp);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_name);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->last_qty);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->re_qty);
@@ -334,6 +355,9 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->in_qty);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->out_qty);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->now_qty);
+
+      if ($showcost == 1) $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->it_cost_baht);
+
       $row++;
       $count_last_qty += $loop->last_qty;
       $count_re_qty += $loop->re_qty;

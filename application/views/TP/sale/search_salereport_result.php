@@ -61,10 +61,11 @@
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>Sold Date</th>
+                                        <th width="70">Sold Date</th>
                                         <th>เลขที่ใบสั่งขาย</th>
                                         <th>Shop</th>
                                         <th width="100">Ref. Number</th>
+																				<th>Model</th>
                                         <th width="100">Caseback</th>
                                         <th>Brand</th>
 										<th width="50">Qty</th>
@@ -81,7 +82,7 @@
 								</tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="6" style="text-align:right">จำนวนทั้งหมด:</th>
+                                        <th colspan="7" style="text-align:right">จำนวนทั้งหมด:</th>
                                         <th></th>
                                         <th colspan="5" style="text-align:right">ยอดเงินทั้งหมด:</th>
                                         <th></th>
@@ -161,14 +162,14 @@ $(document).ready(function()
 
             // Total over all pages
             total = api
-                .column( 6 )
+                .column( 7 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
             total_money = api
-                .column( 12 )
+                .column( 13 )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -176,25 +177,25 @@ $(document).ready(function()
 
             // Total over this page
             pageTotal = api
-                .column( 6, { page: 'current'} )
+                .column( 7, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
             pageTotal_money = api
-                .column( 12, { page: 'current'} )
+                .column( 13, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
             // Update footer
-            $( api.column( 6 ).footer() ).html(
+            $( api.column( 7 ).footer() ).html(
                 total+' ('+pageTotal+')'
             );
 
-            $( api.column( 12 ).footer() ).html(
+            $( api.column( 13 ).footer() ).html(
                 (total_money).formatMoney(2, '.', ',')+'<br>('+(pageTotal_money).formatMoney(2, '.', ',')+')'
             );
         }

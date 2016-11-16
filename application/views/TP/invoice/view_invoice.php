@@ -7,13 +7,13 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>Invoice</h1>
         </section>
-<?php 
+<?php
     foreach($inv_array as $loop) {
         $inv_id = $loop->inv_id;
         $inv_datein = $loop->inv_issuedate;
@@ -181,8 +181,8 @@
                                                         <th colspan="2" style="text-align:right;"><label>จำนวนรวม:</th>
                                                         <th><div id="allcount"><?php echo $count_qty; ?></div></th>
                                                         <th colspan="2" style="text-align:right;"><label>ราคารวม:</th>
-                                                        <th><div id="summary"><?php if($inv_discount_percent<=0) echo number_format($sum_netprice, 2, ".", ","); 
-                                                                                    else echo number_format($sum_netprice*(100-$inv_discount_percent)/100, 2, ".", ","); 
+                                                        <th><div id="summary"><?php if($inv_discount_percent<=0) echo number_format($sum_netprice, 2, ".", ",");
+                                                                                    else echo number_format($sum_netprice*(100-$inv_discount_percent)/100, 2, ".", ",");
                                                          ?></div></th>
                                                     </tr>
                                                 </tfoot>
@@ -190,8 +190,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">
@@ -221,7 +221,7 @@
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -233,7 +233,7 @@
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
 
 });
 
@@ -241,12 +241,12 @@ function del_confirm() {
     bootbox.confirm("ต้องการยกเลิก Invoice ที่เลือกไว้ใช่หรือไม่ ?", function(result) {
                 var currentForm = this;
                 if (result) {
-                    bootbox.prompt("เนื่องจาก..", function(result) {                
-                      if (result === null) {                                             
-                        document.getElementById("form2").submit();                           
+                    bootbox.prompt("เนื่องจาก..", function(result) {
+                      if (result === null) {
+                        document.getElementById("form2").submit();
                       } else {
                         document.getElementById("remarkvoid").value=result;
-                        document.getElementById("form2").submit();                       
+                        document.getElementById("form2").submit();
                       }
                     });
                 }

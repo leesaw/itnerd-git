@@ -141,13 +141,13 @@
                 <i class="fa fa-home"></i> <span>หน้าแรก</span>
               </a>
             </li>
-            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
+            <?php //if ($this->session->userdata('sessstatus') == 1) { ?>
             <li>
               <a href="<?php echo site_url("tp_stockmovement/form_stockmovement"); ?>">
                 <i class="fa fa-dashboard"></i> <span>รายงานยอดเคลื่อนไหวสินค้า</span>
               </a>
             </li>
-            <?php } ?>
+            <?php //} ?>
             <?php if ($this->session->userdata('sessstatus') == 4) { ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-tags"></i> <span>สินค้า (Product)</span><i class="fa fa-angle-left pull-right"></i></a>
