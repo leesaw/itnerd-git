@@ -12,7 +12,7 @@
         <div class="content-wrapper">
         <section class="content-header">
 
-            <h1>จัดการข้อมูลคลังสินค้า</h1>
+            <h1>จัดการข้อมูลสาขา</h1>
         </section>
 
 		<section class="content">
@@ -23,7 +23,7 @@
         <div class="box-body">
         <div class="row">
             <div class="col-xs-1 col-md-2">
-                <a href="<?php echo site_url("warehouse/addwarehouse"); ?>"><button type="button" name="addnew" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> New Warehouse</button></a>
+                <a href="<?php echo site_url("shop/add_new_shop"); ?>"><button type="button" name="addnew" class="btn btn-success btn-sm"><i class="fa fa-plus"></i> New Shop</button></a>
             </div>
         </div>
 
@@ -35,34 +35,38 @@
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-primary">
-					<div class="panel-heading">คลังสินค้า</div>
+					<div class="panel-heading">สาขาที่ขาย</div>
                     <div class="panel-body">
                             <table class="table table-bordered table-striped" id="itemtable" width="100%">
                                 <thead>
                                     <tr>
-										<th>Warehouse Name</th>
-                                        <th>Warehouse Code.</th>
-                                        <th>Group</th>
+										<th>Shop Name</th>
+                                        <th>Shop Code</th>
+                                        <th>Shop Group</th>
+                                        <th>Shop Category</th>
+                                        <th>Warehouse</th>
                                         <th width="80">Status</th>
 										<th width="80"> </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($warehouse_array as $loop) { ?>
+                                    <?php foreach($shop_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->wh_name; ?></td>
-                                        <td><?php echo $loop->wh_code; ?></td>
-                                        <td><?php echo $loop->wg_name; ?></td>
+                                        <td><?php echo $loop->sh_name; ?></td>
+                                        <td><?php echo $loop->sh_code; ?></td>
+                                        <td><?php echo $loop->sg_name; ?></td>
+                                        <td><?php echo $loop->sc_name; ?></td>
+                                        <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
                                         <td><?php
-                                        if ($loop->wh_enable == 0) {
+                                        if ($loop->sh_enable == 0) {
                                             echo "<button class='btn btn-xs btn-warning'>Deleted</button>";
                                         }else{
                                             echo "<button class='btn btn-xs btn-success'>OK</button>";
                                         } ?>
                                         </td>
                                         <td>
-																				<a href="<?php echo site_url("warehouse/edit_warehouse").'/'.$loop->wh_id ?>" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-                                        <a href="#" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="ลบ" onClick="del_confirm(<?php echo $loop->wh_id; ?>)"><span class="glyphicon glyphicon-remove"></span></a>
+																				<a href="<?php echo site_url("shop/edit_shop").'/'.$loop->sh_id ?>" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+                                        <a href="#" class="btn btn-danger btn-xs" data-title="Delete" data-toggle="tooltip" data-target="#delete" data-placement="top" rel="tooltip" title="ลบ" onClick="del_confirm(<?php echo $loop->sh_id; ?>)"><span class="glyphicon glyphicon-remove"></span></a>
                                         </td>
                                     </tr>
                                     <?php } ?>
@@ -83,7 +87,7 @@
 $(document).ready(function()
 {
     $('#itemtable').dataTable();
-
+    
 });
 // tooltip demo
     $('.tooltip-demo').tooltip({
@@ -94,7 +98,7 @@ $(document).ready(function()
 function del_confirm(val1) {
 	bootbox.confirm("ต้องการลบข้อมูลที่เลือกไว้ใช่หรือไม่ ?", function(result) {
 				var currentForm = this;
-				var myurl = "<?php echo site_url("warehouse/disable_warehouse"); ?>";
+				var myurl = "<?php echo site_url("shop/disable_shop"); ?>";
             	if (result) {
 					window.location.replace(myurl+"/"+val1);
 				}

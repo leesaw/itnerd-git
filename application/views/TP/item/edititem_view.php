@@ -7,23 +7,23 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>แก้ไขข้อมูลสินค้า</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
-                    <?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>'; 
+                    <?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>';
 						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
-					
+
 					?>
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่องที่มี *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                         <form name="form1" id="form1" action="<?php echo site_url('item/edit_save'); ?>" method="post">
@@ -111,6 +111,21 @@
                                         <p class="help-block"><?php echo form_error('srp'); ?></p>
                                     </div>
 							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+										<br>
+										<input type="radio" name="caseback" id="caseback0" value="0"<?php if($loop->it_has_caseback == 0) echo " checked"; ?>> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<input type="radio" name="caseback" id="caseback1" value="1"<?php if($loop->it_has_caseback == 1) echo " checked"; ?>> <label class="text-red"> Caseback</label>
+									<p class="help-block"><?php echo form_error('caseback'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+	                    <div class="text-red">BRACELET (สำหรับ Rolex เท่านั้น : OYSTER, JUBILEE)</div>
+	                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $loop->it_remark; ?>">
+											<p class="help-block"><?php echo form_error('remark'); ?></p>
+                  </div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-9">
@@ -132,7 +147,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -140,7 +155,7 @@
 <?php $this->load->view('js_footer'); ?>
 <script>
 $(document).ready(function()
-{    
+{
     //document.getElementById("savebtn").disabled = false;
 
 });
@@ -160,7 +175,7 @@ function autobarcode(obj) {
 }
 function disablebutton() {
     document.getElementById("savebtn").disabled = true;
-    
+
     document.getElementById("form1").submit();
 }
 </script>

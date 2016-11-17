@@ -140,6 +140,8 @@ function save()
         $srp= str_replace(",", "", ($this->input->post('srp')));
         $short= ($this->input->post('short'));
         $long= ($this->input->post('long'));
+        $caseback = $this->input->post('caseback');
+        $remark = $this->input->post('remark');
 
         $product = array(
             'it_refcode' => $refcode,
@@ -153,7 +155,9 @@ function save()
             'it_cost_baht' => $cost,
             'it_short_description' => $short,
             'it_long_description' => $long,
-            'it_min_stock' => $minstock
+            'it_min_stock' => $minstock,
+            'it_has_caseback' => $caseback,
+            'it_remark' => $remark,
         );
 
         $item_id = $this->tp_item_model->addItem($product);
@@ -222,6 +226,8 @@ function edit_save()
         $srp= str_replace(",", "", ($this->input->post('srp')));
         $short= ($this->input->post('short'));
         $long= ($this->input->post('long'));
+        $caseback = $this->input->post('caseback');
+        $remark = $this->input->post('remark');
 
         $product = array(
             'id' => $it_id,
@@ -234,7 +240,9 @@ function edit_save()
             'it_cost_baht' => $cost,
             'it_short_description' => $short,
             'it_long_description' => $long,
-            'it_min_stock' => $minstock
+            'it_min_stock' => $minstock,
+            'it_has_caseback' => $caseback,
+            'it_remark' => $remark,
         );
 
         $item_id = $this->tp_item_model->editItem($product);

@@ -248,6 +248,11 @@
                     <li>
                         <a href="<?php echo site_url("sale/report_sale_item_rank"); ?>"><i class="fa fa-circle-o"></i> รายงาน-อันดับยอดขาย</a>
                     </li>
+                    <?php if ($this->session->userdata('sessstatus') == 1) { ?>
+                    <li>
+          					   <a href="<?php echo site_url("shop/manage"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลสาขา</a>
+          					</li>
+                    <?php } ?>
                 </ul>
 
             </li>

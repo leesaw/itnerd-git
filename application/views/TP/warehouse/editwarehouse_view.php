@@ -11,8 +11,24 @@
         <div class="content-wrapper">
         <section class="content-header">
 
-            <h1>เพิ่มข้อมูลคลังสินค้า</h1>
+            <h1>แก้ไขข้อมูลคลังสินค้า</h1>
         </section>
+
+<?php
+foreach ($wh_array as $loop) {
+  $wh_id = $loop->wh_id;
+  $wh_name = $loop->wh_name;
+  $wh_code = $loop->wh_code;
+  $wh_detail = $loop->wh_detail;
+  $wh_address1 = $loop->wh_address1;
+  $wh_address2 = $loop->wh_address2;
+  $wh_taxid = $loop->wh_taxid;
+  $wh_branch = $loop->wh_branch;
+  $wh_group = $loop->wg_id;
+}
+
+
+?>
 
 		<section class="content">
 		<div class="row">
@@ -27,17 +43,18 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <form name="form1" id="form1" action="<?php echo site_url('warehouse/newwarehouse_save'); ?>" method="post">
+                                <form name="form1" id="form1" action="<?php echo site_url('warehouse/edit_warehouse_save'); ?>" method="post">
+                                <input type="hidden" name="whid" value="<?php echo $wh_id; ?>"/>
                                     <div class="form-group">
                                             Warehouse Name *
-                                            <input type="text" class="form-control" name="whname" id="whname" value="<?php echo set_value('whname'); ?>">
+                                            <input type="text" class="form-control" name="whname" id="whname" value="<?php echo $wh_name; ?>">
 											<p class="help-block"><?php echo form_error('whname'); ?></p>
                                     </div>
 							</div>
                             <div class="col-md-2">
 									<div class="form-group">
                                             Warehouse Code *
-                                            <input type="text" class="form-control" name="whcode" id="whcode" value="<?php echo set_value('whcode'); ?>">
+                                            <input type="text" class="form-control" name="whcode" id="whcode" value="<?php echo $wh_code; ?>">
 											<p class="help-block"><?php echo form_error('whcode'); ?></p>
                                     </div>
 							</div>
@@ -47,7 +64,9 @@
                                         <select class="form-control" name="wgid" id="wgid">
 										<?php 	if(is_array($whgroup_array)) {
 												foreach($whgroup_array as $loop){
-													echo "<option value='".$loop->wg_id."'>".$loop->wg_code." - ".$loop->wg_name."</option>";
+													echo "<option value='".$loop->wg_id."'";
+                          if ($wh_group == $loop->wg_id) echo " selected";
+                          echo ">".$loop->wg_code." - ".$loop->wg_name."</option>";
 										 } } ?>
                                         </select>
                                     </div>
@@ -58,21 +77,21 @@
 							<div class="col-md-5">
 								<div class="form-group">
 										ชื่อบริษัท
-										<input type="text" class="form-control" name="detail" id="detail" value="<?php echo set_value('detail'); ?>">
+										<input type="text" class="form-control" name="detail" id="detail" value="<?php echo $wh_detail; ?>">
 										<p class="help-block"><?php echo form_error('detail'); ?></p>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
 										เลขที่ผู้เสียภาษี
-										<input type="text" class="form-control" name="taxid" id="taxid" value="<?php echo set_value('taxid'); ?>">
+										<input type="text" class="form-control" name="taxid" id="taxid" value="<?php echo $wh_taxid; ?>">
 										<p class="help-block"><?php echo form_error('taxid'); ?></p>
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
 										สาขาที่ ( 0 = สำนักงานใหญ่ )
-										<input type="text" class="form-control" name="branch" id="branch" value="<?php echo set_value('branch'); ?>">
+										<input type="text" class="form-control" name="branch" id="branch" value="<?php echo $wh_branch; ?>">
 										<p class="help-block"><?php echo form_error('branch'); ?></p>
 								</div>
 							</div>
@@ -81,7 +100,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 										ที่อยู่บริษัท แถว 1
-										<input type="text" class="form-control" name="address1" id="address1" value="<?php echo set_value('address1'); ?>">
+										<input type="text" class="form-control" name="address1" id="address1" value="<?php echo $wh_address1; ?>">
 										<p class="help-block"><?php echo form_error('address1'); ?></p>
 								</div>
 							</div>
@@ -90,7 +109,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 										ที่อยู่บริษัท แถว 2
-										<input type="text" class="form-control" name="address2" id="address2" value="<?php echo set_value('address2'); ?>">
+										<input type="text" class="form-control" name="address2" id="address2" value="<?php echo $wh_address2; ?>">
 										<p class="help-block"><?php echo form_error('address2'); ?></p>
 								</div>
 							</div>

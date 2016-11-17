@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ข้อมูลสินค้า</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading"></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                         <?php foreach($product_array as $loop) { ?>
@@ -81,6 +81,21 @@
                                             <input type="text" class="form-control" name="srp" id="srp" value="<?php echo number_format($loop->it_srp,2,'.',','); ?>" readonly>
                                     </div>
 							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+										<br>
+										<input type="radio" name="caseback" id="caseback0" value="0"<?php if($loop->it_has_caseback == 0) echo " checked"; ?> disabled> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+										<input type="radio" name="caseback" id="caseback1" value="1"<?php if($loop->it_has_caseback == 1) echo " checked"; ?> disabled> <label class="text-red"> Caseback</label>
+									<p class="help-block"><?php echo form_error('caseback'); ?></p>
+                                    </div>
+							</div>
+							<div class="col-md-3">
+									<div class="form-group">
+	                    <div class="text-red">BRACELET (สำหรับ Rolex เท่านั้น : OYSTER, JUBILEE)</div>
+	                    <input type="text" class="form-control" name="remark" id="remark" value="<?php echo $loop->it_remark; ?>" readonly>
+											<p class="help-block"><?php echo form_error('remark'); ?></p>
+                  </div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-9">
@@ -99,7 +114,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>

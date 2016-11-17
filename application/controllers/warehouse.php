@@ -57,13 +57,13 @@ function whname_is_exist($id)
 function id_validate($where)
 {
     $this->db->where('wh_name', $this->input->post('whname'));
-    $query = $this->db->get('tp_item');
+    $query = $this->db->get('tp_warehouse');
     return $query->num_rows();
 }
 
 function newwarehouse_save()
 {
-    $this->form_validation->set_rules('whname', 'whname', 'trim|xss_clean|required|callback_ไ้ืฟทำ_is_exist');
+    $this->form_validation->set_rules('whname', 'whname', 'trim|xss_clean|required|callback_whname_is_exist');
     $this->form_validation->set_rules('whcode', 'whcode', 'trim|xss_clean|required');
     $this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
     $this->form_validation->set_error_delimiters('<code>', '</code>');
@@ -72,11 +72,21 @@ function newwarehouse_save()
         $whname= ($this->input->post('whname'));
         $whcode= ($this->input->post('whcode'));
         $wgid= ($this->input->post('wgid'));
+        $whdetail = $this->input->post('detail');
+        $whaddress1 = $this->input->post('address1');
+        $whaddress2 = $this->input->post('address2');
+        $whtaxid = $this->input->post('taxid');
+        $whbranch = $this->input->post('branch');
 
         $warehouse = array(
             'wh_name' => $whname,
             'wh_code' => $whcode,
-            'wh_group_id' => $wgid
+            'wh_group_id' => $wgid,
+            'wh_detail' => $whdetail,
+            'wh_address1' => $whaddress1,
+            'wh_address2' => $whaddress2,
+            'wh_taxid' => $whtaxid,
+            'wh_branch' => $whbranch,
         );
 
         $warehouse_id = $this->tp_warehouse_model->addWarehouse($warehouse);
@@ -93,6 +103,68 @@ function newwarehouse_save()
 
     $data['title'] = "NGG| Nerd - Add New Warehouse";
     $this->load->view('TP/warehouse/addwarehouse_view',$data);
+}
+
+function edit_warehouse()
+{
+    $id = $this->uri->segment(3);
+    $where = "wh_id = '".$id."'";
+    $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($where);
+
+    $sql = "";
+    $data['whgroup_array'] = $this->tp_warehouse_model->getWarehouseGroup($sql);
+
+    $data['title'] = "NGG| Nerd - Edit Warehouse";
+    $this->load->view('TP/warehouse/editwarehouse_view',$data);
+}
+
+function edit_warehouse_save()
+{
+    $this->form_validation->set_rules('whname', 'whname', 'trim|xss_clean|required');
+    $this->form_validation->set_rules('whcode', 'whcode', 'trim|xss_clean|required');
+    $this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
+    $this->form_validation->set_error_delimiters('<code>', '</code>');
+    $id = $this->input->post('whid');
+
+    if($this->form_validation->run() == TRUE) {
+        $whname= ($this->input->post('whname'));
+        $whcode= ($this->input->post('whcode'));
+        $wgid= ($this->input->post('wgid'));
+        $whdetail = $this->input->post('detail');
+        $whaddress1 = $this->input->post('address1');
+        $whaddress2 = $this->input->post('address2');
+        $whtaxid = $this->input->post('taxid');
+        $whbranch = $this->input->post('branch');
+
+        $warehouse = array(
+            'id' => $id,
+            'wh_name' => $whname,
+            'wh_code' => $whcode,
+            'wh_group_id' => $wgid,
+            'wh_detail' => $whdetail,
+            'wh_address1' => $whaddress1,
+            'wh_address2' => $whaddress2,
+            'wh_taxid' => $whtaxid,
+            'wh_branch' => $whbranch,
+        );
+
+        $warehouse_id = $this->tp_warehouse_model->editWarehouse($warehouse);
+
+        if ($warehouse_id)
+            $this->session->set_flashdata('showresult', 'success');
+        else
+            $this->session->set_flashdata('showresult', 'fail');
+        redirect('warehouse/edit_warehouse/'.$id, 'refresh');
+    }
+
+    $where = "wh_id = '".$id."'";
+    $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($where);
+
+    $sql = "";
+    $data['whgroup_array'] = $this->tp_warehouse_model->getWarehouseGroup($sql);
+
+    $data['title'] = "NGG| Nerd - Edit Warehouse";
+    $this->load->view('TP/warehouse/editwarehouse_view',$data);
 }
 
 function disable_warehouse()
@@ -381,6 +453,7 @@ function ajaxViewStock()
 function ajaxViewStock_serial()
 {
     $refcode = $this->uri->segment(3);
+    $refcode = str_replace('_2F_', '/', $refcode);
     $keyword = explode("%20", $refcode);
     $brand = $this->uri->segment(4);
     $warehouse = $this->uri->segment(5);
@@ -442,6 +515,7 @@ function ajaxViewStock_serial()
 function exportExcel_stock_itemlist()
 {
     $refcode = $this->input->post("refcode");
+    $refcode = str_replace('_2F_', '/', $refcode);
     $keyword = explode(" ", $refcode);
     $brand = $this->input->post("brand");
     $warehouse = $this->input->post("warehouse");
@@ -542,6 +616,7 @@ function exportExcel_stock_itemlist()
 function exportExcel_stock_itemlist_caseback()
 {
     $refcode = $this->input->post("refcode");
+    $refcode = str_replace('_2F_', '/', $refcode);
     $keyword = explode(" ", $refcode);
     $brand = $this->input->post("brand");
     $warehouse = $this->input->post("warehouse");
