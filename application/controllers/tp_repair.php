@@ -115,6 +115,22 @@ function view_repair()
     $this->load->view('TP/repair/view_repair',$data);
 }
 
+function print_repair()
+{
+  $id = $this->uri->segment(3);
+  $where = "rep_id = '".$id."'";
+  $data['repair_array'] = $this->tp_repair_model->get_repair($where);
+
+  $this->load->library('mpdf/mpdf');
+  $mpdf= new mPDF('th','A4','0', 'thsaraban');
+  $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+  //$mpdf->SetJS('this.print();');
+  $mpdf->WriteHTML($stylesheet,1);
+  $mpdf->WriteHTML($this->load->view("TP/repair/print_repair", $data, TRUE));
+  $mpdf->Output();
+}
+
 function form_list_repair()
 {
     $sql = $this->shop_rolex;

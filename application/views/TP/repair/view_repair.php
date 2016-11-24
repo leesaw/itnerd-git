@@ -250,6 +250,7 @@
 							</div>
                             <div class="col-md-6">
                                 <div class="pull-right">
+																<a href="<?php echo site_url("tp_repair/print_repair")."/".$rep_id; ?>" target="_blank" type="button" class="btn bg-navy" id="btnPrint" name="btnPrint" <?php if ($rep_enable==0) echo " disabled"; ?>><i class='fa fa-print'></i> พิมพ์เอกสาร</a>&nbsp;&nbsp;
                                 <a href="<?php echo site_url("tp_repair/form_edit_repair")."/".$rep_id; ?>" type="button" class="btn btn-warning" id="editbtn" name="editbtn" <?php if ($rep_enable==0) echo " disabled"; ?>><i class='fa fa-edit'></i> แก้ไขข้อมูล</a>&nbsp;&nbsp;
                                 <button type="button" class="btn btn-danger" onclick="disable_repair()" id="disablebtn" name="disablebtn" <?php if ($rep_enable==0) echo " disabled"; ?>><i class='fa fa-trash'></i> ลบข้อมูล</button>&nbsp;&nbsp;
                                 </div>
