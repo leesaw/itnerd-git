@@ -560,36 +560,41 @@ function exportExcel_repair_report()
     $this->excel->getActiveSheet()->setTitle('Repair Report');
 
     $this->excel->getActiveSheet()->setCellValue('A1', "วันที่ส่งซ่อม");
-    $this->excel->getActiveSheet()->setCellValue('B1', 'เลขที่ใบรับ');
-    $this->excel->getActiveSheet()->setCellValue('C1', 'Ref. Number');
-    $this->excel->getActiveSheet()->setCellValue('D1', 'ยี่ห้อ');
-    $this->excel->getActiveSheet()->setCellValue('E1', 'สาขาที่ส่งซ่อม');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'รายละเอียดลูกค้า');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'ที่มา');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'อาการ');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'ประกัน');
-    $this->excel->getActiveSheet()->setCellValue('J1', 'ราคาซ่อม');
-    $this->excel->getActiveSheet()->setCellValue('K1', 'สถานะ');
+    $this->excel->getActiveSheet()->setCellValue('B1', "วันที่ CS รับ");
+    $this->excel->getActiveSheet()->setCellValue('C1', "วันที่ส่งกลับ");
+    $this->excel->getActiveSheet()->setCellValue('D1', 'เลขที่ใบรับ');
+    $this->excel->getActiveSheet()->setCellValue('E1', 'Ref. Number');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'ยี่ห้อ');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'สาขาที่ส่งซ่อม');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'รายละเอียดลูกค้า');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'ที่มา');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'อาการ');
+    $this->excel->getActiveSheet()->setCellValue('K1', 'ประกัน');
+    $this->excel->getActiveSheet()->setCellValue('L1', 'ราคาซ่อม');
+    $this->excel->getActiveSheet()->setCellValue('M1', 'สถานะ');
+    $this->excel->getActiveSheet()->setCellValue('N1', 'หมายเหตุ');
 
     $row = 2;
     foreach($item_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->rep_datein);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->rep_number);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->rep_refcode);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->br_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->shopin_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->rep_cusname." ".$loop->rep_custelephone);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->rep_datecs);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->rep_datereturn);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->rep_number);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->rep_refcode);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->br_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->shopin_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->rep_cusname." ".$loop->rep_custelephone);
 
         if ($loop->rep_customer == 1) $customer = "ลูกค้า"; else if ($loop->rep_customer == 0) $customer = "สต็อก";
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $customer);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->rep_case);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $customer);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->rep_case);
 
         if ($loop->rep_warranty == '1') $rep_warranty = "หมดประกัน";
         else if ($loop->rep_warranty == '2') $rep_warranty = "อยู่ในประกัน";
         else $rep_warranty = "-";
 
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $rep_warranty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->rep_price);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $rep_warranty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->rep_price);
 
         switch ($loop->rep_status) {
             case 'G' : $rep_status = "รับเข้าซ่อม"; break;
@@ -608,7 +613,8 @@ function exportExcel_repair_report()
                       }
         }
 
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $rep_status);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $rep_status);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->rep_remark);
         $row++;
     }
 
