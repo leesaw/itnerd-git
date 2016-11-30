@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>สวมสินค้าสาขา</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -63,7 +63,7 @@
                                             <button type="button" class="btn btn-danger btn-sm"  name="showall" id="showall" onclick="allproduct()">เลือกสินค้าทั้งหมด</button>
                                             <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้า Excel</a>
                                             <a href="<?php if ($remark=='0') echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_fashion.xlsx"; else echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_caseback.xlsx"; ?>" type="button" class="btn bg-purple btn-sm"><i class='fa fa-file-excel-o'></i> ตัวอย่าง Excel</a>
-                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
+                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -99,8 +99,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">
@@ -113,7 +113,7 @@
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $remark; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
-                                
+
                                 <a href="<?php echo site_url("warehouse_transfer/form_replace_branch"); ?>"><button type="button" class="btn btn-danger" name="resetbtn" id="resetbtn"><i class='fa fa-rotate-left'></i>  เริ่มต้นใหม่ </button></a>
 							</div>
 						</div>
@@ -121,7 +121,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -132,7 +132,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">	                 	
+                <h4 class="modal-title">
                     <i class='fa fa-upload'></i> นำเข้า Excel
                 </h4>
             </div>            <!-- /modal-header -->
@@ -145,14 +145,14 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" onclick="upload_excel();">Upload</button>
 
-            </div> 	
-						
+            </div>
+
         </div>
     </div>
 </div>
 
 </div>
-<!-- close modal --> 
+<!-- close modal -->
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
@@ -162,9 +162,9 @@ var count_enter_form_input_product = 0;
 var count_list = 0;
 
 $(document).ready(function()
-{    
+{
     document.getElementById("savebtn").disabled = false;
-    
+
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
@@ -174,11 +174,11 @@ $(document).ready(function()
             if(product_code_value != "")
 			{
                 check_product_code(product_code_value, whid_out, whname_out, luxury);
-                
+
 			}
-            
+
             $(this).val('');
-            
+
             setTimeout(function(){
                 calculate();
             },3000);
@@ -186,21 +186,21 @@ $(document).ready(function()
 	});
 
 });
-    
+
 function calculate() {
     var count = 0;
     var sum = 0;
     var srp = document.getElementsByName('it_srp');
     var qty = document.getElementsByName('it_quantity');
     for(var i=0; i<qty.length; i++) {
-        if (qty[i].value == "") qty[i].value = 0; 
+        if (qty[i].value == "") qty[i].value = 0;
         count += parseInt(qty[i].value);
         sum += parseInt(qty[i].value)*parseInt(srp[i].value);
     }
     document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-} 
-    
+}
+
 function check_product_code(refcode_input, whid_out, whname_out, luxury)
 {
 	if(refcode_input != "")
@@ -244,7 +244,7 @@ function check_product_code(refcode_input, whid_out, whname_out, luxury)
         }
 	}
 }
-    
+
 function allproduct()
 {
     var whid_out = <?php echo $whid_out; ?>;
@@ -301,8 +301,8 @@ function allproduct()
     setTimeout(function(){
         calculate();
     },3000);
-    
-    
+
+
 }
 
 function delete_item_row(row1)
@@ -314,7 +314,7 @@ function delete_item_row(row1)
         calculate();
     },3000);
 }
-    
+
 function submitform(x)
 {
     var whid_out = <?php echo $whid_out; ?>;
@@ -365,7 +365,7 @@ function submitform(x)
 
 function confirmform(luxury)
 {
-    
+
     if (luxury==1) {
         var whid_out = <?php echo $whid_out; ?>;
         var whid_in = <?php echo $whid_in; ?>;
@@ -376,14 +376,14 @@ function confirmform(luxury)
         var it_old_qty = document.getElementsByName('old_qty');
         var stot_remark =  document.getElementById("stotremark").value;
         var it_array = new Array();
-        
+
         var it_code = document.getElementsByName('it_code');
 
         for(var i=0; i<it_code.length; i++){
             it_array[i] = {id: it_id[i].value, itse_id: itse_id[i].value, qty: 1, code: it_code[i].value, old_qty: it_old_qty[i].value};
         }
         document.getElementById("savebtn").disabled = true;
-        
+
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/save_replace_branch/1"); ?>" ,
@@ -401,15 +401,15 @@ function confirmform(luxury)
                         }
 
                 });
-                
-                
+
+
             },
             error: function (textStatus, errorThrown) {
                 alert("เกิดความผิดพลาด !!!");
                 document.getElementById("savebtn").disabled = false;
             }
         });
-        
+
     }else if (luxury==0){
         var whid_out = <?php echo $whid_out; ?>;
         var whid_in = <?php echo $whid_in; ?>;
@@ -421,7 +421,7 @@ function confirmform(luxury)
         var it_array = new Array();
         var checked = 0;
         var index = 0;
-        
+
         for(var i=0; i<it_quantity.length; i++){
             if (it_quantity[i].value % 1 != 0 || it_quantity[i].value == "") {
                 alert("กรุณาใส่จำนวนสินค้าที่เป็นตัวเลขเท่านั้น");
@@ -430,17 +430,22 @@ function confirmform(luxury)
             }
 
         }
-        document.getElementById("savebtn").disabled = true;
-        
+
+
         for(var i=0; i<it_id.length; i++){
-            
+
             for(var j=0; j<index; j++) {
                 if (it_id[i].value == it_array[j]['id']) {
                     it_array[j]['qty'] = parseInt(it_array[j]['qty']) + parseInt(it_quantity[i].value);
-                    
+
+										if (it_array[j]['qty'] > it_array[j]['old_qty']) {
+											alert("จำนวนสินค้าคงเหลือไม่เพียงพอกับที่ต้องการ !!");
+	                    return;
+										}
+
                     checked++;
                 }
-                
+
             }
             if (checked==0) {
                 it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, old_qty: it_old_qty[i].value};
@@ -449,7 +454,7 @@ function confirmform(luxury)
                 checked = 0;
             }
         }
-        
+				document.getElementById("savebtn").disabled = true;
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/save_replace_branch/0"); ?>" ,
@@ -467,8 +472,8 @@ function confirmform(luxury)
                         }
 
                 });
-                
-                
+
+
             },
             error: function (textStatus, errorThrown) {
                 alert("เกิดความผิดพลาด !!!");
@@ -476,15 +481,15 @@ function confirmform(luxury)
             }
         });
     }
-    
+
 }
-    
+
 function upload_excel() {
     var fileSelect = document.getElementById('excelfile_name');
     var files = fileSelect.files;
     var formData = new FormData();
     var whname_out = "<?php echo $whname_out; ?>";
-    
+
     if (files[0] != 'undefined') {
         formData.append("excelfile_name", files[0]);
 
@@ -523,8 +528,8 @@ function upload_excel() {
     setTimeout(function(){
         calculate();
     },3000);
-    
-};    
+
+};
 </script>
 </body>
 </html>
