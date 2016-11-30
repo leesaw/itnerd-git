@@ -214,6 +214,9 @@
                     <li>
                         <a href="<?php echo site_url("warehouse_transfer/form_return_headoffice"); ?>"><i class="fa fa-circle-o"></i> คืนสินค้าเข้าคลัง HO</a>
                     </li>
+                    <li>
+                       <a href="<?php echo site_url("warehouse_transfer/out_form_stock"); ?>"><i class="fa fa-circle-o"></i> เอาสินค้าออกจากคลัง</a>
+                    </li>
                     <?php } ?>
 					<li>
                         <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
@@ -221,10 +224,15 @@
 					<li>
                         <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("warehouse_transfer/out_stock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-เอาสินค้าออกจากคลัง</a>
+                    </li>
                     <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
+
                     <li>
 					   <a href="<?php echo site_url("warehouse/manage"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลคลังสินค้า</a>
 					</li>
+
                     <?php } ?>
                 </ul>
 

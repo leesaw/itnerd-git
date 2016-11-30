@@ -14,7 +14,13 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            ผลการค้นหา Serial Number : <?php echo $serial; ?>
+            สินค้าที่มีการเอาออกจากคลัง : <?php
+            if ($refcode != "NULL") echo $refcode;
+            echo " ยี่ห้อ : ".$brand_name;
+            echo " คลังสินค้า : ".$wh_name;
+            echo " ช่วงเวลา : ";
+            if ($startdate != '1970-01-01') echo $startdate;
+            echo " ถึง ".$enddate;  ?>
         </h1>
     </section>
 
@@ -28,68 +34,30 @@
 
         <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-success">
+                <div class="panel panel-default">
 					<div class="panel-heading">
-                        ข้อมูลสินค้า
+                        <form name="exportexcel" action="<?php echo site_url("warehouse_transfer/exportExcel_transfer_out_report"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
+                        <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
+                        <input type="hidden" name="warehouse" value="<?php echo $wh_id; ?>">
+                        <input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
+                        <input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
+                        </form>
+
                     </div>
                     <div class="panel-body table-responsive">
-                            <table class="table" id="tablebarcode" width="100%">
+                            <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>Serial No.</th>
-                                        <th>Brand</th>
+                                        <th width="80">วันที่ออกจากคลัง</th>
+                                        <th width="100">เลขที่</th>
                                         <th width="120">Ref. Number</th>
+                                        <th>Brand</th>
                                         <th>Family</th>
                                         <th>Description</th>
                                         <th>SRP</th>
-                                        <th>Warehouse</th>
-                                        <th width="100">สถานะ</th>
-                                    </tr>
-                                </thead>
-								<tbody>
-                                <?php foreach($stock_array as $loop) { ?>
-                                    <tr>
-                                    <td><?php echo $loop->itse_serial_number; ?></td>
-                                    <td><?php echo $loop->br_name; ?></td>
-                                    <td><?php echo $loop->it_refcode; ?></td>
-                                    <td><?php echo $loop->it_model; ?></td>
-                                    <td><?php echo $loop->it_short_description; ?></td>
-                                    <td><?php echo $loop->it_srp; ?></td>
-                                    <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
-                                    <td><?php
-                                        if ($loop->itse_enable == 0)
-                                            echo "<a href='#'><button class='btn btn-danger btn-xs'>ขาย หรือ เอาออกจากคลังแล้ว</button></a>"; 
-                                        else
-                                            echo "<a href='#'><button class='btn btn-primary btn-xs'>อยู่ในคลังสินค้า</button></a>";
-                                        ?>
-
-                                    </td>
-                                    </tr>
-                                <?php } ?>
-								</tbody>
-							</table>
-
-					</div>
-
-				</div>
-			</div>
-
-		</div>
-        <div class="row">
-			<div class="col-xs-12">
-                <div class="panel panel-default">
-					<div class="panel-heading">
-                        ข้อมูลการย้ายคลัง
-                    </div>
-                    <div class="panel-body table-responsive">
-                            <table class="table table-hover" id="tabletransfer" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th width="80">วันที่กำหนดส่ง</th>
-                                        <th width="100">เลขที่ย้ายคลัง</th>
-                                        <th width="120">Ref. Number</th>
-                                        <th width="100">Serial</th>
-                                        <th>ออกจากคลัง</th>
+                                        <th>Qty (Pcs.)</th>
                                         <th>เข้าคลัง</th>
                                     </tr>
                                 </thead>
@@ -97,7 +65,11 @@
 								<tbody>
 								</tbody>
                                 <tfoot>
-
+                                    <tr>
+                                        <th colspan="7" style="text-align:right">จำนวนทั้งหมด:</th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
                                 </tfoot>
 							</table>
 
@@ -109,7 +81,7 @@
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("warehouse/getBalance"); ?>" class="btn btn-primary">ค้นหา</a>
+            <a href="<?php echo site_url("warehouse_transfer/out_stock_history"); ?>" class="btn btn-primary">ค้นหา</a>
             </div>
         </div>
 
@@ -145,11 +117,11 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-    var oTable = $('#tabletransfer').DataTable({
+    var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("warehouse_transfer/ajaxView_seach_transfer_serial")."/".$serial; ?>',
+        'sAjaxSource'    : '<?php echo site_url("warehouse_transfer/ajaxView_seach_transfer_out")."/".$refcode."/".$brand_id."/".$wh_id."/".$startdate."/".$enddate; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',
@@ -159,6 +131,39 @@ $(document).ready(function()
                 "success":fnCallback
 
             });
+        },
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+
+            // Total over all pages
+            total = api
+                .column( 7 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            // Total over this page
+            pageTotal = api
+                .column( 7, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+
+            // Update footer
+            $( api.column( 7 ).footer() ).html(
+                total+' ('+pageTotal+')'
+            );
         }
     });
 
@@ -183,6 +188,11 @@ Number.prototype.formatMoney = function(c, d, t){
         j = (j = i.length) > 3 ? j % 3 : 0;
        return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
      };
+function showcaseback()
+{
+
+    document.getElementById("exportcaseback").submit();
+}
 </script>
 </body>
 </html>

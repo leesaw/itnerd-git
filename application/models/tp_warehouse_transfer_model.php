@@ -40,12 +40,50 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	return $query->result();
  }
 
+ function getWarehouse_transfer_out($where)
+ {
+	$this->db->select("stoo_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stoo_qty_update) as qty_update, MIN(log_stoo_old_qty) as qty_old, stoo_datein, firstname, lastname, log_stoo_item_id, stoo_dateadd, stoo_remark");
+	$this->db->from('log_stock_out');
+    $this->db->join('tp_item', 'it_id = log_stoo_item_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+	$this->db->join('tp_stock_out', 'stoo_id = log_stoo_transfer_id','left');
+    $this->db->join('tp_warehouse', 'wh_id = stoo_warehouse_id','left');
+    $this->db->join('nerd_users', 'id = stoo_dateadd_by','left');
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by("log_stoo_item_id");
+	$query = $this->db->get();
+	return $query->result();
+ }
+
+ function getWarehouse_transfer_out_serial($where)
+ {
+	$this->db->select("log_stoo_item_id, itse_serial_number");
+	$this->db->from('log_stock_out_serial');
+    $this->db->join('log_stock_out', 'log_stoos_stoo_id = log_stoo_id','left');
+    $this->db->join('tp_item_serial', 'itse_id = log_stoos_item_serial_id','left');
+    $this->db->join('tp_stock_out', 'stoo_id = log_stoo_transfer_id','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();
+	return $query->result();
+ }
+
  function getWarehouse_stockin_list($where)
  {
 	$this->db->select("stoi_id, stoi_number, stoi_has_serial, wh_name, wh_code, stoi_datein, firstname, lastname");
 	$this->db->from('tp_stock_in');
     $this->db->join('tp_warehouse', 'wh_id = stoi_warehouse_id','inner');
     $this->db->join('nerd_users', 'id = stoi_dateadd_by','left');
+    if ($where != "") $this->db->where($where);
+	$query = $this->db->get();
+	return $query->result();
+ }
+
+ function getWarehouse_stockout_list($where)
+ {
+	$this->db->select("stoo_id, stoo_number, stoo_has_serial, wh_name, wh_code, stoo_datein, firstname, lastname");
+	$this->db->from('tp_stock_out');
+    $this->db->join('tp_warehouse', 'wh_id = stoo_warehouse_id','inner');
+    $this->db->join('nerd_users', 'id = stoo_dateadd_by','left');
     if ($where != "") $this->db->where($where);
 	$query = $this->db->get();
 	return $query->result();
@@ -155,6 +193,19 @@ Class Tp_warehouse_transfer_model extends CI_Model
 	return $query->num_rows();
  }
 
+ function getMaxNumber_transfer_out($month, $rolex)
+ {
+    $start = $month."-01 00:00:00";
+    $end = $month."-31 23:59:59";
+    $this->db->select("stoo_id");
+	  $this->db->from('tp_stock_out');
+    $this->db->where("stoo_dateadd >=",$start);
+    $this->db->where("stoo_dateadd <=",$end);
+    $this->db->where("stoo_is_rolex", $rolex);
+	  $query = $this->db->get();
+	  return $query->num_rows();
+ }
+
  function getItem_stock($where)
  {
     $this->db->select("it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, itc_name, br_name, br_code, bc_name, stob_id, stob_qty");
@@ -214,6 +265,21 @@ Class Tp_warehouse_transfer_model extends CI_Model
     return $query->result();
  }
 
+ function getItem_transfer_out($where)
+ {
+    $this->db->select("stoo_id, stoo_datein, stoo_number, it_id, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
+    $this->db->from('log_stock_out');
+    $this->db->join('tp_stock_out', 'log_stoo_transfer_id = stoo_id','left');
+    $this->db->join('tp_item', 'it_id = log_stoo_item_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    $this->db->join('tp_warehouse', 'wh_id = log_stoo_warehouse_id','left');
+    $this->db->where('stoo_enable',1);
+    $this->db->where('log_stoo_qty_update >',0);
+    if ($where != "") $this->db->where($where);
+    $query = $this->db->get();
+    return $query->result();
+ }
+
  function addWarehouse_transfer($insert=NULL)
  {
 	$this->db->insert('tp_stock_balance', $insert);
@@ -229,6 +295,12 @@ Class Tp_warehouse_transfer_model extends CI_Model
  function addWarehouse_transfer_between($insert=NULL)
  {
 	$this->db->insert('tp_stock_transfer', $insert);
+	return $this->db->insert_id();
+ }
+
+ function addWarehouse_transfer_out($insert=NULL)
+ {
+	$this->db->insert('tp_stock_out', $insert);
 	return $this->db->insert_id();
  }
 

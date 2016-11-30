@@ -95,6 +95,7 @@ function ajaxView_stockmovement()
 
   $where_out = "tp_stock_transfer.stot_enable=1";
   $where_in = "tp_stock_transfer.stot_enable=1";
+  $where_stockout = "tp_stock_out.stoo_enable=1";
   $where_recieve = "tp_stock_in.stoi_enable=1";
   $where_sale = "tp_saleorder.so_enable=1";
 
@@ -119,6 +120,7 @@ function ajaxView_stockmovement()
       $start_date = $startdate." 00:00:00";
       $where_out .= " and tp_stock_transfer.stot_confirm_dateadd >= '".$start_date."'";
       $where_in .= " and tp_stock_transfer.stot_confirm_dateadd >= '".$start_date."'";
+      $where_stockout .= " and tp_stock_out.stoo_dateadd >= '".$start_date."'";
       $where_recieve .= " and tp_stock_in.stoi_dateadd >= '".$start_date."'";
       $where_sale .= " and tp_saleorder.so_issuedate >= '".$startdate."'";
   }
@@ -127,6 +129,7 @@ function ajaxView_stockmovement()
       $end_date = $enddate." 23:59:59";
       $where_out .= " and tp_stock_transfer.stot_confirm_dateadd <= '".$end_date."'";
       $where_in .= " and tp_stock_transfer.stot_confirm_dateadd <= '".$end_date."'";
+      $where_stockout .= " and tp_stock_out.stoo_dateadd <= '".$end_date."'";
       $where_recieve .= " and tp_stock_in.stoi_dateadd <= '".$end_date."'";
       $where_sale .= " and tp_saleorder.so_issuedate <= '".$enddate."'";
   }else{
@@ -139,17 +142,22 @@ function ajaxView_stockmovement()
 
   $where_now_out = "tp_stock_transfer.stot_enable=1 and tp_stock_transfer.stot_confirm_dateadd > '".$end_date."' and tp_stock_transfer.stot_confirm_dateadd <= '".$now_date."'";
   $where_now_in = "tp_stock_transfer.stot_enable=1 and tp_stock_transfer.stot_confirm_dateadd > '".$end_date."' and tp_stock_transfer.stot_confirm_dateadd <= '".$now_date."'";
+  $where_now_stockout = "tp_stock_out.stoo_enable=1 and tp_stock_out.stoo_dateadd > '".$end_date."' and tp_stock_out.stoo_dateadd <= '".$now_date."'";
   $where_now_recieve = "tp_stock_in.stoi_enable=1 and tp_stock_in.stoi_dateadd > '".$end_date."' and tp_stock_in.stoi_dateadd <= '".$now_date."'";
   $where_now_sale = "tp_saleorder.so_enable=1 and tp_saleorder.so_issuedate > '".$enddate."' and tp_saleorder.so_issuedate <= '".$nowdate."'";
 
   // current stock
-  $now_sql = "( SELECT stob_warehouse_id as now_wh_id, stob_item_id as now_item_id, ( stob_qty - ifnull( now_re_sum_qty, 0 ) - ifnull( now_in_sum_qty, 0 ) + ifnull( now_sale_sum_qty, 0 ) + ifnull( now_out_sum_qty, 0 ) ) as now_qty";
+  $now_sql = "( SELECT stob_warehouse_id as now_wh_id, stob_item_id as now_item_id, ( stob_qty - ifnull( now_re_sum_qty, 0 ) - ifnull( now_in_sum_qty, 0 ) + ifnull( now_sale_sum_qty, 0 ) + ifnull( now_out_sum_qty, 0 ) + ifnull( now_stockout_sum_qty, 0 ) ) as now_qty";
   $now_sql .= " from tp_stock_balance left join tp_item on it_id=stob_item_id left join tp_warehouse on wh_id=stob_warehouse_id left join tp_brand on tp_item.it_brand_id=tp_brand.br_id";
   // transfer out from warehouse
   $now_sql .= " left join ( select stot_warehouse_out_id as now_out_wh_id,log_stock_transfer.log_stot_item_id as now_out_item_id,sum(log_stock_transfer.log_stot_qty_final) as now_out_sum_qty from log_stock_transfer
   left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_stot_transfer_id";
   $now_sql .= " where ".$where_now_out;
   $now_sql .= " group by stot_warehouse_out_id,log_stot_item_id ) now_aa on it_id=now_out_item_id and stob_warehouse_id=now_out_wh_id";
+  // stock out from warehouse
+  $now_sql .= " left join ( SELECT log_stoo_warehouse_id as now_stockout_wh_id,log_stoo_item_id as now_stockout_item_id,sum(log_stoo_qty_update) as now_stockout_sum_qty FROM log_stock_out left join tp_stock_out on tp_stock_out.stoo_id=log_stoo_transfer_id";
+  $now_sql .= " where ".$where_now_stockout;
+  $now_sql .= " group by log_stoo_warehouse_id,log_stoo_item_id ) now_ee on it_id=now_stockout_item_id and stob_warehouse_id=now_stockout_wh_id";
   // transfer in warehouse
   $now_sql .= " left join ( select stot_warehouse_in_id as now_in_wh_id,log_stock_transfer.log_stot_item_id as now_in_item_id,sum(log_stock_transfer.log_stot_qty_final) as now_in_sum_qty from log_stock_transfer
   left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_stot_transfer_id";
@@ -177,6 +185,10 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
 left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_stot_transfer_id";
   $sql .= " where ".$where_in;
   $sql .= " group by stot_warehouse_in_id,log_stot_item_id ) bb on it_id=in_item_id and stob_warehouse_id=in_wh_id";
+// stock out warehouse
+  $sql .= " left join ( SELECT log_stoo_warehouse_id as stockout_wh_id,log_stoo_item_id as stockout_item_id,sum(log_stoo_qty_update) as stockout_sum_qty FROM log_stock_out left join tp_stock_out on tp_stock_out.stoo_id=log_stoo_transfer_id";
+  $sql .= " where ".$where_stockout;
+  $sql .= " group by log_stoo_warehouse_id,log_stoo_item_id ) ee on it_id=stockout_item_id and stob_warehouse_id=stockout_wh_id";
 // recieve in warehouse
   $sql .= " left join ( SELECT log_stob_warehouse_id as re_wh_id,log_stob_item_id as re_item_id,sum(log_stob_qty_update) as re_sum_qty FROM log_stock_balance left join tp_stock_in on tp_stock_in.stoi_id=log_stob_transfer_id";
   $sql .= " where ".$where_recieve;
@@ -191,11 +203,11 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
   if ($showcost == 1) $showcost_msg = ", it_cost_baht";
   else $showcost_msg = "";
   // view only not zero
-  $where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or now_qty > 0)";
+  $where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or ifnull(stockout_sum_qty, 0) > 0 or now_qty > 0)";
 
   $this->load->library('Datatables');
   $this->datatables
-  ->select("it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty".$showcost_msg, FALSE)
+  ->select("it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, (ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) as out_qty, now_qty".$showcost_msg, FALSE)
   ->from($sql)
   // ->join('tp_shop sh1', 'rep_shop_id = sh1.sh_id','left')
   // ->join('tp_shop sh2', 'rep_return_shop_id = sh2.sh_id','left')
@@ -219,8 +231,10 @@ function exportExcel_stockmovement()
 
   $where_out = "tp_stock_transfer.stot_enable=1";
   $where_in = "tp_stock_transfer.stot_enable=1";
+  $where_stockout = "tp_stock_out.stoo_enable=1";
   $where_recieve = "tp_stock_in.stoi_enable=1";
   $where_sale = "tp_saleorder.so_enable=1";
+
   if ($this->session->userdata('sessstatus') != '88') {
       $where = $this->no_rolex;
   }else{ $where = "br_id != 888"; }
@@ -242,6 +256,7 @@ function exportExcel_stockmovement()
       $start_date = $startdate." 00:00:00";
       $where_out .= " and tp_stock_transfer.stot_confirm_dateadd >= '".$start_date."'";
       $where_in .= " and tp_stock_transfer.stot_confirm_dateadd >= '".$start_date."'";
+      $where_stockout .= " and tp_stock_out.stoo_dateadd >= '".$start_date."'";
       $where_recieve .= " and tp_stock_in.stoi_dateadd >= '".$start_date."'";
       $where_sale .= " and tp_saleorder.so_issuedate >= '".$startdate."'";
   }
@@ -250,6 +265,7 @@ function exportExcel_stockmovement()
       $end_date = $enddate." 23:59:59";
       $where_out .= " and tp_stock_transfer.stot_confirm_dateadd <= '".$end_date."'";
       $where_in .= " and tp_stock_transfer.stot_confirm_dateadd <= '".$end_date."'";
+      $where_stockout .= " and tp_stock_out.stoo_dateadd <= '".$end_date."'";
       $where_recieve .= " and tp_stock_in.stoi_dateadd <= '".$end_date."'";
       $where_sale .= " and tp_saleorder.so_issuedate <= '".$enddate."'";
   }else{
@@ -262,11 +278,12 @@ function exportExcel_stockmovement()
 
   $where_now_out = "tp_stock_transfer.stot_enable=1 and tp_stock_transfer.stot_confirm_dateadd > '".$end_date."' and tp_stock_transfer.stot_confirm_dateadd <= '".$now_date."'";
   $where_now_in = "tp_stock_transfer.stot_enable=1 and tp_stock_transfer.stot_confirm_dateadd > '".$end_date."' and tp_stock_transfer.stot_confirm_dateadd <= '".$now_date."'";
+  $where_now_stockout = "tp_stock_out.stoo_enable=1 and tp_stock_out.stoo_dateadd > '".$end_date."' and tp_stock_out.stoo_dateadd <= '".$now_date."'";
   $where_now_recieve = "tp_stock_in.stoi_enable=1 and tp_stock_in.stoi_dateadd > '".$end_date."' and tp_stock_in.stoi_dateadd <= '".$now_date."'";
   $where_now_sale = "tp_saleorder.so_enable=1 and tp_saleorder.so_issuedate > '".$enddate."' and tp_saleorder.so_issuedate <= '".$nowdate."'";
 
   // current stock
-  $now_sql = "( SELECT stob_warehouse_id as now_wh_id, stob_item_id as now_item_id, ( stob_qty - ifnull( now_re_sum_qty, 0 ) - ifnull( now_in_sum_qty, 0 ) + ifnull( now_sale_sum_qty, 0 ) + ifnull( now_out_sum_qty, 0 ) ) as now_qty";
+  $now_sql = "( SELECT stob_warehouse_id as now_wh_id, stob_item_id as now_item_id, ( stob_qty - ifnull( now_re_sum_qty, 0 ) - ifnull( now_in_sum_qty, 0 ) + ifnull( now_sale_sum_qty, 0 ) + ifnull( now_out_sum_qty, 0 ) + ifnull( now_stockout_sum_qty, 0 ) ) as now_qty";
   $now_sql .= " from tp_stock_balance left join tp_item on it_id=stob_item_id left join tp_warehouse on wh_id=stob_warehouse_id left join tp_brand on tp_item.it_brand_id=tp_brand.br_id";
   // transfer out from warehouse
   $now_sql .= " left join ( select stot_warehouse_out_id as now_out_wh_id,log_stock_transfer.log_stot_item_id as now_out_item_id,sum(log_stock_transfer.log_stot_qty_final) as now_out_sum_qty from log_stock_transfer
@@ -278,6 +295,10 @@ function exportExcel_stockmovement()
   left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_stot_transfer_id";
   $now_sql .= " where ".$where_now_in;
   $now_sql .= " group by stot_warehouse_in_id,log_stot_item_id ) now_bb on it_id=now_in_item_id and stob_warehouse_id=now_in_wh_id";
+  // stock out from warehouse
+  $now_sql .= " left join ( SELECT log_stoo_warehouse_id as now_stockout_wh_id,log_stoo_item_id as now_stockout_item_id,sum(log_stoo_qty_update) as now_stockout_sum_qty FROM log_stock_out left join tp_stock_out on tp_stock_out.stoo_id=log_stoo_transfer_id";
+  $now_sql .= " where ".$where_now_stockout;
+  $now_sql .= " group by log_stoo_warehouse_id,log_stoo_item_id ) now_ee on it_id=now_stockout_item_id and stob_warehouse_id=now_stockout_wh_id";
   // recieve in warehouse
   $now_sql .= " left join ( SELECT log_stob_warehouse_id as now_re_wh_id,log_stob_item_id as now_re_item_id,sum(log_stob_qty_update) as now_re_sum_qty FROM log_stock_balance left join tp_stock_in on tp_stock_in.stoi_id=log_stob_transfer_id";
   $now_sql .= " where ".$where_now_recieve;
@@ -288,7 +309,7 @@ function exportExcel_stockmovement()
   $now_sql .= " group by tp_shop.sh_warehouse_id, tp_saleorder_item.soi_item_id ) now_dd on it_id=now_sale_item_id and stob_warehouse_id=now_sale_wh_id";
   $now_sql .= " where ".$where." ) now_stock on it_id=now_item_id and stob_warehouse_id=now_wh_id";
 
-  $sql = "select it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, ifnull(out_sum_qty, 0) as out_qty, now_qty".$showcost_msg;
+  $sql = "select it_refcode,br_name,it_srp,wh_name,(now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) as last_qty, ifnull(re_sum_qty, 0) as re_qty, ifnull(sale_sum_qty, 0) as sale_qty, ifnull(in_sum_qty, 0) as in_qty, (ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) as out_qty, now_qty".$showcost_msg;
   $sql .= " from tp_stock_balance left join tp_item on it_id=stob_item_id left join tp_warehouse on wh_id=stob_warehouse_id left join tp_brand on tp_item.it_brand_id=tp_brand.br_id";
 // transfer out from warehouse
   $sql .= " left join ( select stot_warehouse_out_id as out_wh_id,log_stock_transfer.log_stot_item_id as out_item_id,sum(log_stock_transfer.log_stot_qty_final) as out_sum_qty from log_stock_transfer
@@ -300,6 +321,10 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
 left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_stot_transfer_id";
   $sql .= " where ".$where_in;
   $sql .= " group by stot_warehouse_in_id,log_stot_item_id ) bb on it_id=in_item_id and stob_warehouse_id=in_wh_id";
+// stock out warehouse
+  $sql .= " left join ( SELECT log_stoo_warehouse_id as stockout_wh_id,log_stoo_item_id as stockout_item_id,sum(log_stoo_qty_update) as stockout_sum_qty FROM log_stock_out left join tp_stock_out on tp_stock_out.stoo_id=log_stoo_transfer_id";
+  $sql .= " where ".$where_stockout;
+  $sql .= " group by log_stoo_warehouse_id,log_stoo_item_id ) ee on it_id=stockout_item_id and stob_warehouse_id=stockout_wh_id";
 // recieve in warehouse
   $sql .= " left join ( SELECT log_stob_warehouse_id as re_wh_id,log_stob_item_id as re_item_id,sum(log_stob_qty_update) as re_sum_qty FROM log_stock_balance left join tp_stock_in on tp_stock_in.stoi_id=log_stob_transfer_id";
   $sql .= " where ".$where_recieve;
@@ -310,7 +335,7 @@ left join tp_stock_transfer on tp_stock_transfer.stot_id=log_stock_transfer.log_
   $sql .= " group by tp_shop.sh_warehouse_id, tp_saleorder_item.soi_item_id ) dd on it_id=sale_item_id and stob_warehouse_id=sale_wh_id";
 // where for all
 // view only not zero
-$where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or now_qty > 0)";
+$where .= " and ((now_qty - ifnull(re_sum_qty, 0) - ifnull(in_sum_qty, 0) + ifnull(sale_sum_qty, 0) + ifnull(out_sum_qty, 0) + ifnull(stockout_sum_qty, 0)) > 0 or ifnull(re_sum_qty, 0) > 0 or ifnull(sale_sum_qty, 0) > 0 or ifnull(in_sum_qty, 0) > 0 or ifnull(out_sum_qty, 0) > 0 or ifnull(stockout_sum_qty, 0) > 0 or now_qty > 0)";
 
   $sql .= " left join ".$now_sql." where ".$where;
 
