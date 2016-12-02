@@ -11,13 +11,13 @@
         <div class="content-wrapper">
         <section class="content-header">
 
-            <h1>เอาสินค้าออกจากคลัง</h1>
+            <h1 class="text-red">เอาสินค้าออกจากคลัง</h1>
         </section>
 
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
-                <div class="panel panel-default">
+                <div class="panel panel-danger">
                     <?php if ($this->session->flashdata('showresult') == 'success') echo '<div class="alert-message alert alert-success"> ระบบทำการเพิ่มข้อมูลเรียบร้อยแล้ว</div>';
 						  else if ($this->session->flashdata('showresult') == 'fail') echo '<div class="alert-message alert alert-danger"> ระบบไม่สามารถเพิ่มข้อมูลได้</div>';
 
@@ -45,7 +45,7 @@
                                         </select>
                                     </div>
 							</div>
-                            
+
                             <div class="col-md-3">
                                 <?php if ($sessrolex != 1) { ?>
                                 <input type="radio" name="watch_luxury" id="watch_luxury" value="0" <?php if(($remark=='0') || (!isset($remark))) echo "checked"; ?>> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;

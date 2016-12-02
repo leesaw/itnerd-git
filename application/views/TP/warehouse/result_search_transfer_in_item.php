@@ -59,6 +59,7 @@
                                         <th>SRP</th>
                                         <th>Qty (Pcs.)</th>
                                         <th>เข้าคลัง</th>
+																				<?php if ($user_status == 88) { ?><th>Cost</th><?php } ?>
                                     </tr>
                                 </thead>
 

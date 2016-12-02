@@ -435,6 +435,7 @@ function getCaseback_lockCaseback()
     $refcode = $this->input->post("refcode");
 
     $sql = "itse_serial_number = '".$refcode."' and ".$this->no_rolex;
+    //$sql = "itse_serial_number = '".$refcode."'";
     $result = $this->tp_item_model->getItem_caseback($sql);
     $output = "";
     foreach ($result as $loop) {

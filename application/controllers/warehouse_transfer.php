@@ -1450,6 +1450,7 @@ function result_search_transfer_in_item()
 
     $data['startdate'] = $start;
     $data['enddate'] = $end;
+    $data['user_status'] = $this->session->userdata('sessstatus');
 
     $data['title'] = "Nerd - Search Stock Transfer";
     $this->load->view('TP/warehouse/result_search_transfer_in_item',$data);
@@ -1495,6 +1496,7 @@ function result_search_transfer_item()
 
     $data['startdate'] = $start;
     $data['enddate'] = $end;
+    $data['user_status'] = $this->session->userdata('sessstatus');
 
     $data['title'] = "Nerd - Search Stock Transfer";
     $this->load->view('TP/warehouse/result_search_transfer_item',$data);
@@ -1547,20 +1549,37 @@ function ajaxView_seach_transfer()
         else $sql .= " and stot_warehouse_out_id != '0'";
 
     }
+    $transfer_status1 = site_url("warehouse_transfer/transferstock_print");
+    $transfer_status2 = site_url("warehouse_transfer/transferstock_final_print");
 
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("stot_datein, CONCAT('/', stot_id, '\">', stot_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, 	log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
-    ->from('log_stock_transfer')
-    ->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left')
-    ->join('tp_item', 'it_id = log_stot_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->join('tp_warehouse wh1', 'wh1.wh_id = stot_warehouse_out_id','inner')
-    ->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner')
-    ->where('stot_enable',1)
-    ->where('log_stot_qty_final >',0)
-    ->where($sql)
-    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/transferstock_final_print").'$1',"transfer_id");
+    if ($this->session->userdata('sessstatus') != '88') {
+      $this->datatables
+      ->select("stot_datein,IF(stot_status = 1, CONCAT('".$transfer_status1."', '/', stot_id, '\">', stot_number, '</a>'), CONCAT('".$transfer_status2."', '/', stot_id, '\">', stot_number, '</a>'))  as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, 	log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
+      ->from('log_stock_transfer')
+      ->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left')
+      ->join('tp_item', 'it_id = log_stot_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse wh1', 'wh1.wh_id = stot_warehouse_out_id','inner')
+      ->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner')
+      ->where('stot_enable',1)
+      ->where('log_stot_qty_final >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.'$1',"transfer_id");
+    }else{
+      $this->datatables
+      ->select("stot_datein,IF(stot_status = 1, CONCAT('".$transfer_status1."', '/', stot_id, '\">', stot_number, '</a>'), CONCAT('".$transfer_status2."', '/', stot_id, '\">', stot_number, '</a>'))  as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, 	log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out, it_cost_baht", FALSE)
+      ->from('log_stock_transfer')
+      ->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left')
+      ->join('tp_item', 'it_id = log_stot_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse wh1', 'wh1.wh_id = stot_warehouse_out_id','inner')
+      ->join('tp_warehouse wh2', 'wh2.wh_id = stot_warehouse_in_id','inner')
+      ->where('stot_enable',1)
+      ->where('log_stot_qty_final >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.'$1',"transfer_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -1613,17 +1632,31 @@ function ajaxView_seach_transfer_in()
     }
 
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp,    log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
-    ->from('log_stock_balance')
-    ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
-    ->join('tp_item', 'it_id = log_stob_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->join('tp_warehouse', 'wh_id = log_stob_warehouse_id','left')
-    ->where('stoi_enable',1)
-    ->where('log_stob_qty_update >',0)
-    ->where($sql)
-    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/importstock_print").'$1',"transfer_id");
+    if ($this->session->userdata('sessstatus') != '88') {
+      $this->datatables
+      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp,    log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
+      ->from('log_stock_balance')
+      ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
+      ->join('tp_item', 'it_id = log_stob_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse', 'wh_id = log_stob_warehouse_id','left')
+      ->where('stoi_enable',1)
+      ->where('log_stob_qty_update >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/importstock_print").'$1',"transfer_id");
+    }else{
+      $this->datatables
+      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, it_cost_baht", FALSE)
+      ->from('log_stock_balance')
+      ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
+      ->join('tp_item', 'it_id = log_stob_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse', 'wh_id = log_stob_warehouse_id','left')
+      ->where('stoi_enable',1)
+      ->where('log_stob_qty_update >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/importstock_print").'$1',"transfer_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -1676,17 +1709,31 @@ function ajaxView_seach_transfer_out()
     }
 
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("stoo_datein, CONCAT('/', stoo_id, '\">', stoo_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
-    ->from('log_stock_out')
-    ->join('tp_stock_out', 'log_stoo_transfer_id = stoo_id','left')
-    ->join('tp_item', 'it_id = log_stoo_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->join('tp_warehouse', 'wh_id = log_stoo_warehouse_id','left')
-    ->where('stoo_enable',1)
-    ->where('log_stoo_qty_update >',0)
-    ->where($sql)
-    ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/out_stock_final_print").'$1',"transfer_id");
+    if ($this->session->userdata('sessstatus') != '88') {
+      $this->datatables
+      ->select("stoo_datein, CONCAT('/', stoo_id, '\">', stoo_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
+      ->from('log_stock_out')
+      ->join('tp_stock_out', 'log_stoo_transfer_id = stoo_id','left')
+      ->join('tp_item', 'it_id = log_stoo_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse', 'wh_id = log_stoo_warehouse_id','left')
+      ->where('stoo_enable',1)
+      ->where('log_stoo_qty_update >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/out_stock_final_print").'$1',"transfer_id");
+    }else{
+      $this->datatables
+      ->select("stoo_datein, CONCAT('/', stoo_id, '\">', stoo_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, it_cost_baht", FALSE)
+      ->from('log_stock_out')
+      ->join('tp_stock_out', 'log_stoo_transfer_id = stoo_id','left')
+      ->join('tp_item', 'it_id = log_stoo_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_warehouse', 'wh_id = log_stoo_warehouse_id','left')
+      ->where('stoo_enable',1)
+      ->where('log_stoo_qty_update >',0)
+      ->where($sql)
+      ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/out_stock_final_print").'$1',"transfer_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -1784,6 +1831,7 @@ function exportExcel_transfer_in_report()
     $this->excel->getActiveSheet()->setCellValue('G1', 'SRP');
     $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('I1', 'เข้าคลัง');
+    if ($this->session->userdata("sessstatus") == 88) $this->excel->getActiveSheet()->setCellValue('J1', 'Cost');
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -1796,6 +1844,7 @@ function exportExcel_transfer_in_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->log_stob_qty_update);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->wh_in);
+        if ($this->session->userdata("sessstatus") == 88) $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->it_cost_baht);
         $row++;
     }
 
@@ -1879,6 +1928,7 @@ function exportExcel_transfer_report()
     $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('I1', 'ออกจากคลัง');
     $this->excel->getActiveSheet()->setCellValue('J1', 'เข้าคลัง');
+    if ($this->session->userdata("sessstatus") == 88) $this->excel->getActiveSheet()->setCellValue('K1', 'Cost');
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -1892,6 +1942,7 @@ function exportExcel_transfer_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->log_stot_qty_final);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->wh_in);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->wh_out);
+        if ($this->session->userdata("sessstatus") == 88) $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->it_cost_baht);
         $row++;
     }
 
@@ -2552,11 +2603,11 @@ function save_out_stock()
                       'log_stoo_item_id' => $it_array[$i]["id"],
                       'log_stoo_stock_balance_id' => $stock_id
       );
-      $log_stob_id = $this->tp_log_model->addLogStockOut($stock);
+      $log_stoo_id = $this->tp_log_model->addLogStockOut($stock);
       $count += $it_array[$i]["qty"];
 
       if ($luxury == 1) {
-        $stock = array( 'log_stoos_stoo_id' => $last_id,
+        $stock = array( 'log_stoos_stoo_id' => $log_stoo_id,
                         'log_stoos_item_serial_id' => $it_array[$i]["itse_id"]
         );
         $query = $this->tp_log_model->addLogStockOut_serial($stock);
@@ -2592,7 +2643,7 @@ function out_stock_final_print()
       $data['stock_array'] = array();
     }
 
-    $sql = "log_stoos_stoo_id = '".$id."'";
+    //$sql = "log_stoos_stoo_id = '".$id."'";
     $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_out_serial($sql);
     if($query){
       $data['serial_array'] =  $query;
@@ -2766,6 +2817,7 @@ function result_search_transfer_out_item()
 
     $data['startdate'] = $start;
     $data['enddate'] = $end;
+    $data['user_status'] = $this->session->userdata('sessstatus');
 
     $data['title'] = "Nerd - Search Stock Transfer";
     $this->load->view('TP/warehouse/result_search_transfer_out_item',$data);
@@ -2837,6 +2889,7 @@ function exportExcel_transfer_out_report()
     $this->excel->getActiveSheet()->setCellValue('G1', 'SRP');
     $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('I1', 'ออกจากคลัง');
+    if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('J1', 'Cost'); }
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -2849,6 +2902,7 @@ function exportExcel_transfer_out_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->log_stoo_qty_update);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->wh_in);
+        if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->it_cost_baht); }
         $row++;
     }
 

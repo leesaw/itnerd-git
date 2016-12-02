@@ -106,9 +106,9 @@
             <br>
             <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-success">
+                <div class="panel panel-danger">
 					<div class="panel-heading">
-                        <h4>รายการสินค้าเข้าคลังของเดือน <?php echo $month; ?></h4>
+                        <h4>รายการสินค้าออกจากคลังของเดือน <?php echo $month; ?></h4>
                     </div>
                     <div class="panel-body table-responsive">
                             <table class="table table-hover" id="tablefinal" width="100%">

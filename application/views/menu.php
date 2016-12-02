@@ -521,23 +521,32 @@
             <li>
                <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
             </li>
-            <li>
-                <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
+            <li class="treeview">
+              <a href="#"><i class="fa fa-folder-open-o"></i> <span>เอกสาร</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                  <li>
+                    <a href="<?php echo site_url("warehouse_transfer/importstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-รับสินค้าเข้าคลัง</a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url("warehouse_transfer/out_stock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-เอาสินค้าออกจากคลัง</a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>
+                  </li>
+                  <li>
+                    <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+                  </li>
+                </ul>
             </li>
-            <li>
-                <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
-            </li>
-            <li>
-                <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>
-            </li>
+
             <li>
                 <a href="<?php echo site_url("sale/report_sale_form"); ?>"><i class="fa fa-circle-o"></i> รายงาน-การขาย</a>
             </li>
             <li>
                 <a href="<?php echo site_url("sale/report_sale_item_rank"); ?>"><i class="fa fa-circle-o"></i> รายงาน-อันดับยอดขาย</a>
-            </li>
-            <li>
-                <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
             </li>
             <li>
                 <a href="<?php echo site_url("tp_repair/form_list_repair"); ?>"><i class="fa fa-circle-o"></i> จัดการข้อมูลส่งซ่อม</a>

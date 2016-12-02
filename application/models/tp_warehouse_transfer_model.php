@@ -58,8 +58,8 @@ Class Tp_warehouse_transfer_model extends CI_Model
  function getWarehouse_transfer_out_serial($where)
  {
 	$this->db->select("log_stoo_item_id, itse_serial_number");
-	$this->db->from('log_stock_out_serial');
-    $this->db->join('log_stock_out', 'log_stoos_stoo_id = log_stoo_id','left');
+	$this->db->from('log_stock_out');
+    $this->db->join('log_stock_out_serial', 'log_stoos_stoo_id = log_stoo_id','left');
     $this->db->join('tp_item_serial', 'itse_id = log_stoos_item_serial_id','left');
     $this->db->join('tp_stock_out', 'stoo_id = log_stoo_transfer_id','left');
     if ($where != "") $this->db->where($where);
@@ -235,7 +235,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getItem_transfer($where)
  {
-    $this->db->select("stot_id, stot_datein, stot_number, it_id, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out, wh1.wh_id as wh_out_id, wh2.wh_id as wh_in_id", FALSE);
+    $this->db->select("stot_id, stot_datein, stot_number, it_id, it_refcode, br_name, it_model, it_cost_baht, it_short_description, it_srp, it_uom, log_stot_qty_final, CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out, wh1.wh_id as wh_out_id, wh2.wh_id as wh_in_id", FALSE);
     $this->db->from('log_stock_transfer');
     $this->db->join('tp_stock_transfer', 'log_stot_transfer_id = stot_id','left');
     $this->db->join('tp_item', 'it_id = log_stot_item_id','left');
@@ -252,7 +252,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getItem_transfer_in($where)
  {
-    $this->db->select("stoi_id, stoi_datein, stoi_number, it_id, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
+    $this->db->select("stoi_id, stoi_datein, stoi_number, it_id, it_refcode, br_name, it_model, it_cost_baht, it_short_description, it_srp, it_uom, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
     $this->db->from('log_stock_balance');
     $this->db->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left');
     $this->db->join('tp_item', 'it_id = log_stob_item_id','left');
@@ -267,7 +267,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getItem_transfer_out($where)
  {
-    $this->db->select("stoo_id, stoo_datein, stoo_number, it_id, it_refcode, br_name, it_model, it_short_description, it_srp, it_uom, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
+    $this->db->select("stoo_id, stoo_datein, stoo_number, it_id, it_refcode, br_name, it_model, it_cost_baht, it_short_description, it_srp, it_uom, log_stoo_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, wh_id", FALSE);
     $this->db->from('log_stock_out');
     $this->db->join('tp_stock_out', 'log_stoo_transfer_id = stoo_id','left');
     $this->db->join('tp_item', 'it_id = log_stoo_item_id','left');

@@ -52,7 +52,7 @@
 </tbody>
 <tbody>
 <tr>
-<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum/1.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
 <td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
@@ -231,7 +231,7 @@ return $rstring;
 </tbody>
 <tbody>
 <tr>
-<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum*0.93, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
+<td align="right" colspan=5 scope="row" style="border-top:1px solid black;">รวมเป็นเงิน&nbsp;&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;"><?php  echo number_format($sum/1.07, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 </tr>
 <tr>
 <td align="right" colspan=5 scope="row"><u>หัก</u>&nbsp;ส่วนลด&nbsp;&nbsp;</td><td align="right" style="border-left:1px solid black;"><?php echo number_format(0, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>

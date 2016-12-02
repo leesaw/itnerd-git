@@ -1207,6 +1207,7 @@ function report_sale_filter()
     $data['enddate'] = $end;
 
     $data['viewby'] = 0;
+    $data['user_status'] = $this->session->userdata("sessstatus");
 
     $data['title'] = "Nerd - Search Sale Report";
     $this->load->view('TP/sale/search_salereport_result',$data);
@@ -1231,7 +1232,7 @@ function ajaxViewSaleReport()
         $sql .= $this->no_rolex;
     }else{ $sql .= "br_id != 888"; }
 
-    $sql .= " and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
+    $sql .= " and so_enable='1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
 
     if (($brand=="0") && ($shop=="0")){
         if ($keyword[0]!="NULL") {
@@ -1266,19 +1267,35 @@ function ajaxViewSaleReport()
     }
 
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
-    ->from('tp_saleorder_item')
-    ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
-    ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
-    ->join('tp_shop', 'so_shop_id = sh_id','left')
-    ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
-    ->join('tp_item', 'it_id = soi_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->join('tp_item_serial', 'itse_id=sos_item_serial_id','left')
-    ->where('so_enable',1)
-    ->where($sql)
-    ->edit_column("sale_id",'<a target="_blank"  href="'.site_url("sale/saleorder_print").'$1',"sale_id");
+    if ($this->session->userdata('sessstatus') != '88') {
+      $this->datatables
+      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
+      ->from('tp_saleorder_item')
+      ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
+      ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
+      ->join('tp_shop', 'so_shop_id = sh_id','left')
+      ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
+      ->join('tp_item', 'it_id = soi_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_item_serial', 'itse_id=sos_item_serial_id','left')
+      ->where('so_enable',1)
+      ->where($sql)
+      ->edit_column("sale_id",'<a target="_blank"  href="'.site_url("sale/saleorder_print").'$1',"sale_id");
+    }else{
+      $this->datatables
+      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice, it_cost_baht", FALSE)
+      ->from('tp_saleorder_item')
+      ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
+      ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
+      ->join('tp_shop', 'so_shop_id = sh_id','left')
+      ->join('tp_sale_barcode', 'soi_sale_barcode_id = sb_id','left')
+      ->join('tp_item', 'it_id = soi_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->join('tp_item_serial', 'itse_id=sos_item_serial_id','left')
+      ->where('so_enable',1)
+      ->where($sql)
+      ->edit_column("sale_id",'<a target="_blank"  href="'.site_url("sale/saleorder_print").'$1',"sale_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -1353,6 +1370,7 @@ function exportExcel_sale_report()
     $this->excel->getActiveSheet()->setCellValue('L1', 'On Top (บาท)');
     $this->excel->getActiveSheet()->setCellValue('M1', 'GP (%)');
     $this->excel->getActiveSheet()->setCellValue('N1', 'Receive on Inv.');
+    if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('O1', 'Cost'); }
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -1371,6 +1389,7 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->soi_dc_baht);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->gp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->netprice);
+        if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(14, $row, $loop->it_cost_baht); }
         $row++;
     }
 
@@ -1389,61 +1408,55 @@ function exportExcel_sale_report()
 
 function print_sale_report()
 {
-    $refcode = $this->input->post("refcode");
-    $keyword = explode(" ", $refcode);
-    $brand = $this->input->post("brand");
-    $shop = $this->input->post("shop");
-    $startdate = $this->input->post("startdate");
-    $enddate = $this->input->post("enddate");
+  $refcode = $this->input->post("refcode");
+  $keyword = explode(" ", $refcode);
+  $brand = $this->input->post("brand");
+  $shop = $this->input->post("shop");
+  $startdate = $this->input->post("startdate");
+  $enddate = $this->input->post("enddate");
 
-    $this->load->model('tp_item_model','',TRUE);
-    $where = "br_id = ".$brand;
-    $data['brand_array'] = $this->tp_item_model->getBrand($where);
-    $data["refcode"] = $refcode;
-    $data["brand"] = $brand;
-    $data["shop"] = $shop;
-    $where = "sh_id = ".$shop;
-    $data['shop_array'] = $this->tp_shop_model->getShop($where);
-    $data["startdate"] = $startdate;
-    $data["enddate"] = $enddate;
+  $sql = "";
+  if ($this->session->userdata('sessstatus') != '88') {
+      $sql .= $this->no_rolex;
+  }else{ $sql .= "br_id != 888"; }
 
-    $sql = $this->no_rolex;
+  $sql .= " and so_enable = '1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
 
-    $sql .= " and so_enable = '1' and so_issuedate >= '".$startdate."' and so_issuedate <= '".$enddate."'";
+  if (($brand=="0") && ($shop=="0")){
+      if ($keyword[0]!="NULL") {
+          if (count($keyword) < 2) {
+              $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+          }else{
+              for($i=0; $i<count($keyword); $i++) {
+                  $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+              }
+          }
+      }
+  }else {
+      if ($keyword[0]!="NULL") {
+          $keyword = explode(" ",$refcode);
+          if (count($keyword) < 2) {
+              $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
+          }else{
+              for($i=0; $i<count($keyword); $i++) {
+                  $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
+              }
+          }
+      }else{
+          $sql .= " and it_refcode like '%%'";
+      }
 
-    if (($brand=="0") && ($shop=="0")){
-        if ($keyword[0]!="NULL") {
-            if (count($keyword) < 2) {
-                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
-            }else{
-                for($i=0; $i<count($keyword); $i++) {
-                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
-                }
-            }
-        }
-    }else {
-        if ($keyword[0]!="NULL") {
-            $keyword = explode(" ",$refcode);
-            if (count($keyword) < 2) {
-                $sql .= " and (it_short_description like '%".$refcode."%' or it_refcode like '%".$refcode."%')";
-            }else{
-                for($i=0; $i<count($keyword); $i++) {
-                    $sql .= " and (it_short_description like '%".$keyword[$i]."%' or it_refcode like '%".$keyword[$i]."%')";
-                }
-            }
-        }else{
-            $sql .= " and it_refcode like '%%'";
-        }
+      if ($brand!="0") $sql .= " and br_id = '".$brand."'";
+      else $sql .= " and br_id != '0'";
 
-        if ($brand!="0") $sql .= " and br_id = '".$brand."'";
-        else $sql .= " and br_id != '0'";
+      if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
+      else $sql .= " and sh_id != '0'";
 
-        if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
-        else $sql .= " and sh_id != '0'";
+  }
 
-    }
+  $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
 
-    $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+    //$data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
 
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th','A4-L','0', 'thsaraban');

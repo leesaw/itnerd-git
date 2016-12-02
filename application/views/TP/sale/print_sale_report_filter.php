@@ -9,8 +9,8 @@
 <tr>
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
-</td> 
-<?php 
+</td>
+<?php
  $i = 0;
  foreach($brand_array as $loop) {
     $i++;
@@ -29,18 +29,18 @@
  if ($refcode == "NULL") {
     $refcode = "";
  }
- $start_year=substr($startdate,0,4); 
- $start_month=substr($startdate,5,2); 
- $start_date=substr($startdate,8,2); 
+ $start_year=substr($startdate,0,4);
+ $start_month=substr($startdate,5,2);
+ $start_date=substr($startdate,8,2);
 
- $end_year=substr($enddate,0,4); 
- $end_month=substr($enddate,5,2); 
- $end_date=substr($enddate,8,2); 
+ $end_year=substr($enddate,0,4);
+ $end_month=substr($enddate,5,2);
+ $end_date=substr($enddate,8,2);
 
  $currentdate = date("Y-m-d");
- $c_year=substr($currentdate,0,4); 
- $c_month=substr($currentdate,5,2); 
- $c_date=substr($currentdate,8,2); 
+ $c_year=substr($currentdate,0,4);
+ $c_month=substr($currentdate,5,2);
+ $c_date=substr($currentdate,8,2);
  $currenttime = date("H:i:s");
 ?>
 <td width="250"> </td>
@@ -59,7 +59,7 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) { 
+<?php $no=1; $sum=0; $sum_qty=0; if(isset($item_array)) { foreach($item_array as $loop) {
 ?>
 
 <?php if (($no !=0) && (($no%20) == 0)) { ?></tbody></table><pagebreak /><table border="0">
@@ -67,7 +67,7 @@
 <tr>
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
-</td> 
+</td>
 <td width="250"> </td>
 <td width="300"><div style="text-align: right; font-weight: bold; font-size: 16pt;">รายงานการขาย</div></td>
 </tr>
@@ -103,7 +103,7 @@
 <td align="center" style="border-left:1px solid black;"><?php $rev = ((($loop->soi_item_srp*(100 - $dc)/100) - $loop->soi_dc_baht )*(100 -  $gp)/100); echo number_format($rev, 2, '.', ','); $sum+=$rev; ?></td>
 </tr>
 
-<?php $no++; } } ?> 
+<?php $no++; } } ?>
 <tr><td style="border-top:1px solid black;" colspan="4">&nbsp;</td><td align="right" style="border-top:1px solid black; ">จำนวนทั้งหมด</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;" colspan="5">ยอดเงินทั้งหมด</td><td align="center" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ','); ?></td></tr>
 
 </tbody>

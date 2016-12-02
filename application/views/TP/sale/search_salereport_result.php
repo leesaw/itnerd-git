@@ -75,6 +75,7 @@
                                         <th>On Top<br>บาท</th>
                                         <th>GP(%)</th>
                                         <th>Receive on Inv.</th>
+																				<?php if ($user_status == '88') { ?><th>Cost</th><?php } ?>
                                     </tr>
                                 </thead>
 

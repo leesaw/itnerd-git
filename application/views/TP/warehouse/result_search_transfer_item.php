@@ -60,6 +60,7 @@
                                         <th>Qty (Pcs.)</th>
                                         <th>ออกจากคลัง</th>
                                         <th>เข้าคลัง</th>
+																				<?php if ($user_status == 88) { ?><th>Cost</th><?php } ?>
                                     </tr>
                                 </thead>
 

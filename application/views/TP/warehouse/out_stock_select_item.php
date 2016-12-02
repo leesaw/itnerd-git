@@ -11,13 +11,13 @@
         <div class="content-wrapper">
         <section class="content-header">
 
-            <h1>เอาสินค้าออกจากคลัง</h1>
+            <h1 class="text-red">เอาสินค้าออกจากคลัง</h1>
         </section>
 
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
-                <div class="panel panel-default">
+                <div class="panel panel-danger">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
 
                     <div class="panel-body">
@@ -46,7 +46,7 @@
 						<br>
 						<div class="row">
 							<div class="col-md-12">
-				                <div class="panel panel-default">
+				                <div class="panel panel-danger">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-8">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if($remark==0) echo "Ref. Code ที่ต้องการ"; else echo "Caseback No. ที่ต้องการ"; ?>">
                                         <div class="input-group-btn">
