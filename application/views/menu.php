@@ -1,5 +1,5 @@
 <!-- Bottom Left -->
-<img src="<?php echo base_url(); ?>dist/img/black_ribbon_top_right.png" class="black-ribbon stick-top stick-right"/>
+<!-- <img src="<?php echo base_url(); ?>dist/img/black_ribbon_top_left.png" class="black-ribbon stick-top stick-left"/> -->
 <header class="main-header">
         <a href="#" class="logo"><b>NGG | </b><?php if ($this->session->userdata('sessrolex') == 0) echo "Nerd"; else echo "ROLEX"; if ($this->session->userdata('sessstatus') == 8) echo " POS"; ?> </a>
         <!-- Header Navbar: style can be found in header.less -->

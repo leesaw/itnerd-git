@@ -14,6 +14,8 @@ function __construct()
      if ($this->session->userdata('sessrolex') == 0) {
        if ($this->session->userdata('sessstatus') == 2) {
          $this->no_rolex = "br_id > 0";
+       }else if ($this->session->userdata('sessstatus') == 1) {
+         $this->no_rolex = "br_id > 0";
        }else{
          $this->no_rolex = "br_id != 888";
        }
@@ -680,6 +682,34 @@ function result_print_tag_caseback()
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
     $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_caseback", $data, TRUE));
+    $mpdf->Output();
+}
+
+function result_print_tag_rolex()
+{
+    $caseback = $this->input->post("caseback");
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    $sql_result = "";
+    for($i=0; $i <count($caseback); $i++) {
+        if ($i>0) $sql_result .= " or ";
+        $sql_result .= "itse_serial_number like '".$caseback[$i]."'";
+    }
+    $query = $this->tp_item_model->getItem_caseback($sql_result);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/barcode_print", $data, TRUE));
     $mpdf->Output();
 }
 

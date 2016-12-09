@@ -80,8 +80,10 @@
                                     <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="printrefcode(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Refcode </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <?php if ($remark ==1) { ?>
 									<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="printean(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ EAN </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                    <button type="button" class="btn bg-orange" name="savebtn" id="savebtn" onclick="printcaseback(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Caseback </button>
+                                    <button type="button" class="btn bg-orange" name="savebtn" id="savebtn" onclick="printcaseback(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Caseback </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+																		<button type="button" class="btn bg-purple" name="savebtn" id="savebtn" onclick="printrolex(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคา Rolex </button>
                                     <?php  } ?>
+
 							</div>
 						</div>
 
@@ -193,7 +195,7 @@ function check_product_code(refcode_input, luxury)
                 success : function(data) {
                     if(data != "")
                     {
-											alert("ok");
+
                         var element = '<tr id="row'+count_enter_form_input_product+'">'+data+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
                         $('table > tbody').append(element);
                         count_enter_form_input_product++;
@@ -335,6 +337,38 @@ function printcaseback(x)
 
 }
 
+function printrolex(x)
+{
+    if (x==1) {
+        var it_code = document.getElementsByName('it_code');
+        var duplicate = 0;
+        for(var i=0; i<it_code.length; i++){
+
+            if (!alphanumeric(it_code[i].value))
+            {
+                alert("กรุณาใส่เฉพาะตัวเลขหรือตัวอักษรเท่านั้นในช่อง Caseback");
+                it_code[i].value = "";
+                return;
+            }
+
+            for(var j=i+1; j<it_code.length; j++){
+                if (it_code[i].value==it_code[j].value) {
+                    it_code[j].value = "";
+                    duplicate++;
+                }
+            }
+        }
+        if (duplicate > 0) {
+            alert("Caseback ซ้ำกัน");
+        }else{
+            confirmrolex(x);
+        }
+    }else{
+        confirmrolex(x);
+    }
+
+}
+
 function confirmean(luxury)
 {
 
@@ -398,6 +432,33 @@ function confirmcaseback(luxury)
             input_form += "<input type='hidden' name='caseback[]' value='"+it_code[i].value+"'>";
         }
         var url = '<?php echo site_url("item/result_print_tag_caseback"); ?>';
+        var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
+
+        $('body').append(form3);
+
+        form3.submit();
+
+
+    }
+
+}
+
+function confirmrolex(luxury)
+{
+
+    if (luxury==1) {
+        var it_id = document.getElementsByName('it_id');
+        var it_code = document.getElementsByName('it_code');
+        var input_form = "";
+
+        for(var i=0; i<it_code.length; i++){
+            if (it_code[i].value == "") {
+                alert("กรุณาใส่ Cashback No. ให้ครบทุกช่อง");
+                return;
+            }
+            input_form += "<input type='hidden' name='caseback[]' value='"+it_code[i].value+"'>";
+        }
+        var url = '<?php echo site_url("item/result_print_tag_rolex"); ?>';
         var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
 
         $('body').append(form3);

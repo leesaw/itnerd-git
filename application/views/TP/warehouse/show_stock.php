@@ -9,7 +9,7 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -17,15 +17,15 @@
             แสดงสินค้า <B><U><?php if ($refcode !="NULL") echo $refcode_show; ?></U></B> <?php if ($brand!=0) { foreach($brand_array as $b) echo "ยี่ห้อ ".$b->br_name; } ?> <?php if ($warehouse!=0) { foreach($whname_array as $w) echo "ในคลัง ".$w->wh_name; } ?>
         </h1>
     </section>
-	
+
 	<section class="content">
 		<div class="row">
             <div class="col-md-12">
                 <div class="box box-danger">
 
-                        
+
         <div class="box-body">
-            
+
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-default">
@@ -38,7 +38,7 @@
                         <input type="hidden" name="minprice" value="<?php echo $minprice; ?>">
                         <input type="hidden" name="maxprice" value="<?php echo $maxprice; ?>">
                         &nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน 
+                        <input type="radio" name="byquantity" value="0"<?php if ($viewby ==0) echo " checked"; ?>> แสดงจำนวน
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="radio" name="byserial" id="byserial" value="1"<?php if ($viewby ==1) echo " checked"; ?>> แสดง Caseback
                         <button class="btn btn-primary pull-right" type="button" onclick="showcaseback();"><span class="glyphicon glyphicon-barcode" aria-hidden="true"></span> Excel Caseback</button>
@@ -73,7 +73,7 @@
                                         <!-- <th width="50">Caseback</th> -->
                                     </tr>
                                 </thead>
-                                
+
 								<tbody>
 								</tbody>
                                 <tfoot>
@@ -83,39 +83,39 @@
                                     </tr>
                                 </tfoot>
 							</table>
-                        
+
 					</div>
-                    
+
 				</div>
-			</div>	
-            
+			</div>
+
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("warehouse/getBalance"); ?>" class="btn btn-primary">ค้นหา</a>    
+            <a href="<?php echo site_url("warehouse/getBalance"); ?>" class="btn btn-primary">ค้นหา</a>
             </div>
         </div>
-                        
-                        
-                        
-                        
+
+
+
+
 					</div>
                 </div>
             </div>
         </div>
         </section>
 		</div>
-    
-    
+
+
 	</div>
 
 <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" data-dismiss="modal">
-    <div class="modal-content"  >              
+    <div class="modal-content"  >
       <div class="modal-body">
       	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
         <img src="" class="imagepreview" style="width: 100%;" >
-      </div> 
+      </div>
     </div>
   </div>
 </div>
@@ -127,13 +127,13 @@
 <script src="<?php echo base_url(); ?>plugins/fancybox/jquery.fancybox.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
         'sAjaxSource'    : '<?php echo site_url("warehouse/ajaxViewStock")."/".$refcode."/".$brand."/".$warehouse."/".$minprice."/".$maxprice; ?>',
-        "fnServerData": function ( sSource, aoData, fnCallback ) {
+        "fnServerData": function ( sSource, aoData, fnCallback, oSettings ) {
             $.ajax( {
                 "dataType": 'json',
                 "type": "POST",
@@ -145,7 +145,7 @@ $(document).ready(function()
         },
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
- 
+
             // Remove the formatting to get integer data for summation
             var intVal = function ( i ) {
                 return typeof i === 'string' ?
@@ -153,7 +153,7 @@ $(document).ready(function()
                     typeof i === 'number' ?
                         i : 0;
             };
- 
+
             // Total over all pages
             total = api
                 .column( 5 )
@@ -161,7 +161,7 @@ $(document).ready(function()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
-            
+
             // Total over this page
             pageTotal = api
                 .column( 5, { page: 'current'} )
@@ -169,28 +169,28 @@ $(document).ready(function()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
- 
+
             // Update footer
             $( api.column( 5 ).footer() ).html(
                 total+' ('+pageTotal+')'
             );
         }
     });
-    
-    $('#fancyboxall').fancybox({ 
+
+    $('#fancyboxall').fancybox({
     'width': '30%',
-    'height': '80%', 
+    'height': '80%',
     'autoScale':false,
-    'transitionIn':'none', 
-    'transitionOut':'none', 
-    'type':'iframe'}); 
-    
-    $('#byserial').on('click', function(){     
+    'transitionIn':'none',
+    'transitionOut':'none',
+    'type':'iframe'});
+
+    $('#byserial').on('click', function(){
         document.getElementById('byserial').checked = false;
         document.getElementById("viewbyserial").submit();
     });
 });
-    
+
 function showcaseback()
 {
     document.getElementById("exportcaseback").submit();

@@ -16,6 +16,8 @@ function __construct()
      if ($this->session->userdata('sessrolex') == 0) {
        if ($this->session->userdata('sessstatus') == 2) {
          $this->no_rolex = "br_id > 0";
+       }else if ($this->session->userdata('sessstatus') == 1) {
+         $this->no_rolex = "br_id > 0";
        }else{
          $this->no_rolex = "br_id != 888";
        }
