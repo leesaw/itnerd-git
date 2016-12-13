@@ -95,10 +95,13 @@
                 <a href="#"><i class="fa fa-shopping-cart"></i> <span> Invoice</span><i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li>
-                        <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+                        <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice ห้าง</a>
                     </li>
                     <li>
                         <a href="<?php echo site_url("tp_invoice/form_new_invoice"); ?>"><i class="fa fa-circle-o"></i> เพิ่ม Invoice ใหม่</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-POS<br>ใบกำกับภาษีอย่างย่อ</a>
                     </li>
                 </ul>
 
@@ -289,6 +292,9 @@
                     <li>
                         <a href="<?php echo site_url("tp_invoice/form_new_invoice"); ?>"><i class="fa fa-circle-o"></i> เพิ่ม Invoice ใหม่</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-POS<br>ใบกำกับภาษีอย่างย่อ</a>
+                    </li>
                 </ul>
 
             </li>
@@ -299,6 +305,9 @@
                 <ul class="treeview-menu">
                     <li>
                         <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-POS<br>ใบกำกับภาษีอย่างย่อ</a>
                     </li>
                 </ul>
 
@@ -538,6 +547,9 @@
                   </li>
                   <li>
                     <a href="<?php echo site_url("tp_invoice/list_invoice_month"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-Invoice</a>
+                  </li>
+                  <li>
+                      <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-POS<br>ใบกำกับภาษีอย่างย่อ</a>
                   </li>
                 </ul>
             </li>
