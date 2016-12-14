@@ -47,7 +47,7 @@
 <td width="300"><div style="text-align: right; font-weight: bold; font-size: 16pt;">รายงานการขาย</div></td>
 </tr>
 <tr>
-    <td>รายละเอียด : <?php echo $refcode; ?><br>สาขาที่ขาย : <?php echo $shopname; ?><br>ช่วงเวลา: <?php echo $startdate." ถึง ".$enddate; ?></td><td> </td><td> ยี่ห้อ : <?php echo $brandname; ?><br>วันที่พิมพ์ : <?php echo $c_date."/".$c_month."/".$c_year." ".$currenttime; ?>
+    <td>รายละเอียด : <?php echo $search_refcode; ?><br>สาขาที่ขาย : <?php echo $search_shopname; ?><br>ช่วงเวลา: <?php echo $search_startdate." ถึง ".$search_enddate; ?></td><td> </td><td> ยี่ห้อ : <?php echo $search_brandname; ?><br>วันที่พิมพ์ : <?php echo $c_date."/".$c_month."/".$c_year." ".$currenttime; ?>
     </td>
 </tr>
 </tbody>

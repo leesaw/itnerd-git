@@ -92,7 +92,7 @@
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("sale/report_sale_form"); ?>" class="btn btn-primary">ค้นหา</a>
+            <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>" class="btn btn-primary">ค้นหา</a>
             </div>
         </div>
 

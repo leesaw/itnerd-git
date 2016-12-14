@@ -1415,6 +1415,23 @@ function print_sale_report()
   $startdate = $this->input->post("startdate");
   $enddate = $this->input->post("enddate");
 
+  $where = "br_id = '".$brand."'";
+  $this->load->model('tp_item_model','',TRUE);
+  $query = $this->tp_item_model->getBrand($where);
+  foreach($query as $loop) { $brandname = $loop->br_name; }
+
+  $where = "sh_id = '".$shop."'";
+  $this->load->model('tp_shop_model','',TRUE);
+  $query = $this->tp_shop_model->getShop($where);
+  foreach($query as $loop) { $shopname = $loop->sh_name; }
+
+  $data['search_refcode'] = $refcode;
+  $data['search_brandname'] = $brandname;
+  $data['search_shopname'] = $shopname;
+  $data['search_startdate'] = $startdate;
+  $data['search_enddate'] = $enddate;
+
+
   $sql = "";
   if ($this->session->userdata('sessstatus') != '88') {
       $sql .= $this->no_rolex;
