@@ -424,10 +424,22 @@ function saleorder_rolex_print()
         $data['item_array'] = array();
     }
 
+    $demo_item = 0;
+    foreach($query as $loop) {
+      if ($loop->itse_serial_number == 'demo01') {
+        $demo_item = 1;
+      }
+    }
+
     //echo $html;
     $mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
-    $mpdf->WriteHTML($this->load->view("TP/sale/bill_rolex_print", $data, TRUE));
+    if ($demo_item > 0) {
+      $mpdf->WriteHTML($this->load->view("TP/sale/bill_rolex_print_demo", $data, TRUE));
+    }else{
+      $mpdf->WriteHTML($this->load->view("TP/sale/bill_rolex_print", $data, TRUE));
+    }
+
     $mpdf->Output();
 }
 
