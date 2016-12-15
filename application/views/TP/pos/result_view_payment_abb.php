@@ -4,6 +4,32 @@
 <?php $this->load->view('header_view'); ?>
 <link href="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>plugins/fancybox/jquery.fancybox.css" >
+<style>
+.btnVoid {
+	padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+	color: #fff;
+  background-color: #c9302c;
+  border-color: #ac2925;
+	display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+}
+</style>
 </head>
 
 <body class="skin-red">
@@ -61,7 +87,7 @@
                             <table class="table table-hover" id="tablebarcode" width="100%">
                                 <thead>
                                     <tr>
-                                        <th class='col-xs-1'>เลขที่ใบกำกับภาษีอย่างย่อ</th>
+                                        <th class='col-xs-2'>เลขที่ใบกำกับภาษีอย่างย่อ</th>
                                         <th class='col-xs-1'>วันที่</th>
                                         <th class='col-xs-2'>POS</th>
                                         <th class='col-xs-1'>พนักงานขาย</th>
@@ -69,7 +95,7 @@
                                         <th class='col-xs-1'>รวมส่วนลด</th>
                                         <th class='col-xs-1'>ส่วนลดท้ายบิล</th>
                                         <th class='col-xs-1'>ภาษีมูลค่าเพิ่ม</th>
-                                        <th class='col-xs-2'>รวมยอดเงิน (รวมภาษี)</th>
+                                        <th class='col-xs-1'>รวมยอดเงิน<br>(รวมภาษี)</th>
                                         <th class='col-xs-1'> </th>
                                     </tr>
                                 </thead>

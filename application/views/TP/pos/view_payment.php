@@ -80,7 +80,7 @@
                   <div class='col-md-4'>
                     <label>สถานะ : </label> <?php if ($payment_status == 'N') echo "<label class='text-green'>ปิดการขาย</label>";
                     else if ($payment_status == 'V') echo "<label class='text-red'>ยกเลิกแล้ว</label>";
-                    else if ($payment_status == 'T') echo "<label class='text-orange'>เปลี่ยนเป็นใบกำกับภาษีแบบเต็มแล้ว</label><br><a href='".site_url("pos_invoice/view_invoice_abb_id")."/".$payment_id."' type='button' class='btn btn-success btn-sm'>ดูใบกำกับภาษี</a>"; ?>
+                    else if ($payment_status == 'T') echo "<label class='text-orange'>เปลี่ยนเป็นใบกำกับภาษีแบบเต็มแล้ว</label><br><a href='".site_url("pos_sale/view_invoice_abb_id")."/".$payment_id."' type='button' class='btn btn-success btn-sm'>ดูใบกำกับภาษี</a>"; ?>
                   </div>
                 </div>
                 <br/>
