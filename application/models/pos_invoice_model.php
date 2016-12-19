@@ -22,7 +22,7 @@ Class Pos_invoice_model extends CI_Model
     $this->db->select('pini_id, pini_pinv_id, pini_barcode, pini_item_id, pini_item_name, pini_item_number, pini_item_uom, pini_item_brand, pini_item_description,
      pini_item_srp, pini_item_dc_baht, pini_item_dc_percent, pini_item_net, pini_item_serial, pini_item_qty');
     $this->db->from('pos_invoice_item');
-    $this->db->join('time_item', 'pini_id = tiit_id', 'left');
+    //$this->db->join('time_item', 'pini_id = tiit_id', 'left');
     if ($where != "") $this->db->where($where);
     $this->db->order_by('pini_id', 'asc');
     return $this->db->get()->result();

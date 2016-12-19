@@ -2343,8 +2343,13 @@ function undo_confirm_transfer_between()
 
     $start = $last14days." 00:00:00";
     $end = $currentdate." 23:59:59";
+    if ($this->session->userdata('sessstatus') == 1) {
+      // only admin
+      $sql = "stot_confirm_dateadd >= '".$start."' and stot_confirm_dateadd <= '".$end."' and (stot_status='2' or stot_status='4')";
+    }else{
+      $sql = "stot_confirm_dateadd >= '".$start."' and stot_confirm_dateadd <= '".$end."' and stot_status='2'";
+    }
 
-    $sql = "stot_confirm_dateadd >= '".$start."' and stot_confirm_dateadd <= '".$end."' and stot_status='2'";
     if ($this->session->userdata('sessstatus') != '88') {
         $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
     }
