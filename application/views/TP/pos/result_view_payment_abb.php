@@ -29,6 +29,32 @@
   background-image: none;
   border: 1px solid transparent;
 }
+
+.btnFull {
+	padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+	color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+	display: inline-block;
+  margin-bottom: 0;
+  font-weight: normal;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -ms-touch-action: manipulation;
+      touch-action: manipulation;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+}
+
 </style>
 </head>
 
@@ -63,7 +89,7 @@
                 <div class="panel panel-default">
 					<div class="panel-heading">
 
-                        <form name="exportexcel" action="<?php echo site_url("pos_sale/exportExcel_sale_report"); ?>" method="post">
+                        <form name="exportexcel" action="<?php echo site_url("pos_sale/exportExcel_view_payment_abb"); ?>" method="post">
                         <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
@@ -74,7 +100,7 @@
                         <button class="btn btn-primary" type="button" onclick="print_report();"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
                         </form>
 
-                        <form name="printreport" id="printreport" action="<?php echo site_url("pos_sale/print_sale_report"); ?>" method="post" target="_blank">
+                        <form name="printreport" id="printreport" action="<?php echo site_url("pos_sale/print_view_payment_abb"); ?>" method="post" target="_blank">
                         <input type="hidden" name="refcode" value="<?php echo $refcode; ?>">
                         <input type="hidden" name="brand" value="<?php echo $brand_id; ?>">
                         <input type="hidden" name="shop" value="<?php echo $shop_id; ?>">

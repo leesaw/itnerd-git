@@ -93,6 +93,35 @@ Class Pos_payment_model extends CI_Model
     return $this->db->get()->result();
   }
 
+  function get_payment_item($where)
+  {
+    $this->db->select("posp_issuedate, posp_small_invoice_number, posh_name, it_refcode, it_model, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net");
+    $this->db->from('pos_payment_item');
+    $this->db->join('pos_payment', 'posp_id=popi_posp_id','left');
+    $this->db->join('tp_item', 'it_id = popi_item_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id', 'left');
+    $this->db->join('ngg_users', 'nggu_id = posp_saleperson_id', 'left');
+    $this->db->join('pos_shop', 'posh_id = posp_shop_id', 'left');
+    $this->db->join('tp_shop', 'posh_shop_id = sh_id','left');
+    if ($where != "") $this->db->where($where);
+    return $this->db->get()->result();
+  }
+
+  function get_summary_payment_abb($from, $where)
+  {
+    $this->db->select("posp_status, posp_small_invoice_number, posp_issuedate, posh_name, nggu_firstname, nggu_lastname,
+    posc_name, posp_price_discount, posp_price_topup, posp_price_tax, (posp_price_net - posp_price_topup) as net, posp_id");
+    $this->db->from('(select distinct popi_posp_id as payment_id from pos_payment_item left join tp_brand on br_name = popi_item_brand
+  		where '.$from.') tt');
+    $this->db->join('pos_payment', 'posp_id=payment_id','left');
+    $this->db->join('pos_customer', 'posc_id = posp_customer_id','left');
+    $this->db->join('ngg_users', 'nggu_id = posp_saleperson_id', 'left');
+    $this->db->join('pos_shop', 'posh_id = posp_shop_id', 'left');
+    $this->db->join('tp_shop', 'posh_shop_id = sh_id','left');
+    if ($where != "") $this->db->where($where);
+    return $this->db->get()->result();
+  }
+
   function insert_new_payment($payment)
   {
     $this->db->insert('pos_payment', $payment);

@@ -98,7 +98,7 @@
                                       <th>SRP</th>
                                       <th>Discount(บาท)</th>
                                       <th>Net</th>
-                                      <?php if ($user_status == '88') { ?><th>Cost</th><?php } ?>
+
                                   </tr>
                               </thead>
 
@@ -117,7 +117,7 @@
 		</div>
         <div class="row">
             <div class="col-xs-12">
-            <a href="<?php echo site_url("pos_sale/form_view_payment_abb"); ?>" class="btn btn-primary">ค้นหา</a>
+            <a href="<?php echo site_url("pos_sale/form_sale_item_view"); ?>" class="btn btn-primary">ค้นหา</a>
             </div>
         </div>
 
@@ -154,6 +154,9 @@
 $(document).ready(function()
 {
     var oTable = $('#tablebarcode').DataTable({
+				"oLanguage": {
+		      "sEmptyTable": "ไม่พบข้อมูล"
+		    },
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,

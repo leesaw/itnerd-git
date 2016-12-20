@@ -12,7 +12,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            POS -> ใบกำกับภาษีอย่างย่อ
+            POS -> Sale Report
         </h1>
     </section>
 	<!-- Main content -->
