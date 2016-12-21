@@ -106,10 +106,12 @@ function view_repair()
 
     $sql = $this->shop_rolex;
     $sql .= " and sh_category_id = 1";
-	$data['shop_array'] = $this->tp_shop_model->getShop($sql);
+	  $data['shop_array'] = $this->tp_shop_model->getShop($sql);
 
     $where = "rep_id = '".$id."'";
     $data['repair_array'] = $this->tp_repair_model->get_repair($where);
+
+    $data['user_status'] = $this->session->userdata('sessstatus');
 
     $data['title'] = "Nerd | View Repair";
     $this->load->view('TP/repair/view_repair',$data);
