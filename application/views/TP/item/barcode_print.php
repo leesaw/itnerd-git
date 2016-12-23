@@ -4,7 +4,7 @@
 <title>POS Printing</title>
 </head>
 <body>
-<?php 
+<?php
 $count = count($serial_array);
 $i = 0;
 foreach($serial_array as $loop) { ?>
@@ -20,7 +20,7 @@ foreach($serial_array as $loop) { ?>
 <b style="font-size:12"><?php echo $loop->it_short_description; ?></b>
 </td>
 <td style="text-align: top;" width="500">
-<b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?></b>
+<b style="font-size:12">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->br_name; ?>&nbsp;&nbsp;&nbsp;&nbsp;<?php if ($loop->itse_qms > 0) echo "Q"; ?></b>
 <br/>
 <b>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $loop->itse_serial_number; ?></b>
 <br/>
