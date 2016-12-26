@@ -33,6 +33,9 @@ function index()
 
 function importstock()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+
 	$sql = "wh_enable = 1 and (wh_group_id = 3 or wh_id = '888')";
   if ($this->session->userdata('sessrolex') == 1) $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_id = '888')";
   if ($this->session->userdata('sessstatus') == 1) $sql = "wh_enable = 1";
@@ -274,6 +277,9 @@ function upload_excel_import_stock()
 
 function transferstock()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+
 	$sql = "wh_enable = 1";
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['currentdate'] = date("d/m/Y");
@@ -880,6 +886,10 @@ function checkStock_transfer_caseback()
 
 function report_transferstock()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+
+
     $sql = "stot_status = 1 and stot_enable = 1";
     $sql .= " and stot_is_rolex = ".$this->session->userdata('sessrolex');
 
@@ -1963,6 +1973,9 @@ function exportExcel_transfer_report()
 
 function form_return_headoffice()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+
     $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_group_id = 7)";
 	$data['wh_out'] = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['currentdate'] = date("d/m/Y");
@@ -2151,6 +2164,9 @@ function save_return_headoffice()
 
 function form_replace_branch()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+
     $sql = "wh_enable = 1 and (wh_group_id != 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);
 	$data['wh_out'] = $result;
@@ -2512,6 +2528,9 @@ function check_undo_transfer_between()
 
 function out_form_stock()
 {
+  // disable Transfer
+  redirect('login', 'refresh');
+  
     $sql = "wh_enable = 1 and (wh_group_id = 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);
   	$data['wh_out'] = $result;

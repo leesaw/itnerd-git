@@ -37,6 +37,7 @@
       $shop_fax = $loop->pinv_shop_fax;
       $shop_taxid = $loop->pinv_shop_taxid;
       $shop_branch_no = $loop->pinv_shop_branch_no;
+			$payment_id = $loop->pinv_payment_id;
     }
 
     $today = date("Y-m-d");
@@ -49,8 +50,8 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            POS -> ใบกำกับภาษีอย่างย่อ
-        </h1>
+            POS -> ใบกำกับภาษีแบบเต็ม
+				</h1>
     </section>
 	<!-- Main content -->
     <section class="content">
@@ -58,7 +59,7 @@
         <div class="col-md-10">
           <div class="box box-success">
             <div class="box-header with-border">
-              <h3 class="box-title">ใบกำกับภาษี</h3>
+              <h3 class="box-title">ใบกำกับภาษีแบบเต็ม</h3>
             </div>
             <div class="box-body">
               <div class='row'>
@@ -87,10 +88,20 @@
               </div>
               <div class='row'>
                 <div class='col-md-6'>
-                  <label>อ้างอิงใบกำกับภาษีอย่างย่อ : </label> <?php echo $small_invoice_number; ?>
+                  <label>อ้างอิงใบกำกับภาษีอย่างย่อ : </label> <a href="<?php echo site_url("pos_sale/view_payment")."/".$payment_id; ?>"><?php echo $small_invoice_number; ?></a>
                 </div>
                 <div class='col-md-6'>
                   <label>สาขาที่ขาย : </label> <?php echo $shop_name; ?>
+                </div>
+              </div>
+							<div class='row'>
+                <div class='col-md-6'>
+                  <label>สถานะ : </label> <?php if ($inv_status == 'N') echo "<label class='text-green'>ปกติ</label>";
+									else if ($inv_status == 'V') echo "<label class='text-red'>ยกเลิกแล้ว</label>";
+									?>
+                </div>
+                <div class='col-md-6'>
+
                 </div>
               </div>
               <br/>
@@ -146,10 +157,10 @@
 
         <div class='col-md-2'>
 
-            <?php if ($inv_status == 'N') { ?><a href="<?php echo site_url("pos_sale/print_invoice")."/".$inv_id; ?>" target="_blank" type="button" class="btn btn-primary btn-lg btn-block" name="btnInvoice" id="btnInvoice">พิมพ์ใบกำกับภาษี</a><?php } ?>
+            <?php if ($inv_status == 'N') { ?><a href="<?php echo site_url("pos_invoice/print_invoice")."/".$inv_id; ?>" target="_blank" type="button" class="btn btn-primary btn-lg btn-block" name="btnInvoice" id="btnInvoice">พิมพ์ใบกำกับภาษี</a><?php } ?>
 
           <br/><br/><br/><br/>
-          <?php if ($inv_status == 'N' && $today == $issue) { ?><a type="button" href='<?php echo site_url('pos_invoice/void_invoice')."/".$inv_id; ?>' class="btn btn-danger btn-lg btn-block" name="btnVoid" id="btnVoid"><i class="fa fa-ban"></i> ยกเลิก (Void)<br>ใบกำกับภาษี</a><?php } ?>
+          <?php if ($inv_status == 'N' && $user_status == 6) { ?><a type="button" href='<?php echo site_url('pos_invoice/void_invoice')."/".$inv_id; ?>' class="btn btn-danger btn-lg btn-block" name="btnVoid" id="btnVoid"><i class="fa fa-ban"></i> ยกเลิก (Void)<br>ใบกำกับภาษี</a><?php } ?>
         </div>
       </div>
         <!-- /.row -->
@@ -171,7 +182,7 @@ $(document).ready(function() {
   });
 
   $("#btnVoid").click(function() {
-      bootbox.confirm("ต้องการยกเลิกการสั่งขาย ที่เลือกไว้ใช่หรือไม่ ?", function(result) {
+      bootbox.confirm("ต้องการยกเลิกใบกำกับภาษีแบบเต็ม ที่เลือกไว้ใช่หรือไม่ ?", function(result) {
         var currentForm = this;
         if (result) {
             bootbox.prompt("เนื่องจาก..", function(result) {
