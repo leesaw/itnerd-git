@@ -278,7 +278,7 @@ function upload_excel_import_stock()
 function transferstock()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
 	$sql = "wh_enable = 1";
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
@@ -887,7 +887,7 @@ function checkStock_transfer_caseback()
 function report_transferstock()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
 
     $sql = "stot_status = 1 and stot_enable = 1";
@@ -1974,7 +1974,7 @@ function exportExcel_transfer_report()
 function form_return_headoffice()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
     $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_group_id = 7)";
 	$data['wh_out'] = $this->tp_warehouse_model->getWarehouse($sql);
@@ -2165,7 +2165,7 @@ function save_return_headoffice()
 function form_replace_branch()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
     $sql = "wh_enable = 1 and (wh_group_id != 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);
@@ -2530,7 +2530,7 @@ function out_form_stock()
 {
   // disable Transfer
   redirect('login', 'refresh');
-  
+
     $sql = "wh_enable = 1 and (wh_group_id = 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);
   	$data['wh_out'] = $result;
