@@ -203,6 +203,70 @@ Class Tp_saleorder_model extends CI_Model
 	return $query->result();
  }
 
+ function getCustomer_temp($where)
+ {
+    $this->db->select("posrot_customer_name, posrot_customer_address, posrot_customer_tel");
+    $this->db->from('tp_pos_rolex_temp');
+    if ($where != "") $this->db->where($where);
+    $query = $this->db->get();
+    return $query->result();
+ }
+
+ function getCustomerName_temp($where)
+ {
+    $this->db->select("posrot_customer_name, posrot_customer_address, posrot_customer_tel");
+    $this->db->from('tp_pos_rolex_temp');
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by("posrot_customer_name");
+    $query = $this->db->get();
+    return $query->result();
+ }
+
+ function getCustomer_invoice($where)
+ {
+    $this->db->select("posro_customer_name, posro_customer_address, posro_customer_tel, posro_customer_taxid, posro_customer_passport");
+    $this->db->from('tp_pos_rolex');
+    if ($where != "") $this->db->where($where);
+    $query = $this->db->get();
+    return $query->result();
+ }
+
+ function getCustomerName_invoice($where)
+ {
+    $this->db->select("posro_customer_name, posro_customer_address, posro_customer_tel, posro_customer_taxid, posro_customer_passport");
+    $this->db->from('tp_pos_rolex');
+    if ($where != "") $this->db->where($where);
+    $this->db->group_by("posro_customer_name");
+    $query = $this->db->get();
+    return $query->result();
+ }
+
+ function getHistory_sale_temp($where)
+ {
+  	$this->db->select("posrot_customer_name, posrot_customer_tel, posroit_id, posroit_pos_rolex_temp_id, posroit_item_id, posroit_item_serial_number_id, posroit_item_srp, posroit_qty, posroit_dc_percent, posroit_dc_baht, posroit_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_srp, it_remark, it_short_description, posroit_stock_balance_id");
+  	$this->db->from('tp_pos_rolex_temp_item');
+    $this->db->join('tp_pos_rolex_temp', 'posroit_pos_rolex_temp_id = posrot_id', 'left');
+    $this->db->join('tp_item', 'it_id = posroit_item_id','left');
+    $this->db->join('tp_item_serial', 'itse_id = posroit_item_serial_number_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+  	$query = $this->db->get();
+  	return $query->result();
+ }
+
+ function getHistory_sale_invoice($where)
+ {
+    $this->db->select("posro_customer_name, posro_customer_tel, posroi_id, posroi_pos_rolex_id, posroi_item_id, posroi_item_serial_number_id, posroi_item_srp, posroi_qty, posroi_dc_percent, posroi_dc_baht, posroi_netprice, it_refcode, it_barcode, br_name, it_model, it_uom, itse_serial_number, it_srp, it_remark, it_short_description, posroi_stock_balance_id");
+  	$this->db->from('tp_pos_rolex_item');
+    $this->db->join('tp_pos_rolex', '	posroi_pos_rolex_id = posro_id', 'left');
+    $this->db->join('tp_item', 'it_id = posroi_item_id','left');
+    $this->db->join('tp_item_serial', 'itse_id = posroi_item_serial_number_id','left');
+    $this->db->join('tp_brand', 'br_id = it_brand_id','left');
+    if ($where != "") $this->db->where($where);
+  	$query = $this->db->get();
+  	return $query->result();
+ }
+
  function addSaleOrder($insert=NULL)
  {
 	$this->db->insert('tp_saleorder', $insert);

@@ -2002,5 +2002,59 @@ function edit_saleorder()
 
 }
 
+function check_customer()
+{
+	$telephone = $this->input->post("telephone");
+	$where = "replace(replace(posrot_customer_tel,' ',''),'-','') like '".$telephone."' and posrot_enable = '1' and posrot_status = 'N'";
+	$this->load->model('tp_saleorder_model','',TRUE);
+	$query = $this->tp_saleorder_model->getCustomer_temp($where);
+  $count = 0;
+	foreach($query as $loop) {
+		$result = array("customer_name" => $loop->posrot_customer_name,
+										"customer_address" => $loop->posrot_customer_address,
+										"customer_telephone" => $loop->posrot_customer_tel,
+                    "customer_taxid" => "",
+                    "customer_passport" => "",
+							);
+    $count++;
+	}
+
+  if ($count == 0) {
+    $where = "replace(replace(posro_customer_tel,' ',''),'-','') like '".$telephone."' and posro_enable = '1' and posro_status = 'N'";
+  	$query = $this->tp_saleorder_model->getCustomer_invoice($where);
+  	foreach($query as $loop) {
+  		$result = array("customer_name" => $loop->posro_customer_name,
+  										"customer_address" => $loop->posro_customer_address,
+  										"customer_telephone" => $loop->posro_customer_tel,
+                      "customer_taxid" => $loop->posro_customer_taxid,
+                      "customer_passport" => $loop->posro_customer_passport,
+  							);
+  	}
+  }
+	echo json_encode($result);
+}
+
+function get_customer_name()
+{
+  $this->load->model('tp_saleorder_model');
+  if (isset($_GET['term'])){
+    $count = 0;
+    $q = strtolower($_GET['term']);
+    $where = "replace(posrot_customer_name,'คุณ','') like '".$q."%' and posrot_enable = '1' and posrot_status = 'N' and posrot_customer_name not like '%ลูกค้า%' and posrot_shop_id = '888'";
+    $query = $this->tp_saleorder_model->getCustomerName_temp($where);
+
+    foreach($query as $loop) {
+  		$result[] = $loop->posrot_customer_name;
+  	}
+
+    $where = "replace(posro_customer_name,'คุณ','') like '".$q."%' and posro_enable = '1' and posro_status = 'N'  and posro_customer_name not like '%ลูกค้า%' and posro_shop_id = '888'";
+  	$query = $this->tp_saleorder_model->getCustomerName_invoice($where);
+  	foreach($query as $loop) {
+  		$result[] = $loop->posro_customer_name;
+  	}
+  	echo json_encode($result);
+  }
+}
+
 }
 ?>

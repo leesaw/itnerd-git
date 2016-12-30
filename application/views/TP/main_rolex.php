@@ -7,7 +7,7 @@
 <body class="skin-red">
 <div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
 <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -92,6 +92,11 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>"><button type="button" class="btn btn-success btn-lg btn-block"><h4>รายการใบรับประกันที่รูดแล้ว</h4></button></a>
+                                </div>
+                            </div>
+														<div class="col-md-4">
+                                <div class="form-group">
+                                    <a href="<?php echo site_url("pos/form_customer_history"); ?>"><button type="button" class="btn btn-primary btn-lg btn-block"><h4>ประวัติลูกค้า</h4></button></a>
                                 </div>
                             </div>
 						</div>

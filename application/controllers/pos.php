@@ -944,5 +944,37 @@ function list_rolex_warrantycard()
     $this->load->view('TP/shop/list_rolex_warrantycard',$data);
 }
 
+function form_customer_history()
+{
+  $data['title'] = "NGG| Nerd - Search Customer History";
+  $this->load->view('TP/shop/form_customer_history',$data);
+}
+
+function result_customer_history()
+{
+  $custelephone = $this->input->post("custelephone");
+  $cusname = $this->input->post("cusname");
+
+  if ($custelephone == "" and $cusname == "") redirect('pos/form_customer_history', 'refresh');
+
+  $where = "posrot_customer_name not like '%ลูกค้า%'";
+  if ($custelephone != "") $where .= " and replace(replace(posrot_customer_tel,' ',''),'-','') like '%".$custelephone."%'";
+  if ($cusname != "") $where .= " and posrot_customer_name like '%".$cusname."%'";
+  $this->load->model('tp_saleorder_model','',TRUE);
+	$query = $this->tp_saleorder_model->getHistory_sale_temp($where);
+  $data['temp_item'] = $query;
+
+  $where = "posro_customer_name not like '%ลูกค้า%'";
+
+  if ($custelephone != "") $where .= " and replace(replace(posro_customer_tel,' ',''),'-','') like '%".$custelephone."%'";
+  if ($cusname != "") $where .= " and posro_customer_name like '%".$cusname."%'";
+  $this->load->model('tp_saleorder_model','',TRUE);
+	$query = $this->tp_saleorder_model->getHistory_sale_invoice($where);
+  $data['invoice_item'] = $query;
+
+  $data['title'] = "NGG| Nerd - Search Customer History";
+  $this->load->view('TP/shop/result_customer_history',$data);
+}
+
 }
 ?>

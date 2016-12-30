@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ออกใบ Invoice</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-success">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -113,12 +113,14 @@
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group col-md-6">
+									<div class="panel-heading"><div class="input-group input-group col-md-10">
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Ref. Number">
                                         <div class="input-group-btn">
-                                        <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-success" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้าจากเลขที่ใบส่งของ</a>
+                                        <a data-toggle="modal" data-target="#myModal" type="button" class="btn btn-primary" name="uploadbtn" id="uploadbtn"><i class='fa fa-upload'></i> นำเข้าจากเลขที่ใบส่งของ</a>
+																				<a data-toggle="modal" data-target="#myModal_excel" type="button" class="btn btn-success" name="excelbtn" id="excelbtn"><i class='fa fa-upload'></i> นำเข้า Excel</a>
+																				<a href="<?php echo base_url()."uploads/excel/ตัวอย่างไฟล์นำเข้า_fashion.xlsx"; ?>" type="button" class="btn bg-purple"><i class='fa fa-file-excel-o'></i> ตัวอย่าง Excel</a>
                                         </div>
-                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
+                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -150,8 +152,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">
@@ -169,7 +171,7 @@
 						</div>
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -181,7 +183,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">                        
+                <h4 class="modal-title">
                     <i class='fa fa-upload'></i> นำเข้าจากเลขใบส่งของ
                 </h4>
             </div>            <!-- /modal-header -->
@@ -193,14 +195,40 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" onclick="check_transfer_number();">นำเข้า</button>
 
-            </div>  
-                        
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- datepicker modal for upload excel -->
+    <div class="modal fade" id="myModal_excel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel_excel" aria-hidden="true">
+
+      <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">
+                    <i class='fa fa-upload'></i> นำเข้า Excel
+                </h4>
+            </div>            <!-- /modal-header -->
+            <div class="modal-body">
+                <form action="#" method="post" enctype="multipart/form-data" id="form_uploadexcel" class="form-horizontal">
+                <div class="row"><div class="col-md-12"><div class="form-group"><label class="col-md-4 control-label" for="donedate_done">เลือกไฟล์</label><div class="col-md-8"> <input type="file" class="form-control" id="excelfile_name" name="excelfile_name" /></div></div></form> </div>  </div>
+
+            </div>            <!-- /modal-body -->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="upload_excel();">Upload</button>
+
+            </div>
+
         </div>
     </div>
 </div>
 
 </div>
-<!-- close modal -->  
+<!-- close modal -->
 
 <?php $this->load->view('js_footer'); ?>
 <script type='text/javascript' src="<?php echo base_url(); ?>js/bootstrap-select.js"></script>
@@ -211,13 +239,13 @@ var count_enter_form_input_product = 0;
 var count_list = 0;
 
 $(document).ready(function()
-{    
+{
     //Initialize Select2 Elements
     $(".select2").select2();
     get_datepicker("#datein");
-    
+
     document.getElementById("savebtn").disabled = false;
-    
+
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
@@ -225,9 +253,9 @@ $(document).ready(function()
 			{
                 check_product_code(product_code_value);
 			}
-            
+
             $(this).val('');
-            
+
             setTimeout(function(){
                 calculate();
             },3000);
@@ -241,7 +269,7 @@ $(document).ready(function()
             //calSummary();
         }
     });
-    
+
     $('#barcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var barcode = $.trim($(this).val());
@@ -269,7 +297,7 @@ $(document).ready(function()
 
         }
     });
-    
+
 });
 
 function get_datepicker(id)
@@ -282,7 +310,7 @@ function showdetail()
 {
     var select_value = document.getElementById("whid").value;
     //alert(select_value);
-    
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_invoice/check_warehouse_detail"); ?>" ,
@@ -290,9 +318,9 @@ function showdetail()
         dataType: 'json',
         success : function(data) {
             document.getElementById("cusname").value = data.wh_detail;
-            document.getElementById("cusaddress1").value = data.wh_address1;   
-            document.getElementById("cusaddress2").value = data.wh_address2;  
-            document.getElementById("custax_id").value = data.wh_taxid;   
+            document.getElementById("cusaddress1").value = data.wh_address1;
+            document.getElementById("cusaddress2").value = data.wh_address2;
+            document.getElementById("custax_id").value = data.wh_taxid;
             document.getElementById("vender").value = data.wh_vender;
             if (data.wh_branch == 0) {
                 document.getElementById("branch_0").checked = true;
@@ -327,10 +355,10 @@ function check_transfer_number()
 
             if(data.item.length > 0)
             {
-                
-                if (data.exist_number) { 
-                    if( confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) { 
-                        confirm_number = true; 
+
+                if (data.exist_number) {
+                    if( confirm("เลขใบส่งของ "+tb_number+" ถูกอ้างอิงใน Invoice อื่นแล้ว\n\nต้องการดำเนินการต่อใช่หรือไม่")==true) {
+                        confirm_number = true;
                     }else{
                         confirm_number = false;
                     }
@@ -347,9 +375,9 @@ function check_transfer_number()
                     document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
 
                     document.getElementById("cusname").value = data.warehouse.wh_detail;
-                    document.getElementById("cusaddress1").value = data.warehouse.wh_address1;   
-                    document.getElementById("cusaddress2").value = data.warehouse.wh_address2;  
-                    document.getElementById("custax_id").value = data.warehouse.wh_taxid;   
+                    document.getElementById("cusaddress1").value = data.warehouse.wh_address1;
+                    document.getElementById("cusaddress2").value = data.warehouse.wh_address2;
+                    document.getElementById("custax_id").value = data.warehouse.wh_taxid;
                     document.getElementById("vender").value = data.warehouse.wh_vender;
                     var tb = document.getElementById("tb_number_input").value;
                     if (tb == "") {
@@ -369,7 +397,7 @@ function check_transfer_number()
                         document.getElementById("branch_1").checked = false;
                         document.getElementById("branch_number").value = "";
                     }
-                    
+
                     var message = "ทำการนำเข้าข้อมูลเรียบร้อยแล้ว";
                     bootbox.alert(message, function() {
                         $('#myModal').modal('hide');
@@ -390,17 +418,17 @@ function check_transfer_number()
                 calculate();
             },3000);
 }
-    
+
 function calSummary() {
     var sum = 0;
     var srp = document.getElementsByName('it_srp');
     var dc = document.getElementsByName('dc_thb');
     for(var i=0; i<srp.length; i++) {
-        if (dc[i].value == "") dc[i].value = 0; 
+        if (dc[i].value == "") dc[i].value = 0;
         sum += parseInt(srp[i].value) - parseInt((dc[i].value).replace(/,/g, ''));
     }
     document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",").toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-} 
+}
 
 function calDiscount() {
     var result = 0;
@@ -410,7 +438,7 @@ function calDiscount() {
     var dc_value;
 
     for(var i=0; i<dc.length; i++) {
-        if (dc[i].value == "") dc_value = 0; 
+        if (dc[i].value == "") dc_value = 0;
         else dc_value = dc[i].value;
         net[i].value = (parseFloat(srp[i].value.replace(/,/g, '')) * (100 - parseFloat(dc_value))/100).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
@@ -418,8 +446,8 @@ function calDiscount() {
 
     setTimeout(function(){
                 calculate();
-            },3000);  
-} 
+            },3000);
+}
 
 function calSRP() {
     var result = 0;
@@ -438,8 +466,8 @@ function calSRP() {
     setTimeout(function(){
                 calculate();
             },3000);
-    
-} 
+
+}
 
 function calculate() {
     var count = 0;
@@ -447,14 +475,14 @@ function calculate() {
     var srp = document.getElementsByName('it_netprice');
     var qty = document.getElementsByName('it_qty');
     for(var i=0; i<qty.length; i++) {
-        if (qty[i].value == "") qty[i].value = 0; 
+        if (qty[i].value == "") qty[i].value = 0;
         count += parseInt(qty[i].value);
         sum += parseInt(qty[i].value)*parseFloat(srp[i].value.replace(/,/g, ''));
     }
     document.getElementById("summary").innerHTML = sum.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-} 
-    
+}
+
 function numberWithCommas(obj) {
 	var x=$(obj).val();
     var parts = x.toString().split(".");
@@ -537,7 +565,7 @@ function delete_item_row(row1)
                 calculate();
             },3000);
 }
-    
+
 function submitform()
 {
     var datein = document.getElementById('datein').value;
@@ -552,29 +580,29 @@ function submitform()
     var it_dc = document.getElementsByName('it_discount');
     var it_net = document.getElementsByName('it_netprice');
     var it_qty = document.getElementsByName('it_qty');
-        
+
     if (datein == "") {
         alert("กรุณาใส่วันที่ออกใบ Invoice");
-        document.getElementById('datein').focus(); 
+        document.getElementById('datein').focus();
     }else if (wh_id == -1) {
         alert("กรุณาใส่เลือกคลังสินค้า");
-        document.getElementById('whid').focus(); 
+        document.getElementById('whid').focus();
     }else if (it_id.length < 1) {
         alert("กรุณาใส่รายการสินค้า");
     }else if (cusname == "") {
         alert("กรุณาใส่นามผู้ซื้อ");
-        document.getElementById('cusname').focus(); 
+        document.getElementById('cusname').focus();
     }else if (cusaddress == "") {
         alert("กรุณาใส่ที่อยู่ผู้ซื้อ");
-        document.getElementById('cusaddress1').focus(); 
+        document.getElementById('cusaddress1').focus();
     }else if (custax_id == "") {
         alert("กรุณาใส่เลขประจำตัวผู้เสียภาษีผู้ซื้อ");
-        document.getElementById('custax_id').focus(); 
+        document.getElementById('custax_id').focus();
     }else if (branch != 0 && branch != -1 ) {
         alert("กรุณาเลือกสำนักงานใหญ่ หรือ สาขาที่");
     }else if (branch == -1 && branch_number =="") {
         alert("กรุณาใส่เลขที่สาขา");
-        document.getElementById('branch_number').focus(); 
+        document.getElementById('branch_number').focus();
     }else{
 
         for(var i=0; i<it_dc.length; i++) {
@@ -591,7 +619,7 @@ function submitform()
                 return;
             }
 
-            
+
 
             if (Math.round((it_net[i].value).replace(/,/g, '')*1000) %  1 != 0) {
                 alert("กรุณาใส่จำนวนเฉพาะตัวเลขเท่านั้น");
@@ -609,7 +637,7 @@ function submitform()
 
 function confirmform()
 {
-    
+
     var cusname = document.getElementById('cusname').value;
     var cusaddress1 = document.getElementById('cusaddress1').value;
     var cusaddress2 = document.getElementById('cusaddress2').value;
@@ -618,7 +646,7 @@ function confirmform()
     var branch_number = document.getElementById('branch_number').value;
 
     var remark = document.getElementById('remark').value;
-    
+
     var wh_id = document.getElementById("whid").value;
     var datein = document.getElementById('datein').value;
     var vender = document.getElementById('vender').value;
@@ -627,8 +655,8 @@ function confirmform()
     var stot_id = document.getElementById('stot_id').value;
     var discount_srp = document.getElementById('discount_srp').value;
     var note = document.getElementById('note').value;
-    
-    
+
+
     var it_id = document.getElementsByName('it_id');
     var it_refcode = document.getElementsByName('it_refcode');
     var it_brand = document.getElementsByName('br_name');
@@ -643,9 +671,9 @@ function confirmform()
         it_array[index] = {id: it_id[i].value, refcode: it_refcode[i].value, brand: it_brand[i].value, qty: it_qty[i].value, dc: (it_dc[i].value).replace(/,/g, ''), net: (it_net[i].value).replace(/,/g, ''), srp: (it_srp[i].value).replace(/,/g, '')};
         index++;
     }
-    
+
     document.getElementById("savebtn").disabled = true;
-    
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_invoice/save_new_invoice"); ?>" ,
@@ -671,8 +699,55 @@ function confirmform()
             document.getElementById("savebtn").disabled = false;
         }
     });
-    
+
 }
+
+function upload_excel() {
+    var fileSelect = document.getElementById('excelfile_name');
+    var files = fileSelect.files;
+    var formData = new FormData();
+
+    if (files[0] != 'undefined') {
+        formData.append("excelfile_name", files[0]);
+
+        $.ajax({
+            type : "POST" ,
+            url : "<?php echo site_url("tp_invoice/upload_excel_invoice_item"); ?>" ,
+            data : formData ,
+            processData : false,
+            contentType : false,
+            dataType: 'json',
+            success : function(data) {
+							console.log(data.length);
+							if(data.length > 0)
+							{
+									for(var i=0; i<data.length; i++) {
+											var element = '<tr id="row'+count_enter_form_input_product+'">'+data[i]+'<td><button type="button" id="row'+count_enter_form_input_product+'" class="btn btn-danger btn-xs" onClick="delete_item_row('+count_enter_form_input_product+');"><i class="fa fa-close"></i></button></td>'+''+'</tr>';
+											//console.log(element);
+											$('table > tbody').append(element);
+											count_enter_form_input_product++;
+											count_list++;
+									}
+									document.getElementById("count_all").innerHTML = "จำนวน &nbsp&nbsp "+count_list+"   &nbsp&nbsp รายการ";
+									var message = "ทำการนำเข้าข้อมูลเรียบร้อยแล้ว";
+									bootbox.alert(message, function() {
+											$('#myModal_excel').modal('hide');
+									});
+							}else{
+									alert("ไม่พบ Refcode ที่ต้องการ");
+							}
+
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+    }
+    setTimeout(function(){
+        calculate();
+    },3000);
+
+};
 </script>
 </body>
 </html>

@@ -12,9 +12,9 @@ function __construct()
 
 function index()
 {
-    
+
 }
-    
+
 function form_new_invoice()
 {
     $data['datein'] = date("d/m/Y");
@@ -22,7 +22,7 @@ function form_new_invoice()
     $this->load->model('tp_warehouse_model','',TRUE);
     $sql = "wh_group_id != 3 and wh_group_id != 6 and wh_enable = 1";
     $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
-    
+
     $data['title'] = "NGG| Nerd - Create Invoice";
     $this->load->view("TP/invoice/form_new_invoice", $data);
 }
@@ -39,7 +39,7 @@ function check_transfer_number()
     $sql = "stot_number = 'TB".$tb_number."' and stot_enable = '1'";
     $this->load->model('tp_warehouse_transfer_model','',TRUE);
     $result = $this->tp_warehouse_transfer_model->getItem_transfer($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             if ($index == 0) {
@@ -80,7 +80,7 @@ function check_transfer_number()
 function check_warehouse_detail()
 {
     $whid = $this->input->post("whid");
-    
+
     $sql = "wh_id = '".$whid."'";
     $this->load->model('tp_warehouse_model','',TRUE);
     $query = $this->tp_warehouse_model->getWarehouse($sql);
@@ -118,7 +118,7 @@ function check_item_refcode()
     $sql = "it_refcode = '".$refcode."' and it_enable = '1'";
     $this->load->model('tp_item_model','',TRUE);
     $result = $this->tp_item_model->getItem($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();'";
@@ -142,7 +142,7 @@ function check_sale_barcode()
     $sql = "sb_number = '".$barcode."' and sb_enable = '1'";
     $this->load->model('tp_saleorder_model','',TRUE);
     $result = $this->tp_saleorder_model->getSaleBarcode($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output = $loop->sb_gp;
@@ -171,7 +171,7 @@ function save_new_invoice()
     $note = $this->input->post("note");
     $remark = $this->input->post("remark");
     $it_array = $this->input->post("item");
-    
+
     if ($branch == -1) {
         $branch_input = $branch_number;
     }else if ($branch == 0) {
@@ -179,11 +179,11 @@ function save_new_invoice()
     }
 
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein = explode('/', $datein);
     $datein_input = $datein[2]."-".$datein[1]."-".$datein[0];
     $month = $datein[2]."-".$datein[1];
-    
+
     $number = $this->tp_invoice_model->get_max_number($month);
     $number++;
     $year_thai = substr($datein[2] + 543, 2, 2);
@@ -208,11 +208,11 @@ function save_new_invoice()
                     'inv_dateadd' => $currentdate,
                     'inv_dateadd_by' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_invoice_model->add_invoice_detail($invoice);
 
     for($i=0; $i<count($it_array); $i++){
-        
+
         $item = array( 'invit_invoice_id' => $last_id,
                         'invit_qty' => $it_array[$i]["qty"],
                         'invit_refcode' => $it_array[$i]["refcode"],
@@ -224,7 +224,7 @@ function save_new_invoice()
         );
         $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
     }
-    
+
     $result = array("a" => $number, "b" => $last_id);
     //$result = array("a" => 1, "b" => 2);
     echo json_encode($result);
@@ -242,7 +242,7 @@ function view_invoice()
     }else{
         $data['inv_array'] = array();
     }
-    
+
     $sql = "invit_invoice_id = '".$id."' and invit_enable=1";
     $query = $this->tp_invoice_model->get_invoice_item($sql);
     if($query){
@@ -258,7 +258,7 @@ function view_invoice()
     }else{
         $data['auth_edit'] = false;
     }
-    
+
 
     $data['title'] = "NGG| Nerd - View Invoice";
     $this->load->view("TP/invoice/view_invoice", $data);
@@ -275,7 +275,7 @@ function print_invoice()
     }else{
         $data['inv_array'] = array();
     }
-    
+
     $sql = "invit_invoice_id = '".$id."' and invit_enable=1";
     $query = $this->tp_invoice_model->get_invoice_item($sql);
     if($query){
@@ -293,7 +293,7 @@ function print_invoice()
     $data["lastpage"] = count($query) % 10;
     $data['count_item'] = count($query);
 
-    $this->load->library('mpdf/mpdf');               
+    $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(203,278),'0', 'thangsana');
     $stylesheet = file_get_contents('application/libraries/mpdf/css/style_dotprint_invoice.css');
 
@@ -314,7 +314,7 @@ function excel_invoice()
 
     $sql = "inv_id = '".$id."' and inv_enable = '1'";
     $inv_array = $this->tp_invoice_model->get_invoice_detail($sql);
-    
+
     $sql = "invit_invoice_id = '".$id."' and invit_enable=1";
     $item_array = $this->tp_invoice_model->get_invoice_item($sql);
 
@@ -377,14 +377,14 @@ function excel_invoice()
     $this->excel->getActiveSheet()->setCellValue('E3', 'เลขที่ใบส่งของอ้างอิง');
     $this->excel->getActiveSheet()->setCellValue('F3', $inv_stot_number);
     $this->excel->getActiveSheet()->setCellValue('G3', 'ส่วนลดราคาป้าย '.$inv_srp_discount.' %');
-    
+
     $this->excel->getActiveSheet()->setCellValue('A5', 'Ref. Number');
     $this->excel->getActiveSheet()->setCellValue('B5', 'รายละเอียด');
     $this->excel->getActiveSheet()->setCellValue('C5', 'จำนวน');
     $this->excel->getActiveSheet()->setCellValue('D5', 'หน่วยละ');
     $this->excel->getActiveSheet()->setCellValue('E5', 'ส่วนลด %');
     $this->excel->getActiveSheet()->setCellValue('F5', 'จำนวนเงิน');
-    
+
     $row = 6;
     $sum = 0;
     $sum_qty = 0;
@@ -392,11 +392,11 @@ function excel_invoice()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->invit_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, strtoupper($loop->invit_brand));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->invit_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->invit_srp);  
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->invit_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, number_format($loop->invit_discount));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->invit_netprice*$loop->invit_qty);
         $row++;
-        $sum += $loop->invit_netprice*$loop->invit_qty; 
+        $sum += $loop->invit_netprice*$loop->invit_qty;
         $sum_qty += $loop->invit_qty;
     }
     if ($inv_discount_percent > 0) {
@@ -406,10 +406,10 @@ function excel_invoice()
         $row++;
     }
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, "รวมจำนวน");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $sum_qty);    
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $sum_qty);
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "รวมเงิน");
     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $sum*(100-$inv_discount_percent)/100);
-    
+
 
     $filename='invoice_'.$inv_number.'.xlsx'; //save our workbook as this file name
     header('Content-Type: application/vnd.ms-excel'); //mime type
@@ -418,7 +418,7 @@ function excel_invoice()
 
     //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
     //if you want to save it as .XLSX Excel 2007 format
-    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');  
+    $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
     //force user to download the Excel file without writing it to server's HD
     $objWriter->save('php://output');
 }
@@ -426,9 +426,9 @@ function excel_invoice()
 function void_invoice()
 {
     $id = $this->uri->segment(3);
-    
+
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $sql = "inv_id = '".$id."'";
     $query = $this->tp_invoice_model->get_invoice_detail($sql);
     foreach($query as $loop) {
@@ -439,7 +439,7 @@ function void_invoice()
                 "inv_dateadd" => $currentdate, "inv_dateadd_by" => $this->session->userdata('sessid')
                 );
     $query = $this->tp_invoice_model->edit_invoice_detail($inv);
-        
+
     redirect('tp_invoice/view_invoice/'.$id, 'refresh');
 }
 
@@ -458,7 +458,7 @@ function edit_invoice()
     }else{
         $data['inv_array'] = array();
     }
-    
+
     $sql = "invit_invoice_id = '".$id."' and invit_enable = 1";
     $query = $this->tp_invoice_model->get_invoice_item($sql);
     if($query){
@@ -493,7 +493,7 @@ function save_edit_invoice()
     $note = $this->input->post("note");
     $remark = $this->input->post("remark");
     $it_array = $this->input->post("item");
-    
+
     if ($branch == -1) {
         $branch_input = $branch_number;
     }else if ($branch == 0) {
@@ -501,7 +501,7 @@ function save_edit_invoice()
     }
 
     $currentdate = date("Y-m-d H:i:s");
-    
+
     $datein = explode('/', $datein);
     $datein_input = $datein[2]."-".$datein[1]."-".$datein[0];
 
@@ -523,16 +523,16 @@ function save_edit_invoice()
                     'inv_dateadd' => $currentdate,
                     'inv_dateadd_by' => $this->session->userdata('sessid')
             );
-    
+
     $last_id = $this->tp_invoice_model->edit_invoice_detail($invoice);
 
-    
+
     $sql = "invit_invoice_id = '".$inv_id."'";
     $query_item = $this->tp_invoice_model->get_invoice_item($sql);
 
     $new_item = array();
     $index = 0;
-    
+
     foreach($query_item as $loop3) {
         $item = array( 'id' => $loop3->invit_id,
                     'invit_enable' => 0
@@ -557,7 +557,7 @@ function save_edit_invoice()
         $duplicate = 0;
         foreach($query_item as $loop3) {
             if ($loop3->invit_item_id == $it_array[$i]["id"]) {
-                $duplicate = $loop3->invit_id;   
+                $duplicate = $loop3->invit_id;
                 $new_item[$index] = $it_array[$i]["id"];
                 $index++;
             }
@@ -584,9 +584,9 @@ function save_edit_invoice()
                         'invit_netprice' => $it_array[$i]["net"]
             );
             $inv_item_id = $this->tp_invoice_model->add_invoice_item($item);
-        }   
+        }
     }
-    
+
     foreach($query_item as $loop4) {
         $exist = 0;
         for($i=0; $i<count($new_item); $i++) {
@@ -603,7 +603,7 @@ function save_edit_invoice()
     }
 
     */
-    
+
     $result = array("a" => $number, "b" => $inv_id);
     //$result = array("a" => 1, "b" => 2);
     echo json_encode($result);
@@ -619,7 +619,7 @@ function get_invoice_item()
     $index = 0 ;
     $sql = "invit_invoice_id = '".$inv_id."' and invit_enable = 1";
     $result = $this->tp_invoice_model->get_invoice_item($sql);
-    
+
     if (count($result) >0) {
         foreach($result as $loop) {
             $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->invit_item_id."'><input type='hidden' name='it_refcode' value='".$loop->invit_refcode."'>".$loop->invit_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->invit_brand."'>".$loop->invit_brand."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='".number_format($dc1)."' onChange='calSRP();'";
@@ -642,21 +642,152 @@ function list_invoice_month()
     }else{
         $currentdate = date("Y-m");
     }
-    
+
     $currentdate = explode('-', $currentdate);
     $currentmonth = $currentdate[1]."/".$currentdate[0];
-    
+
     $data['month'] = $currentmonth;
-    
+
     $start = $currentdate[0]."-".$currentdate[1]."-01 00:00:00";
     $end = $currentdate[0]."-".$currentdate[1]."-31 23:59:59";
     $sql = "inv_enable = '1' and invit_enable = '1'";
     $sql .= " and inv_issuedate >= '".$start."' and inv_issuedate <= '".$end."'";
-    
+
     $data['inv_array'] = $this->tp_invoice_model->get_invoice_detail_sumnetprice_list($sql);
-    
+
     $data['title'] = "Nerd - Invoice List";
     $this->load->view("TP/invoice/list_invoice_month", $data);
+}
+
+function upload_excel_invoice()
+{
+    $luxury = $this->uri->segment(3);
+
+    $this->load->helper(array('form', 'url'));
+
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+
+            }
+
+        }
+
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "") {
+                $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and ".$this->no_rolex;
+                $sql .= " and it_has_caseback = '".$luxury."'";
+                $this->load->model('tp_item_model','',TRUE);
+                $result = $this->tp_item_model->getItem($sql);
+                foreach ($result as $loop) {
+                    $output = "<td><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' id='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td><td>";
+                    if ($luxury == 0) {
+                        $output .= "<input type='text' name='it_quantity' id='it_quantity' value='".$arr_data[$i]['B']."' style='width: 50px;' onChange='calculate();'></td><td>".$loop->it_uom."</td>";
+                    }else{
+                        $output .= "<input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+                        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$arr_data[$i]['B']."' style='width: 200px;'></td>";
+                    }
+
+                    $arr[$index] = $output;
+                    $index++;
+                }
+            }
+
+        }
+        unlink($data['full_path']);
+
+        echo json_encode($arr);
+        exit();
+    }
+
+}
+
+function upload_excel_invoice_item()
+{
+    $this->load->helper(array('form', 'url'));
+
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+
+            }
+
+        }
+
+        $index = 0 ;
+        $output = array();
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "" && $arr_data[$i]['B'] != "") {
+              $sql = "it_refcode = '".$arr_data[$i]['A']."' and it_enable = '1'";
+              $this->load->model('tp_item_model','',TRUE);
+              $result = $this->tp_item_model->getItem($sql);
+
+              if (count($result) >0) {
+                  foreach($result as $loop) {
+                      $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();'";
+                      // repair item can edit
+                      if ($loop->it_id > 1) $output[$index] .= " readonly";
+                      $output[$index] .= "></td><td><input type='text' name='it_qty' id='it_qty' value='".$arr_data[$i]['B']."' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->it_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->it_srp, 2, ".", ",")."' onChange='calculate();'></td>";
+                      $index++;
+                  }
+              }
+
+
+            }
+
+        }
+        unlink($data['full_path']);
+
+        echo json_encode($output);
+        exit();
+    }
+
 }
 
 }

@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ออกใบเสร็จรับเงิน</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-info">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -68,13 +68,13 @@
                                         <option value="Q">เช็ค</option>
                                     </select>
                                 </div>
-							</div> 
+							</div>
                             <div class="col-md-2">
                                 <div class="form-group-lg">
                                     <div id="text1">จำนวนเงินที่จ่าย *</div>
                                     <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="" onchange="numberWithCommas(this);" >
                                 </div>
-							</div> 
+							</div>
                         </div>
 						<br>
 						<div class="row">
@@ -85,7 +85,7 @@
                                         <div class="input-group-btn">
 
                                         </div>
-                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
+                                        <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -115,8 +115,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group-sm">
@@ -148,7 +148,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -163,12 +163,12 @@ var count_enter_form_input_product = 0;
 var count_list = 0;
 
 $(document).ready(function()
-{    
+{
     get_datepicker("#datein");
     $("#refcode").focus();
-    
+
     document.getElementById("savebtn").disabled = false;
-    
+
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
@@ -177,16 +177,16 @@ $(document).ready(function()
 			{
                 check_product_code(product_code_value,shop_id);
 			}
-            
+
             $(this).val('');
-            
+
             setTimeout(function(){
                 calSummary();
             },100);
             //calSummary();
 		}
 	});
-    
+
     $('#salepersonid').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var person_id = $.trim($(this).val());
@@ -198,7 +198,7 @@ $(document).ready(function()
             //calSummary();
 		}
 	});
-    
+
     $("#payment").change(function() {
         var val = document.getElementById("payment").value;
         if (val == 'C') {
@@ -212,26 +212,67 @@ $(document).ready(function()
             document.getElementById("payment_value").value = "";
         }
     });
-    
+
+		$('#custelephone').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var telephone = $.trim($(this).val());
+            if(telephone != "")
+						{
+			        check_customer(telephone);
+						}
+				}
+		});
+
 });
-    
+
+function check_customer(telephone)
+{
+	if(telephone != "") {
+		$.ajax({
+			type : "POST" ,
+			url : '<?php echo site_url("sale/check_customer"); ?>' ,
+			data : {telephone: telephone} ,
+      dataType: 'json',
+			success : function(data) {
+				if(data.customer_name != "")
+				{
+          $('#cusname').val(data.customer_name);
+          $('#cusaddress').val(data.customer_address);
+          $('#custelephone').val(data.customer_telephone);
+        }else{
+        	alert("ไม่พบ ข้อมูลลูกค้า ที่ต้องการ");
+          $('#cusname').val('');
+          $('#cusaddress').val('');
+          $('#custelephone').val('');
+        }
+			},
+      error: function (textStatus, errorThrown) {
+          alert("ไม่พบ ข้อมูลลูกค้า ที่ต้องการ !!!");
+					$('#cusname').val('');
+          $('#cusaddress').val('');
+          $('#custelephone').val('');
+      }
+		});
+	}
+}
+
 function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 }
-    
+
 function calSummary() {
     var sum = 0;
     var srp = document.getElementsByName('it_srp');
     var dc = document.getElementsByName('dc_thb');
     for(var i=0; i<srp.length; i++) {
-        if (dc[i].value == "") dc[i].value = 0; 
+        if (dc[i].value == "") dc[i].value = 0;
         sum += parseInt(srp[i].value) - parseInt((dc[i].value).replace(/,/g, ''));
     }
     document.getElementById("summary").innerHTML = sum.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-} 
-    
+}
+
 function numberWithCommas(obj) {
 	var x=$(obj).val();
     var parts = x.toString().split(".");
@@ -267,7 +308,7 @@ function check_product_code(refcode_input, shop_id)
 	}
 
 }
-    
+
 function check_saleperson_code(saleperson_id, shop_id)
 {
 	if(saleperson_id != "")
@@ -303,7 +344,7 @@ function delete_item_row(row1)
         calSummary();
     },50);
 }
-    
+
 function submitform()
 {
     var cusname = document.getElementById('cusname').value;
@@ -335,18 +376,18 @@ function submitform()
 
 function confirmform()
 {
-    
+
     var cusname = document.getElementById('cusname').value;
     var cusaddress = document.getElementById('cusaddress').value;
     var custelephone = document.getElementById('custelephone').value;
     var payment = document.getElementById('payment').value;
     var payment_value = (document.getElementById('payment_value').value).replace(/,/g, '');
     var remark = document.getElementById('remark').value;
-    
+
     var shop_id = document.getElementById('shop_id').value;
     var datein = document.getElementById('datein').value;
     var saleperson_code = document.getElementById('saleperson_code').value;
-    
+
     var itse_id = document.getElementsByName('itse_id');
     var stob_id = document.getElementsByName('stob_id');
     var it_id = document.getElementsByName('it_id');
@@ -360,7 +401,7 @@ function confirmform()
         for(var j=0; j<index; j++) {
             if (it_id[i].value == it_array[j]['id']) {
                 //it_array[j]['qty'] = parseInt(it_array[j]['qty']) + 1;
-                
+
                 if (itse_id[i].value == it_array[j]['itse_id']) {
                     alert("Serial ซ้ำกัน");
                     return;
@@ -376,9 +417,9 @@ function confirmform()
             checked = 0;
         }
     }
-    
+
     document.getElementById("savebtn").disabled = true;
-    
+
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("sale/saleorder_rolex_temp_save"); ?>" ,
@@ -404,7 +445,7 @@ function confirmform()
             document.getElementById("savebtn").disabled = false;
         }
     });
-    
+
 }
 </script>
 </body>

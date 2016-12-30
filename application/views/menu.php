@@ -489,6 +489,9 @@
             <li><a href="<?php echo site_url("pos/list_rolex_warrantycard"); ?>">
                 <i class="fa fa-circle-o text-red"></i><span>รายการใบรับประกันที่รูดแล้ว</span>
             </a></li>
+            <li><a href="<?php echo site_url("pos/form_customer_history"); ?>">
+                <i class="fa fa-circle-o text-red"></i><span>ประวัติลูกค้า</span>
+            </a></li>
             <?php } ?>
 
             <?php
