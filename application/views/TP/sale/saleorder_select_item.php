@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>การสั่งขาย (Sale Order)</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading"><strong>กรุณาใส่ข้อมูลให้ครบทุกช่อง *</strong></div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
@@ -29,7 +29,7 @@
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $datein; ?>" readonly>
                                     </div>
 							</div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 									<div class="form-group-sm">
                                         สาขาที่ขาย *
                                         <input type="text" class="form-control" name="shop_name" id="shop_name" value="<?php echo $shop_name; ?>" readonly>
@@ -53,7 +53,7 @@
                                         <input type="text" class="form-control" name="refcode" id="refcode" placeholder="<?php if ($caseback==0) echo "Ref. Code ที่ขาย"; else echo "Caseback ที่ขาย"; ?>">
                                         <div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button>
-                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label> 
+                                        </div> <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; 0 &nbsp;&nbsp; รายการ</label>
                                         </div></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
@@ -80,8 +80,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">
@@ -94,7 +94,7 @@
                         <div class="row">
 							<div class="col-md-6">
 								<button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="submitform(<?php echo $caseback; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
-                                
+
                                 <a href="<?php echo site_url("sale/saleorder_view"); ?>"><button type="button" class="btn btn-danger" name="resetbtn" id="resetbtn"><i class='fa fa-rotate-left'></i>  เริ่มต้นใหม่ </button></a>
 							</div>
 						</div>
@@ -102,7 +102,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -115,9 +115,9 @@ var count_enter_form_input_product = 0;
 var count_list = 0;
 
 $(document).ready(function()
-{    
+{
     document.getElementById("savebtn").disabled = false;
-    
+
     $('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
@@ -126,9 +126,9 @@ $(document).ready(function()
             if(product_code_value != "")
 			{
                 check_product_code(product_code_value, shop_id, caseback);
-                
+
 			}
-            
+
             $(this).val('');
 		}
 	});
@@ -176,12 +176,12 @@ function submitform(x)
     var shopid = "<?php echo $shop_id; ?>";
     var datein = "<?php echo $datein; ?>";
     var it_quantity = document.getElementsByName('it_quantity');
-    
+
     var barcode_id = document.getElementsByName('barcode_id');
     var discount_value = document.getElementsByName('discount_value');
     var discount_baht = document.getElementsByName('discount_baht');
     var gp_value = document.getElementsByName('gp_value');
-    
+
     var it_serial = document.getElementsByName('serial_id');
     if (shopid < 0) {
         alert("กรุณาเลือกสาขาที่ขาย");
@@ -217,7 +217,7 @@ function submitform(x)
                 alert("กรุณาเลือกบาร์โค้ดห้าง");
                 return;
             }
-            
+
             if (barcode_id[i].value == -1) {
                 if (discount_value[i].value =="") {
                     alert("กรุณาใส่ Discount(%)");
@@ -233,16 +233,16 @@ function submitform(x)
                 }
             }
         }
-        
-        
-        
+
+
+
         var r = confirm("ยืนยันการสั่งขาย !!");
         if (r == true) {
             confirmform(x);
         }
     }
 }
-    
+
 function confirmform(caseback)
 {
     var shop_id = "<?php echo $shop_id; ?>";
@@ -250,26 +250,26 @@ function confirmform(caseback)
     var datein = "<?php echo $datein; ?>";
     if (caseback==1) var it_serial = document.getElementsByName('serial_id');
     var it_quantity = document.getElementsByName('it_quantity');
-    
+
     // Barcode Discount GP
     var barcode_id = document.getElementsByName('barcode_id');
     var discount_value = document.getElementsByName('discount_value');
     var discount_baht = document.getElementsByName('discount_baht');
     var gp_value = document.getElementsByName('gp_value');
-    
+
     var it_id = document.getElementsByName('it_id');
     var it_srp = document.getElementsByName('it_srp');
     var stob_id = document.getElementsByName('stob_id');
-    
+
     var saleorder_remark =  document.getElementById("saleorder_remark").value;
-    
+
     var it_array = new Array();
     var serial_array = new Array();
     var checked = 0;
     var index = 0;
 
     document.getElementById("savebtn").disabled = true;
-    
+
     for(var i=0; i<it_id.length; i++){
         /*
         for(var j=0; j<index; j++) {
@@ -281,9 +281,9 @@ function confirmform(caseback)
         }
         */
         //if (checked==0) {
-            
+
         it_array[index] = {id: it_id[i].value, qty: it_quantity[i].value, barcode_id: barcode_id[i].value, discount_value: discount_value[i].value, discount_baht: discount_baht[i].value, gp_value: gp_value[i].value, stob_id: stob_id[i].value, srp: it_srp[i].value};
-        
+
         if (caseback==1) {
             serial_array[index] = {id: it_id[i].value, stob_id: stob_id[i].value, serial: it_serial[i].value};
         }
@@ -292,8 +292,8 @@ function confirmform(caseback)
         //}else{
         //    checked = 0;
         //}
-        
-        
+
+
     }
     $.ajax({
         type : "POST" ,
@@ -320,7 +320,7 @@ function confirmform(caseback)
             document.getElementById("savebtn").disabled = false;
         }
     });
-    
+
 }
 </script>
 </body>

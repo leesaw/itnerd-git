@@ -957,17 +957,17 @@ function result_customer_history()
 
   if ($custelephone == "" and $cusname == "") redirect('pos/form_customer_history', 'refresh');
 
-  $where = "posrot_customer_name not like '%ลูกค้า%'";
+  $where = "replace(posrot_customer_name, ' ', '') not like '%ลูกค้า%'";
   if ($custelephone != "") $where .= " and replace(replace(posrot_customer_tel,' ',''),'-','') like '%".$custelephone."%'";
-  if ($cusname != "") $where .= " and posrot_customer_name like '%".$cusname."%'";
+  if ($cusname != "") $where .= " and replace(posrot_customer_name, ' ', '') like '%".str_replace(' ', '', $cusname)."%'";
   $this->load->model('tp_saleorder_model','',TRUE);
 	$query = $this->tp_saleorder_model->getHistory_sale_temp($where);
   $data['temp_item'] = $query;
 
-  $where = "posro_customer_name not like '%ลูกค้า%'";
+  $where = "replace(posro_customer_name, ' ', '') not like '%ลูกค้า%'";
 
   if ($custelephone != "") $where .= " and replace(replace(posro_customer_tel,' ',''),'-','') like '%".$custelephone."%'";
-  if ($cusname != "") $where .= " and posro_customer_name like '%".$cusname."%'";
+  if ($cusname != "") $where .= " and replace(posro_customer_name, ' ', '') like '%".str_replace(' ', '', $cusname)."%'";
   $this->load->model('tp_saleorder_model','',TRUE);
 	$query = $this->tp_saleorder_model->getHistory_sale_invoice($where);
   $data['invoice_item'] = $query;

@@ -34,7 +34,7 @@ function index()
 function importstock()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  // redirect('login', 'refresh');
 
 	$sql = "wh_enable = 1 and (wh_group_id = 3 or wh_id = '888')";
   if ($this->session->userdata('sessrolex') == 1) $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_id = '888')";
@@ -278,7 +278,7 @@ function upload_excel_import_stock()
 function transferstock()
 {
   // disable Transfer
-  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
+  // if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
 	$sql = "wh_enable = 1";
 	$data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
@@ -887,7 +887,7 @@ function checkStock_transfer_caseback()
 function report_transferstock()
 {
   // disable Transfer
-  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
+  // if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
 
     $sql = "stot_status = 1 and stot_enable = 1";
@@ -1646,8 +1646,10 @@ function ajaxView_seach_transfer_in()
     $this->load->library('Datatables');
     if ($this->session->userdata('sessstatus') != '88') {
       $this->datatables
-      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp,    log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
+      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, IF(it_has_caseback=1, CONCAT(it_refcode,'<br>','[',itse_serial_number,']'),it_refcode), br_name, it_model, it_short_description, it_srp,    log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in", FALSE)
       ->from('log_stock_balance')
+      ->join('log_stock_balance_serial', 'log_stob_id = log_stobs_stob_id', 'left')
+      ->join('tp_item_serial', 'log_stobs_item_serial_id = itse_id', 'left')
       ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
       ->join('tp_item', 'it_id = log_stob_item_id','left')
       ->join('tp_brand', 'br_id = it_brand_id','left')
@@ -1658,8 +1660,10 @@ function ajaxView_seach_transfer_in()
       ->edit_column("transfer_id",'<a target="_blank"  href="'.site_url("warehouse_transfer/importstock_print").'$1',"transfer_id");
     }else{
       $this->datatables
-      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, it_refcode, br_name, it_model, it_short_description, it_srp, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, it_cost_baht", FALSE)
+      ->select("stoi_datein, CONCAT('/', stoi_id, '\">', stoi_number, '</a>') as transfer_id, IF(it_has_caseback=1, CONCAT(it_refcode,'<br>','[',itse_serial_number,']'),it_refcode), br_name, it_model, it_short_description, it_srp, log_stob_qty_update, CONCAT(wh_code,'-',wh_name) as wh_in, it_cost_baht", FALSE)
       ->from('log_stock_balance')
+      ->join('log_stock_balance_serial', 'log_stob_id = log_stobs_stob_id', 'left')
+      ->join('tp_item_serial', 'log_stobs_item_serial_id = itse_id', 'left')
       ->join('tp_stock_in', 'log_stob_transfer_id = stoi_id','left')
       ->join('tp_item', 'it_id = log_stob_item_id','left')
       ->join('tp_brand', 'br_id = it_brand_id','left')
@@ -1974,7 +1978,7 @@ function exportExcel_transfer_report()
 function form_return_headoffice()
 {
   // disable Transfer
-  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
+  // if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
     $sql = "wh_enable = 1 and (wh_group_id = 3 or wh_group_id = 7)";
 	$data['wh_out'] = $this->tp_warehouse_model->getWarehouse($sql);
@@ -2165,7 +2169,7 @@ function save_return_headoffice()
 function form_replace_branch()
 {
   // disable Transfer
-  if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
+  // if ($this->session->userdata("sessstatus") != 1) redirect('login', 'refresh');
 
     $sql = "wh_enable = 1 and (wh_group_id != 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);
@@ -2529,7 +2533,7 @@ function check_undo_transfer_between()
 function out_form_stock()
 {
   // disable Transfer
-  redirect('login', 'refresh');
+  // redirect('login', 'refresh');
 
     $sql = "wh_enable = 1 and (wh_group_id = 3)";
     $result = $this->tp_warehouse_model->getWarehouse($sql);

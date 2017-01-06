@@ -448,7 +448,7 @@ function ajax_sale_item_view()
   $this->load->library('Datatables');
   if ($this->session->userdata('sessstatus') == '88') {
     $this->datatables
-    ->select("posp_issuedate, CONCAT('/', posp_id, '\">', posp_small_invoice_number, '</a>') as number, posh_name, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net, it_cost_baht")
+    ->select("posp_issuedate, CONCAT('/', posp_id, '\">', posp_small_invoice_number, '</a>') as number, posh_name, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net, it_cost_baht", FALSE)
     ->from('pos_payment_item')
     ->join('pos_payment', 'posp_id=popi_posp_id','left')
     ->join('tp_item', 'it_id = popi_item_id','left')

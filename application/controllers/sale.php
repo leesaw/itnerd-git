@@ -2040,14 +2040,14 @@ function get_customer_name()
   if (isset($_GET['term'])){
     $count = 0;
     $q = strtolower($_GET['term']);
-    $where = "replace(posrot_customer_name,'คุณ','') like '".$q."%' and posrot_enable = '1' and posrot_status = 'N' and posrot_customer_name not like '%ลูกค้า%' and posrot_shop_id = '888'";
+    $where = "replace(replace(posrot_customer_name,'คุณ',''), ' ', '') like '".$q."%' and posrot_enable = '1' and posrot_status = 'N' and posrot_customer_name not like '%ลูกค้า%' and posrot_shop_id = '888'";
     $query = $this->tp_saleorder_model->getCustomerName_temp($where);
 
     foreach($query as $loop) {
   		$result[] = $loop->posrot_customer_name;
   	}
 
-    $where = "replace(posro_customer_name,'คุณ','') like '".$q."%' and posro_enable = '1' and posro_status = 'N'  and posro_customer_name not like '%ลูกค้า%' and posro_shop_id = '888'";
+    $where = "replace(replace(posro_customer_name,'คุณ',''), ' ', '') like '".$q."%' and posro_enable = '1' and posro_status = 'N'  and posro_customer_name not like '%ลูกค้า%' and posro_shop_id = '888'";
   	$query = $this->tp_saleorder_model->getCustomerName_invoice($where);
   	foreach($query as $loop) {
   		$result[] = $loop->posro_customer_name;
