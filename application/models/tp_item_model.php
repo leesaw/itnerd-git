@@ -78,7 +78,7 @@ Class Tp_item_model extends CI_Model
  }
 
  function checkCaseback_warehouse($caseback, $wh_id) {
-    $this->db->select("itse_id, itse_item_id, itse_serial_number");
+    $this->db->select("itse_id, itse_item_id, itse_serial_number, itse_sample");
     $this->db->from("tp_item_serial");
     $this->db->where("itse_serial_number", $caseback);
     $this->db->where("itse_warehouse_id", $wh_id);

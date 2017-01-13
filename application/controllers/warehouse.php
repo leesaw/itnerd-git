@@ -502,7 +502,7 @@ function ajaxViewStock_serial()
 
     $this->load->library('Datatables');
     $this->datatables
-    ->select("it_refcode, itse_serial_number, br_name, it_model, wh_code, wh_name, '1', it_srp, it_short_description", false)
+    ->select("it_refcode, IF(itse_sample = 1, CONCAT(itse_serial_number, '(Sample)'), itse_serial_number), br_name, it_model, wh_code, wh_name, '1', it_srp, it_short_description", false)
     ->from('tp_item_serial')
     ->join('tp_warehouse', 'wh_id = itse_warehouse_id','left')
     ->join('tp_item', 'it_id = itse_item_id','left')
@@ -692,7 +692,11 @@ function exportExcel_stock_itemlist_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->wh_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->itse_serial_number);
+
+        if ($loop->itse_sample > 0) $serial = $loop->itse_serial_number."(Sample)";
+        else $serial = $loop->itse_serial_number;
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $serial);
+        
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 1);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);

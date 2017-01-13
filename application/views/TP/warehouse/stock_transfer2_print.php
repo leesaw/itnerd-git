@@ -9,8 +9,8 @@
 <tr>
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
-</td> 
-<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; $wh_in_group = $loop->wh_in_group; break; } 
+</td>
+<?php foreach($stock_array as $loop) { $datetime = $loop->stot_datein; $si_id = $loop->stot_number; $editor = $loop->firstname." ".$loop->lastname; $confirm = $loop->confirm_firstname." ".$loop->confirm_lastname; $stock_out = $loop->wh_out_code."-".$loop->wh_out_name; $stock_in = $loop->wh_in_code."-".$loop->wh_in_name; $status = $loop->stot_status; $stock_remark = $loop->stot_remark; $dateadd = $loop->stot_confirm_dateadd; $wh_in_group = $loop->wh_in_group; break; }
 
  $GGyear=substr($datetime,0,4);
  $GGmonth=substr($datetime,5,2);
@@ -34,15 +34,15 @@
 	</tr>
 </thead>
 <tbody>
-<?php $no=1; $sum=0; $sum_qty=0; $count_row=0; if(isset($stock_array)) { foreach($stock_array as $loop) { 
-if ($loop->qty_final > 0) {    
+<?php $no=1; $sum=0; $sum_qty=0; $count_row=0; if(isset($stock_array)) { foreach($stock_array as $loop) {
+if ($loop->qty_final > 0) {
 ?>
 <?php if (($count_row !=0) && (($count_row%36) == 0)) { ?></tbody></table><pagebreak /><table border="0">
 <tbody>
 <tr>
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
-</td> 
+</td>
 <td width="50"> </td>
 <td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;"><?php if ($wh_in_group == 3) echo "ใบยืนยันรับสินค้า"; else echo "ใบส่งของ"; ?></div></td>
 </tr>
@@ -62,7 +62,7 @@ if ($loop->qty_final > 0) {
 <?php } ?>
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
-<td style="border-left:1px solid black;"><?php 
+<td style="border-left:1px solid black;"><?php
 if ($loop->br_id != '896') echo $loop->br_name." ".$loop->it_model;
 else echo $loop->br_name." ".$loop->it_short_description; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_final." &nbsp; ".$loop->it_uom; ?></td>
@@ -77,7 +77,7 @@ if(isset($serial_array)) {
         if ($loop->log_stot_item_id==$loop2->itse_item_id) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
-<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; ?>   
+<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; if ($loop2->itse_sample == 1) echo "(Sample)"; ?>   
 </td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="right" style="border-left:1px solid black;"></td>
@@ -87,8 +87,8 @@ if(isset($serial_array)) {
        $count_row++; }
     }
 }
-?> 
-<?php $no++; } } } ?> 
+?>
+<?php $no++; } } } ?>
 <tr><td style="border-top:1px solid black;">&nbsp;</td><td style="border-top:1px solid black;">&nbsp;</td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;">รวมเงิน</td><td align="right" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td></tr>
 
 </tbody>

@@ -7,19 +7,19 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ยืนยันการย้ายคลังสินค้า</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
                 <div class="panel panel-default">
 					<div class="panel-heading">กรุณาตรวจสอบจำนวนสินค้า</div>
-					
+
                     <div class="panel-body">
                         <div class="row">
                             <?php foreach($stock_array as $loop) { ?>
@@ -61,8 +61,8 @@
 							<div class="col-md-12">
 				                <div class="panel panel-default">
 									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
-                                    <?php $must_serial=0; 
-                                          foreach($stock_array as $loop){ 
+                                    <?php $must_serial=0;
+                                          foreach($stock_array as $loop){
                                               $stot_remark = $loop->stot_remark;
                                               if ($loop->it_has_caseback == 1) { $must_serial++; break; } }
                                         if ($must_serial>0) {
@@ -88,7 +88,7 @@
 				                                    </tr>
 				                                </thead>
 												<tbody>
-                                                    <?php 
+                                                    <?php
                                                     $count=0;
                                                     foreach($stock_array as $loop) { ?>
                                                     <tr<?php if ($loop->it_has_caseback==1) echo " class='danger'"; ?>>
@@ -108,7 +108,7 @@
                                                         <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->it_has_caseback==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->it_has_caseback)) echo "readonly"; ?> onChange='calculate();'>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
-                                                    
+
                                                     <?php // if has serial
                                                     $count_serial = 0;
                                                     if ($loop->it_has_caseback==1) {
@@ -131,8 +131,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">
@@ -151,7 +151,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -161,11 +161,11 @@
 <script type="text/javascript">
 
 $(document).ready(function()
-{    
+{
     document.getElementById("savebtn").disabled = false;
     get_datepicker("#datein");
 
-    
+
     setTimeout(function(){
                 calculate();
             },3000);
@@ -177,18 +177,18 @@ $(document).ready(function()
             if(product_code_value != "")
 			{
                 check_product_code(product_code_value, wh_out_id);
-                
+
 			}
-            
+
             $(this).val('');
-            
+
             setTimeout(function(){
                 calculate();
             },3000);
 		}
 	});
 });
-    
+
 function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
@@ -213,9 +213,11 @@ function check_product_code(refcode_input, wh_id)
                     var serial_id = document.getElementsByName("serial_item_id"+data.a);
                     var it_final = document.getElementsByName("it_final");
                     for (var i=0; i<serial_array.length; i++) {
-                        
+
                         if (serial_array[i].value == "") {
-                            serial_array[i].value = data.b;
+														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
+                            else serial_array[i].value = data.b;
+														
                             serial_id[i].value = data.c;
                             it_final[serial].value = parseInt(it_final[serial].value) + 1;
                             break;
@@ -250,7 +252,7 @@ function submitform()
             alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
             return;
         }
-        
+
         if (parseInt(it_final[i].value) > parseInt(qty_old[i].value)) {
             alert("จำนวนสินค้าคงเหลือไม่เพียงพอกับที่ต้องการ !!");
             return;
@@ -259,38 +261,38 @@ function submitform()
     if (document.getElementById('datein').value == "") {
         alert("กรุณาเลือกวันที่รับเข้า");
         document.getElementById('datein').focus();
-    }else{    
+    }else{
         var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
         if (r == true) {
             confirmform();
         }
     }
 }
-    
+
 function calculate() {
     var count = 0;
     var qty = document.getElementsByName('it_final');
     for(var i=0; i<qty.length; i++) {
-        if (qty[i].value == "") qty[i].value = 0; 
+        if (qty[i].value == "") qty[i].value = 0;
         count += parseInt(qty[i].value);
     }
     document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-} 
-    
+}
+
 function confirmform()
 {
     var it_final = document.getElementsByName('it_final');
     var log_id = document.getElementsByName('log_id');
     var item_id = document.getElementsByName('it_id');
     var stot_id = <?php echo $stot_id; ?>;
-    var wh_out_id = document.getElementById("wh_out_id").value; 
-    var wh_in_id = document.getElementById("wh_in_id").value; 
+    var wh_out_id = document.getElementById("wh_out_id").value;
+    var wh_in_id = document.getElementById("wh_in_id").value;
     var datein = document.getElementById("datein").value;
     var stot_remark =  document.getElementById("stotremark").value;
-    
+
     var serial_array = new Array();
     var index_serial = 0;
-    
+
     var item_array = new Array();
     for(var i=0; i<log_id.length; i++){
         if (it_final[i].value % 1 != 0 || it_final[i].value == "") {
@@ -299,25 +301,25 @@ function confirmform()
             return;
         }
         item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
-        
+
         var serial = document.getElementsByName('serial'+item_id[i].value.replace(/\s+/g, ''));
         var serial_wh_id = document.getElementsByName('serial_wh_id'+item_id[i].value.replace(/\s+/g, ''));
         var serial_item_id = document.getElementsByName('serial_item_id'+item_id[i].value.replace(/\s+/g, ''));
-        
+
         for(var j=0; j<serial.length; j++) {
             if (serial[j].value != "") {
-                
+
                 serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
                 index_serial++;
-                
+
             }/*else{
                 alert("กรุณาใส่ Caseback ให้ครบ");
                 return;
             }*/
-            
+
         }
     }
-    
+
     document.getElementById("savebtn").disabled = true;
 
     $.ajax({
@@ -337,8 +339,8 @@ function confirmform()
                         }
 
                 });
-                
-                
+
+
             },
             error: function (textStatus, errorThrown) {
                 alert("เกิดความผิดพลาด !!!");
@@ -348,7 +350,7 @@ function confirmform()
 
 }
 
-    
+
 </script>
 </body>
 </html>

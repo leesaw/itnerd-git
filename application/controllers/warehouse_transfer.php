@@ -879,7 +879,9 @@ function checkStock_transfer_caseback()
     foreach ($result as $loop) {
         $output .= "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
         $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
-        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number;
+        if ($loop->itse_sample == 1) $output .= "(Sample)";
+        $output .= "' style='width: 200px;' readonly></td>";
     }
     echo $output;
 }
@@ -1411,13 +1413,15 @@ function checkSerial_warehouse()
     $result1 = 0;
     $result2 = "";
     $result3 = 0;
+    $result4 = 0;
     foreach($number as $loop) {
         $result1 = $loop->itse_item_id;
         $result2 = $loop->itse_serial_number;
         $result3 = $loop->itse_id;
+        $result4 = $loop->itse_sample;
     }
 
-    $result = array("a" => $result1, "b" => $result2, "c" => $result3);
+    $result = array("a" => $result1, "b" => $result2, "c" => $result3, "d" => $result4);
     echo json_encode($result);
     exit();
 }
@@ -1765,7 +1769,7 @@ function ajaxView_seach_transfer_serial()
 
     $this->load->library('Datatables');
     $this->datatables
-    ->select("stot_datein, CONCAT('/', stot_id, '\">', stot_number, '</a>') as transfer_id, it_refcode, itse_serial_number,  CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
+    ->select("stot_datein, CONCAT('/', stot_id, '\">', stot_number, '</a>') as transfer_id, it_refcode, IF(itse_sample = 1, CONCAT(itse_serial_number,'(Sample)'), itse_serial_number),  CONCAT(wh1.wh_code,'-',wh1.wh_name) as wh_in, CONCAT(wh2.wh_code,'-',wh2.wh_name ) as wh_out", FALSE)
     ->from('log_stock_transfer_serial')
     ->join('log_stock_transfer', 'log_stots_stot_id = log_stot_id', 'left')
     ->join('tp_item_serial', 'log_stots_item_serial_id = itse_id', 'left')

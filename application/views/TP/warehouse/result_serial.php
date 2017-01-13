@@ -49,7 +49,7 @@
 								<tbody>
                                 <?php foreach($stock_array as $loop) { ?>
                                     <tr>
-                                    <td><?php echo $loop->itse_serial_number; ?></td>
+                                    <td><?php echo $loop->itse_serial_number; if ($loop->itse_sample > 0) echo "(Sample)"; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
                                     <td><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>
@@ -58,7 +58,7 @@
                                     <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
                                     <td><?php
                                         if ($loop->itse_enable == 0)
-                                            echo "<a href='#'><button class='btn btn-danger btn-xs'>ขาย หรือ เอาออกจากคลังแล้ว</button></a>"; 
+                                            echo "<a href='#'><button class='btn btn-danger btn-xs'>ขาย หรือ เอาออกจากคลังแล้ว</button></a>";
                                         else
                                             echo "<a href='#'><button class='btn btn-primary btn-xs'>อยู่ในคลังสินค้า</button></a>";
                                         ?>

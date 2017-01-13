@@ -156,7 +156,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_transfer_between_serial_one($where)
  {
-	$this->db->select("log_stots_item_serial_id, itse_serial_number, itse_item_id, log_stots_id, itse_enable, stot_warehouse_out_id");
+	$this->db->select("log_stots_item_serial_id, itse_serial_number, itse_item_id, itse_sample, log_stots_id, itse_enable, stot_warehouse_out_id");
 	$this->db->from('log_stock_transfer_serial');
     $this->db->join('log_stock_transfer', 'log_stot_id = log_stots_stot_id','left');
     $this->db->join('tp_stock_transfer', 'stot_id = log_stot_transfer_id','left');
@@ -221,7 +221,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getItem_stock_caseback($where)
  {
-	$this->db->select("itse_id, itse_serial_number, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, itc_name, br_name, br_code, bc_name, itse_warehouse_id, stob_qty, stob_id, itse_enable, itse_qms");
+	$this->db->select("itse_id, itse_serial_number, itse_sample, it_id, it_refcode, it_barcode, it_model, it_uom, it_short_description, it_long_description, it_srp, it_cost_baht, it_picture, it_min_stock, it_remark, itc_name, br_name, br_code, bc_name, itse_warehouse_id, stob_qty, stob_id, itse_enable, itse_qms");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_item', 'itse_item_id = it_id', 'left');
     $this->db->join('tp_stock_balance', 'stob_warehouse_id=itse_warehouse_id and stob_item_id=it_id', 'left');
