@@ -696,7 +696,7 @@ function exportExcel_stock_itemlist_caseback()
         if ($loop->itse_sample > 0) $serial = $loop->itse_serial_number."(Sample)";
         else $serial = $loop->itse_serial_number;
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $serial);
-        
+
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 1);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);
