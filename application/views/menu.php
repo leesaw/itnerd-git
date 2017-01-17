@@ -189,7 +189,10 @@
                         <a href="<?php echo site_url("tp_suunto_report/inventory_now"); ?>"><i class="fa fa-circle-o"></i> จำนวนคงเหลือปัจจุบัน</a>
                     </li>
                     <li>
-                        <a href="<?php echo site_url("tp_suunto_report/top_ten"); ?>"><i class="fa fa-circle-o"></i> อันดับยอดขาย</a>
+                        <a href="<?php echo site_url("tp_suunto_report/top_ten"); ?>"><i class="fa fa-circle-o"></i> อันดับยอดขายประจำเดือน</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/sale_kpi"); ?>"><i class="fa fa-circle-o"></i> รายงานขายประจำเดือน</a>
                     </li>
                 </ul>
             </li>
@@ -217,6 +220,22 @@
                 </ul>
 
             </li>
+            <?php if ($this->session->userdata('sessstatus') == 1) { ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-tags"></i> <span>Suunto Report</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/inventory_now"); ?>"><i class="fa fa-circle-o"></i> จำนวนคงเหลือปัจจุบัน</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/top_ten"); ?>"><i class="fa fa-circle-o"></i> อันดับยอดขายประจำเดือน</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/sale_kpi"); ?>"><i class="fa fa-circle-o"></i> รายงานขายประจำเดือน</a>
+                    </li>
+                </ul>
+            </li>
+            <?php } ?>
             <?php } ?>
             <li class="treeview">
                 <a href="#"><i class="fa fa-truck"></i> <span>คลังสินค้า (Inventory)</span><i class="fa fa-angle-left pull-right"></i></a>
@@ -271,7 +290,7 @@
                 <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
                 <?php if ($this->session->userdata('sessstatus') != 2) { ?>
-                    <?php if ($this->session->userdata('sessstatus') != 4) { ?>
+                    <?php if ($this->session->userdata('sessstatus') != 4 && $this->session->userdata('sessstatus') != 7) { ?>
 				    <li>
 					   <a href="<?php echo site_url("sale/saleorder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
 					</li>

@@ -38,7 +38,7 @@
                                     <th>SBU</th>
                                     <th>Month</th>
                                     <th>Qty</th>
-                                    <th>Unit Price<br>( Local Currency)</th>
+                                    <th>Unit Price<br>(Local Currency)</th>
                                     <th>Total Amount<br>(Local Currency)</th>
                                     <th>Landed Cost</th>
                                 </tr>

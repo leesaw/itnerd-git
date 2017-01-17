@@ -19,7 +19,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Suunto Report > Top 10 ประจำเดือนที่ี่ <?php echo $month; ?>
+            Suunto Report > อันดับยอดขาย ประจำเดือนที่ <?php echo $month; ?>
         </h1>
     </section>
 
@@ -45,12 +45,17 @@
             <br>
             <div class="row">
 			<div class="col-xs-12">
-                <div class="panel panel-success">
+                <div class="panel panel-primary">
 					<div class="panel-heading">
-                        <h4>Top 10 ประจำเดือนที่ี่ <?php echo $month; ?></h4>
+						<form name="exportexcel" class="pull-right" action="<?php echo site_url("tp_suunto_report/exportExcel_top_ten"); ?>" method="post">
+							<input type="hidden" name="datein" value="<?php echo $month; ?>">
+						<button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel Top 10</button>
+						</form>
+                        <h4>อันดับยอดขาย ประจำเดือนที่ <?php echo $month; ?></h4>
+
                     </div>
                     <div class="panel-body table-responsive">
-                            <table class="table table-hover" id="tablefinal" width="100%">
+                            <table class="table table-bordered" id="tablefinal" width="100%">
                                 <thead>
                                     <tr>
                                         <th rowspan="2">No.</th>
