@@ -104,21 +104,29 @@ function exportExcel_inventory_now()
 
 function top_ten()
 {
-  $datein = $this->input->post("datein");
-  if ($datein !="") {
-      $month = explode('/',$datein);
-      $currentdate = $month[1]."-".$month[0];
+  $startdate = $this->input->post("startdate");
+  $enddate = $this->input->post("enddate");
+
+  if ($startdate != "") {
+      $start = explode('/', $startdate);
+      $start= $start[2]."-".$start[1]."-".$start[0];
+
   }else{
-      $currentdate = date("Y-m");
+      $start = date("m/Y");
+      $startdate = "01/".$start;
+      $start = date("Y-m");
+      $start .= "-01";
   }
 
-  $currentdate = explode('-', $currentdate);
-  $currentmonth = $currentdate[1]."/".$currentdate[0];
-
-  $data['month'] = $currentmonth;
-
-  $start = $currentdate[0]."-".$currentdate[1]."-01";
-  $end = $currentdate[0]."-".$currentdate[1]."-31";
+  if ($enddate != "") {
+      $end = explode('/', $enddate);
+      $end = $end[2]."-".$end[1]."-".$end[0];
+  }else{
+      $end = date("Y-m-d");
+      $enddate =date("d/m/Y");
+  }
+  $data['startdate'] = $startdate;
+  $data['enddate'] = $enddate;
 
   $sql = $this->brand_suunto;
   $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
@@ -134,20 +142,27 @@ function top_ten()
 
 function exportExcel_top_ten()
 {
-  $datein = $this->input->post("datein");
+  $startdate = $this->input->post("startdate");
+  $enddate = $this->input->post("enddate");
 
-  if ($datein !="") {
-      $month = explode('/',$datein);
-      $currentdate = $month[1]."-".$month[0];
+  if ($startdate != "") {
+      $start = explode('/', $startdate);
+      $start= $start[2]."-".$start[1]."-".$start[0];
+
   }else{
-      $currentdate = date("Y-m");
+      $start = date("m/Y");
+      $startdate = "01/".$start;
+      $start = date("Y-m");
+      $start .= "-01";
   }
 
-  $currentdate = explode('-', $currentdate);
-  $currentmonth = $currentdate[1]."/".$currentdate[0];
-
-  $start = $currentdate[0]."-".$currentdate[1]."-01";
-  $end = $currentdate[0]."-".$currentdate[1]."-31";
+  if ($enddate != "") {
+      $end = explode('/', $enddate);
+      $end = $end[2]."-".$end[1]."-".$end[0];
+  }else{
+      $end = date("Y-m-d");
+      $enddate =date("d/m/Y");
+  }
 
   $sql = $this->brand_suunto;
   $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
@@ -155,7 +170,7 @@ function exportExcel_top_ten()
   $this->load->model('tp_suunto_model','',TRUE);
   $top_array = $this->tp_suunto_model->get_top_ten_remark($sql);
 
-  $all_array = $this->tp_suunto_model->get_top_ten_all($sql, 10);
+  $all_array = $this->tp_suunto_model->get_top_ten_all($sql, 0);
 
   //load our new PHPExcel library
   $this->load->library('excel');
@@ -165,8 +180,8 @@ function exportExcel_top_ten()
   $this->excel->getActiveSheet()->setTitle('Suunto Top 10');
 
   $this->excel->getActiveSheet()->setCellValue('A1', 'Suunto Top 10 Report');
-  $this->excel->getActiveSheet()->setCellValue('C1', 'Top 10 ประจำเดือนที่ี่');
-  $this->excel->getActiveSheet()->setCellValue('D1', $currentmonth);
+  $this->excel->getActiveSheet()->setCellValue('C1', 'ช่วงวันที่');
+  $this->excel->getActiveSheet()->setCellValue('D1', $startdate." ถึง ".$enddate);
 
   $this->excel->getActiveSheet()->setCellValue('A3', 'No.');
   $this->excel->getActiveSheet()->setCellValue('B3', 'Shop Code');
@@ -238,19 +253,32 @@ function exportExcel_top_ten()
 
 function sale_kpi()
 {
-  $datein = $this->input->post("datein");
-  if ($datein !="") {
-      $month = explode('/',$datein);
-      $currentdate = $month[1]."-".$month[0];
+  $startdate = $this->input->post("startdate");
+  $enddate = $this->input->post("enddate");
+
+  if ($startdate != "") {
+      $start = explode('/', $startdate);
+      $start= $start[2]."-".$start[1]."-".$start[0];
+
   }else{
-      $currentdate = date("Y-m");
+      $start = date("m/Y");
+      $startdate = "01/".$start;
+      $start = date("Y-m");
+      $start .= "-01";
   }
 
-  $currentdate = explode('-', $currentdate);
-  $currentmonth = $currentdate[1]."/".$currentdate[0];
-  $data['ajax_month'] = $currentdate[0]."-".$currentdate[1];
-  $data['month'] = $currentmonth;
+  if ($enddate != "") {
+      $end = explode('/', $enddate);
+      $end = $end[2]."-".$end[1]."-".$end[0];
+  }else{
+      $end = date("Y-m-d");
+      $enddate =date("d/m/Y");
+  }
+  $data['startdate'] = $startdate;
+  $data['enddate'] = $enddate;
 
+  $data['ajax_start'] = $start;
+  $data['ajax_end'] = $end;
 
   $data['title'] = "Nerd | Suunto Sale KPI";
   $this->load->view('TP/suunto_report/view_sale_kpi',$data);
@@ -258,9 +286,8 @@ function sale_kpi()
 
 function ajaxView_sale_kpi()
 {
-  $month = $this->uri->segment(3);
-  $start = $month."-01";
-  $end = $month."-31";
+  $start = $this->uri->segment(3);
+  $end = $this->uri->segment(4);
 
   $sql = $this->brand_suunto;
   $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
@@ -286,20 +313,28 @@ function ajaxView_sale_kpi()
 
 function exportExcel_sale_kpi()
 {
-  $datein = $this->input->post("datein");
+  $startdate = $this->input->post("startdate");
+  $enddate = $this->input->post("enddate");
 
-  if ($datein !="") {
-      $month = explode('/',$datein);
-      $currentdate = $month[1]."-".$month[0];
+  if ($startdate != "") {
+      $start = explode('/', $startdate);
+      $start= $start[2]."-".$start[1]."-".$start[0];
+
   }else{
-      $currentdate = date("Y-m");
+      $start = date("m/Y");
+      $startdate = "01/".$start;
+      $start = date("Y-m");
+      $start .= "-01";
   }
 
-  $currentdate = explode('-', $currentdate);
-  $currentmonth = $currentdate[1]."/".$currentdate[0];
+  if ($enddate != "") {
+      $end = explode('/', $enddate);
+      $end = $end[2]."-".$end[1]."-".$end[0];
+  }else{
+      $end = date("Y-m-d");
+      $enddate =date("d/m/Y");
+  }
 
-  $start = $currentdate[0]."-".$currentdate[1]."-01";
-  $end = $currentdate[0]."-".$currentdate[1]."-31";
 
   $sql = $this->brand_suunto;
   $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
@@ -319,8 +354,8 @@ function exportExcel_sale_kpi()
   $this->excel->getActiveSheet()->setTitle('Suunto Sale KPI');
 
   $this->excel->getActiveSheet()->setCellValue('A1', 'Suunto Sale Report');
-  $this->excel->getActiveSheet()->setCellValue('C1', 'ประจำเดือนที่ี่');
-  $this->excel->getActiveSheet()->setCellValue('D1', $currentmonth);
+  $this->excel->getActiveSheet()->setCellValue('C1', 'ช่วงวันที่');
+  $this->excel->getActiveSheet()->setCellValue('D1', $startdate." ถึง ".$enddate);
 
   $this->excel->getActiveSheet()->setCellValue('A3', 'Shop Code');
   $this->excel->getActiveSheet()->setCellValue('B3', 'Shop Name');

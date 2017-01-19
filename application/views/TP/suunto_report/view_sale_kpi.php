@@ -19,7 +19,7 @@
         <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Suunto Report > Sale KPI ประจำเดือนที่ <?php echo $month; ?>
+            Suunto Report > Sale KPI ช่วงวันที่ <?php echo $startdate; ?> ถึง <?php echo $enddate; ?>
         </h1>
     </section>
 
@@ -31,16 +31,22 @@
 
         <div class="box-body">
             <div class="row">
-                <div class="col-md-6">
-                    <form action="<?php echo site_url("tp_suunto_report/sale_kpi"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
-                        <div class="form-group-sm">
-                                <label class="col-sm-2 control-label">เลือกเดือน</label>
-                            <div class="col-sm-3">
-                                <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $month; ?>" onChange="submitform();" autocomplete="off" readonly>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+              <form action="<?php echo site_url("tp_suunto_report/sale_kpi"); ?>" name="form1" id="form1" method="post" class="form-horizontal">
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">เลือกช่วงเวลา เริ่ม</label>
+                		<div class="col-sm-2">
+                    <input type="text" class="form-control" name="startdate" id="startdate" value="<?php echo $startdate; ?>" autocomplete="off" readonly>
+                		</div>
+										<label class="col-sm-2 control-label">ถึง</label>
+                		<div class="col-sm-2">
+                    <input type="text" class="form-control" name="enddate" id="enddate" value="<?php echo $enddate; ?>" autocomplete="off" readonly>
+                		</div>
+										<div class="col-sm-2">
+											<button type="button" class="btn btn-primary" onClick="submitform();">ตกลง</button>
+										</div>
+                  </div>
+              </form>
+
             </div>
             <br>
             <div class="row">
@@ -48,10 +54,11 @@
                 <div class="panel panel-danger">
 					<div class="panel-heading">
 						<form name="exportexcel" class="pull-right" action="<?php echo site_url("tp_suunto_report/exportExcel_sale_kpi"); ?>" method="post">
-							<input type="hidden" name="datein" value="<?php echo $month; ?>">
+							<input type="hidden" name="startdate" value="<?php echo $startdate; ?>">
+							<input type="hidden" name="enddate" value="<?php echo $enddate; ?>">
 						<button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
 						</form>
-                        <h4>Sale KPI ประจำเดือนที่ <?php echo $month; ?></h4>
+                        <h4>Sale KPI ช่วงวันที่ <?php echo $startdate; ?> ถึง <?php echo $enddate; ?></h4>
 
                     </div>
                     <div class="panel-body table-responsive">
@@ -106,14 +113,14 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-
-    get_datepicker("#datein");
+		get_datepicker("#startdate");
+    get_datepicker("#enddate");
 
     var oTable = $('#tablebarcode').DataTable({
         "bProcessing": true,
         'bServerSide'    : false,
         "bDeferRender": true,
-        'sAjaxSource'    : '<?php echo site_url("tp_suunto_report/ajaxView_sale_kpi")."/".$ajax_month; ?>',
+        'sAjaxSource'    : '<?php echo site_url("tp_suunto_report/ajaxView_sale_kpi")."/".$ajax_start."/".$ajax_end; ?>',
         "fnServerData": function ( sSource, aoData, fnCallback ) {
             $.ajax( {
                 "dataType": 'json',
@@ -127,21 +134,13 @@ $(document).ready(function()
     });
 
 
-    $('#fancyboxall').fancybox({
-    'width': '40%',
-    'height': '70%',
-    'autoScale':false,
-    'transitionIn':'none',
-    'transitionOut':'none',
-    'type':'iframe'});
-
 });
 
 function get_datepicker(id)
 {
-    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months",
-    minViewMode: "months" }).on('changeDate', function(ev){
+    $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
+
 }
 
 function submitform()
