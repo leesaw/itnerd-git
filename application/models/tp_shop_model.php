@@ -3,10 +3,11 @@ Class Tp_shop_model extends CI_Model
 {
  function getShop($where)
  {
-	$this->db->select("sh_id, sh_name, sh_code, sh_detail, sh_address, sh_number, sh_group_id, sh_category_id, sc_name, sg_name, sh_warehouse_id, wh_name, wh_code, sh_enable");
+	$this->db->select("sh_id, sh_name, sh_name_eng, sh_code, sh_detail, sh_address, sh_number, sh_group_id, sh_category_id, sc_name, sh_channel_id, sn_name, sg_name, sh_warehouse_id, wh_name, wh_code, sh_enable");
 	$this->db->from('tp_shop');
 	$this->db->join('tp_shop_category', 'sh_category_id = sc_id','left');
     $this->db->join('tp_shop_group', 'sh_group_id = sg_id','left');
+    $this->db->join('tp_shop_channel', 'sh_channel_id = sn_id','left');
     $this->db->join('tp_warehouse', 'sh_warehouse_id = wh_id','left');
     if ($where != "") $this->db->where($where);
     $this->db->order_by("sh_code", "asc");
@@ -32,6 +33,16 @@ Class Tp_shop_model extends CI_Model
     $this->db->order_by("sg_name", "asc");
 	$query = $this->db->get();
 	return $query->result();
+ }
+
+ function getShopChannel($where)
+ {
+    $this->db->select("sn_id, sn_name, sn_remark");
+    $this->db->from('tp_shop_channel');
+    if ($where != "") $this->db->where($where);
+    $this->db->order_by("sn_name", "asc");
+    $query = $this->db->get();
+    return $query->result();
  }
 
  function getItem_refcode($where)

@@ -29,7 +29,7 @@ Class Tp_warehouse_model extends CI_Model
 
  function getWarehouse_balance($where)
  {
-	$this->db->select("stob_id, stob_item_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, stob_qty, stob_warehouse_id, wh_name, wh_code, stob_lastupdate, stob_lastupdate_by, count(itse_serial_number) as has_serial");
+	$this->db->select("stob_id, stob_item_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, stob_qty, stob_warehouse_id, wh_name, wh_name_eng, wh_code, stob_lastupdate, stob_lastupdate_by, count(itse_serial_number) as has_serial");
 	$this->db->from('tp_stock_balance');
 	$this->db->join('tp_warehouse', 'wh_id = stob_warehouse_id','left');
     $this->db->join('tp_item', 'it_id = stob_item_id','left');
@@ -70,7 +70,7 @@ Class Tp_warehouse_model extends CI_Model
 
  function getWarehouse_balance_caseback($where)
  {
-	$this->db->select("itse_id, it_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_code, itse_serial_number, br_name, itse_sample, itse_enable");
+	$this->db->select("itse_id, it_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_name_eng, wh_code, itse_serial_number, br_name, itse_sample, itse_enable");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_warehouse', 'itse_warehouse_id = wh_id','left');
     $this->db->join('tp_item', 'it_id = itse_item_id','left');

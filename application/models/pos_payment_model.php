@@ -95,7 +95,7 @@ Class Pos_payment_model extends CI_Model
 
   function get_payment_item($where)
   {
-    $this->db->select("posp_issuedate, posp_small_invoice_number, posh_name, it_refcode, it_model, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net");
+    $this->db->select("posp_issuedate, posp_small_invoice_number, posh_name, sh_code, sh_name_eng, sn_name, it_refcode, it_model, it_short_description, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net");
     $this->db->from('pos_payment_item');
     $this->db->join('pos_payment', 'posp_id=popi_posp_id','left');
     $this->db->join('tp_item', 'it_id = popi_item_id','left');
@@ -103,6 +103,7 @@ Class Pos_payment_model extends CI_Model
     $this->db->join('ngg_users', 'nggu_id = posp_saleperson_id', 'left');
     $this->db->join('pos_shop', 'posh_id = posp_shop_id', 'left');
     $this->db->join('tp_shop', 'posh_shop_id = sh_id','left');
+    $this->db->join('tp_shop_channel', 'sn_id = sh_channel_id', 'left');
     if ($where != "") $this->db->where($where);
     return $this->db->get()->result();
   }

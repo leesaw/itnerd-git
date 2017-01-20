@@ -61,13 +61,14 @@ Class Tp_saleorder_model extends CI_Model
 
  function getSaleOrder_Item($where)
  {
-    $this->db->select("soi_id, soi_saleorder_id, soi_item_id, soi_item_refcode, soi_item_name, it_cost_baht,  soi_item_srp, soi_qty, soi_dc_percent, soi_dc_baht, soi_sale_barcode_id, soi_gp, soi_netprice, soi_remark, it_refcode, it_barcode, br_name, it_model, it_uom, it_short_description, it_srp, sb_number, sb_discount_percent, sb_gp, so_issuedate, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, sh_code, sh_name, sb_number, ( ((soi_item_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100 ) as netprice, itse_serial_number");
-	$this->db->from('tp_saleorder_item');
+    $this->db->select("soi_id, soi_saleorder_id, soi_item_id, soi_item_refcode, soi_item_name, it_cost_baht, soi_item_srp, soi_qty, soi_dc_percent, soi_dc_baht, soi_sale_barcode_id, soi_gp, soi_netprice, soi_remark, it_refcode, it_barcode, br_name, it_model, it_uom, it_short_description, it_srp, sb_number, sb_discount_percent, sb_gp, so_issuedate, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, sh_code, sh_name, sh_name_eng, sn_name, sb_number, ( ((soi_item_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100 ) as netprice, itse_serial_number");
+	  $this->db->from('tp_saleorder_item');
     $this->db->join('tp_saleorder', 'so_id = soi_saleorder_id','left');
     $this->db->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left');
     $this->db->join('tp_item', 'it_id = soi_item_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     $this->db->join('tp_shop', 'so_shop_id = sh_id','left');
+    $this->db->join('tp_shop_channel', 'sn_id = sh_channel_id', 'left');
     $this->db->join('tp_sale_barcode', 'sb_id = soi_sale_barcode_id','left');
     $this->db->join('tp_item_serial', 'itse_id=sos_item_serial_id','left');
     if ($where != "") $this->db->where($where);

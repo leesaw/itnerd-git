@@ -29,7 +29,7 @@
                             <div class="col-md-3">
                                 <form name="form1" id="form1" action="<?php echo site_url('shop/new_shop_save'); ?>" method="post">
                                     <div class="form-group">
-                                            Shop Name *
+                                            Shop Name (ภาษาไทย) *
                                             <input type="text" class="form-control" name="shname" id="shname" value="<?php echo set_value('shname'); ?>">
 											<p class="help-block"><?php echo form_error('shname'); ?></p>
                                     </div>
@@ -75,6 +75,26 @@
                               echo "<option value='".$loop->wh_id."'>".$loop->wh_code."-".$loop->wh_name."</option>";
                          } } ?>
                     </select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+									<div class="form-group">
+                                        Shop Channel *
+                                        <select class="form-control" name="snid" id="snid">
+										<?php 	if(is_array($channel_array)) {
+												foreach($channel_array as $loop){
+													echo "<option value='".$loop->sn_id."'>".$loop->sn_name."</option>";
+										 } } ?>
+                                        </select>
+                  </div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									Shop Name (English) *
+									<input type="text" class="form-control" name="shname_eng" id="shname_eng" value="<?php echo set_value('shname_eng'); ?>">
+									<p class="help-block"><?php echo form_error('shname_eng'); ?></p>
 								</div>
 							</div>
 						</div>

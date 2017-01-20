@@ -64,6 +64,10 @@ function add_new_shop()
     $sql = "";
     $data['category_array'] = $this->tp_shop_model->getShopCategory($sql);
 
+    $sql = "sn_enable = 1";
+    $data['channel_array'] = $this->tp_shop_model->getShopChannel($sql);
+
+
     $data['title'] = "Nerd - New Shop";
     $this->load->view('TP/shop/add_new_shop_view',$data);
 }
@@ -77,17 +81,21 @@ function new_shop_save()
 
     if($this->form_validation->run() == TRUE) {
         $shname= ($this->input->post('shname'));
+        $shname_eng = $this->input->post('shname_eng');
         $shcode= ($this->input->post('shcode'));
         $sgid= ($this->input->post('sgid'));
         $scid = $this->input->post('scid');
         $whid = $this->input->post('whid');
+        $snid = $this->input->post('snid');
 
         $shop = array(
             'sh_name' => $shname,
+            'sh_name_eng' => $shname_eng,
             'sh_code' => $shcode,
             'sh_group_id' => $sgid,
             'sh_category_id' => $scid,
             'sh_warehouse_id' => $whid,
+            'sh_channel_id' => $snid,
         );
 
         $shop_id = $this->tp_shop_model->addShop($shop);
@@ -108,6 +116,9 @@ function new_shop_save()
     $sql = "";
     $data['category_array'] = $this->tp_shop_model->getShopCategory($sql);
 
+    $sql = "sn_enable = 1";
+    $data['channel_array'] = $this->tp_shop_model->getShopChannel($sql);
+
     $data['title'] = "Nerd - New Shop";
     $this->load->view('TP/shop/add_new_shop_view',$data);
 }
@@ -127,6 +138,9 @@ function edit_shop()
     $sql = "";
     $data['category_array'] = $this->tp_shop_model->getShopCategory($sql);
 
+    $sql = "sn_enable = 1";
+    $data['channel_array'] = $this->tp_shop_model->getShopChannel($sql);
+
     $data['title'] = "Nerd - Edit Shop";
     $this->load->view('TP/shop/edit_shop_view',$data);
 }
@@ -141,18 +155,22 @@ function edit_shop_save()
 
     if($this->form_validation->run() == TRUE) {
         $shname= ($this->input->post('shname'));
+        $shname_eng = $this->input->post('shname_eng');
         $shcode= ($this->input->post('shcode'));
         $sgid= ($this->input->post('sgid'));
         $scid = $this->input->post('scid');
         $whid = $this->input->post('whid');
+        $snid = $this->input->post('snid');
 
         $shop = array(
             'id' => $id,
             'sh_name' => $shname,
+            'sh_name_eng' => $shname_eng,
             'sh_code' => $shcode,
             'sh_group_id' => $sgid,
             'sh_category_id' => $scid,
             'sh_warehouse_id' => $whid,
+            'sh_channel_id' => $snid,
         );
 
         $shop_id = $this->tp_shop_model->editShop($shop);

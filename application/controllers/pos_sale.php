@@ -529,36 +529,48 @@ function exportExcel_sale_item()
   //activate worksheet number 1
   $this->excel->setActiveSheetIndex(0);
   //name the worksheet
-  $this->excel->getActiveSheet()->setTitle('Sale Report');
+  $this->excel->getActiveSheet()->setTitle('POS Sale Report');
 
   $this->excel->getActiveSheet()->setCellValue('A1', 'Sold Date');
-  $this->excel->getActiveSheet()->setCellValue('B1', 'เลขที่ใบกำกับภาษีอย่างย่อ');
-  $this->excel->getActiveSheet()->setCellValue('C1', 'POS');
-  $this->excel->getActiveSheet()->setCellValue('D1', 'Ref. Number');
-  $this->excel->getActiveSheet()->setCellValue('E1', 'Model');
-  $this->excel->getActiveSheet()->setCellValue('F1', 'Caseback');
-  $this->excel->getActiveSheet()->setCellValue('G1', 'Brand');
-  $this->excel->getActiveSheet()->setCellValue('H1', 'Qty (Pcs.)');
-  $this->excel->getActiveSheet()->setCellValue('I1', 'SRP');
-  $this->excel->getActiveSheet()->setCellValue('J1', 'Discount (บาท)');
-  $this->excel->getActiveSheet()->setCellValue('K1', 'Net');
-  if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('L1', 'Cost'); }
+  $this->excel->getActiveSheet()->setCellValue('B1', 'Month');
+  $this->excel->getActiveSheet()->setCellValue('C1', 'Shop Code');
+  $this->excel->getActiveSheet()->setCellValue('D1', 'Shop (Thai)');
+  $this->excel->getActiveSheet()->setCellValue('E1', 'Shop (English)');
+  $this->excel->getActiveSheet()->setCellValue('F1', 'Channel');
+  $this->excel->getActiveSheet()->setCellValue('G1', 'Ref. Number');
+  $this->excel->getActiveSheet()->setCellValue('H1', 'Family');
+  $this->excel->getActiveSheet()->setCellValue('I1', 'Description');
+  $this->excel->getActiveSheet()->setCellValue('J1', 'Caseback');
+  $this->excel->getActiveSheet()->setCellValue('K1', 'Brand');
+  $this->excel->getActiveSheet()->setCellValue('L1', 'Qty (Pcs.)');
+  $this->excel->getActiveSheet()->setCellValue('M1', 'SRP');
+  $this->excel->getActiveSheet()->setCellValue('N1', 'Discount (บาท)');
+  $this->excel->getActiveSheet()->setCellValue('O1', 'Net Price');
+  if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('P1', 'Cost'); }
 
   $row = 2;
   foreach($item_array as $loop) {
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->posp_issuedate);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->posp_small_invoice_number);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->posh_name );
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_refcode);
+
+      $dateValue = strtotime($loop->posp_issuedate);
+      $mon = date("M", $dateValue);
+      $yer = date("Y", $dateValue);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $mon."-".$yer);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->sh_code);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->posh_name);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->sh_name_eng);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->sn_name);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_refcode);
       if($loop->it_refcode!=$loop->it_model) $model = $loop->it_model; else $model = "";
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $model);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->popi_item_serial);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->popi_item_brand);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->popi_item_qty);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->popi_item_srp);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->popi_item_dc_baht);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->popi_item_net);
-      if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->it_cost_baht); }
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_model);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->popi_item_serial);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->popi_item_brand);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->popi_item_qty);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->popi_item_srp);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->popi_item_dc_baht);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(14, $row, $loop->popi_item_net);
+      if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(15, $row, $loop->it_cost_baht); }
       $row++;
   }
 

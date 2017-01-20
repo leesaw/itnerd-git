@@ -44,6 +44,7 @@
                                         <th>Shop Code</th>
                                         <th>Shop Group</th>
                                         <th>Shop Category</th>
+																				<th>Channel</th>
                                         <th>Warehouse</th>
                                         <th width="80">Status</th>
 										<th width="80"> </th>
@@ -52,10 +53,11 @@
                                 <tbody>
                                     <?php foreach($shop_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->sh_name; ?></td>
+                                        <td><?php echo $loop->sh_name.'<br><b>'.$loop->sh_name_eng.'</b>'; ?></td>
                                         <td><?php echo $loop->sh_code; ?></td>
                                         <td><?php echo $loop->sg_name; ?></td>
                                         <td><?php echo $loop->sc_name; ?></td>
+																				<td><?php echo $loop->sn_name; ?></td>
                                         <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
                                         <td><?php
                                         if ($loop->sh_enable == 0) {
@@ -87,7 +89,7 @@
 $(document).ready(function()
 {
     $('#itemtable').dataTable();
-    
+
 });
 // tooltip demo
     $('.tooltip-demo').tooltip({

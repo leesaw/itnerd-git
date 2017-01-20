@@ -576,9 +576,10 @@ function exportExcel_stock_itemlist()
     $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
     $this->excel->getActiveSheet()->setCellValue('D1', 'รหัสคลังสินค้า');
     $this->excel->getActiveSheet()->setCellValue('E1', 'คลังสินค้า');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'จำนวน (Pcs.)');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'ราคาป้าย');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'รายละเอียด');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'คลังสินค้า (English)');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'จำนวน (Pcs.)');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'ราคาป้าย');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'รายละเอียด');
 
     $row = 2;
     $count_qty = 0;
@@ -588,16 +589,17 @@ function exportExcel_stock_itemlist()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->wh_name);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->stob_qty);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_srp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->wh_name_eng);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);
         $row++;
         $count_qty += $loop->stob_qty;
     }
 
     // count all qty
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, "จำนวนรวม");
-    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $count_qty);
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, "จำนวนรวม");
+    $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $count_qty);
 
     //--------
 
@@ -679,10 +681,11 @@ function exportExcel_stock_itemlist_caseback()
     $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
     $this->excel->getActiveSheet()->setCellValue('D1', 'รหัสคลังสินค้า');
     $this->excel->getActiveSheet()->setCellValue('E1', 'คลังสินค้า');
-    $this->excel->getActiveSheet()->setCellValue('F1', 'Caseback');
-    $this->excel->getActiveSheet()->setCellValue('G1', 'จำนวน');
-    $this->excel->getActiveSheet()->setCellValue('H1', 'ราคาป้าย');
-    $this->excel->getActiveSheet()->setCellValue('I1', 'รายละเอียด');
+    $this->excel->getActiveSheet()->setCellValue('F1', 'คลังสินค้า (English)');
+    $this->excel->getActiveSheet()->setCellValue('G1', 'Caseback');
+    $this->excel->getActiveSheet()->setCellValue('H1', 'จำนวน');
+    $this->excel->getActiveSheet()->setCellValue('I1', 'ราคาป้าย');
+    $this->excel->getActiveSheet()->setCellValue('J1', 'รายละเอียด');
 
     $row = 2;
     $count_qty = 0;
@@ -692,14 +695,15 @@ function exportExcel_stock_itemlist_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->wh_code);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->wh_name);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->wh_name_eng);
 
         if ($loop->itse_sample > 0) $serial = $loop->itse_serial_number."(Sample)";
         else $serial = $loop->itse_serial_number;
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $serial);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $serial);
 
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, 1);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, 1);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_srp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->it_short_description);
         $row++;
         $count_qty++;
     }

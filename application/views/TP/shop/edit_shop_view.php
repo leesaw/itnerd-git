@@ -18,10 +18,12 @@
 foreach ($sh_array as $loop) {
   $sh_id = $loop->sh_id;
   $sh_name = $loop->sh_name;
+	$sh_name_eng = $loop->sh_name_eng;
   $sh_code = $loop->sh_code;
   $sh_group = $loop->sh_group_id;
   $sh_category = $loop->sh_category_id;
   $wh_id = $loop->sh_warehouse_id;
+	$sh_channel = $loop->sh_channel_id;
 }
 
 
@@ -95,6 +97,28 @@ foreach ($sh_array as $loop) {
                               echo ">".$loop->wh_code."-".$loop->wh_name."</option>";
                          } } ?>
                     </select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+									<div class="form-group">
+                                        Shop Channel *
+                                        <select class="form-control" name="snid" id="snid">
+										<?php 	if(is_array($channel_array)) {
+												foreach($channel_array as $loop){
+													echo "<option value='".$loop->sn_id."'";
+													if($loop->sn_id==$sh_channel) echo " selected";
+													echo ">".$loop->sn_name."</option>";
+										 } } ?>
+                                        </select>
+                  </div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									Shop Name (English) *
+									<input type="text" class="form-control" name="shname_eng" id="shname_eng" value="<?php echo $sh_name_eng; ?>">
+									<p class="help-block"><?php echo form_error('shname_eng'); ?></p>
 								</div>
 							</div>
 						</div>

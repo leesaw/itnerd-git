@@ -64,27 +64,29 @@ function exportExcel_inventory_now()
 
   $this->excel->getActiveSheet()->setCellValue('A3', 'WH Code');
   $this->excel->getActiveSheet()->setCellValue('B3', 'WH Name');
-  $this->excel->getActiveSheet()->setCellValue('C3', 'Suunto Code');
-  $this->excel->getActiveSheet()->setCellValue('D3', 'Description');
-  $this->excel->getActiveSheet()->setCellValue('E3', 'SBU');
-  $this->excel->getActiveSheet()->setCellValue('F3', 'Month');
-  $this->excel->getActiveSheet()->setCellValue('G3', 'Qty');
-  $this->excel->getActiveSheet()->setCellValue('H3', 'Unit Price ( Local Currency)');
-  $this->excel->getActiveSheet()->setCellValue('I3', 'Total Amount ( Local Currency)');
-  $this->excel->getActiveSheet()->setCellValue('J3', 'Landed Cost');
+  $this->excel->getActiveSheet()->setCellValue('C3', 'WH Name (English)');
+  $this->excel->getActiveSheet()->setCellValue('D3', 'Suunto Code');
+  $this->excel->getActiveSheet()->setCellValue('E3', 'Description');
+  $this->excel->getActiveSheet()->setCellValue('F3', 'SBU');
+  $this->excel->getActiveSheet()->setCellValue('G3', 'Month');
+  $this->excel->getActiveSheet()->setCellValue('H3', 'Qty');
+  $this->excel->getActiveSheet()->setCellValue('I3', 'Unit Price ( Local Currency)');
+  $this->excel->getActiveSheet()->setCellValue('J3', 'Total Amount ( Local Currency)');
+  $this->excel->getActiveSheet()->setCellValue('K3', 'Landed Cost');
 
   $row = 4;
   foreach($item_array as $loop) {
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->wh_code);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->wh_name);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_refcode);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_remark);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $now_month);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, ($loop->it_srp * $loop->stob_qty));
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->it_cost_baht);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->wh_name_eng);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_refcode);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_short_description);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $now_month);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->stob_qty);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_srp);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, ($loop->it_srp * $loop->stob_qty));
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->it_cost_baht);
       $row++;
   }
 
@@ -298,13 +300,13 @@ function ajaxView_sale_kpi()
 
   $this->load->library('Datatables');
   $this->datatables
-  ->select("sh_code, sh_name, sc_remark,  date_format(so_issuedate, '%d/%m/%y'), it_refcode, it_short_description, it_remark, it_cost_baht, soi_qty, soi_item_srp, (soi_qty*soi_item_srp), date_format(so_issuedate, '%b-%y')", FALSE)
-  ->from('(( SELECT sh_code, sh_name, sc_remark, so_issuedate, it_refcode, it_short_description, it_remark, it_cost_baht, soi_qty, soi_item_srp FROM tp_saleorder_item
+  ->select("sh_code, sh_name_eng, sn_name,  date_format(so_issuedate, '%d/%m/%y'), it_refcode, it_short_description, it_remark, it_cost_baht, soi_qty, soi_item_srp, (soi_qty*soi_item_srp), date_format(so_issuedate, '%b-%y')", FALSE)
+  ->from('(( SELECT sh_code, sh_name_eng, sn_name, so_issuedate, it_refcode, it_short_description, it_remark, it_cost_baht, soi_qty, soi_item_srp FROM tp_saleorder_item
   LEFT JOIN tp_saleorder ON so_id = soi_saleorder_id LEFT JOIN tp_item ON it_id = soi_item_id LEFT JOIN tp_brand ON br_id = it_brand_id LEFT JOIN tp_shop ON so_shop_id = sh_id
-  LEFT JOIN tp_shop_category ON sh_category_id = sc_id WHERE '.$sql.' ) UNION
-  (SELECT sh_code, sh_name, sc_remark, posp_issuedate as so_issuedate, it_refcode, it_short_description, it_remark, it_cost_baht, popi_item_qty as soi_qty, popi_item_srp as soi_item_srp FROM
+  LEFT JOIN tp_shop_category ON sh_category_id = sc_id LEFT JOIN tp_shop_channel ON sh_channel_id = sn_id WHERE '.$sql.' ) UNION
+  (SELECT sh_code, sh_name_eng, sn_name, posp_issuedate as so_issuedate, it_refcode, it_short_description, it_remark, it_cost_baht, popi_item_qty as soi_qty, popi_item_srp as soi_item_srp FROM
   pos_payment_item LEFT JOIN pos_payment ON posp_id=popi_posp_id LEFT JOIN tp_item ON it_id = popi_item_id LEFT JOIN tp_brand ON br_id = it_brand_id LEFT JOIN ngg_users ON nggu_id = posp_saleperson_id
-  LEFT JOIN pos_shop ON posh_id = posp_shop_id LEFT JOIN tp_shop ON posh_shop_id = sh_id LEFT JOIN tp_shop_category ON sh_category_id = sc_id
+  LEFT JOIN pos_shop ON posh_id = posp_shop_id LEFT JOIN tp_shop ON posh_shop_id = sh_id LEFT JOIN tp_shop_category ON sh_category_id = sc_id LEFT JOIN tp_shop_channel ON sh_channel_id = sn_id
   WHERE '.$sql_payment.'
    )) as aa');
   echo $this->datatables->generate();
@@ -359,31 +361,33 @@ function exportExcel_sale_kpi()
 
   $this->excel->getActiveSheet()->setCellValue('A3', 'Shop Code');
   $this->excel->getActiveSheet()->setCellValue('B3', 'Shop Name');
-  $this->excel->getActiveSheet()->setCellValue('C3', 'Channel');
-  $this->excel->getActiveSheet()->setCellValue('D3', 'Issue Date');
-  $this->excel->getActiveSheet()->setCellValue('E3', 'Suunto Code');
-  $this->excel->getActiveSheet()->setCellValue('F3', 'Description');
-  $this->excel->getActiveSheet()->setCellValue('G3', 'SBU');
-  $this->excel->getActiveSheet()->setCellValue('H3', 'Landed Cost (Local Currency)');
-  $this->excel->getActiveSheet()->setCellValue('I3', 'Qty');
-  $this->excel->getActiveSheet()->setCellValue('J3', 'Selling Price (Local Currency)');
-  $this->excel->getActiveSheet()->setCellValue('K3', 'Total Amount (Local Currency)');
-  $this->excel->getActiveSheet()->setCellValue('L3', 'Month');
+  $this->excel->getActiveSheet()->setCellValue('C3', 'Shop Name (English)');
+  $this->excel->getActiveSheet()->setCellValue('D3', 'Channel');
+  $this->excel->getActiveSheet()->setCellValue('E3', 'Issue Date');
+  $this->excel->getActiveSheet()->setCellValue('F3', 'Suunto Code');
+  $this->excel->getActiveSheet()->setCellValue('G3', 'Description');
+  $this->excel->getActiveSheet()->setCellValue('H3', 'SBU');
+  $this->excel->getActiveSheet()->setCellValue('I3', 'Landed Cost (Local Currency)');
+  $this->excel->getActiveSheet()->setCellValue('J3', 'Qty');
+  $this->excel->getActiveSheet()->setCellValue('K3', 'Selling Price (Local Currency)');
+  $this->excel->getActiveSheet()->setCellValue('L3', 'Total Amount (Local Currency)');
+  $this->excel->getActiveSheet()->setCellValue('M3', 'Month');
 
   $row = 5;
   foreach($sale_array as $loop) {
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->sh_code);
       $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->sh_name);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->sc_remark);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->issuedate);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_refcode);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_short_description);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_remark);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_cost_baht);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->soi_qty);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->soi_item_srp);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->total);
-      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->month);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->sh_name_eng);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->sn_name);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->issuedate);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_refcode);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->it_short_description);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_remark);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_cost_baht);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->soi_qty);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(10, $row, $loop->soi_item_srp);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(11, $row, $loop->total);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(12, $row, $loop->month);
       $row++;
   }
 
