@@ -195,26 +195,42 @@ function stock_rolex_excel()
 
     $row = 3;
     $no = 1;
-    foreach($item_array as $loop) {
+
+    // Conclude serial for 1 product code
+    // foreach($item_array as $loop) {
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
+    //
+    //     $serial_temp = "";
+    //     $count = 0;
+    //     foreach ($serial_array as $loop2) {
+    //         if ($loop->stob_item_id==$loop2->it_id) {
+    //             if ($count != 0) $serial_temp .= " , ";
+    //             $serial_temp .= $loop2->itse_serial_number;
+    //             $count++;
+    //         }
+    //     }
+    //     $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $serial_temp);
+    //     $row++;
+    //     $no++;
+    // }
+
+    foreach($serial_array as $loop) {
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $no);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->it_refcode);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->br_name);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_short_description);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->it_model);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(5, $row, $loop->it_remark);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, '1');
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
-
-        $serial_temp = "";
-        $count = 0;
-        foreach ($serial_array as $loop2) {
-            if ($loop->stob_item_id==$loop2->it_id) {
-                if ($count != 0) $serial_temp .= " , ";
-                $serial_temp .= $loop2->itse_serial_number;
-                $count++;
-            }
-        }
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $serial_temp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->itse_serial_number);
         $row++;
         $no++;
     }
