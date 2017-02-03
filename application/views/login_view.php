@@ -10,14 +10,14 @@
           <br>
         <b>Nerd</b>
         <h5>1.3</h5>
-         
-          
+
+
       </div><!-- /.login-logo -->
       <div class="login-box-body">
         <p class="login-box-msg">เข้าสู่ระบบ</p>
-          
+
         <?php echo validation_errors(); ?>
-          
+
         <?php echo form_open('verifylogin'); ?>
         <div class="form-group has-feedback">
             <input class="form-control" placeholder="Username" name="username" type="username" autofocus>
@@ -43,7 +43,7 @@
 
       </div><!-- /.login-box-body -->
     </div><!-- /.login-box -->
-    
+
     <center>NGG Nerd 2016 - All rights reserved</center>
 
     <?php $this->load->view('js_footer'); ?>
