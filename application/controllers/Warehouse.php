@@ -580,6 +580,7 @@ function exportExcel_stock_itemlist()
     $this->excel->getActiveSheet()->setCellValue('G1', 'จำนวน (Pcs.)');
     $this->excel->getActiveSheet()->setCellValue('H1', 'ราคาป้าย');
     $this->excel->getActiveSheet()->setCellValue('I1', 'รายละเอียด');
+    if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('J1', 'ราคาทุน'); }
 
     $row = 2;
     $count_qty = 0;
@@ -593,6 +594,7 @@ function exportExcel_stock_itemlist()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->stob_qty);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $loop->it_srp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(8, $row, $loop->it_short_description);
+        if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(9, $row, $loop->it_cost_baht); }
         $row++;
         $count_qty += $loop->stob_qty;
     }
