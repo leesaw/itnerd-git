@@ -168,7 +168,7 @@
                                                 <?php $count_qty = 0; $sum_netprice = 0; foreach($item_array as $loop) { ?>
                                                     <tr>
                                                         <td><?php echo $loop->invit_refcode; ?></td>
-                                                        <td><?php echo $loop->invit_brand; ?></td>
+                                                        <td><?php echo $loop->invit_brand." ".$loop->it_model; ?></td>
                                                         <td><?php echo $loop->invit_qty; $count_qty+=$loop->invit_qty;  ?></td>
                                                         <td><?php echo number_format($loop->invit_srp,2,".",","); ?></td>
                                                         <td><?php echo $loop->invit_discount; ?></td>

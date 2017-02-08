@@ -68,8 +68,9 @@
                                         <th>Warehouse Code</th>
                                         <th>Warehouse</th>
 										<th width="50">Qty</th>
-                                        <th>SRP</th>
+                                        <?php if ($this->session->userdata('sessstatus') == 88) { ?><th>Cost</th><?php }else{ ?><th>SRP</th> <?php } ?>
                                         <th width="200">Short Description</th>
+																				<th></th>
                                         <!-- <th width="50">Caseback</th> -->
                                     </tr>
                                 </thead>
@@ -80,6 +81,8 @@
                                     <tr>
                                         <th colspan="5" style="text-align:right">จำนวนทั้งหมด:</th>
                                         <th></th>
+																				<th></th>
+																				<th></th>
                                     </tr>
                                 </tfoot>
 							</table>
@@ -162,9 +165,25 @@ $(document).ready(function()
                     return intVal(a) + intVal(b);
                 }, 0 );
 
+						// Total Sum over all pages
+	          total_price = api
+	              .column( 8 )
+	              .data()
+	              .reduce( function (a, b) {
+	                  return intVal(a) + intVal(b);
+	              }, 0 );
+
             // Total over this page
             pageTotal = api
                 .column( 5, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+						// Total Sum over this page
+            pageTotal_price = api
+                .column( 8, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
@@ -174,7 +193,19 @@ $(document).ready(function()
             $( api.column( 5 ).footer() ).html(
                 total+' ('+pageTotal+')'
             );
-        }
+
+						// Update footer for sum price
+            $( api.column( 6 ).footer() ).html(
+                (total_price).formatMoney(2, '.', ',')+'<br>('+(pageTotal_price).formatMoney(2, '.', ',')+')'
+            );
+        },
+				"columnDefs": [
+            {
+                "targets": [ 8 ],
+                "visible": false,
+                "searchable": false
+            },
+        ]
     });
 
     $('#fancyboxall').fancybox({
@@ -190,6 +221,17 @@ $(document).ready(function()
         document.getElementById("viewbyserial").submit();
     });
 });
+
+Number.prototype.formatMoney = function(c, d, t){
+var n = this,
+    c = isNaN(c = Math.abs(c)) ? 2 : c,
+    d = d == undefined ? "." : d,
+    t = t == undefined ? "," : t,
+    s = n < 0 ? "-" : "",
+    i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "",
+    j = (j = i.length) > 3 ? j % 3 : 0;
+   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+ };
 
 function showcaseback()
 {

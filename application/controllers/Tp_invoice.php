@@ -121,7 +121,7 @@ function check_item_refcode()
 
     if (count($result) >0) {
         foreach($result as $loop) {
-            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();'";
+            $output[$index] = "<td><input type='hidden' name='it_id' value='".$loop->it_id."'><input type='hidden' name='it_refcode' value='".$loop->it_refcode."'>".$loop->it_refcode."</td><td><input type='hidden' name='br_name' value='".$loop->br_name."'>".$loop->br_name." ".$loop->it_model."</td><td><input type='hidden' name='it_srp1' id='it_srp1' value='".$loop->it_srp."'>".$loop->it_srp."</td><td><input type='text' style='width: 80px;' name='it_discount1' id='it_discount1' value='' onChange='calSRP();'";
             // repair item can edit
             if ($loop->it_id > 1) $output[$index] .= " readonly";
             $output[$index] .= "></td><td><input type='text' name='it_qty' id='it_qty' value='1' onChange='calculate();'></td><td><input type='text' name='it_srp' id='it_srp' value='".number_format($loop->it_srp, 2, ".", ",")."' readonly></td><td><input type='text' style='width: 80px;' name='it_discount' id='it_discount' value='' onChange='calDiscount();'></td><td><input type='text' name='it_netprice' id='it_netprice' value='".number_format($loop->it_srp, 2, ".", ",")."' onChange='calculate();'></td>";
@@ -155,21 +155,33 @@ function check_sale_barcode()
 
 function save_new_invoice()
 {
-    $datein = $this->input->post("datein");
-    $wh_id = $this->input->post("wh_id");
+    // $datein = $this->input->post("datein");
+    // $wh_id = $this->input->post("wh_id");
     $cusname = $this->input->post("cusname");
     $cusaddress1 = $this->input->post("cusaddress1");
     $cusaddress2 = $this->input->post("cusaddress2");
     $custax_id = $this->input->post("custax_id");
     $branch = $this->input->post("branch");
-    $branch_number = $this->input->post("branch_number");
-    $vender = $this->input->post("vender");
-    $barcode = $this->input->post("barcode");
-    $tb_number = $this->input->post("tb_number");
-    $stot_id = $this->input->post("stot_id");
-    $discount_srp = $this->input->post("discount_srp");
+    // $branch_number = $this->input->post("branch_number");
+    // $vender = $this->input->post("vender");
+    // $barcode = $this->input->post("barcode");
+    // $tb_number = $this->input->post("tb_number");
+    // $stot_id = $this->input->post("stot_id");
+    // $discount_srp = $this->input->post("discount_srp");
     $note = $this->input->post("note");
     $remark = $this->input->post("remark");
+
+    $detial = $this->input->post("detail");
+    $detial = explode('#,#', $detial);
+    $datein = $detial[5];
+    $wh_id = $detial[6];
+    $branch_number = $detial[7];
+    $vender = $detial[4];
+    $barcode = $detial[3];
+    $tb_number = $detial[2];
+    $stot_id = $detial[1];
+    $discount_srp = $detial[0];
+
     $it_array = $this->input->post("item");
 
     if ($branch == -1) {

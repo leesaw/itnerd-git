@@ -438,15 +438,27 @@ function ajaxViewStock()
     }
 
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("it_refcode, br_name, it_model, wh_code, wh_name, stob_qty, it_srp, it_short_description")
-    ->from('tp_stock_balance')
-    ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
-    ->join('tp_item', 'it_id = stob_item_id','left')
-    ->join('tp_brand', 'br_id = it_brand_id','left')
-    ->where('stob_qty >', 0)
-    ->where('it_enable',1)
-    ->where($sql);
+    if ($this->session->userdata('sessstatus') == 88) {
+      $this->datatables
+      ->select("it_refcode, br_name, it_model, wh_code, wh_name, stob_qty, it_cost_baht, it_short_description, (stob_qty * it_cost_baht)")
+      ->from('tp_stock_balance')
+      ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
+      ->join('tp_item', 'it_id = stob_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->where('stob_qty >', 0)
+      ->where('it_enable',1)
+      ->where($sql);
+    }else{
+      $this->datatables
+      ->select("it_refcode, br_name, it_model, wh_code, wh_name, stob_qty, it_srp, it_short_description, (stob_qty * it_srp)")
+      ->from('tp_stock_balance')
+      ->join('tp_warehouse', 'wh_id = stob_warehouse_id','left')
+      ->join('tp_item', 'it_id = stob_item_id','left')
+      ->join('tp_brand', 'br_id = it_brand_id','left')
+      ->where('stob_qty >', 0)
+      ->where('it_enable',1)
+      ->where($sql);
+    }
     echo $this->datatables->generate();
 }
 

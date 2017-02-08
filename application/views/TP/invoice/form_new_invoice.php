@@ -656,6 +656,13 @@ function confirmform()
     var discount_srp = document.getElementById('discount_srp').value;
     var note = document.getElementById('note').value;
 
+		var detail = discount_srp+"#,#"+stot_id+"#,#"+tb_number+"#,#"+barcode+"#,#"+vender+"#,#"+datein+"#,#"+wh_id+"#,#"+branch_number;
+
+
+
+		// var detail_array = new Array();
+		// detail_array = {discount_srp: discount_srp,stot_id: stot_id, tb_number: tb_number, barcode: barcode, vender: vender}
+		// detail_array = {note: note, tb_number: tb_number, barcode: barcode, vender: vender};
 
     var it_id = document.getElementsByName('it_id');
     var it_refcode = document.getElementsByName('it_refcode');
@@ -677,8 +684,9 @@ function confirmform()
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("tp_invoice/save_new_invoice"); ?>" ,
-        data : {datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
-        dataType: 'json',
+        //data : {datein: datein, item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, branch_number: branch_number, wh_id: wh_id, vender: vender, barcode: barcode, tb_number: tb_number, stot_id: stot_id, discount_srp: discount_srp, note: note, remark: remark} ,
+				data : {item: it_array, cusname: cusname, cusaddress1: cusaddress1, cusaddress2: cusaddress2, custax_id: custax_id, branch: branch, detail: detail, note: note, remark: remark},
+				dataType: 'json',
         success : function(data) {
             var message = "เอกสาร Invoice เลขที่ "+data.a+" ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์เอกสาร ใช่หรือไม่";
             bootbox.confirm(message, function(result) {
@@ -695,6 +703,7 @@ function confirmform()
 
         },
         error: function (textStatus, errorThrown) {
+						console.log("note="+note);
             alert("เกิดความผิดพลาด !!!");
             document.getElementById("savebtn").disabled = false;
         }
