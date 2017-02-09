@@ -150,7 +150,7 @@
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-primary">
-									<div class="panel-heading"><h3 class="panel-title">รายการสินค้า</h3></div>
+									<div class="panel-heading"><h3 class="panel-title">รายการสินค้า <u><b>จำนวน <?php echo count($item_array); ?> รายการ</b></u></h3></div>
 				                    <div class="panel-body">
 				                        <div class="table-responsive">
 				                            <table class="table table-bordered table-hover" id="tablebarcode" width="100%">
