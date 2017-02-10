@@ -399,6 +399,7 @@ function ajaxViewStock()
     $maxprice = $this->uri->segment(7);
 
     $sql = "br_id != '888'";
+    if ($this->session->userdata('sessstatus') == 88) $sql = "br_id > '0'";
 
     if (($brand=="0") && ($warehouse=="0") && ($minprice=="") && ($maxprice=="")){
         if ($keyword[0]!="NULL") {
