@@ -124,7 +124,7 @@ function save()
     $this->form_validation->set_rules('minstock', 'minstock', 'trim|xss_clean|required|numeric');
     $this->form_validation->set_rules('uom', 'uom', 'trim|xss_clean|required');
     $this->form_validation->set_rules('short', 'short', 'xss_clean');
-    $this->form_validation->set_rules('long', 'long', 'xss_clean');
+    //$this->form_validation->set_rules('long', 'long', 'xss_clean');
     $this->form_validation->set_message('required', 'กรุณาใส่ข้อมูล');
     $this->form_validation->set_message('numeric', 'กรุณาใส่เฉพาะตัวเลขเท่านั้น');
     $this->form_validation->set_error_delimiters('<code>', '</code>');
