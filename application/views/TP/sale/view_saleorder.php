@@ -24,6 +24,7 @@ foreach($so_array as $loop) {
     $dateadd = $loop->so_dateadd;
     $remark = $loop->so_remark;
     $status = $loop->so_status;
+		$on_top_baht = $loop->so_ontop_baht;
 }
 
 $caseback = count($serial_array);
@@ -148,6 +149,12 @@ $caseback = count($serial_array);
                                 <div class="form-group-sm">
                                     Remark
                                     <input type="text" class="form-control" name="saleorder_remark" id="saleorder_remark" value="<?php echo $remark; ?>" readonly>
+                                </div>
+                            </div>
+														<div class="col-md-2">
+                                <div class="form-group-sm">
+                                    <div class="text-red">ส่วนลดท้ายบิล (บาท)</div>
+                                    <input type="text" class="form-control" name="on_top_baht" id="on_top_baht" value="<?php echo number_format($on_top_baht, 2, '.', ','); ?>" readonly>
                                 </div>
                             </div>
                         </div>

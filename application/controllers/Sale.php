@@ -127,6 +127,8 @@ function saleorder_save()
     $serial_array = $this->input->post("serial");
     $caseback = $this->input->post("caseback");
     $saleorder_remark = $this->input->post("saleorder_remark");
+    $on_top_baht = $this->input->post("on_top_baht");
+
     $currentdate = date("Y-m-d H:i:s");
 
     $datein = explode('/', $datein);
@@ -147,6 +149,7 @@ function saleorder_save()
                     'so_dateadd' => $currentdate,
                     'so_shop_id' => $shop_id,
                     'so_remark' => $saleorder_remark,
+                    'so_ontop_baht' => $on_top_baht,
                     'so_dateadd_by' => $this->session->userdata('sessid')
             );
     $last_id = $this->tp_saleorder_model->addSaleOrder($sale);
@@ -1281,7 +1284,7 @@ function ajaxViewSaleReport()
     $this->load->library('Datatables');
     if ($this->session->userdata('sessstatus') != '88') {
       $this->datatables
-      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
+      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, IF(so_ontop_baht > 0, CONCAT(soi_dc_baht, '<br>[ท้ายบิลรวม ', so_ontop_baht, ' ]') ,soi_dc_baht) as dcbaht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice", FALSE)
       ->from('tp_saleorder_item')
       ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
       ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
@@ -1295,7 +1298,7 @@ function ajaxViewSaleReport()
       ->edit_column("sale_id",'<a target="_blank"  href="'.site_url("sale/saleorder_print").'$1',"sale_id");
     }else{
       $this->datatables
-      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, soi_dc_baht,IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice, it_cost_baht", FALSE)
+      ->select("so_issuedate, CONCAT('/', so_id, '\">', so_number, '</a>') as sale_id, CONCAT(sh_code,'-',sh_name) as shopname, it_refcode, IF( it_refcode=it_model, '', it_model ) as model, itse_serial_number, br_name, soi_qty, soi_item_srp, sb_number, IF( soi_sale_barcode_id >0, sb_discount_percent, soi_dc_percent ) as dc, IF(so_ontop_baht > 0, CONCAT(soi_dc_baht, '<br>[ท้ายบิลรวม ', so_ontop_baht, ' ]') ,soi_dc_baht) as dcbaht, IF( soi_sale_barcode_id >0, sb_gp, soi_gp ) as gp, ((((it_srp*(100 - ( select dc ))/100) - soi_dc_baht )*(100 - ( select gp ))/100)*soi_qty) as netprice, it_cost_baht", FALSE)
       ->from('tp_saleorder_item')
       ->join('tp_saleorder', 'so_id = soi_saleorder_id','left')
       ->join('tp_saleorder_serial', 'sos_soi_id = soi_id', 'left')
@@ -1384,9 +1387,10 @@ function exportExcel_sale_report()
     $this->excel->getActiveSheet()->setCellValue('N1', 'BAR');
     $this->excel->getActiveSheet()->setCellValue('O1', 'Discount (%)');
     $this->excel->getActiveSheet()->setCellValue('P1', 'On Top (บาท)');
-    $this->excel->getActiveSheet()->setCellValue('Q1', 'GP (%)');
-    $this->excel->getActiveSheet()->setCellValue('R1', 'Receive on Inv.');
-    if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('S1', 'Cost'); }
+    $this->excel->getActiveSheet()->setCellValue('Q1', 'ส่วนลดท้ายบิลรวม (บาท)');
+    $this->excel->getActiveSheet()->setCellValue('R1', 'GP (%)');
+    $this->excel->getActiveSheet()->setCellValue('S1', 'Receive on Inv.');
+    if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValue('T1', 'Cost'); }
 
     $row = 2;
     foreach($item_array as $loop) {
@@ -1411,9 +1415,10 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->sb_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(14, $row, $loop->dc);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(15, $row, $loop->soi_dc_baht);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, $loop->gp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(17, $row, $loop->netprice);
-        if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, $loop->it_cost_baht); }
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, $loop->so_ontop_baht);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(17, $row, $loop->gp);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, $loop->netprice);
+        if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(19, $row, $loop->it_cost_baht); }
         $row++;
     }
 

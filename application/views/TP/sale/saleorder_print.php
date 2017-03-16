@@ -10,7 +10,8 @@
 <td width="450">
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td>
-<?php foreach($so_array as $loop) { $datetime = $loop->so_issuedate; $so_id = $loop->so_number; $editor = $loop->firstname." ".$loop->lastname; $shop = $loop->sh_code."-".$loop->sh_name; $dateadd = $loop->so_dateadd; $so_remark = $loop->so_remark; break; }
+<?php foreach($so_array as $loop) { $datetime = $loop->so_issuedate; $so_id = $loop->so_number; $editor = $loop->firstname." ".$loop->lastname;
+  $shop = $loop->sh_code."-".$loop->sh_name; $dateadd = $loop->so_dateadd; $so_remark = $loop->so_remark; $on_top_baht = $loop->so_ontop_baht; break; }
 
  $GGyear=substr($datetime,0,4);
  $GGmonth=substr($datetime,5,2);
@@ -77,7 +78,18 @@ if(isset($serial_array)) {
 }
 ?>
 <?php $no++; } } ?>
-<tr><td style="border-top:1px solid black;" colspan="2">&nbsp;</td><td align="right" style="border-top:1px solid black; ">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;" colspan="2">รวมเงิน</td><td align="right" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td></tr>
+<?php if ($on_top_baht > 0) { ?>
+<tr style="border:1px solid black;"><td align="center"></td>
+<td align="center" style="border-left:1px solid black;"></td>
+<td style="border-left:1px solid black;">ส่วนลดท้ายบิล</td>
+<td align="center" style="border-left:1px solid black;"></td>
+<td align="right" style="border-left:1px solid black;"></td>
+<td align="right" style="border-left:1px solid black;"></td>
+<td align="right" style="border-left:1px solid black;"><?php echo "-".number_format($on_top_baht, 2, '.', ',')."&nbsp;&nbsp;"; $sum -= $on_top_baht; ?></td>
+</tr>
+<?php } ?>
+<tr><td style="border-top:1px solid black;" colspan="2">&nbsp;</td><td align="right" style="border-top:1px solid black; ">รวมจำนวน</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;" colspan="2">รวมเงิน</td>
+  <td align="right" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ',')."&nbsp;&nbsp;"; ?></td></tr>
 
 </tbody>
 </table>

@@ -55,7 +55,9 @@
 <table style="border:1px solid black; border-spacing:0px 0px;">
 <thead>
 	<tr>
-		<th width="80" style="border-bottom:1px solid black;">Sold Date</th><th width="200" style="border-left:1px solid black;border-bottom:1px solid black;">Shop</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Caseback</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Brand</th><th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">SRP</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">BAR</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">Discount(%)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">On Top(บาท)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">GP(%)</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Receive on Inv.</th>
+		<th width="80" style="border-bottom:1px solid black;">Sold Date</th><th width="200" style="border-left:1px solid black;border-bottom:1px solid black;">Shop</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Caseback</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Brand</th>
+    <th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">SRP</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">BAR</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">Discount(%)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">On Top(บาท)</th>
+    <th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">ส่วนลดท้ายบิลรวม (บาท)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">GP(%)</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Receive on Inv.</th>
 	</tr>
 </thead>
 <tbody>
@@ -80,7 +82,9 @@
 <table style="border:1px solid black; border-spacing:0px 0px;">
 <thead>
     <tr>
-        <th width="80" style="border-bottom:1px solid black;">Sold Date</th><th width="200" style="border-left:1px solid black;border-bottom:1px solid black;">Shop</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Caseback</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Brand</th><th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">SRP</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">BAR</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">Discount(%)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">On Top(บาท)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">GP(%)</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Receive on Inv.</th>
+        <th width="80" style="border-bottom:1px solid black;">111Sold Date</th><th width="200" style="border-left:1px solid black;border-bottom:1px solid black;">Shop</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Ref. Number</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Caseback</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">Brand</th>
+        <th width="50" style="border-left:1px solid black;border-bottom:1px solid black;">จำนวน</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">SRP</th><th width="80" style="border-left:1px solid black;border-bottom:1px solid black;">BAR</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">Discount(%)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">On Top(บาท)</th>
+        <th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">ส่วนลดท้ายบิลรวม (บาท)</th><th width="30" style="border-left:1px solid black;border-bottom:1px solid black;">GP(%)</th><th width="100" style="border-left:1px solid black;border-bottom:1px solid black;">Receive on Inv.</th>
     </tr>
 </thead>
 <tbody>
@@ -98,13 +102,15 @@
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->sb_number; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php if($loop->soi_sale_barcode_id > 0) { $dc = $loop->sb_discount_percent; }else{ $dc = $loop->soi_dc_percent; } echo $dc; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->soi_dc_baht; ?></td>
+<td align="center" style="border-left:1px solid black;"><?php echo $loop->so_ontop_baht; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php if($loop->soi_sale_barcode_id > 0) $gp = $loop->sb_gp; else $gp = $loop->soi_gp; echo $gp; ?></td>
 </tr>
 <td align="center" style="border-left:1px solid black;"><?php $rev = ((($loop->soi_item_srp*(100 - $dc)/100) - $loop->soi_dc_baht )*(100 -  $gp)/100); echo number_format($rev, 2, '.', ','); $sum+=$rev; ?></td>
 </tr>
 
 <?php $no++; } } ?>
-<tr><td style="border-top:1px solid black;" colspan="4">&nbsp;</td><td align="right" style="border-top:1px solid black; ">จำนวนทั้งหมด</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;" colspan="5">ยอดเงินทั้งหมด</td><td align="center" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ','); ?></td></tr>
+<tr><td style="border-top:1px solid black;" colspan="4">&nbsp;</td><td align="right" style="border-top:1px solid black; ">จำนวนทั้งหมด</td><td align="center" style="border-top:1px solid black; border-left:1px solid black;"><?php echo $sum_qty; ?></td><td align="right" style="border-top:1px solid black; border-left:1px solid black;" colspan="6">ยอดเงินทั้งหมด</td>
+  <td align="center" style="border-left:1px solid black;border-top:1px solid black;"><?php echo number_format($sum, 2, '.', ','); ?></td></tr>
 
 </tbody>
 </table>

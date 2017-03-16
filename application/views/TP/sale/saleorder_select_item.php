@@ -89,6 +89,12 @@
                                     <input type="text" class="form-control" name="saleorder_remark" id="saleorder_remark" value="">
                                 </div>
                             </div>
+														<div class="col-md-2">
+                                <div class="form-group-sm">
+                                    <div class="text-red">ส่วนลดท้ายบิล (บาท)</div>
+                                    <input type="text" class="form-control" name="on_top_baht" id="on_top_baht" value="">
+                                </div>
+                            </div>
                         </div>
                         <br>
                         <div class="row">
@@ -262,6 +268,7 @@ function confirmform(caseback)
     var stob_id = document.getElementsByName('stob_id');
 
     var saleorder_remark =  document.getElementById("saleorder_remark").value;
+		var on_top_baht =  document.getElementById("on_top_baht").value;
 
     var it_array = new Array();
     var serial_array = new Array();
@@ -298,7 +305,7 @@ function confirmform(caseback)
     $.ajax({
         type : "POST" ,
         url : "<?php echo site_url("sale/saleorder_save"); ?>" ,
-        data : {datein: datein, shop_id: shop_id, shop_code: shop_code, item: it_array, serial: serial_array, caseback: caseback, saleorder_remark: saleorder_remark} ,
+        data : {datein: datein, shop_id: shop_id, shop_code: shop_code, item: it_array, serial: serial_array, caseback: caseback, saleorder_remark: saleorder_remark, on_top_baht: on_top_baht} ,
         dataType: 'json',
         success : function(data) {
             var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบสั่งขาย ใช่หรือไม่";

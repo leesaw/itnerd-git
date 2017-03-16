@@ -95,7 +95,7 @@ Class Pos_payment_model extends CI_Model
 
   function get_payment_item($where)
   {
-    $this->db->select("posp_issuedate, posp_small_invoice_number, posh_name, sh_code, sh_name_eng, sn_name, it_refcode, it_model, it_short_description, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net");
+    $this->db->select("posp_issuedate, posp_small_invoice_number, posh_name, sh_code, sh_name_eng, sn_name, it_refcode, it_model, it_cost_baht, it_short_description, popi_item_serial, popi_item_brand, popi_item_qty, popi_item_srp, popi_item_dc_baht, popi_item_net");
     $this->db->from('pos_payment_item');
     $this->db->join('pos_payment', 'posp_id=popi_posp_id','left');
     $this->db->join('tp_item', 'it_id = popi_item_id','left');
