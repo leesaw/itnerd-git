@@ -8,18 +8,18 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>จัดการข้อมูลสินค้า</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-md-12">
                 <div class="box box-primary">
-                        
+
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("item/filter_item"); ?>" method="post">
@@ -53,19 +53,21 @@
                 <button type="submit" name="action" value="0" class="btn btn-primary btn-xs"><i class="fa fa-search"></i> Filter</button>
             </div>
 
-        </div>              
-                        
-        </form>               
-                        
+        </div>
+
+        </form>
+
 					</div>
                 </div>
             </div>
         </div>
-            
+
         <div class="row">
 			<div class="col-xs-12">
                 <div class="panel panel-danger">
-					<div class="panel-heading"></div>
+										<div class="panel-heading"><form name="exportexcel" action="<?php echo site_url("item/export_excel_item"); ?>" method="post">
+                        <button class="btn btn-success" type="submit"><span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span> Excel</button>
+                        </form></div>
                     <div class="panel-body">
                             <table class="table table-bordered table-striped" id="itemtable" width="100%">
                                 <thead>
@@ -81,7 +83,7 @@
 							</table>
 					</div>
 				</div>
-			</div>	
+			</div>
 		</div>
         </section>
 	</div>
@@ -91,7 +93,7 @@
 <script src="<?php echo base_url(); ?>plugins/datatables/dataTables.bootstrap.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     $('#itemtable').dataTable
         ({
             "bProcessing": true,
@@ -105,17 +107,17 @@ $(document).ready(function()
                     "url": sSource,
                     "data": aoData,
                     "success":fnCallback
-                
+
                 });
             }
         });
-    
+
 });
 // tooltip demo
     $('.tooltip-demo').tooltip({
         selector: "[rel=tooltip]",
         container: "body"
-    })  
+    })
 </script>
 </body>
 </html>

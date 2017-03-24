@@ -67,9 +67,12 @@
                                               if ($loop->it_has_caseback == 1) { $must_serial++; break; } }
                                         if ($must_serial>0) {
                                     ?>
-                                            <input type="text" class="form-control" name="refcode" id="refcode" placeholder="Caseback No. ที่ต้องการย้าย"><div class="input-group-btn">
+                                            <input type="text" class="form-control" name="caseback" id="caseback" placeholder="Caseback No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
-                                    <?php } ?>
+                                    <?php } else { ?>
+																						<input type="text" class="form-control" name="refcode" id="refcode" placeholder="Refcode No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
+																						<button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
+																		<?php } ?>
                                         <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
                                         </div></div>
 				                    <div class="panel-body">
@@ -170,13 +173,30 @@ $(document).ready(function()
                 calculate();
             },3000);
 
-    $('#refcode').keyup(function(e){ //enter next
+    $('#caseback').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
             var wh_out_id = "<?php echo $wh_out_id; ?>";
             if(product_code_value != "")
 			{
                 check_product_code(product_code_value, wh_out_id);
+
+			}
+
+            $(this).val('');
+
+            setTimeout(function(){
+                calculate();
+            },3000);
+		}
+
+		$('#refcode').keyup(function(e){ //enter next
+        if(e.keyCode == 13) {
+            var refcode = $.trim($(this).val());
+            var wh_out_id = "<?php echo $wh_out_id; ?>";
+            if(product_code_value != "")
+			{
+                check_ref_code(refcode, wh_out_id);
 
 			}
 
@@ -193,6 +213,49 @@ function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
+}
+
+function check_ref_code(refcode_input, wh_id)
+{
+	if(refcode_input != "")
+	{
+        $.ajax({
+            type : "POST" ,
+            dataType: "json",
+            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
+            data : {refcode: refcode_input, serial_wh_id: wh_id},
+            success : function(data) {
+                if(data.a > 0)
+                {
+                    var ind = "serial"+data.a;
+                    var serial = document.getElementById("count_serial_"+data.a).value;
+                    var serial_array = document.getElementsByName(ind);
+                    var serial_id = document.getElementsByName("serial_item_id"+data.a);
+                    var it_final = document.getElementsByName("it_final");
+                    for (var i=0; i<serial_array.length; i++) {
+
+                        if (serial_array[i].value == "") {
+														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
+                            else serial_array[i].value = data.b;
+
+                            serial_id[i].value = data.c;
+                            it_final[serial].value = parseInt(it_final[serial].value) + 1;
+                            break;
+                        }else if(data.b == serial_array[i].value) {
+                            alert("Caseback ซ้ำ");
+                            break;
+                        }
+                    }
+                }else{
+                    alert("ไม่พบ Caseback ที่ต้องการในคลัง");
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                alert("เกิดความผิดพลาด !!!");
+            }
+        });
+	}
+
 }
 
 function check_product_code(refcode_input, wh_id)
@@ -217,7 +280,7 @@ function check_product_code(refcode_input, wh_id)
                         if (serial_array[i].value == "") {
 														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
                             else serial_array[i].value = data.b;
-														
+
                             serial_id[i].value = data.c;
                             it_final[serial].value = parseInt(it_final[serial].value) + 1;
                             break;

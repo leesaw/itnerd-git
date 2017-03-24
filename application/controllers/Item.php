@@ -51,6 +51,74 @@ function manage()
     $this->load->view('TP/item/allitem_view',$data);
 }
 
+function export_excel_item()
+{
+  $all = $this->input->post("all");
+  $where = "";
+  if ($all != 1) {
+    $refcode = $this->input->post("refcode");
+    $keyword = explode("%20", $refcode);
+    $brandid = $this->input->post("brandid");
+    $catid = $this->input->post("catid");
+    if ($keyword[0] != "NULL") {
+        if (count($keyword) > 1) {
+            for($i=0; $i<count($keyword); $i++) {
+                if ($i != 0) $where .= " or it_short_description like '%".$keyword[$i]."%'";
+                else if ($keyword[$i] != "") $where .= "( it_short_description like '%".$keyword[$i]."%'";
+                if ($i == (count($keyword)-1)) $where .= " )";
+            }
+        }else{
+            $where .= "( it_refcode like '%".$keyword[0]."%' or it_short_description like '%".$keyword[0]."%' )";
+        }
+
+        $where .= " and ";
+    }
+    if (($brandid != 0) && ($catid != 0)) $where .= "it_brand_id = '".$brandid."' and it_category_id = '".$catid."' and ";
+    else if (($brandid != 0) && ($catid == 0)) $where .= "it_brand_id = '".$brandid."' and ";
+    else if (($brandid == 0) && ($catid != 0)) $where .= "it_category_id = '".$catid."' and ";
+    $where .= $this->no_rolex." and it_enable = 1";
+  }else{
+    $where = "it_enable = 1";
+  }
+
+  $item_array = $this->tp_item_model->getItem($where);
+
+  //load our new PHPExcel library
+  $this->load->library('excel');
+  //activate worksheet number 1
+  $this->excel->setActiveSheetIndex(0);
+  //name the worksheet
+  $this->excel->getActiveSheet()->setTitle('Sale Report');
+
+  $this->excel->getActiveSheet()->setCellValue('A1', 'Ref. Number');
+  $this->excel->getActiveSheet()->setCellValue('B1', 'Brand');
+  $this->excel->getActiveSheet()->setCellValue('C1', 'Family');
+  $this->excel->getActiveSheet()->setCellValue('D1', 'SRP');
+  $this->excel->getActiveSheet()->setCellValue('E1', 'Product Category');
+
+  $row = 2;
+  foreach($item_array as $loop) {
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(0, $row, $loop->it_refcode);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(1, $row, $loop->br_name);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(2, $row, $loop->it_model);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(3, $row, $loop->it_srp);
+      $this->excel->getActiveSheet()->setCellValueByColumnAndRow(4, $row, $loop->itc_name);
+      $row++;
+  }
+
+
+  $filename='item_list_'.date('YmdHis').'.xlsx'; //save our workbook as this file name
+  header('Content-Type: application/vnd.ms-excel'); //mime type
+  header('Content-Disposition: attachment;filename="'.$filename.'"'); //tell browser what's the file name
+  header('Cache-Control: max-age=0'); //no cache
+
+  //save it to Excel5 format (excel 2003 .XLS file), change this to 'Excel2007' (and adjust the filename extension, also the header mime type)
+  //if you want to save it as .XLSX Excel 2007 format
+  $objWriter = PHPExcel_IOFactory::createWriter($this->excel, 'Excel2007');
+  //force user to download the Excel file without writing it to server's HD
+  $objWriter->save('php://output');
+}
+
 function additem()
 {
 	$this->load->helper(array('form'));
@@ -650,7 +718,38 @@ function result_print_tag_refcode()
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
-    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode0", $data, TRUE));
+    // $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
+    $mpdf->Output();
+}
+
+function result_print_tag_refcode0()
+{
+    $it_id = array(7204);
+    $it_qty = array(1);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+
+    $currentdate = date('Y-m-d');
+    $this->load->model('tp_item_model','',TRUE);
+    $result = array();
+    $index = 0;
+    $sql_result = "";
+    for($i=0; $i <count($it_id); $i++) {
+        $sql_result = "it_id = '".$it_id[$i]."'";
+        $query = $this->tp_item_model->getItem($sql_result);
+        foreach($query as $loop) {
+            $result[$index] = array( "br_name" => $loop->br_name, "it_refcode" => $loop->it_refcode, "it_srp" => $loop->it_srp, "it_model" => $loop->it_model, "it_qty" => $it_qty[$i] );
+            $index++;
+        }
+    }
+    $data['result_array'] = $result;
+    //echo $html;
+    //$mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode0", $data, TRUE));
     $mpdf->Output();
 }
 
