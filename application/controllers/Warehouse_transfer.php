@@ -1429,22 +1429,20 @@ function checkSerial_warehouse()
 function checkRefcode_warehouse()
 {
     $refcode = $this->input->post("refcode");
-    $serial_wh_id = $this->input->post("serial_wh_id");
+    $wh_id = $this->input->post("wh_id");
 
     $this->load->model('tp_item_model','',TRUE);
-    $number = $this->tp_item_model->checkCaseback_warehouse($serial, $serial_wh_id);
+    $number = $this->tp_item_model->checkRefcode_warehouse($refcode, $wh_id);
     $result1 = 0;
     $result2 = "";
     $result3 = 0;
-    $result4 = 0;
     foreach($number as $loop) {
-        $result1 = $loop->itse_item_id;
-        $result2 = $loop->itse_serial_number;
-        $result3 = $loop->itse_id;
-        $result4 = $loop->itse_sample;
+        $result1 = $loop->it_id;
+        $result2 = $loop->it_refcode;
+        $result3 = $loop->stob_qty;
     }
 
-    $result = array("a" => $result1, "b" => $result2, "c" => $result3, "d" => $result4);
+    $result = array("a" => $result1, "b" => $result2, "c" => $result3);
     echo json_encode($result);
     exit();
 }

@@ -77,7 +77,7 @@
 						</div>
                         <div class="row">
 							<div class="col-md-12">
-                                    <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="printrefcode(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Refcode </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="printrefcode(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคา QR แบบ Refcode </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <?php if ($remark ==1) { ?>
 									<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="printean(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ EAN </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <button type="button" class="btn bg-orange" name="savebtn" id="savebtn" onclick="printcaseback(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Caseback </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;

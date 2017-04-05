@@ -55,23 +55,34 @@
                                     </div>
 							</div>
                                 <?php $status = $loop->stot_status; break; } ?>
+								<div class="col-md-2">
+									<div class="form-group-sm">
+                      จำนวนนับเข้าระบบ
+                      <div class="text-red" id="checkin" style="font-size: 24pt; font-weight: bold;">0</div>
+                  </div>
+								</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-12">
 				                <div class="panel panel-default">
-									<div class="panel-heading"><div class="input-group input-group-sm col-xs-6">
-                                    <?php $must_serial=0;
+									<div class="panel-heading"><div class="input-group input-group-sm col-xs-8">
+                                    <?php $must_serial=0; $just_refcode=0;
                                           foreach($stock_array as $loop){
                                               $stot_remark = $loop->stot_remark;
-                                              if ($loop->it_has_caseback == 1) { $must_serial++; break; } }
-                                        if ($must_serial>0) {
+                                              if ($loop->it_has_caseback == 1) { $must_serial++; }else{ $just_refcode++; } }
+                                        if (($must_serial>0) && ($just_refcode==0)) {
                                     ?>
                                             <input type="text" class="form-control" name="caseback" id="caseback" placeholder="Caseback No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
                                             <button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
-                                    <?php } else { ?>
+                                    <?php } elseif ($must_serial==0) { ?>
 																						<input type="text" class="form-control" name="refcode" id="refcode" placeholder="Refcode No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
 																						<button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
+																		<?php } elseif (($must_serial>0) && ($just_refcode>0)) { ?>
+																						<input type="text" class="form-control" name="caseback" id="caseback" placeholder="Caseback No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
+																						<button type="button" class="btn btn-primary"><i class='fa fa-search'></i></button></div>
+																						<input type="text" class="form-control" name="refcode" id="refcode" placeholder="Refcode No. ที่ต้องการย้าย" autocomplete='off'><div class="input-group-btn">
+																						<button type="button" class="btn btn-danger"><i class='fa fa-search'></i></button></div>
 																		<?php } ?>
                                         <label id="count_all" class="text-red pull-right">จำนวน &nbsp;&nbsp; <?php echo count($stock_array); ?> &nbsp;&nbsp; รายการ</label><?php if ($status==2) echo "<label class='text-green'>&nbsp;&nbsp; ทำการยืนยันแล้ว</label>"; if ($status==3) echo "<label class='text-red'>&nbsp;&nbsp; ทำการยกเลิกแล้ว</label>"; ?>
                                         </div></div>
@@ -103,12 +114,12 @@
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
                                                     <td><input type='hidden' name='qty_old' id='qty_old' value=" <?php echo $loop->qty_old; ?>"><?php if ($loop->qty_old <1) echo "<span class='text-red'><b>".$loop->qty_old."</b></span>";
                                                         else echo $loop->qty_old; ?></td>
-                                                    <td><?php echo $loop->qty_update; ?></td>
+                                                    <td><input type='hidden' name='qty_update' id='qty_update' value=" <?php echo $loop->qty_update; ?>"><?php echo $loop->qty_update; ?></td>
                                                     <td>
                                                         <?php if ($loop->it_has_caseback==1) { ?>
                                                         <input type="hidden" name="count_serial_<?php echo $loop->log_stot_item_id; ?>" id="count_serial_<?php echo $loop->log_stot_item_id; ?>" value="<?php echo $count; ?>">
                                                         <?php } ?>
-                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($loop->it_has_caseback==0) { echo $loop->qty_update; }else{ echo "0"; } ?>' <?php if (($status==2) || ($loop->it_has_caseback)) echo "readonly"; ?> onChange='calculate();'>
+                                                        <input type='text' name='it_final' id='it_final' style="text-align:center;width: 50px;" value='<?php if ($status==2) { echo $loop->qty_final; }else{ echo "0"; } ?>' <?php if (($status==1) || ($status==2) || ($loop->it_has_caseback)) echo "readonly"; ?> onChange='calculate();'>
                                                     </td>
                                                     <td><?php echo $loop->it_uom; ?></td></tr>
 
@@ -173,40 +184,44 @@ $(document).ready(function()
                 calculate();
             },3000);
 
+		$("#refcode").focus();
+		$("#caseback").focus();
+
     $('#caseback').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var product_code_value = $.trim($(this).val());
             var wh_out_id = "<?php echo $wh_out_id; ?>";
             if(product_code_value != "")
-			{
+						{
                 check_product_code(product_code_value, wh_out_id);
 
-			}
+							}
 
             $(this).val('');
 
             setTimeout(function(){
                 calculate();
             },3000);
-		}
+					}
+		});
 
 		$('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var refcode = $.trim($(this).val());
             var wh_out_id = "<?php echo $wh_out_id; ?>";
-            if(product_code_value != "")
-			{
+            if(refcode != "")
+						{
                 check_ref_code(refcode, wh_out_id);
 
-			}
+						}
 
             $(this).val('');
 
             setTimeout(function(){
                 calculate();
             },3000);
-		}
-	});
+					}
+		});
 });
 
 function get_datepicker(id)
@@ -222,32 +237,35 @@ function check_ref_code(refcode_input, wh_id)
         $.ajax({
             type : "POST" ,
             dataType: "json",
-            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
-            data : {refcode: refcode_input, serial_wh_id: wh_id},
+            url : "<?php echo site_url("warehouse_transfer/checkRefcode_warehouse"); ?>" ,
+            data : {refcode: refcode_input, wh_id: wh_id},
             success : function(data) {
-                if(data.a > 0)
+                if(data.c > 0)
                 {
-                    var ind = "serial"+data.a;
-                    var serial = document.getElementById("count_serial_"+data.a).value;
-                    var serial_array = document.getElementsByName(ind);
-                    var serial_id = document.getElementsByName("serial_item_id"+data.a);
+                    var wh_it_id = data.a;
+										var it_refcode = data.b;
+                    var it_id = document.getElementsByName("it_id");
                     var it_final = document.getElementsByName("it_final");
-                    for (var i=0; i<serial_array.length; i++) {
-
-                        if (serial_array[i].value == "") {
-														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
-                            else serial_array[i].value = data.b;
-
-                            serial_id[i].value = data.c;
-                            it_final[serial].value = parseInt(it_final[serial].value) + 1;
+										var qty_update = document.getElementsByName("qty_update");
+										var checkin = parseInt(document.getElementById("checkin").innerHTML);
+										var count = 0;
+                    for (var i=0; i<it_id.length; i++) {
+                        if (parseInt(it_id[i].value) == wh_it_id) {
+													count++;
+													if (parseInt(it_final[i].value) >= parseInt(qty_update[i].value)) {
+														alert("จำนวนสินค้าเกินจากที่ต้องการ");
+														break;
+													}else{
+														it_final[i].value = parseInt(it_final[i].value) + 1;
+														checkin++;
+														document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             break;
-                        }else if(data.b == serial_array[i].value) {
-                            alert("Caseback ซ้ำ");
-                            break;
+													}
                         }
                     }
+										if (count == 0) alert("ไม่พบสินค้า "+it_refcode+" ในเอกสารนี้");
                 }else{
-                    alert("ไม่พบ Caseback ที่ต้องการในคลัง");
+                    alert("ไม่พบสินค้าที่ต้องการในคลัง");
                 }
             },
             error: function (textStatus, errorThrown) {
@@ -275,6 +293,8 @@ function check_product_code(refcode_input, wh_id)
                     var serial_array = document.getElementsByName(ind);
                     var serial_id = document.getElementsByName("serial_item_id"+data.a);
                     var it_final = document.getElementsByName("it_final");
+										var checkin = parseInt(document.getElementById("checkin").innerHTML);
+										var count_serial = 0;
                     for (var i=0; i<serial_array.length; i++) {
 
                         if (serial_array[i].value == "") {
@@ -283,12 +303,19 @@ function check_product_code(refcode_input, wh_id)
 
                             serial_id[i].value = data.c;
                             it_final[serial].value = parseInt(it_final[serial].value) + 1;
+														checkin++;
+														document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             break;
                         }else if(data.b == serial_array[i].value) {
-                            alert("Caseback ซ้ำ");
+                            alert("Caseback ซ้ำ !!");
                             break;
-                        }
+                        }else{
+													count_serial++;
+												}
                     }
+										if (count_serial == serial_array.length) {
+											alert("สินค้าเกินจำนวนที่ต้องการ !!");
+										}
                 }else{
                     alert("ไม่พบ Caseback ที่ต้องการในคลัง");
                 }

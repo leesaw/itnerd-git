@@ -1,0 +1,19 @@
+body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 14px;
+}
+@page {
+    margin-left: 0px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.barcode {
+    padding: 0mm;
+    color: #000000;
+    text-align: left;
+}
+.barcodecell {
+    text-align: left;
+    vertical-align: top;
+}

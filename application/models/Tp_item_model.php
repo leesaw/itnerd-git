@@ -88,11 +88,12 @@ Class Tp_item_model extends CI_Model
  }
 
  function checkRefcode_warehouse($refcode, $wh_id) {
-    $this->db->select("itse_id, itse_item_id, itse_serial_number, itse_sample");
-    $this->db->from("tp_item_serial");
-    $this->db->where("itse_serial_number", $caseback);
-    $this->db->where("itse_warehouse_id", $wh_id);
-    $this->db->where("itse_enable", 1);
+    $this->db->select("it_id, it_refcode, stob_qty");
+    $this->db->from("tp_stock_balance");
+    $this->db->join("tp_item", "stob_item_id = it_id");
+    $this->db->where("it_refcode", $refcode);
+    $this->db->where("stob_warehouse_id", $wh_id);
+    $this->db->where("stob_enable", 1);
     $query = $this->db->get();
  return $query->result();
  }

@@ -699,7 +699,7 @@ function result_print_tag_refcode()
 
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
-    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode_qr.css');
 
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
@@ -759,7 +759,7 @@ function result_print_tag_caseback()
 
     $this->load->library('mpdf/mpdf');
     $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
-    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode_qr.css');
 
     $currentdate = date('Y-m-d');
     $this->load->model('tp_item_model','',TRUE);
@@ -780,7 +780,7 @@ function result_print_tag_caseback()
     //echo $html;
     //$mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
-    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_caseback", $data, TRUE));
+    $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_caseback0", $data, TRUE));
     $mpdf->Output();
 }
 

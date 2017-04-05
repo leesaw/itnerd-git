@@ -11,22 +11,22 @@ for($i = 0; $i<$count; $i++) {
 ?>
 <table border="0">
 <tbody>
-<tr><td style="text-align: top;" width="30"></td>
-<td style="text-align: top; font-size:16pt" width="200"><b><?php echo $result_array[$i]['br_name']; ?></b>
-<br/>
+<tr>
+<td style="text-align: top; font-size:16pt" width="235"><b><?php echo $result_array[$i]['br_name']; ?></b>
+</td>
+<td style="text-align: top; font-size:16pt" colspan="2">
 <b><?php echo $result_array[$i]['it_refcode']; ?></b>
-<br/>
-<b><?php echo $result_array[$i]['it_srp']." THB"; ?></b>
 </td>
-<td style="text-align: top;" width="500">
-<b style="font-size:16pt">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $result_array[$i]['it_refcode']; ?></b>
-<br/>
-<barcode code='<?php echo $result_array[$i]['it_refcode']; ?>' type="C128a" size="0.9" height="1.2" />
-<br/>
-<!-- <b >&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $result_array[$i]['it_refcode']; ?></b>
-<br/> -->
-<b style="font-size:16pt">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo number_format($result_array[$i]['it_srp'])." THB"; ?></b>
-</td>
+</tr>
+<tr>
+<td style="text-align: top; font-size:16pt"><b><?php echo $result_array[$i]['it_refcode']; ?></b></td>
+<td style="text-align: top;" width="80"><barcode code="<?php echo $result_array[$i]['it_refcode']; ?>" type="QR" class="barcode" size="0.4" /></td>
+<td style="text-align: top;" width="400"><b style="font-size:16pt"><?php echo number_format($result_array[$i]['it_srp'])." THB"; ?></b></td>
+</tr>
+<tr>
+<td style="text-align: top; font-size:16pt"><b><?php echo number_format($result_array[$i]['it_srp'])." THB"; ?></b></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -38,6 +38,5 @@ for($i = 0; $i<$count; $i++) {
 if ($i != $count-1) { ?>
 <pagebreak />
 <?php } } ?>
-<script src="<?php echo base_url(); ?>plugins/jquery-barcode.min.js"></script>
 </body>
 </html>

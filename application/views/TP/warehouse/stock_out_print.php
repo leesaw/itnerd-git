@@ -40,7 +40,7 @@
 </td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_old." &nbsp; ".$loop->it_uom; ?></td>
 <td align="center" style="border-left:1px solid black;"><?php echo $loop->qty_update." &nbsp; ".$loop->it_uom; ?></td>
-<td align="center" style="border-left:1px solid black;"><?php echo ($loop->qty_old+$loop->qty_update)." &nbsp; ".$loop->it_uom; ?></td>
+<td align="center" style="border-left:1px solid black;"><?php echo ($loop->qty_old-$loop->qty_update)." &nbsp; ".$loop->it_uom; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="right" style="border-left:1px solid black;"><?php echo number_format($loop->qty_update*$loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $loop->qty_update*$loop->it_srp; $sum_in += $loop->qty_update; ?></td>
 </tr>

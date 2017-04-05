@@ -35,6 +35,7 @@ function ajaxView_inventory_now()
   ->join('tp_item', 'it_id = stob_item_id','left')
   ->join('tp_brand', 'br_id = it_brand_id','left')
   ->where('stob_qty >', 0)
+  ->where('it_category_id',1)
   ->where('it_enable',1)
   ->where($sql);
   echo $this->datatables->generate();
@@ -43,7 +44,7 @@ function ajaxView_inventory_now()
 function exportExcel_inventory_now()
 {
   $sql = $this->brand_suunto;
-  $sql .= " and stob_qty >0 and it_enable = 1";
+  $sql .= " and stob_qty >0 and it_enable = 1 and it_category_id = 1";
 
   $now_date = date("d/m/Y");
   $now_month = date("M-y");
@@ -131,7 +132,7 @@ function top_ten()
   $data['enddate'] = $enddate;
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
 
   $this->load->model('tp_suunto_model','',TRUE);
   $data['top_array'] = $this->tp_suunto_model->get_top_ten_remark($sql);
@@ -167,7 +168,7 @@ function exportExcel_top_ten()
   }
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
 
   $this->load->model('tp_suunto_model','',TRUE);
   $top_array = $this->tp_suunto_model->get_top_ten_remark($sql);
@@ -292,11 +293,11 @@ function ajaxView_sale_kpi()
   $end = $this->uri->segment(4);
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
 
   $sql_payment = $this->brand_suunto;
 
-  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."'";
+  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."' and it_category_id = 1";
 
   $this->load->library('Datatables');
   $this->datatables
@@ -339,11 +340,11 @@ function exportExcel_sale_kpi()
 
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."'";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
 
   $sql_payment = $this->brand_suunto;
 
-  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."'";
+  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."' and it_category_id = 1";
 
   $this->load->model('tp_suunto_model','',TRUE);
   $sale_array = $this->tp_suunto_model->get_saleorder_item($sql, $sql_payment);
