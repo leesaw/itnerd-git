@@ -364,18 +364,32 @@ function edit_save()
 public function ajaxViewAllItem()
 {
     $this->load->library('Datatables');
-    $this->datatables
-    ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
-    ->from('tp_item')
-    ->join('tp_item_category', 'it_category_id = itc_id','left')
-    ->join('tp_brand', 'it_brand_id = br_id','left')
-    ->where('it_enable',1)
-    ->where($this->no_rolex)
+    if ($this->session->userdata('sessstatus') == 1) {
+      $this->datatables
+      ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
+      ->from('tp_item')
+      ->join('tp_item_category', 'it_category_id = itc_id','left')
+      ->join('tp_brand', 'it_brand_id = br_id','left')
+      ->where('it_enable',1)
+      ->where($this->no_rolex)
 
-    ->edit_column("it_id",'<div class="tooltip-demo">
-<a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
-<a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
-</div>',"it_id");
+      ->edit_column("it_id",'<div class="tooltip-demo">
+  <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+  <a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
+  </div>',"it_id");
+    }else{
+      $this->datatables
+      ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
+      ->from('tp_item')
+      ->join('tp_item_category', 'it_category_id = itc_id','left')
+      ->join('tp_brand', 'it_brand_id = br_id','left')
+      ->where('it_enable',1)
+      ->where($this->no_rolex)
+
+      ->edit_column("it_id",'<div class="tooltip-demo">
+  <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+  </div>',"it_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -407,6 +421,8 @@ public function ajaxViewFilterItem()
     $where .= $this->no_rolex;
 
     $this->load->library('Datatables');
+
+    if ($this->session->userdata('sessstatus') == 1) {
     $this->datatables
     ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
     ->from('tp_item')
@@ -419,6 +435,18 @@ public function ajaxViewFilterItem()
 <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
 <a href="'.site_url("item/editproduct/$1").'" class="btn btn-primary btn-xs" data-title="Edit" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="แก้ไข"><span class="glyphicon glyphicon-pencil"></span></a>
 </div>',"it_id");
+    }else{
+      $this->datatables
+      ->select("it_refcode, br_name, it_model, it_srp, itc_name, it_id")
+      ->from('tp_item')
+      ->join('tp_item_category', 'it_category_id = itc_id','left')
+      ->join('tp_brand', 'it_brand_id = br_id','left')
+      ->where('it_enable',1)
+      ->where($where)
+      ->edit_column("it_id",'<div class="tooltip-demo">
+  <a href="'.site_url("item/viewproduct/$1").'" target="blank" class="btn btn-success btn-xs" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-fullscreen"></span></a>
+  </div>',"it_id");
+    }
     echo $this->datatables->generate();
 }
 
@@ -431,12 +459,18 @@ function viewproduct()
         $data['product_array'] =  $query;
     }
 
+    if ($this->session->userdata('sessstatus') == 1) {
+      $data['cost'] = 1;
+    }else{
+      $data['cost'] = 0;
+    }
     $data['title'] = "NGG| Nerd - View Product";
     $this->load->view('TP/item/viewitem_view',$data);
 }
 
 function editproduct()
 {
+  if ($this->session->userdata('sessstatus') == 1) {
     $id = $this->uri->segment(3);
     $sql = "it_id = '".$id."' and ".$this->no_rolex;
     $query = $this->tp_item_model->getItem($sql);
@@ -462,6 +496,7 @@ function editproduct()
 
     $data['title'] = "NGG| Nerd - Edit Product";
     $this->load->view('TP/item/edititem_view',$data);
+  }
 }
 
 function getRefcode()

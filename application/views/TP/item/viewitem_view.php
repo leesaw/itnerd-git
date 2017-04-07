@@ -72,7 +72,7 @@
                             <div class="col-md-3">
 									<div class="form-group">
                                             ราคาทุน
-                                            <input type="text" class="form-control" name="cost" id="cost" value="<?php echo number_format($loop->it_cost_baht,2,'.',','); ?>" readonly>
+                                            <input type="text" class="form-control" name="cost" id="cost" value="<?php if ($cost == 1) echo number_format($loop->it_cost_baht,2,'.',','); ?>" readonly>
                                     </div>
 							</div>
 							<div class="col-md-3">

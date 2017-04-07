@@ -8,7 +8,7 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -16,12 +16,12 @@
             ประวัติรับสินค้าเข้าคลัง
         </h1>
     </section>
-	
+
 	<section class="content">
         <div class="row">
             <div class="col-md-10">
                 <div class="box box-primary">
-                        
+
         <div class="box-body">
         <div class="row">
             <form action="<?php echo site_url("warehouse_transfer/result_search_transfer_in_item"); ?>" name="formfilter" id="formfilter" method="post">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
             </div>
-        </div> 
+        </div>
         <br>
         <div class="row">
             <div class="col-md-2">
@@ -55,8 +55,8 @@
 
                     <select id="warehouse" name="warehouse" class="form-control select2" style="width: 100%;">
                         <option value="0-ทั้งหมด" selected>เลือกทั้งหมด</option>
-                        <?php 
-                            foreach($whname_array as $loop) { 
+                        <?php
+                            foreach($whname_array as $loop) {
                         ?>
                         <option value="<?php echo $loop->wh_id."-".$loop->wh_name; ?>"><?php echo $loop->wh_code."-".$loop->wh_name; ?>
                         </option>
@@ -65,7 +65,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                เลือกวันที่เริ่มต้น : 
+                เลือกวันที่เริ่มต้น :
                 <input type="text" class="form-control" id="startdate" name="startdate" value="" />
             </div>
             <div class="col-md-2">
@@ -77,10 +77,10 @@
                 <div class="col-md-3"><button type="submit" name="action" value="0" class="btn btn-success"><i class="fa fa-search"></i> ค้นหา</button></div>
             </div>
         </div>
-    
-                        
-        </form>               
-                        
+
+
+        </form>
+
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
             <div class="col-md-12">
                 <div class="box box-danger">
 
-                        
+
         <div class="box-body">
             <div class="row">
                 <div class="col-md-6">
@@ -98,7 +98,7 @@
                                 <label class="col-sm-2 control-label">เลือกเดือน</label>
                             <div class="col-sm-3">
                                 <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>" onChange="submitform();" autocomplete="off" readonly>
-                            </div>  
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -121,38 +121,40 @@
                                         <th> </th>
                                     </tr>
                                 </thead>
-                                
+
 								<tbody>
                                     <?php foreach($final_array as $loop) { ?>
                                     <tr>
-                                        <td><?php echo $loop->stoi_number; ?></td>
+                                        <td><?php echo $loop->stoi_number; if ($loop->stoi_status =='V') echo " <button class='btn btn-xs btn-danger'>ยกเลิกแล้ว</button>"; ?></td>
                                         <td><?php echo $loop->stoi_datein; ?></td>
                                         <td><?php echo $loop->wh_code."-".$loop->wh_name; ?></td>
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
-                                        <td><a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_print")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_print")."/".$loop->stoi_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a>
-                                        <a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_excel")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_excel")."/".$loop->stoi_id; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a> 
+                                        <td>
+																					<!-- <a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_view")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_print")."/".$loop->stoi_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a> -->
+																					<a href="<?php echo site_url("warehouse_transfer/importstock_view")."/".$loop->stoi_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="ดูรายละเอียด" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><i class="fa fa-search"></i></a>
+                                        <a href="<?php if($loop->stoi_has_serial==0) echo site_url("warehouse_transfer/importstock_excel")."/".$loop->stoi_id; else echo site_url("warehouse_transfer/importstock_serial_excel")."/".$loop->stoi_id; ?>" class="btn bg-maroon btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="Excel"><i class="fa fa-download"></i></a>
                                         </td>
                                     </tr>
                                     <?php } ?>
 								</tbody>
 							</table>
-                        
+
 					</div>
-                    
+
 				</div>
-			</div>	
-            
-		</div>                
-                        
-                        
+			</div>
+
+		</div>
+
+
 					</div>
                 </div>
             </div>
         </div>
         </section>
 		</div>
-    
-    
+
+
 	</div>
 
 
@@ -163,40 +165,40 @@
 <script src="<?php echo base_url(); ?>plugins/datepicker/locales/bootstrap-datepicker.th.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
+{
     //Initialize Select2 Elements
     $(".select2").select2();
-    
+
     get_datepicker("#startdate");
     get_datepicker("#enddate");
 
     get_datepicker_month("#datein");
-    
+
     var oTable = $('#tablefinal').DataTable();
-    $('#fancyboxall').fancybox({ 
+    $('#fancyboxall').fancybox({
     'width': '40%',
-    'height': '70%', 
+    'height': '70%',
     'autoScale':false,
-    'transitionIn':'none', 
-    'transitionOut':'none', 
-    'type':'iframe'}); 
-    
+    'transitionIn':'none',
+    'transitionOut':'none',
+    'type':'iframe'});
+
 });
 
 function get_datepicker_month(id)
 {
-    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months", 
+    $(id).datepicker({ language:'th-th',format: "mm/yyyy", viewMode: "months",
     minViewMode: "months" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 }
-    
+
 function get_datepicker(id)
 {
     $(id).datepicker({ language:'th-th',format: "dd/mm/yyyy" }).on('changeDate', function(ev){
     $(this).datepicker('hide'); });
 
 }
-    
+
 function submitform()
 {
     document.getElementById("form1").submit();

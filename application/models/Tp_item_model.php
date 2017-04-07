@@ -158,6 +158,12 @@ Class Tp_item_model extends CI_Model
 	$this->db->delete('tp_brand_category');
  }
 
+ function delItemSerial($id=NULL)
+ {
+	$this->db->where('itse_id', $id);
+	$this->db->delete('tp_item_serial');
+ }
+
  function editItem($edit=NULL)
  {
 	$this->db->where('it_id', $edit['id']);

@@ -289,6 +289,89 @@ function transferstock()
     $this->load->view("TP/warehouse/transferstock_view", $data);
 }
 
+function importstock_view()
+{
+		$id = $this->uri->segment(3);
+    $sql = "stoi_id = '".$id."'";
+		$query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
+		if($query){
+			$data['stock_array'] =  $query;
+		}else{
+			$data['stock_array'] = array();
+		}
+
+    $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in_serial($sql);
+    if($query){
+        $data['serial_array'] =  $query;
+    }else{
+        $data['serial_array'] = array();
+    }
+
+    $data['stoi_id'] = $id;
+    $data['user_status'] = $this->session->userdata('sessstatus');
+
+    $data['title'] = "Nerd - Transfer Recieve";
+    $this->load->view("TP/warehouse/view_import_stock", $data);
+}
+
+function void_stock_in()
+{
+  $id = $this->uri->segment(3);
+
+  $currentdate = date("Y-m-d H:i:s");
+
+  $sql = "stoi_id = '".$id."'";
+  $query = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);
+  foreach($query as $loop) {
+      $remark = $loop->stoi_remark;
+      $warehouse_id = $loop->stoi_warehouse_id;
+  }
+
+  $remark .= "##VOID##".$this->input->post("remarkvoid");
+  $stockin = array("id" => $id, "stoi_enable" => 0, "stoi_remark" => $remark, "stoi_status" => 'V',
+              "stoi_dateadd" => $currentdate, "stoi_dateadd_by" => $this->session->userdata('sessid')
+              );
+  $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_in($stockin);
+
+  $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in($sql);
+  foreach($query as $loop) {
+    // increase stock warehouse
+    $this->load->model('tp_warehouse_transfer_model','',TRUE);
+    $sql = "stob_item_id = '".$loop->log_stob_item_id."' and stob_warehouse_id = '".$warehouse_id."'";
+    $query2 = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+    $qty_update = $loop->qty_update;
+
+    if (!empty($query2)) {
+        foreach($query2 as $loop2) {
+            $qty_new = $loop2->stob_qty - $qty_update;
+            $stock = array( 'id' => $loop2->stob_id,
+                            'stob_qty' => $qty_new,
+                            'stob_lastupdate' => $currentdate,
+                            'stob_lastupdate_by' => $this->session->userdata('sessid')
+                        );
+            $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+            break;
+        }
+    }
+  }
+
+  $sql = "stoi_id = '".$id."'";
+  $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_in_serial($sql);
+
+  foreach($query as $loop) {
+    $this->load->model('tp_item_model','',TRUE);
+    $serial_item = array( 'id' => $loop->itse_id,
+                             'itse_enable' => 0,
+                             'itse_dateadd' => $currentdate,
+                        );
+    $query = $this->tp_item_model->editItemSerial($serial_item);
+  }
+
+
+  redirect('warehouse_transfer/importstock_view/'.$id, 'refresh');
+}
+
 function importstock_print()
 {
 		$id = $this->uri->segment(3);
@@ -1310,7 +1393,7 @@ function importstock_history()
     $sql = "";
     $sql .= "stoi_dateadd >= '".$start."' and stoi_dateadd <= '".$end."'";
     if ($this->session->userdata('sessstatus') != '88') {
-        $sql .= " and stoi_enable = 1 and stoi_is_rolex = ".$this->session->userdata('sessrolex');
+        $sql .= " and stoi_is_rolex = ".$this->session->userdata('sessrolex');
     }
 
     $data['final_array'] = $this->tp_warehouse_transfer_model->getWarehouse_stockin_list($sql);

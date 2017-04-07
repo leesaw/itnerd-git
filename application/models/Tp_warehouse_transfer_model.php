@@ -15,7 +15,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_transfer_in($where)
  {
-	$this->db->select("stoi_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stob_qty_update) as qty_update, MIN(log_stob_old_qty) as qty_old, stoi_datein, firstname, lastname, log_stob_item_id, stoi_dateadd, stoi_remark");
+	$this->db->select("stoi_number, stoi_status, stoi_has_serial, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stob_qty_update) as qty_update, MIN(log_stob_old_qty) as qty_old, stoi_datein, firstname, lastname, log_stob_item_id, stoi_dateadd, stoi_remark");
 	$this->db->from('log_stock_balance');
     $this->db->join('tp_item', 'it_id = log_stob_item_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
@@ -30,7 +30,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_transfer_in_serial($where)
  {
-	$this->db->select("log_stob_item_id, itse_serial_number");
+	$this->db->select("log_stob_item_id, itse_serial_number, itse_id");
 	$this->db->from('log_stock_balance');
     $this->db->join('log_stock_balance_serial', 'log_stobs_stob_id = log_stob_id','left');
     $this->db->join('tp_item_serial', 'itse_id = log_stobs_item_serial_id','left');
@@ -69,7 +69,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_stockin_list($where)
  {
-	$this->db->select("stoi_id, stoi_number, stoi_has_serial, wh_name, wh_code, stoi_datein, firstname, lastname");
+	$this->db->select("stoi_id, stoi_status, stoi_number, stoi_has_serial, wh_name, wh_code, stoi_datein, firstname, lastname, stoi_remark, stoi_warehouse_id");
 	$this->db->from('tp_stock_in');
     $this->db->join('tp_warehouse', 'wh_id = stoi_warehouse_id','inner');
     $this->db->join('nerd_users', 'id = stoi_dateadd_by','left');
