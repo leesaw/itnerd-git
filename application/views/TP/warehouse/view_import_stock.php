@@ -89,12 +89,14 @@ foreach($stock_array as $loop) {
                                                 <th>จำนวน<br>ในคลัง</th>
                                                 <th>จำนวน<br>รับเข้า</th>
                                                 <th>จำนวน<br>ในคลังหลังรับเข้า</th>
+																								<th>จำนวน<br>ปัจจุบัน</th>
 										                            <th>หน่วยละ</th>
                                                 <th>จำนวนเงิน</th>
 				                                    </tr>
 				                                </thead>
 												<tbody>
                           <?php
+														$error_qty = 0;
                             foreach($stock_array as $loop) { ?>
                             <tr>
                               <td><?php echo $loop->it_refcode; ?></td>
@@ -113,6 +115,11 @@ foreach($stock_array as $loop) {
                               <td><?php echo $loop->qty_old." &nbsp; ".$loop->it_uom; ?></td>
                               <td><?php echo $loop->qty_update." &nbsp; ".$loop->it_uom; ?></td>
                               <td><?php echo ($loop->qty_old+$loop->qty_update)." &nbsp; ".$loop->it_uom; ?></td>
+															<td><?php
+															if ($loop->qty_update > $loop->stob_qty) {
+																echo "<label class='text-red'>".($loop->stob_qty)." &nbsp; ".$loop->it_uom."</label>";
+																$error_qty++;
+															}else{ echo ($loop->stob_qty)." &nbsp; ".$loop->it_uom; } ?></td>
                               <td><?php echo number_format($loop->it_srp, 2, '.', ','); ?></td>
                               <td><?php echo number_format($loop->qty_update*$loop->it_srp, 2, '.', ','); ?></td>
 
@@ -156,6 +163,10 @@ foreach($stock_array as $loop) {
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 function del_confirm() {
+	var error_qty = <?php echo $error_qty; ?>;
+	if (error_qty > 0) {
+		alert("จำนวนสินค้าคงเหลือปัจจุบันไม่เพียงพอ ไม่สามารถยกเลิกได้ !!!");
+	}else{
     bootbox.confirm("ต้องการยกเลิกการรับสินค้าเข้าคลัง ที่เลือกไว้ใช่หรือไม่ ?", function(result) {
       var currentForm = this;
       if (result) {
@@ -170,6 +181,7 @@ function del_confirm() {
       }
 
     });
+	}
 }
 </script>
 </body>

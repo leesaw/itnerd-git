@@ -19,7 +19,7 @@ foreach($serial_array as $loop) { ?>
 </tr>
 <tr>
 <td style="text-align: top; font-size:16pt"><b><?php echo $loop->it_refcode; ?></b></td>
-<td style="text-align: top;" width="80"><barcode code="<?php echo $loop->itse_serial_number; ?>" type="QR" class="barcode" size="0.4" /></td>
+<td style="text-align: top;" width="80"><barcode code="<?php echo $loop->itse_serial_number; ?>" type="QR" class="barcode" size="0.42" /></td>
 <td style="text-align: top;" width="400"><b style="font-size:14pt"><?php echo $loop->itse_serial_number; ?></b></td>
 </tr>
 <tr>

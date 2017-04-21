@@ -15,13 +15,15 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_transfer_in($where)
  {
-	$this->db->select("stoi_number, stoi_status, stoi_has_serial, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stob_qty_update) as qty_update, MIN(log_stob_old_qty) as qty_old, stoi_datein, firstname, lastname, log_stob_item_id, stoi_dateadd, stoi_remark");
+	$this->db->select("stob_qty, stoi_number, stoi_status, stoi_has_serial, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stob_qty_update) as qty_update, MIN(log_stob_old_qty) as qty_old, stoi_datein, firstname, lastname, log_stob_item_id, stoi_dateadd, stoi_remark");
 	$this->db->from('log_stock_balance');
     $this->db->join('tp_item', 'it_id = log_stob_item_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
 	$this->db->join('tp_stock_in', 'stoi_id = log_stob_transfer_id','left');
     $this->db->join('tp_warehouse', 'wh_id = stoi_warehouse_id','left');
     $this->db->join('nerd_users', 'id = stoi_dateadd_by','left');
+    // view current stock available
+    $this->db->join('tp_stock_balance', 'stob_warehouse_id = stoi_warehouse_id and stob_item_id = log_stob_item_id', 'left');
     if ($where != "") $this->db->where($where);
     $this->db->group_by("log_stob_item_id");
 	$query = $this->db->get();

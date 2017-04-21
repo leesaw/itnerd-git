@@ -20,7 +20,7 @@ for($i = 0; $i<$count; $i++) {
 </tr>
 <tr>
 <td style="text-align: top; font-size:16pt"><b><?php echo $result_array[$i]['it_refcode']; ?></b></td>
-<td style="text-align: top;" width="80"><barcode code="<?php echo $result_array[$i]['it_refcode']; ?>" type="QR" class="barcode" size="0.4" /></td>
+<td style="text-align: top;" width="80"><barcode code="<?php echo $result_array[$i]['it_refcode']; ?>" type="QR" class="barcode" size="0.42" /></td>
 <td style="text-align: top;" width="400"><b style="font-size:16pt"><?php echo number_format($result_array[$i]['it_srp'])." THB"; ?></b></td>
 </tr>
 <tr>
