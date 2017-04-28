@@ -246,7 +246,7 @@
             <?php } ?>
             <?php } ?>
             <li class="treeview">
-                <a href="#"><i class="fa fa-truck"></i> <span>คลังสินค้า (Inventory)</span><i class="fa fa-angle-left pull-right"></i></a>
+                <a href="#"><i class="fa fa-clock-o"></i> <span>คลังสินค้า (Inventory)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">
 				    <li>
 					   <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
@@ -294,6 +294,23 @@
                 </ul>
 
             </li>
+            <!-- delivery -->
+            <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2) || ($this->session->userdata('sessstatus') == 3)) { ?>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-truck"></i> <span>ส่งของ (Delivery)</span><i class="fa fa-angle-left pull-right"></i></a>
+    				<ul class="treeview-menu">
+            <?php if ($this->session->userdata('sessstatus') != 3) { ?>
+				    <li>
+					   <a href="<?php echo site_url("tp_delivery/form_confirm_sent"); ?>"><i class="fa fa-circle-o"></i> แจ้งส่งของแล้ว</a>
+  					</li>
+            <?php } ?>
+  					<li>
+              <a href="<?php echo site_url("tp_delivery/report_delivery"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ส่งของ</a>
+            </li>
+            </ul>
+            </li>
+            <?php } ?>
+
             <li class="treeview">
                 <a href="#"><i class="fa fa-usd"></i> <span>การขาย (Sale)</span><i class="fa fa-angle-left pull-right"></i></a>
 				<ul class="treeview-menu">

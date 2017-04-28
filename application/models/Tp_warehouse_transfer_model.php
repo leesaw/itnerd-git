@@ -149,7 +149,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
     $this->db->join('nerd_users user1', 'user1.id = stot_dateadd_by','left');
     $this->db->join('nerd_users user2', 'user2.id = stot_confirm_by','left');
     if ($where != "") $this->db->where($where);
-    $this->db->where('log_stots_enable', 1);
+    // $this->db->where('log_stots_enable', 1);
     $this->db->group_by("itse_item_id");
     $this->db->order_by("it_refcode");
 	$query = $this->db->get();

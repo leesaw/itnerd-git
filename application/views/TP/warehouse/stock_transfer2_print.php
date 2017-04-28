@@ -19,7 +19,9 @@
  $dateadd = substr($dateadd,8,2)."/".substr($dateadd,5,2)."/".substr($dateadd,0,4)." ".substr($dateadd,11,8);
 ?>
 <td width="50"> </td>
-<td width="200"><div style="text-align: right; font-weight: bold; font-size: 16pt;"><?php if ($wh_in_group == 3) echo "ใบยืนยันรับสินค้า"; else echo "ใบส่งของ"; ?></div></td>
+<td width="250"><div style="text-align: right; font-weight: bold; font-size: 16pt;"><?php if ($wh_in_group == 3) echo "ใบยืนยันรับสินค้า"; else echo "ใบส่งของ"; ?></div>
+<barcode code='<?php echo $si_id; ?>' type="C128A" size="1" height="0.5" class='barcode' />
+</td>
 </tr>
 <tr>
     <td>ย้ายคลังจาก : <u><b><?php echo $stock_out; ?></b></u> ไปยัง <u><b><?php echo $stock_in; ?></b></u><br>ชื่อผู้ใส่ข้อมูล:  <?php echo $editor; ?><br>Remark: <?php if ($status==4) echo "(สวมสินค้า) "; echo $stock_remark; ?></td><td> </td><td>เลขที่ <?php echo $si_id; ?><br>วันที่กำหนดส่ง : <?php echo $GGdate."/".$GGmonth."/".$GGyear; ?><br>วันที่ยืนยัน : <?php echo $dateadd; ?>
@@ -77,7 +79,7 @@ if(isset($serial_array)) {
         if ($loop->log_stot_item_id==$loop2->itse_item_id) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>
-<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; if ($loop2->itse_sample == 1) echo "(Sample)"; ?>   
+<td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; if ($loop2->itse_sample == 1) echo "(Sample)"; ?>
 </td>
 <td align="center" style="border-left:1px solid black;"></td>
 <td align="right" style="border-left:1px solid black;"></td>

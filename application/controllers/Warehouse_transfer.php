@@ -1345,7 +1345,7 @@ function disable_transfer_between_serial()
         $data['stock_array'] = array();
     }
 
-    $sql = "log_stot_transfer_id = '".$stot_id."'";
+    $sql = "log_stot_transfer_id = '".$id."'";
     $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer_between_serial_one($sql);
     if($query){
         $data['serial_array'] =  $query;
@@ -2169,6 +2169,7 @@ function save_return_headoffice()
                     'stot_dateadd_by' => $this->session->userdata('sessid'),
                     'stot_remark' => $stot_remark,
                     "stot_status" => 2,
+                    "delivery_status" => 0,
                     "stot_confirm_dateadd" => $currentdate,
                     "stot_confirm_by" => $this->session->userdata('sessid')
             );
