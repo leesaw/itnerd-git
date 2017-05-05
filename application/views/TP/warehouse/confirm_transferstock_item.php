@@ -298,6 +298,7 @@ function check_product_code(refcode_input, wh_id)
                     for (var i=0; i<serial_array.length; i++) {
 
                         if (serial_array[i].value == "") {
+
 														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
                             else serial_array[i].value = data.b;
 
@@ -307,6 +308,9 @@ function check_product_code(refcode_input, wh_id)
 														document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                             break;
                         }else if(data.b == serial_array[i].value) {
+                            alert("Caseback ซ้ำ !!");
+                            break;
+												}else if((data.d > 0) && (data.b+"(Sample)" == serial_array[i].value)) {
                             alert("Caseback ซ้ำ !!");
                             break;
                         }else{

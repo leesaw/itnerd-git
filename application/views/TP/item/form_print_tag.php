@@ -78,8 +78,9 @@
                         <div class="row">
 							<div class="col-md-12">
                                     <button type="button" class="btn btn-success" name="savebtn" id="savebtn" onclick="printrefcode(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคา QR แบบ Refcode </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+																		<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="printean(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ EAN </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                                     <?php if ($remark ==1) { ?>
-									<button type="button" class="btn btn-primary" name="savebtn" id="savebtn" onclick="printean(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ EAN </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
                                     <button type="button" class="btn bg-orange" name="savebtn" id="savebtn" onclick="printcaseback(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคาแบบ Caseback </button>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 																		<button type="button" class="btn bg-purple" name="savebtn" id="savebtn" onclick="printrolex(<?php echo $remark; ?>)"><i class='fa fa-print'></i>  พิมพ์ป้ายราคา Rolex </button>
                                     <?php  } ?>
@@ -281,7 +282,20 @@ function printean(x)
             confirmean(x);
         }
     }else{
-        confirmean(x);
+			var it_code = document.getElementsByName('it_id');
+	    var it_quantity = document.getElementsByName('it_quantity');
+	    for(var i=0; i<it_code.length; i++){
+	        if (it_quantity[i].value % 1 !== 0)
+	        {
+	            alert("กรุณาใส่เฉพาะตัวเลขเท่านั้นในช่อง จำนวน");
+	            it_quantity[i].value = "";
+	            return;
+	        }
+
+	    }
+
+			console.log("ean");
+      confirmean(x);
     }
 
 }
@@ -392,7 +406,22 @@ function confirmean(luxury)
         form3.submit();
 
 
-    }
+    }else{
+			var it_id = document.getElementsByName('it_id');
+	    var it_quantity = document.getElementsByName('it_quantity');
+	    var input_form = "";
+
+	    for(var i=0; i<it_id.length; i++){
+	        input_form += "<input type='hidden' name='it_id[]' value='"+it_id[i].value+"'><input type='hidden' name='it_qty[]' value='"+it_quantity[i].value+"'>";
+	    }
+
+	    var url = '<?php echo site_url("item/result_print_tag_ean_refcode"); ?>';
+	    var form3 = $('<form action="'+url+'" method="post" target="_blank">'+input_form+'</form>');
+
+	    $('body').append(form3);
+
+	    form3.submit();
+		}
 
 }
 

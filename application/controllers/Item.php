@@ -727,6 +727,37 @@ function result_print_tag_ean()
     $mpdf->Output();
 }
 
+function result_print_tag_ean_refcode()
+{
+  $it_id = $this->input->post("it_id");
+  $it_qty = $this->input->post("it_qty");
+
+  $this->load->library('mpdf/mpdf');
+  $mpdf= new mPDF('th',array(110,19),'0', 'thsaraban');
+  $stylesheet = file_get_contents('application/libraries/mpdf/css/stylebarcode.css');
+
+  $currentdate = date('Y-m-d');
+  $this->load->model('tp_item_model','',TRUE);
+  $result = array();
+  $index = 0;
+  $sql_result = "";
+  for($i=0; $i <count($it_id); $i++) {
+      $sql_result = "it_id = '".$it_id[$i]."'";
+      $query = $this->tp_item_model->getItem($sql_result);
+      foreach($query as $loop) {
+          $result[$index] = array( "br_name" => $loop->br_name, "it_refcode" => $loop->it_refcode, "it_srp" => $loop->it_srp, "it_barcode" => $loop->it_barcode, "it_qty" => $it_qty[$i] );
+          $index++;
+      }
+  }
+  $data['result_array'] = $result;
+  //echo $html;
+  //$mpdf->SetJS('this.print();');
+  $mpdf->WriteHTML($stylesheet,1);
+  $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_ean_refcode", $data, TRUE));
+  // $mpdf->WriteHTML($this->load->view("TP/item/item_barcode_print_refcode", $data, TRUE));
+  $mpdf->Output();
+}
+
 function result_print_tag_refcode()
 {
     $it_id = $this->input->post("it_id");
