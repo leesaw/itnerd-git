@@ -29,10 +29,11 @@ Class Tp_warehouse_model extends CI_Model
 
  function getWarehouse_balance($where)
  {
-	$this->db->select("stob_id, stob_item_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_cost_baht, it_short_description, it_remark, stob_qty, stob_warehouse_id, wh_name, wh_name_eng, wh_code, stob_lastupdate, stob_lastupdate_by, count(itse_serial_number) as has_serial");
+	$this->db->select("stob_id, stob_item_id, it_refcode, it_barcode, itc_name, br_name, it_model, it_uom, it_srp, it_cost_baht, it_short_description, it_remark, stob_qty, stob_warehouse_id, wh_name, wh_name_eng, wh_code, stob_lastupdate, stob_lastupdate_by, count(itse_serial_number) as has_serial");
 	$this->db->from('tp_stock_balance');
 	$this->db->join('tp_warehouse', 'wh_id = stob_warehouse_id','left');
     $this->db->join('tp_item', 'it_id = stob_item_id','left');
+    $this->db->join('tp_item_category', 'itc_id = it_category_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     $this->db->join('tp_item_serial', 'itse_item_id=stob_item_id and itse_warehouse_id=stob_warehouse_id','left');
     $this->db->group_by('stob_id');
@@ -70,10 +71,11 @@ Class Tp_warehouse_model extends CI_Model
 
  function getWarehouse_balance_caseback($where)
  {
-	$this->db->select("itse_id, it_id, it_refcode, it_barcode, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_name_eng, wh_code, itse_serial_number, br_name, itse_sample, itse_enable");
+	$this->db->select("itse_id, it_id, it_refcode, it_barcode, itc_name, br_name, it_model, it_uom, it_srp, it_short_description, it_remark, wh_name, wh_name_eng, wh_code, itse_serial_number, br_name, itse_sample, itse_enable");
     $this->db->from('tp_item_serial');
 	$this->db->join('tp_warehouse', 'itse_warehouse_id = wh_id','left');
     $this->db->join('tp_item', 'it_id = itse_item_id','left');
+    $this->db->join('tp_item_category', 'itc_id = it_category_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');
     if ($where != "") $this->db->where($where);
     $this->db->order_by('itse_serial_number', 'asc');

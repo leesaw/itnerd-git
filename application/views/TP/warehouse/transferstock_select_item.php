@@ -343,7 +343,9 @@ function submitform(x)
                 }
             }
         }
-        if (duplicate > 0) {
+				if (it_code.length < 1) {
+					alert("กรุณาเลือกสินค้าที่ต้องการย้ายคลังอย่างน้อย 1 ชิ้น !!!");
+				}else if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");
         }else{
             var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
@@ -436,7 +438,7 @@ function confirmform(luxury)
                 checked = 0;
             }
         }
-	
+
         $.ajax({
             type : "POST" ,
             url : "<?php echo site_url("warehouse_transfer/transferstock_save/0"); ?>" ,

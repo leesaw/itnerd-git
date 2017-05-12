@@ -286,10 +286,14 @@ function check_product_code(refcode_input, wh_id)
             url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
             data : {serial: refcode_input, serial_wh_id: wh_id},
             success : function(data) {
-                if(data.a > 0)
-                {
+							var check_refcode = document.getElementById("count_serial_"+data.a);
+								if (check_refcode === null) {
+									alert("ไม่พบ Ref. Code ที่ต้องการในเอกสารนี้ !!!");
+								}else if(data.a > 0){
+
                     var ind = "serial"+data.a;
                     var serial = document.getElementById("count_serial_"+data.a).value;
+										// var serial_array = new Array();
                     var serial_array = document.getElementsByName(ind);
                     var serial_id = document.getElementsByName("serial_item_id"+data.a);
                     var it_final = document.getElementsByName("it_final");

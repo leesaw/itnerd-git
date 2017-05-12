@@ -65,7 +65,7 @@
                                         <th width="80">Ref. Number</th>
                                         <th>Brand</th>
                                         <th>Family</th>
-                                        <th>Warehouse Code</th>
+                                        <th>Category</th>
                                         <th>Warehouse</th>
 										<th width="50">Qty</th>
                                         <?php if ($this->session->userdata('sessstatus') == 88) { ?><th>Cost</th><?php }else{ ?><th>SRP</th> <?php } ?>
