@@ -325,6 +325,7 @@ function submitform(x)
     var whid_in = <?php echo $whid_in; ?>;
     var datein = "<?php echo $datein; ?>";
     var it_code = document.getElementsByName('it_code');
+		var it_id = document.getElementsByName('it_id');
     if (whid_out < 0) {
         alert("กรุณาเลือกคลังสินค้า");
     }else if (whid_in < 0) {
@@ -343,7 +344,7 @@ function submitform(x)
                 }
             }
         }
-				if (it_code.length < 1) {
+				if (it_id.length < 1) {
 					alert("กรุณาเลือกสินค้าที่ต้องการย้ายคลังอย่างน้อย 1 ชิ้น !!!");
 				}else if (duplicate > 0) {
             alert("Caseback ซ้ำกัน");

@@ -44,7 +44,7 @@ Class Tp_warehouse_transfer_model extends CI_Model
 
  function getWarehouse_transfer_out($where)
  {
-	$this->db->select("stoo_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stoo_qty_update) as qty_update, MIN(log_stoo_old_qty) as qty_old, stoo_datein, firstname, lastname, log_stoo_item_id, stoo_dateadd, stoo_remark");
+	$this->db->select("stoo_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, wh_name, wh_code, SUM(log_stoo_qty_update) as qty_update, MAX(log_stoo_old_qty) as qty_old, stoo_datein, firstname, lastname, log_stoo_item_id, stoo_dateadd, stoo_remark");
 	$this->db->from('log_stock_out');
     $this->db->join('tp_item', 'it_id = log_stoo_item_id','left');
     $this->db->join('tp_brand', 'br_id = it_brand_id','left');

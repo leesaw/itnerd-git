@@ -209,6 +209,87 @@ function upload_excel_transfer_stock_fashion()
 
 }
 
+function upload_excel_transfer_out_stock_fashion()
+{
+    $luxury = $this->uri->segment(3);
+    $whid_out = $this->uri->segment(4);
+
+    $this->load->helper(array('form', 'url'));
+
+    $config['upload_path']          = './uploads/excel';
+    $config['allowed_types']        = 'xls|xlsx';
+    $config['max_size']             = '5000';
+
+    $this->load->library('upload', $config);
+
+    if ( !$this->upload->do_upload('excelfile_name'))
+    {
+        $error = array('error' => $this->upload->display_errors());
+
+    }
+    else
+    {
+        $data = $this->upload->data();
+        $arr = array();
+        $index = 0;
+        $this->load->library('excel');
+        $objPHPExcel = PHPExcel_IOFactory::load($data['full_path']);
+        $cell_collection = $objPHPExcel->getActiveSheet()->getCellCollection();
+        foreach ($cell_collection as $cell) {
+            $column = $objPHPExcel->getActiveSheet()->getCell($cell)->getColumn();
+            $row = $objPHPExcel->getActiveSheet()->getCell($cell)->getRow();
+            $data_value = $objPHPExcel->getActiveSheet()->getCell($cell)->getValue();
+
+            if ($row != 1) {
+                $arr_data[$row-2][$column] = $data_value;
+
+            }
+
+        }
+
+        for($i=0; $i<count($arr_data); $i++) {
+            if ($arr_data[$i]['A'] != "" && $arr_data[$i]['B'] != "") {
+                if($luxury ==0) {
+                    $sql = "it_enable = 1 and it_refcode = '".$arr_data[$i]['A']."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '".$luxury."'";
+                    $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='it_id_refcode' id='it_id_refcode' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp_refcode' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+
+                        if ($loop->stob_qty > 0) {
+                            $output .= "<td style='width: 120px;'>";
+                        }else{
+                            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+                        }
+                        $output .= "<input type='hidden' name='old_qty_refcode' id='old_qty_refcode' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+                        $output .= "<td><input type='text' name='it_quantity_refcode' id='it_quantity_refcode' value='".$arr_data[$i]['B']."' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }else{
+                    $sql = "itse_serial_number = '".$arr_data[$i]['B']."' and itse_enable = 1 and itse_warehouse_id = '".$whid_out."' and ".$this->no_rolex;
+
+                    $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
+                    foreach ($result as $loop) {
+                        $output = "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id_caseback' id='it_id_caseback' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp_caseback' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+                        $output .= "<td><input type='hidden' name='old_qty_caseback' id='old_qty_caseback' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity_caseback' id='it_quantity_caseback' value='1'>1</td><td>".$loop->it_uom."</td>";
+                        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number."' style='width: 200px;' readonly></td>";
+                        $arr[$index] = $output;
+                        $index++;
+                    }
+                }
+
+            }
+
+        }
+        unlink($data['full_path']);
+
+        echo json_encode($arr);
+        exit();
+    }
+
+}
+
 function upload_excel_import_stock()
 {
     $luxury = $this->uri->segment(3);
@@ -962,6 +1043,47 @@ function checkStock_transfer_caseback()
     foreach ($result as $loop) {
         $output .= "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id' id='it_id' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
         $output .= "<td><input type='hidden' name='old_qty' id='old_qty' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity' id='it_quantity' value='1'>1</td><td>".$loop->it_uom."</td>";
+        $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number;
+        if ($loop->itse_sample == 1) $output .= "(Sample)";
+        $output .= "' style='width: 200px;' readonly></td>";
+    }
+    echo $output;
+}
+
+function checkStock_transfer_out_onlyfashion()
+{
+    $refcode = $this->input->post("refcode");
+    $whid_out = $this->input->post("whid_out");
+
+    $sql = "it_enable = 1 and it_refcode = '".$refcode."' and stob_warehouse_id = '".$whid_out."' and it_has_caseback = '0'";
+    $result = $this->tp_warehouse_transfer_model->getItem_stock($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='it_id_refcode' id='it_id_refcode' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp_refcode' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+
+        if ($loop->stob_qty > 0) {
+            $output .= "<td style='width: 120px;'>";
+        }else{
+            $output .= "<td style='width: 120px;background-color: #F6CECE; font-weight: bold;'>";
+        }
+        $output .= "<input type='hidden' name='old_qty_refcode' id='old_qty_refcode' value='".$loop->stob_qty."'>".$loop->stob_qty."</td>";
+        $output .= "<td><input type='text' name='it_quantity_refcode' id='it_quantity_refcode' value='1' style='width: 50px;'></td><td>".$loop->it_uom."</td>";
+    }
+    echo $output;
+}
+
+function checkStock_transfer_out_caseback()
+{
+    $refcode = $this->input->post("refcode");
+    $whid_out = $this->input->post("whid_out");
+
+    $sql = "itse_serial_number = '".$refcode."' and itse_enable = 1 and itse_warehouse_id = '".$whid_out."' and ".$this->no_rolex;
+
+    $result = $this->tp_warehouse_transfer_model->getItem_stock_caseback($sql);
+    $output = "";
+    foreach ($result as $loop) {
+        $output .= "<td><input type='hidden' name='itse_id' id='itse_id' value='".$loop->itse_id."'><input type='hidden' name='it_id_caseback' id='it_id_caseback' value='".$loop->it_id."'>".$loop->it_refcode."</td><td>".$loop->br_name."</td><td>".$loop->it_model."</td><td><input type='hidden' name='it_srp_caseback' value='".$loop->it_srp."'>".number_format($loop->it_srp)."</td>";
+        $output .= "<td><input type='hidden' name='old_qty_caseback' id='old_qty_caseback' value='".$loop->stob_qty."'><input type='hidden' name='it_quantity_caseback' id='it_quantity_caseback' value='1'>1</td><td>".$loop->it_uom."</td>";
         $output .= "<td><input type='text' name='it_code' id='it_code' value='".$loop->itse_serial_number;
         if ($loop->itse_sample == 1) $output .= "(Sample)";
         $output .= "' style='width: 200px;' readonly></td>";
@@ -2660,7 +2782,7 @@ function out_stock_select_item()
 {
     $datein = $this->input->post("datein");
     $whid_out = $this->input->post("whid_out");
-    $watch_luxury = $this->input->post("watch_luxury");
+    // $watch_luxury = $this->input->post("watch_luxury");
 
     $whout_array = explode('#', $whid_out);
     $whname_out = $whout_array[1];
@@ -2669,7 +2791,7 @@ function out_stock_select_item()
     $data['datein'] = $datein;
     $data['whid_out'] = $whid_out;
     $data['whname_out'] = $whname_out;
-    $data['remark'] = $watch_luxury;
+    // $data['remark'] = $watch_luxury;
     $data['sessrolex'] = $this->session->userdata('sessrolex');
 
     $data['title'] = "Nerd - Out Stock";
@@ -2678,10 +2800,11 @@ function out_stock_select_item()
 
 function save_out_stock()
 {
-  $luxury = $this->uri->segment(3);
+  // $luxury = $this->uri->segment(3);
   $datein = $this->input->post("datein");
   $wh_id = $this->input->post("whid_out");
-  $it_array = $this->input->post("item");
+  $it_array_refcode = $this->input->post("item_refcode");
+  $it_array_caseback = $this->input->post("item_caseback");
   $remark = $this->input->post("stot_remark");
 
 
@@ -2703,6 +2826,8 @@ function save_out_stock()
       $number = "TU-Ro".$month_array[0].$month_array[1].str_pad($number, 3, '0', STR_PAD_LEFT);
   }
 
+  if (count($it_array_caseback) > 0) $luxury = 1; else $luxury = 0;
+
   $stock = array( 'stoo_number' => $number,
                   'stoo_warehouse_id' => $wh_id,
                   'stoo_datein' => $datein,
@@ -2715,14 +2840,14 @@ function save_out_stock()
 
   $last_id = $this->tp_warehouse_transfer_model->addWarehouse_transfer_out($stock);
 
-  for($i=0; $i<count($it_array); $i++){
+  for($i=0; $i<count($it_array_refcode); $i++){
 
-      $sql = "stob_item_id = '".$it_array[$i]["id"]."' and stob_warehouse_id = '".$wh_id."'";
+      $sql = "stob_item_id = '".$it_array_refcode[$i]["id"]."' and stob_warehouse_id = '".$wh_id."'";
       $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
       if (!empty($query)) {
           foreach($query as $loop) {
               $stock_id = $loop->stob_id;
-              $qty_new = $loop->stob_qty - $it_array[$i]["qty"];
+              $qty_new = $loop->stob_qty - $it_array_refcode[$i]["qty"];
               $stock = array( 'id' => $loop->stob_id,
                               'stob_qty' => $qty_new,
                               'stob_lastupdate' => $currentdate,
@@ -2736,29 +2861,60 @@ function save_out_stock()
 
       $stock = array( 'log_stoo_transfer_id' => $last_id,
                       'log_stoo_status' => 'I',
-                      'log_stoo_qty_update' => $it_array[$i]["qty"],
+                      'log_stoo_qty_update' => $it_array_refcode[$i]["qty"],
                       'log_stoo_warehouse_id' => $wh_id,
                       'log_stoo_old_qty' => $old_qty,
-                      'log_stoo_item_id' => $it_array[$i]["id"],
+                      'log_stoo_item_id' => $it_array_refcode[$i]["id"],
                       'log_stoo_stock_balance_id' => $stock_id
       );
       $log_stoo_id = $this->tp_log_model->addLogStockOut($stock);
-      $count += $it_array[$i]["qty"];
-
-      if ($luxury == 1) {
-        $stock = array( 'log_stoos_stoo_id' => $log_stoo_id,
-                        'log_stoos_item_serial_id' => $it_array[$i]["itse_id"]
-        );
-        $query = $this->tp_log_model->addLogStockOut_serial($stock);
-
-        $this->load->model('tp_item_model','',TRUE);
-        $serial_item = array( 'id' => $it_array[$i]["itse_id"],
-                            'itse_enable' => 0,
-                            'itse_dateadd' => $currentdate
-                        );
-        $query = $this->tp_item_model->editItemSerial($serial_item);
-      }
+      $count += $it_array_refcode[$i]["qty"];
   }
+
+  for($i=0; $i<count($it_array_caseback); $i++){
+
+      $sql = "stob_item_id = '".$it_array_caseback[$i]["id"]."' and stob_warehouse_id = '".$wh_id."'";
+      $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+      if (!empty($query)) {
+          foreach($query as $loop) {
+              $stock_id = $loop->stob_id;
+              $qty_new = $loop->stob_qty - $it_array_caseback[$i]["qty"];
+              $stock = array( 'id' => $loop->stob_id,
+                              'stob_qty' => $qty_new,
+                              'stob_lastupdate' => $currentdate,
+                              'stob_lastupdate_by' => $this->session->userdata('sessid')
+                          );
+              $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+              break;
+          }
+          $old_qty = $loop->stob_qty;
+      }
+
+      $stock = array( 'log_stoo_transfer_id' => $last_id,
+                      'log_stoo_status' => 'I',
+                      'log_stoo_qty_update' => $it_array_caseback[$i]["qty"],
+                      'log_stoo_warehouse_id' => $wh_id,
+                      'log_stoo_old_qty' => $old_qty,
+                      'log_stoo_item_id' => $it_array_caseback[$i]["id"],
+                      'log_stoo_stock_balance_id' => $stock_id
+      );
+      $log_stoo_id = $this->tp_log_model->addLogStockOut($stock);
+      $count += $it_array_caseback[$i]["qty"];
+
+
+      $stock = array( 'log_stoos_stoo_id' => $log_stoo_id,
+                      'log_stoos_item_serial_id' => $it_array_caseback[$i]["itse_id"]
+      );
+      $query = $this->tp_log_model->addLogStockOut_serial($stock);
+
+      $this->load->model('tp_item_model','',TRUE);
+      $serial_item = array( 'id' => $it_array_caseback[$i]["itse_id"],
+                          'itse_enable' => 0,
+                          'itse_dateadd' => $currentdate
+                      );
+      $query = $this->tp_item_model->editItemSerial($serial_item);
+
+    }
 
   $result = array("a" => $count, "b" => $last_id);
   //$result = array("a" => 1, "b" => 2);

@@ -258,6 +258,9 @@
                     <li>
                         <a href="<?php echo site_url("warehouse_transfer/report_transferstock"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ย้ายคลังสินค้า</a>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_stock_return/report_return_request"); ?>"><i class="fa fa-circle-o"></i> รายงาน-ขอคืนสินค้า</a>
+                    </li>
                     <?php } ?>
                     <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 3)) { ?>
                     <li>
@@ -319,6 +322,9 @@
 				    <li>
 					   <a href="<?php echo site_url("sale/saleorder_view"); ?>"><i class="fa fa-circle-o"></i> การสั่งขาย (Sale Order)</a>
 					</li>
+          <li>
+             <a href="<?php echo site_url("tp_stock_return/form_return_request"); ?>"><i class="fa fa-circle-o"></i> ขอคืนสินค้าจากการสั่งขาย</a>
+          </li>
                     <?php } ?>
 					<li>
                         <a href="<?php echo site_url("sale/saleorder_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-การสั่งขาย</a>

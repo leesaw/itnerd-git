@@ -11,7 +11,7 @@
         <div class="content-wrapper">
         <section class="content-header">
 
-            <h1 class="text-red">เอาสินค้าออกจากคลัง</h1>
+            <h1>ขอคืนสินค้าจากการสั่งขาย</h1>
         </section>
 
 		<section class="content">
@@ -27,31 +27,20 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <form action="<?php echo site_url("warehouse_transfer/out_stock_select_item"); ?>" name="form1" id="form1" method="post">
+                                <form action="<?php echo site_url("tp_stock_return/return_request_select_item"); ?>" name="form1" id="form1" method="post">
                                     <div class="form-group-sm">
-                                            วันที่เอาออก
+                                            วันที่ขอคืนสินค้า
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php echo $currentdate; ?>">
                                     </div>
 							</div>
                             <div class="col-md-3">
-									<div class="form-group-sm">
-                                        ออกจากคลัง *
-                                        <select class="form-control select2" name="whid_out" id="whid_out" style="width: 100%;">
-                                            <option value='-1'>-- เลือกคลังสินค้า --</option>
-										<?php 	if(is_array($wh_out)) {
-												foreach($wh_out as $loop){
-													echo "<option value='".$loop->wh_id."#".$loop->wh_code."-".$loop->wh_name."'>".$loop->wh_code."-".$loop->wh_name."</option>";
-										 } } ?>
-                                        </select>
-                                    </div>
+                              <div class="form-group-sm text-red">
+                                      เลขที่ใบสั่งขาย
+                                      <input type="hidden" name="so_id" id="so_id" value="">
+                                      <input type="text" class="form-control" name="so_number" id="so_number" value="" placeholder="** เฉพาะการสั่งขาย SO-HOxxx เท่านั้น**">
+                              </div>
 							</div>
 
-                            <!-- <div class="col-md-3">
-                                <?php if ($sessrolex != 1) { ?>
-                                <input type="radio" name="watch_luxury" id="watch_luxury" value="0" <?php if(($remark=='0') || (!isset($remark))) echo "checked"; ?>> <label class="text-green"> No Caseback</label>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                <?php } ?>
-              <input type="radio" name="watch_luxury" id="watch_luxury" value="1" <?php if ($remark=='1') echo "checked"; ?>> <label class="text-red"> Caseback</label>
-                            </div> -->
 						</div>
                         <br>
                         <div name="submit1" class="row">
@@ -87,14 +76,31 @@ function get_datepicker(id)
 
 function submitform()
 {
-    if (document.getElementById('whid_out').value < 0) {
-        alert("กรุณาเลือกคลังสินค้า");
-        document.getElementById('whid_out').focus();
-    }else if (document.getElementById('datein').value == "") {
-        alert("กรุณาเลือกวันที่เอาออก");
-        document.getElementById('datein').focus();
+    if (document.getElementById('datein').value == "") {
+      alert("กรุณาเลือกวันที่ขอคืนสินค้า !!");
+      document.getElementById('datein').focus();
+    }else if (document.getElementById('so_number').value == "") {
+      alert("กรุณาใส่เลขที่ใบสั่งขาย !!");
+      document.getElementById('so_number').focus();
     }else{
-        document.getElementById("form1").submit();
+      var so_number = document.getElementById('so_number').value;
+
+      $.ajax({
+          type : "POST" ,
+          url : "<?php echo site_url("tp_stock_return/check_so_number"); ?>" ,
+          data : {so_number: so_number},
+          success : function(data) {
+              if(data == 0)
+              {
+                alert("เลขที่เอกสาร "+so_number+" ไม่สามารถขอคืนสินค้าได้ !!");
+                document.getElementById('so_number').focus();
+              }else{
+                document.getElementById('so_id').value = data;
+                document.getElementById("form1").submit();
+              }
+          }
+      });
+
     }
 
 }

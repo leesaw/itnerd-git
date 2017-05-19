@@ -48,7 +48,7 @@
 // print serial number
 if(isset($serial_array)) {
     foreach ($serial_array as $loop2) {
-        if ($loop->log_stoo_item_id==$loop2->log_stoo_item_id) { ?>
+        if (($loop->log_stoo_item_id==$loop2->log_stoo_item_id)) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td style="border-left:1px solid black;"><?php echo "Caseback : ".$loop2->itse_serial_number; ?>
 </td>
