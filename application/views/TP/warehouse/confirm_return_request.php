@@ -31,7 +31,7 @@
 							</div>
                             <div class="col-md-2">
                                     <div class="form-group-sm">
-                                            วันที่กำหนดส่ง
+                                            วันที่คืน
                                             <input type="text" class="form-control" name="datein" id="datein" value="<?php $datein = explode('-', $loop->stor_issue);
     echo $datein[2]."/".$datein[1]."/".$datein[0]; ?>" readonly>
                                     </div>
@@ -49,7 +49,9 @@
                     <option value='-1'>-- เลือกคลังสินค้า --</option>
                     <?php 	if(is_array($wh_array)) {
                         foreach($wh_array as $loop_wh){
-                          echo "<option value='".$loop_wh->wh_id."'>".$loop_wh->wh_code."-".$loop_wh->wh_name."</option>";
+                          echo "<option value='".$loop_wh->wh_id."'";
+													if ($loop_wh->wh_id == $loop->wh_id) echo " selected";
+													echo ">".$loop_wh->wh_code."-".$loop_wh->wh_name."</option>";
                      } } ?>
                     </select>
                 </div>
@@ -96,7 +98,13 @@
                                                     <td><?php echo $loop->br_name; ?></td>
                                                     <td><?php echo $loop->it_model; ?></td>
                                                     <td><?php echo number_format($loop->it_srp); ?></td>
-                                                    <td><input type='hidden' name='qty_update' id='qty_update' value=" <?php echo $loop->qty_update; ?>"><?php echo $loop->qty_update; ?></td>
+                                                    <td><input type='hidden' name='qty_update' id='qty_update' value="<?php echo $loop->qty_update; ?>">
+																											  <input type='hidden' name='qty_so' id='qty_so' value="
+																												<?php foreach($so_array as $loop_so) { if($loop_so->soi_item_id == $loop->log_stor_item_id)
+																													echo $loop_so->soi_qty; break;
+																												}  ?>
+																												">
+																										<?php echo $loop->qty_update; ?></td>
                                                     <td>
                                                         <?php if ($luxury==1) { ?>
                                                         <input type="hidden" name="count_serial_<?php echo $loop->log_stor_item_id; ?>" id="count_serial_<?php echo $loop->log_stor_item_id; ?>" value="<?php echo $count; ?>">
@@ -120,8 +128,9 @@
 												</tbody>
                                                 <tfoot>
                                                     <tr style="font-size:120%;" class="text-red">
-                                                        <th colspan="6" style="text-align:right;"><label>จำนวนรวม:</th>
+                                                        <th colspan="5" style="text-align:right;"><label>จำนวนรวม:</th>
                                                         <th><div id="allcount"></div></th>
+																												<th></th>
                                                     </tr>
                                                 </tfoot>
 											</table>
@@ -141,8 +150,8 @@
                         <br>
                         <div class="row">
 							<div class="col-md-6">
-								<button type="button" class="btn btn-success <?php if ($status==2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform()"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-primary" name="returnbtn" id="returnbtn" onclick="returnform()"><i class='fa fa-save'></i>  กลับไปหน้ารายการ-ย้ายคลังสินค้า </button>
+								<button type="button" class="btn btn-success <?php if ($status==2) echo "disabled"; ?>" name="savebtn" id="savebtn" onclick="submitform(<?php echo $luxury; ?>)"><i class='fa fa-save'></i>  บันทึก </button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary" name="returnbtn" id="returnbtn" onclick="returnform()"><i class='fa fa-save'></i>  กลับไปหน้ารายการ-ขอคืนสินค้า </button>
 							</div>
 						</div>
 
@@ -169,33 +178,14 @@ $(document).ready(function()
             },3000);
 
 		$("#refcode").focus();
-		$("#caseback").focus();
-
-    $('#caseback').keyup(function(e){ //enter next
-        if(e.keyCode == 13) {
-            var product_code_value = $.trim($(this).val());
-            var wh_out_id = "<?php echo $wh_out_id; ?>";
-            if(product_code_value != "")
-						{
-                check_product_code(product_code_value, wh_out_id);
-
-							}
-
-            $(this).val('');
-
-            setTimeout(function(){
-                calculate();
-            },3000);
-					}
-		});
 
 		$('#refcode').keyup(function(e){ //enter next
         if(e.keyCode == 13) {
             var refcode = $.trim($(this).val());
-            var wh_out_id = "<?php echo $wh_out_id; ?>";
+            var stor_id = "<?php echo $stor_id; ?>";
             if(refcode != "")
 						{
-                check_ref_code(refcode, wh_out_id);
+                check_ref_code(refcode, stor_id);
 
 						}
 
@@ -214,102 +204,86 @@ function get_datepicker(id)
     $(this).datepicker('hide'); });
 }
 
-function check_ref_code(refcode_input, wh_id)
+function check_ref_code(refcode_input, stor_id)
 {
 	if(refcode_input != "")
 	{
         $.ajax({
             type : "POST" ,
             dataType: "json",
-            url : "<?php echo site_url("warehouse_transfer/checkRefcode_warehouse"); ?>" ,
-            data : {refcode: refcode_input, wh_id: wh_id},
+            url : "<?php echo site_url("tp_stock_return/check_return_item_list"); ?>" ,
+            data : {refcode: refcode_input, stor_id: stor_id},
             success : function(data) {
                 if(data.c > 0)
                 {
-                    var wh_it_id = data.a;
+                    var item_id = data.a;
 										var it_refcode = data.b;
+										var luxury = data.luxury;
                     var it_id = document.getElementsByName("it_id");
                     var it_final = document.getElementsByName("it_final");
 										var qty_update = document.getElementsByName("qty_update");
+										var qty_so = document.getElementsByName("qty_so");
 										var checkin = parseInt(document.getElementById("checkin").innerHTML);
 										var count = 0;
-                    for (var i=0; i<it_id.length; i++) {
-                        if (parseInt(it_id[i].value) == wh_it_id) {
-													count++;
-													if (parseInt(it_final[i].value) >= parseInt(qty_update[i].value)) {
-														alert("จำนวนสินค้าเกินจากที่ต้องการ");
-														break;
-													}else{
-														it_final[i].value = parseInt(it_final[i].value) + 1;
-														checkin++;
-														document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                            break;
+										if (luxury == 0) {
+											for (var i=0; i<it_id.length; i++) {
+	                        if (parseInt(it_id[i].value) == item_id) {
+														count++;
+														if (parseInt(it_final[i].value) >= parseInt(qty_update[i].value)) {
+															alert("จำนวนสินค้าเกินจากที่ต้องการ");
+															break;
+														}else if(parseInt(it_final[i].value) >= parseInt(qty_so[i].value)) {
+															alert("จำนวนสินค้าเกินจากที่สามารถคืนได้ กรุณาตรวจสอบใบสั่งขายอีกครั้ง");
+															break;
+														}else{
+															it_final[i].value = parseInt(it_final[i].value) + 1;
+															checkin++;
+															document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	                            break;
+														}
+	                        }
+	                    }
+											if (count == 0) alert("ไม่พบสินค้า "+it_refcode+" ในเอกสารนี้");
+										}else{
+											var check_refcode = document.getElementById("count_serial_"+data.a);
+											if (check_refcode === null) {
+												alert("ไม่พบ Ref. Code ที่ต้องการในเอกสารนี้ !!!");
+											}else if(data.a > 0){
+
+			                    var ind = "serial"+data.a;
+			                    var serial = document.getElementById("count_serial_"+data.a).value;
+													// var serial_array = new Array();
+			                    var serial_array = document.getElementsByName(ind);
+			                    var serial_id = document.getElementsByName("serial_item_id"+data.a);
+													var count_serial = 0;
+			                    for (var i=0; i<serial_array.length; i++) {
+
+			                        if (serial_array[i].value == "") {
+
+																	serial_array[i].value = data.b;
+
+			                            serial_id[i].value = data.c;
+			                            it_final[serial].value = parseInt(it_final[serial].value) + 1;
+																	checkin++;
+																	document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			                            break;
+			                        }else if(data.b == serial_array[i].value) {
+			                            alert("Caseback ซ้ำ !!");
+			                            break;
+			                        }else{
+																count_serial++;
+															}
+			                    }
+													if (count_serial == serial_array.length) {
+														alert("สินค้าเกินจำนวนที่ต้องการ !!");
 													}
-                        }
-                    }
-										if (count == 0) alert("ไม่พบสินค้า "+it_refcode+" ในเอกสารนี้");
-                }else{
-                    alert("ไม่พบสินค้าที่ต้องการในคลัง");
-                }
-            },
-            error: function (textStatus, errorThrown) {
-                alert("เกิดความผิดพลาด !!!");
-            }
-        });
-	}
-
-}
-
-function check_product_code(refcode_input, wh_id)
-{
-	if(refcode_input != "")
-	{
-        $.ajax({
-            type : "POST" ,
-            dataType: "json",
-            url : "<?php echo site_url("warehouse_transfer/checkSerial_warehouse"); ?>" ,
-            data : {serial: refcode_input, serial_wh_id: wh_id},
-            success : function(data) {
-							var check_refcode = document.getElementById("count_serial_"+data.a);
-								if (check_refcode === null) {
-									alert("ไม่พบ Ref. Code ที่ต้องการในเอกสารนี้ !!!");
-								}else if(data.a > 0){
-
-                    var ind = "serial"+data.a;
-                    var serial = document.getElementById("count_serial_"+data.a).value;
-										// var serial_array = new Array();
-                    var serial_array = document.getElementsByName(ind);
-                    var serial_id = document.getElementsByName("serial_item_id"+data.a);
-                    var it_final = document.getElementsByName("it_final");
-										var checkin = parseInt(document.getElementById("checkin").innerHTML);
-										var count_serial = 0;
-                    for (var i=0; i<serial_array.length; i++) {
-
-                        if (serial_array[i].value == "") {
-
-														if (data.d > 0) serial_array[i].value = data.b + "(Sample)";
-                            else serial_array[i].value = data.b;
-
-                            serial_id[i].value = data.c;
-                            it_final[serial].value = parseInt(it_final[serial].value) + 1;
-														checkin++;
-														document.getElementById("checkin").innerHTML = checkin.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                            break;
-                        }else if(data.b == serial_array[i].value) {
-                            alert("Caseback ซ้ำ !!");
-                            break;
-												}else if((data.d > 0) && (data.b+"(Sample)" == serial_array[i].value)) {
-                            alert("Caseback ซ้ำ !!");
-                            break;
-                        }else{
-													count_serial++;
-												}
-                    }
-										if (count_serial == serial_array.length) {
-											alert("สินค้าเกินจำนวนที่ต้องการ !!");
+			                }else{
+			                    alert("ไม่พบ Caseback ที่ต้องการในคลัง");
+			                }
 										}
+
                 }else{
-                    alert("ไม่พบ Caseback ที่ต้องการในคลัง");
+                    alert("ไม่พบสินค้าที่ต้องการในเอกสารนี้");
                 }
             },
             error: function (textStatus, errorThrown) {
@@ -322,32 +296,21 @@ function check_product_code(refcode_input, wh_id)
 
 function returnform()
 {
-    window.location = "<?php echo site_url("warehouse_transfer/report_transferstock"); ?>";
+    window.location = "<?php echo site_url("tp_stock_return/report_return_request"); ?>";
 }
 
-function submitform()
+function submitform(luxury)
 {
     var it_final = document.getElementsByName('it_final');
-    var qty_old = document.getElementsByName('qty_old');
     for(var i=0; i<it_final.length; i++){
-        if (it_final[i].value == "") {
-            alert("กรุณาใส่จำนวนสินค้าให้ครบทุกช่อง");
-            return;
-        }
-
-        if (parseInt(it_final[i].value) > parseInt(qty_old[i].value)) {
-            alert("จำนวนสินค้าคงเหลือไม่เพียงพอกับที่ต้องการ !!");
+        if (it_final[i].value == 0) {
+            alert("กรุณาใส่สินค้าให้ครบทุกช่อง");
             return;
         }
     }
-    if (document.getElementById('datein').value == "") {
-        alert("กรุณาเลือกวันที่รับเข้า");
-        document.getElementById('datein').focus();
-    }else{
-        var r = confirm("ยืนยันการย้ายคลังสินค้า !!");
-        if (r == true) {
-            confirmform();
-        }
+    var r = confirm("ยืนยันการขอคืนสินค้า !!");
+    if (r == true) {
+        confirmform(luxury);
     }
 }
 
@@ -361,16 +324,15 @@ function calculate() {
     document.getElementById("allcount").innerHTML = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-function confirmform()
+function confirmform(luxury)
 {
     var it_final = document.getElementsByName('it_final');
     var log_id = document.getElementsByName('log_id');
     var item_id = document.getElementsByName('it_id');
-    var stot_id = <?php echo $stot_id; ?>;
-    var wh_out_id = document.getElementById("wh_out_id").value;
-    var wh_in_id = document.getElementById("wh_in_id").value;
+    var stor_id = <?php echo $stor_id; ?>;
+    var whid = document.getElementById("whid").value;
     var datein = document.getElementById("datein").value;
-    var stot_remark =  document.getElementById("stotremark").value;
+    var stor_remark =  document.getElementById("storremark").value;
 
     var serial_array = new Array();
     var index_serial = 0;
@@ -385,13 +347,12 @@ function confirmform()
         item_array[i] = {id: log_id[i].value, qty_final: it_final[i].value, item_id: item_id[i].value};
 
         var serial = document.getElementsByName('serial'+item_id[i].value.replace(/\s+/g, ''));
-        var serial_wh_id = document.getElementsByName('serial_wh_id'+item_id[i].value.replace(/\s+/g, ''));
         var serial_item_id = document.getElementsByName('serial_item_id'+item_id[i].value.replace(/\s+/g, ''));
 
         for(var j=0; j<serial.length; j++) {
             if (serial[j].value != "") {
 
-                serial_array[index_serial] = {serial_wh_id: serial_wh_id[j].value, serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
+                serial_array[index_serial] = {serial: serial[j].value, serial_item_id: serial_item_id[j].value, serial_log_id: log_id[i].value};
                 index_serial++;
 
             }/*else{
@@ -406,15 +367,15 @@ function confirmform()
 
     $.ajax({
             type : "POST" ,
-            url : "<?php echo site_url("warehouse_transfer/transferstock_save_confirm"); ?>" ,
-            data : {item: item_array, stot_id: stot_id, wh_out_id: wh_out_id, wh_in_id: wh_in_id, datein: datein, serial_array: serial_array, stot_remark: stot_remark} ,
+            url : "<?php echo site_url("tp_stock_return/save_return_confirm"); ?>" ,
+            data : {item: item_array, stor_id: stor_id, whid: whid, datein: datein, serial_array: serial_array, stor_remark: stor_remark, luxury: luxury} ,
             dataType: 'json',
             success : function(data) {
-                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบส่งของ ใช่หรือไม่";
+                var message = "สินค้าจำนวน "+data.a+" ชิ้น  ทำการบันทึกเรียบร้อยแล้ว <br><br>คุณต้องการพิมพ์ใบรับคืนสินค้า ใช่หรือไม่";
                 bootbox.confirm(message, function(result) {
                         var currentForm = this;
                         if (result) {
-                            window.open("<?php echo site_url("warehouse_transfer/transferstock_final_print"); ?>"+"/"+data.b, "_blank");
+                            window.open("<?php echo site_url("tp_stock_return/print_return_confirm"); ?>"+"/"+data.b, "_blank");
                             location.reload();
                         }else{
                             location.reload();

@@ -269,7 +269,7 @@ function submitform(x)
 				}
 			}
 
-			var r = confirm("ยืนยันเอาสินค้าออกจากคลัง !!");
+			var r = confirm("ยืนยันขอคืนสินค้า !!");
 			if (r == true) {
 					confirmform(x);
 			}

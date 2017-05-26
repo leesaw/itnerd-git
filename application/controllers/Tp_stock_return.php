@@ -271,14 +271,296 @@ function confirm_return_request()
       $data['stock_array'] = array();
   }
 
+  foreach($query as $loop) {
+    $so_id = $loop->so_id;
+    break;
+  }
+
+  $sql = "so_id = ".$so_id;
+  $query = $this->tp_stock_return_model->get_sale_item_sum($sql);
+  if($query){
+      $data['so_array'] =  $query;
+  }else{
+      $data['so_array'] = array();
+  }
+
   $sql = "wh_enable = 1 and (wh_group_id = 3)";
   $this->load->model('tp_warehouse_model','',TRUE);
   $result = $this->tp_warehouse_model->getWarehouse($sql);
   $data['wh_array'] = $result;
 
-  $data['stot_id'] = $id;
+  $data['stor_id'] = $id;
   $data['title'] = "Nerd - Confirm Return Request";
   $this->load->view("TP/warehouse/confirm_return_request", $data);
+}
+
+function check_return_item_list()
+{
+  $stor_id = $this->input->post("stor_id");
+  $refcode = $this->input->post("refcode");
+  $result1 = 0;
+  $result2 = "";
+  $result3 = 0;
+
+  $sql = "stor_id = ".$stor_id;
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  foreach($query as $loop) {
+    $luxury = $loop->stor_has_serial;
+    break;
+  }
+
+  if ($luxury == 0) {
+    $sql = "stor_id = ".$stor_id." and it_refcode = '".$refcode."'";
+    $query = $this->tp_stock_return_model->get_return_item($sql);
+    foreach($query as $loop) {
+      $result1 = $loop->log_stor_item_id;
+      $result2 = $loop->it_refcode;
+      $result3 = $loop->qty_update;
+    }
+  }else{
+    $sql = "stor_id = ".$stor_id." and itse_serial_number = '".$refcode."'";
+    $query = $this->tp_stock_return_model->get_return_serial($sql);
+    foreach($query as $loop) {
+      $result1 = $loop->log_stor_item_id;
+      $result2 = $loop->itse_serial_number;
+      $result3 = $loop->itse_id;
+    }
+  }
+
+  $result = array("a" => $result1, "b" => $result2, "c" => $result3, "luxury" => $luxury);
+  echo json_encode($result);
+  exit();
+}
+
+function save_return_confirm()
+{
+  $serial_array = $this->input->post("serial_array");
+  $it_array = $this->input->post("item");
+  //$it_cancel_array = $this->input->post("cancel_item");
+  $stor_id = $this->input->post("stor_id");
+  $luxury = $this->input->post("luxury");
+  $whid = $this->input->post("whid");
+  $datein = $this->input->post("datein");
+  $datein = explode("/", $datein);
+  $datein = $datein[2]."-".$datein[1]."-".$datein[0];
+  $stor_remark = $this->input->post("stor_remark");
+
+  $currentdate = date("Y-m-d H:i:s");
+
+  $count = 0;
+
+  $sql = "stor_id = ".$stor_id;
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  foreach($query as $loop){
+    $so_id = $loop->stor_so_id;
+    break;
+  }
+
+  $stock = array("id" => $stor_id, "stor_status" => 2, "stor_confirm_dateadd" => $currentdate, "stor_confirm_by" => $this->session->userdata('sessid'), "stor_remark" => $stor_remark, "stor_issue" => $datein, "stor_warehouse_id" => $whid);
+  $query = $this->tp_stock_return_model->edit_stock_return($stock);
+
+  for($i=0; $i<count($it_array); $i++){
+
+      // increase stock warehouse out
+      $sql = "stob_item_id = '".$it_array[$i]["item_id"]."' and stob_warehouse_id = '".$whid."'";
+      $this->load->model('tp_warehouse_transfer_model','',TRUE);
+      $query = $this->tp_warehouse_transfer_model->getWarehouse_transfer($sql);
+
+      $qty_update = $it_array[$i]["qty_final"];
+
+      if (!empty($query)) {
+          foreach($query as $loop) {
+              $stock_id = $loop->stob_id;
+
+              $qty_new = $loop->stob_qty + $qty_update;
+              $stock = array( 'id' => $loop->stob_id,
+                              'stob_qty' => $qty_new,
+                              'stob_lastupdate' => $currentdate,
+                              'stob_lastupdate_by' => $this->session->userdata('sessid')
+                          );
+              $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer($stock);
+              break;
+          }
+      }
+
+      $stock = array( 'id' => $it_array[$i]["id"],
+                      'log_stor_qty_final' => $it_array[$i]["qty_final"],
+                      'log_stor_stock_balance_id' => $stock_id,
+                      );
+
+      $query = $this->tp_stock_return_model->edit_log_stock_return($stock);
+
+      $count += $it_array[$i]["qty_final"];
+
+      if ($luxury == 0) {
+        $this->load->model('tp_saleorder_model','',TRUE);
+        $sql = "soi_saleorder_id = ".$so_id." and soi_item_id = ".$it_array[$i]["item_id"];
+        $query = $this->tp_saleorder_model->getSaleItem($sql);
+        foreach($query as $loop) {
+          $old_qty = $loop->soi_qty;
+          $soi_id = $loop->soi_id;
+          if ($old_qty > 0) break;
+        }
+
+
+        $soi_update = $old_qty - $it_array[$i]["qty_final"];
+        $saleitem = array("id" => $soi_id, "soi_qty" => $soi_update, "soi_remark" => "Return");
+
+        $query = $this->tp_saleorder_model->editSaleItem($saleitem);
+      }
+
+  }
+
+  if ($serial_array != "") {
+  for($i=0; $i<count($serial_array); $i++){
+
+      $this->load->model('tp_item_model','',TRUE);
+      $serial_item = array( 'id' => $serial_array[$i]["serial_item_id"],
+                          'itse_warehouse_id' => $whid,
+                          'itse_enable' => 1,
+                      );
+      $query = $this->tp_item_model->editItemSerial($serial_item);
+
+      $this->load->model('tp_saleorder_model','',TRUE);
+      $sql = "sos_saleorder_id = ".$so_id." and sos_item_serial_id = ".$serial_array[$i]["serial_item_id"];
+      $query = $this->tp_saleorder_model->getSaleItemSerial($sql);
+
+      foreach($query as $loop) {
+        $old_qty = $loop->soi_qty;
+        $soi_id = $loop->sos_soi_id;
+        if ($old_qty > 0) break;
+        break;
+      }
+
+      $soi_update = $old_qty - 1;
+      $saleitem = array("id" => $soi_id, "soi_qty" => $soi_update, "soi_remark" => "Return");
+
+      $query = $this->tp_saleorder_model->editSaleItem($saleitem);
+
+  } }
+
+  $result = array("a" => $count, "b" => $stor_id);
+  echo json_encode($result);
+  exit();
+}
+
+function print_return_confirm()
+{
+  $id = $this->uri->segment(3);
+
+  $this->load->library('mpdf/mpdf');
+  $mpdf= new mPDF('th','A4','0', 'thsaraban');
+  $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  if($query){
+      $data['detail_array'] =  $query;
+  }else{
+      $data['detail_array'] = array();
+  }
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_item($sql);
+  if($query){
+      $data['request_array'] =  $query;
+  }else{
+      $data['request_array'] = array();
+  }
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_serial($sql);
+  if($query){
+      $data['serial_array'] =  $query;
+  }else{
+      $data['serial_array'] = array();
+  }
+
+  //echo $html;
+  $mpdf->SetJS('this.print();');
+  $mpdf->WriteHTML($stylesheet,1);
+  $mpdf->WriteHTML($this->load->view("TP/warehouse/print_return_confirm", $data, TRUE));
+  $mpdf->Output();
+}
+
+function list_return()
+{
+  $datein = $this->input->post("datein");
+  if ($datein !="") {
+      $month = explode('/',$datein);
+      $currentdate = $month[1]."-".$month[0];
+  }else{
+      $currentdate = date("Y-m");
+  }
+
+  $start = $currentdate."-01 00:00:00";
+  $end = $currentdate."-31 23:59:59";
+
+  $sql = "stor_dateadd >= '".$start."' and stor_dateadd <= '".$end."' and stor_status > 0";
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  $data['request_array'] = $query;
+
+  $currentdate = explode('-', $currentdate);
+  $currentdate = $currentdate[1]."/".$currentdate[0];
+  $data["currentdate"] = $currentdate;
+  $data['month'] = $currentdate;
+
+  $data['title'] = "Nerd - Return Request List";
+  $this->load->view("TP/warehouse/list_return", $data);
+}
+
+function view_return()
+{
+  $id = $this->uri->segment(3);
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  if($query){
+      $data['stor_array'] =  $query;
+  }else{
+      $data['stor_array'] = array();
+  }
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_item($sql);
+  if($query){
+      $data['item_array'] =  $query;
+  }else{
+      $data['item_array'] = array();
+  }
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_serial($sql);
+  if($query){
+      $data['serial_array'] =  $query;
+  }else{
+      $data['serial_array'] = array();
+  }
+
+  $data['user_status'] = $this->session->userdata('sessstatus');
+  $data['title'] = "Nerd - View Return";
+  $this->load->view("TP/warehouse/view_return", $data);
+}
+
+function void_return()
+{
+  $id = $this->uri->segment(3);
+
+  $currentdate = date("Y-m-d H:i:s");
+
+  $sql = "stor_id = '".$id."'";
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  foreach($query as $loop) {
+      $remark = $loop->stor_remark;
+  }
+
+  $remark .= "##VOID##".$this->input->post("remarkvoid");
+  $return = array("id" => $id, "stor_enable" => 0, "stor_remark" => $remark, "stor_status" => 3,
+              "stor_dateadd" => $currentdate, "stor_dateadd_by" => $this->session->userdata('sessid')
+              );
+  $query = $this->tp_stock_return_model->edit_stock_return($return);
+
+  redirect('tp_stock_return/view_return/'.$id, 'refresh');
 }
 
 

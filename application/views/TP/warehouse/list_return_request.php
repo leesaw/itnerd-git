@@ -54,7 +54,7 @@
                                         <td><?php if($loop->stor_status==1) echo "<button class='btn btn-xs btn-danger'>รอยืนยันสินค้า</button>"; ?></td>
                                         <td><a href="<?php echo site_url("tp_stock_return/print_return_request")."/".$loop->stor_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a>
                                         <a href="<?php echo site_url("tp_stock_return/confirm_return_request")."/".$loop->stor_id; ?>" class="btn btn-success btn-xs" data-title="ยืนยันสินค้าที่คืน" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยืนยันสินค้าที่คืน"><i class="fa fa-check-square-o"></i></a>
-                                        <a href="<?php if($loop->stor_has_serial==0) echo site_url("tp_stock_return/reject_return_request_refcode")."/".$loop->stor_id; else echo site_url("tp_stock_return/reject_return_request_serial")."/".$loop->stor_id; ?>" class="btn btn-danger btn-xs" data-title="ยกเลิก" data-toggle="tooltip" data-target="#edit" data-placement="top" rel="tooltip" title="ยกเลิก"><i class="fa fa-remove"></i></a>
+                          
                                         </td>
                                     </tr>
                                     <?php } ?>

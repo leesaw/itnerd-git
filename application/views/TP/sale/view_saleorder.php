@@ -144,6 +144,17 @@ $caseback = count($serial_array);
 								</div>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group-sm">
+									<?php $i = 0; foreach($return_array as $loop) {
+										if($i == 0) echo "<b class='text-red'>เอกสารคืนสินค้า : </b>";
+										echo "<a href='".site_url("tp_stock_return/print_return_confirm")."/".$loop->stor_id."' target='_blank'>".$loop->stor_number."</a>";
+										$i++; } ?>
+									<?php if ($i > 0) echo "<br><br>"; ?>
+								</div>
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group-sm">

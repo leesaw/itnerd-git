@@ -230,7 +230,7 @@ function saleorder_print()
         $data['so_array'] = array();
     }
 
-    $sql = "soi_saleorder_id = '".$id."'";
+    $sql = "soi_saleorder_id = '".$id."' and soi_qty > 0";
     $query = $this->tp_saleorder_model->getSaleItem($sql);
     if($query){
         $data['item_array'] =  $query;
@@ -1279,6 +1279,8 @@ function ajaxViewSaleReport()
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
 
+        $sql .= " and soi_qty > 0";
+
     }
 
     $this->load->library('Datatables');
@@ -1360,9 +1362,13 @@ function exportExcel_sale_report()
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
 
+        $sql .= " and soi_qty > 0";
+
     }
 
-    $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+    // $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+
+    $item_array = $this->tp_saleorder_model->getSaleOrder_Item_divide_ontop($sql);
 
     //load our new PHPExcel library
     $this->load->library('excel');
@@ -1415,7 +1421,8 @@ function exportExcel_sale_report()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(13, $row, $loop->sb_number);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(14, $row, $loop->dc);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(15, $row, $loop->soi_dc_baht);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, $loop->so_ontop_baht);
+        if (($loop->so_qty>1) && ($loop->so_ontop_baht>0)) $ontop=$loop->so_ontop_baht/sprintf("%.2f", $loop->so_qty); else $ontop = 0;
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, sprintf("%.2f", $ontop));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(17, $row, $loop->gp);
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, $loop->netprice);
         if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(19, $row, $loop->it_cost_baht); }
@@ -1500,9 +1507,11 @@ function print_sale_report()
       if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
       else $sql .= " and sh_id != '0'";
 
+      $sql .= " and soi_qty > 0";
+
   }
 
-  $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
+  $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item_divide_ontop($sql);
 
     //$data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item($sql);
 
@@ -1559,6 +1568,8 @@ function exportExcel_sale_report_caseback()
 
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
+
+        $sql .= " and soi_qty > 0";
 
     }
 
@@ -1930,7 +1941,7 @@ function view_saleorder()
       $data['so_array'] = array();
   }
 
-  $sql = "soi_saleorder_id = '".$id."'";
+  $sql = "soi_saleorder_id = '".$id."' and soi_qty > 0";
   $query = $this->tp_saleorder_model->getSaleItem($sql);
   if($query){
       $data['item_array'] =  $query;
@@ -1938,13 +1949,19 @@ function view_saleorder()
       $data['item_array'] = array();
   }
 
-  $sql = "sos_saleorder_id = '".$id."'";
+  $sql = "sos_saleorder_id = '".$id."' and soi_qty > 0";
   $query = $this->tp_saleorder_model->getSaleItemSerial($sql);
   if($query){
       $data['serial_array'] =  $query;
   }else{
       $data['serial_array'] = array();
   }
+
+  $this->load->model('tp_stock_return_model','',TRUE);
+  $sql = "stor_so_id = ".$id." and stor_enable = 1";
+  $query = $this->tp_stock_return_model->get_return_request($sql);
+  $data['return_array'] =  $query;
+
   $data['user_status'] = $this->session->userdata('sessstatus');
   $data['title'] = "Nerd - View Sale Order";
   $this->load->view("TP/sale/view_saleorder", $data);

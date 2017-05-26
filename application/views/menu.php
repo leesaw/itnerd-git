@@ -285,6 +285,9 @@
                         <a href="<?php echo site_url("warehouse_transfer/transferstock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ย้ายคลังสินค้า</a>
                     </li>
                     <li>
+                        <a href="<?php echo site_url("tp_stock_return/list_return"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-ขอคืนสินค้า</a>
+                    </li>
+                    <li>
                         <a href="<?php echo site_url("warehouse_transfer/out_stock_history"); ?>"><i class="fa fa-circle-o"></i> เอกสาร-เอาสินค้าออกจากคลัง</a>
                     </li>
                     <?php if (($this->session->userdata('sessstatus') == 1) || ($this->session->userdata('sessstatus') == 2)) { ?>
