@@ -84,7 +84,7 @@ function get_return_item($where)
 
 function get_return_serial($where)
 {
-  $this->db->select("log_stor_item_id, itse_serial_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, itse_id");
+  $this->db->select("log_stor_item_id, log_stor_stor_id, itse_serial_number, it_refcode, it_barcode, it_short_description, br_name, it_model, it_uom, it_srp, itse_id");
   $this->db->from('log_stock_return');
   $this->db->join('log_stock_return_serial', 'log_stors_stor_id = log_stor_id','left');
   $this->db->join('tp_item_serial', 'itse_id = log_stors_item_serial_id','left');

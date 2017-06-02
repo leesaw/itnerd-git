@@ -172,7 +172,12 @@ $caseback = count($serial_array);
                         <br>
                         <div class="row">
 							<div class="col-md-12">
+								<?php if ($i == 0) { ?>
                 <a href="<?php echo site_url("sale/saleorder_print")."/".$so_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบสั่งขาย </button></a>&nbsp;&nbsp;
+								<?php }else{ ?>
+								<a href="<?php echo site_url("sale/saleorder_print")."/".$so_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบสั่งขายล่าสุด </button></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<a href="<?php echo site_url("sale/saleorder_print_original")."/".$so_id; ?>" target="_blank"><button type="button" class="btn btn-success" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบสั่งขายต้นฉบับ </button></a>&nbsp;&nbsp;
+								<?php } ?>
                   <?php if($user_status == 1) { ?>
                 <button type="button" class="btn btn-danger pull-right" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if ($status == 'V') { echo "disabled"; } ?>><i class='fa fa-close'></i>  ยกเลิกการสั่งขาย (Void) </button>&nbsp;&nbsp;
                 <form action="<?php echo site_url("sale/void_saleorder")."/".$so_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>

@@ -11,9 +11,7 @@
 <div style="text-align: left; font-weight: bold; font-size: 20pt;">NGG TIMEPIECES COMPANY LIMITED</div><br\><div style="text-align: left; font-weight: font-size: 16pt;">27 Soi Pattanasin Naradhiwas Rajanagarindra Rd. Thungmahamek Sathon Bangkok 10120</div>
 </td>
 <?php foreach($so_array as $loop) { $datetime = $loop->so_issuedate; $so_id = $loop->so_number; $editor = $loop->firstname." ".$loop->lastname;
-  $shop = $loop->sh_code."-".$loop->sh_name; $dateadd = $loop->so_dateadd; $so_remark = $loop->so_remark; $on_top_baht = $loop->so_ontop_baht;
-  if ($return_enable > 0) $so_id .= " (".$return_enable.")";
-  break; }
+  $shop = $loop->sh_code."-".$loop->sh_name; $dateadd = $loop->so_dateadd; $so_remark = $loop->so_remark; $on_top_baht = $loop->so_ontop_baht; break; }
 
  $GGyear=substr($datetime,0,4);
  $GGmonth=substr($datetime,5,2);
@@ -40,7 +38,22 @@
 <tr style="border:1px solid black;"><td align="center"><?php echo $no; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->it_refcode; ?></td>
 <td style="border-left:1px solid black;"><?php echo $loop->br_name." ".$loop->it_model; ?></td>
-<td align="center" style="border-left:1px solid black;"><?php echo $loop->soi_qty." ".$loop->it_uom; ?></td>
+<td align="center" style="border-left:1px solid black;">
+<?php
+$qty = 0;
+// $log_return_item_id = 0;
+// foreach($return_item_array as $loop_item_return) {
+//   if ($loop_item_return->log_stor_item_id == $loop->soi_item_id) {
+//     $qty += $loop_item_return->qty_final;
+//     $log_return_item_id = $loop_item_return->log_stor_item_id;
+//     $loop_item_return->log_stor_item_id = 0;
+//     $loop_item_return->qty_final = 0;
+//   }
+// }
+// $return_serial_qty = $qty;
+$qty += $loop->soi_qty;
+echo $qty." ".$loop->it_uom; ?>
+</td>
 <td align="center" style="border-left:1px solid black;"><?php echo number_format($loop->it_srp, 2, '.', ',')."&nbsp;&nbsp;"; ?></td>
 <td align="center" style="border-left:1px solid black;">
 <?php
@@ -51,8 +64,8 @@ else if ($loop->soi_sale_barcode_id == -1) echo "Discount".$loop->soi_dc_percent
 </td>
 <td align="right" style="border-left:1px solid black;">
 <?php
-if ($loop->soi_sale_barcode_id > -1) { $cal = ($loop->soi_qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
-else if ($loop->soi_sale_barcode_id == -1) { $cal = (($loop->soi_qty*$loop->it_srp)*((100-$loop->soi_dc_percent)/100)- ($loop->soi_qty*$loop->soi_dc_baht))*((100-$loop->soi_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $loop->soi_qty; }
+if ($loop->soi_sale_barcode_id > -1) { $cal = ($qty*$loop->it_srp)*((100-$loop->sb_discount_percent)/100)*((100-$loop->sb_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $qty; }
+else if ($loop->soi_sale_barcode_id == -1) { $cal = (($qty*$loop->it_srp)*((100-$loop->soi_dc_percent)/100)- ($qty*$loop->soi_dc_baht))*((100-$loop->soi_gp)/100); echo number_format($cal, 2, '.', ',')."&nbsp;&nbsp;"; $sum += $cal; $sum_qty += $qty; }
 ?></td>
 </tr>
 <?php
@@ -78,8 +91,12 @@ if(isset($serial_array)) {
         } }
     }
 }
+// print return serial number
+
 ?>
-<?php $no++; } } ?>
+<?php $no++; } }
+
+?>
 <?php if ($on_top_baht > 0) { ?>
 <tr style="border:1px solid black;"><td align="center"></td>
 <td align="center" style="border-left:1px solid black;"></td>

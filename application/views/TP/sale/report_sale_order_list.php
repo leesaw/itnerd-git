@@ -109,9 +109,9 @@
                                         <td><?php echo $loop->firstname." ".$loop->lastname; ?></td>
                                         <td><?php echo $loop->so_dateadd; ?></td>
                                         <td><a href="<?php echo site_url("sale/saleorder_print")."/".$loop->so_id; ?>" class="btn btn-primary btn-xs" target="_blank" data-title="View" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><span class="glyphicon glyphicon-print"></span></a>
-																				<?php if ($user_status == 1) { ?>
+																				<?php // if ($user_status == 1) { ?>
 																					<a href="<?php echo site_url("sale/view_saleorder")."/".$loop->so_id; ?>" class="btn btn-danger btn-xs" data-title="ดูรายละเอียด" data-toggle="tooltip" data-target="#view" data-placement="top" rel="tooltip" title="ดูรายละเอียด"><i class="fa fa-search"></i></a>
-																				<?php } ?>
+																				<?php // } ?>
                                         </td>
                                     </tr>
                                     <?php } ?>

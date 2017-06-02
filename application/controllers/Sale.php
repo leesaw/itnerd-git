@@ -246,6 +246,107 @@ function saleorder_print()
         $data['serial_array'] = array();
     }
 
+    // return
+    $this->load->model('tp_stock_return_model','',TRUE);
+    $sql = "stor_so_id = '".$id."'";
+    $query4 = $this->tp_stock_return_model->get_return_request($sql);
+    if($query4){
+        $data['return_detail_array'] =  $query4;
+    }else{
+        $data['return_detail_array'] = array();
+    }
+
+    $return_enable = 0;
+    foreach($query4 as $loop1) {
+      $return_enable++;
+    }
+
+    $data['return_enable'] = $return_enable;
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/sale/saleorder_print", $data, TRUE));
+    $mpdf->Output();
+}
+
+function saleorder_print_original()
+{
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+
+    $sql = "so_id = '".$id."'";
+    $query1 = $this->tp_saleorder_model->getSaleOrder($sql);
+    if($query1){
+        $data['so_array'] =  $query1;
+    }else{
+        $data['so_array'] = array();
+    }
+
+    $sql = "soi_saleorder_id = '".$id."'";
+    $query2 = $this->tp_saleorder_model->getSaleItem($sql);
+    if($query2){
+        $data['item_array'] =  $query2;
+    }else{
+        $data['item_array'] = array();
+    }
+
+    $sql = "sos_saleorder_id = '".$id."'";
+    $query3 = $this->tp_saleorder_model->getSaleSerial($sql);
+    if($query3){
+        $data['serial_array'] =  $query3;
+    }else{
+        $data['serial_array'] = array();
+    }
+
+    // return
+    $this->load->model('tp_stock_return_model','',TRUE);
+    $sql = "stor_so_id = '".$id."'";
+    $query4 = $this->tp_stock_return_model->get_return_request($sql);
+    if($query4){
+        $data['return_detail_array'] =  $query4;
+    }else{
+        $data['return_detail_array'] = array();
+    }
+
+    $sql = "stor_so_id = '".$id."'";
+    $query5 = $this->tp_stock_return_model->get_return_item($sql);
+    if($query5){
+        $data['return_item_array'] =  $query5;
+    }else{
+        $data['return_item_array'] = array();
+    }
+
+    $sql = "stor_so_id = '".$id."'";
+    $query6 = $this->tp_stock_return_model->get_return_serial($sql);
+    if($query6){
+        $data['return_serial_array'] =  $query6;
+    }else{
+        $data['return_serial_array'] = array();
+    }
+
+    $return_enable = 0;
+    foreach($query4 as $loop1) {
+      $luxury = $loop1->stor_has_serial;
+      if($luxury == 0) {
+        foreach($query2 as $loop2) {
+          foreach($query5 as $loop3) {
+            if($loop2->soi_item_id == $loop3->log_stor_item_id) {
+              $loop2->soi_qty += $loop3->qty_final;
+            }
+          }
+        }
+      }else{
+        foreach($query2 as $loop2) {
+          if ($loop2->soi_qty == 0) $loop2->soi_qty = 1;
+        }
+      }
+    }
+
+    $data['return_enable'] = $return_enable;
     //echo $html;
     $mpdf->SetJS('this.print();');
     $mpdf->WriteHTML($stylesheet,1);
@@ -1279,9 +1380,11 @@ function ajaxViewSaleReport()
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
 
-        $sql .= " and soi_qty > 0";
+
 
     }
+
+    $sql .= " and soi_qty > 0";
 
     $this->load->library('Datatables');
     if ($this->session->userdata('sessstatus') != '88') {
@@ -1362,9 +1465,9 @@ function exportExcel_sale_report()
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
 
-        $sql .= " and soi_qty > 0";
-
     }
+
+    $sql .= " and soi_qty > 0";
 
     // $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);
 
@@ -1424,7 +1527,7 @@ function exportExcel_sale_report()
         if (($loop->so_qty>1) && ($loop->so_ontop_baht>0)) $ontop=$loop->so_ontop_baht/sprintf("%.2f", $loop->so_qty); else $ontop = 0;
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, sprintf("%.2f", $ontop));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(17, $row, $loop->gp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, $loop->netprice);
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, ($loop->netprice * $loop->soi_qty));
         if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(19, $row, $loop->it_cost_baht); }
         $row++;
     }
@@ -1507,9 +1610,10 @@ function print_sale_report()
       if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
       else $sql .= " and sh_id != '0'";
 
-      $sql .= " and soi_qty > 0";
 
   }
+
+  $sql .= " and soi_qty > 0";
 
   $data['item_array'] = $this->tp_saleorder_model->getSaleOrder_Item_divide_ontop($sql);
 
@@ -1569,9 +1673,11 @@ function exportExcel_sale_report_caseback()
         if ($shop!="0") $sql .= " and sh_id = '".$shop."'";
         else $sql .= " and sh_id != '0'";
 
-        $sql .= " and soi_qty > 0";
+
 
     }
+
+    $sql .= " and soi_qty > 0";
 
 
     $item_array = $this->tp_saleorder_model->getSaleOrder_Item($sql);

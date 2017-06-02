@@ -107,7 +107,7 @@
   echo number_format($ontop, 2, '.', ','); ?></td>
 <td align="center" style="border-left:1px solid black;"><?php if($loop->soi_sale_barcode_id > 0) $gp = $loop->sb_gp; else $gp = $loop->soi_gp; echo $gp; ?></td>
 </tr>
-<td align="center" style="border-left:1px solid black;"><?php $rev = ((($loop->soi_item_srp*(100 - $dc)/100) - $loop->soi_dc_baht )*(100 -  $gp)/100); echo number_format($rev, 2, '.', ','); $sum+=$rev; ?></td>
+<td align="center" style="border-left:1px solid black;"><?php $rev = ((($loop->soi_item_srp*(100 - $dc)/100) - $loop->soi_dc_baht )*(100 -  $gp)/100); echo number_format($rev*$loop->soi_qty, 2, '.', ','); $sum+=$rev; ?></td>
 </tr>
 
 <?php $no++; } } ?>
