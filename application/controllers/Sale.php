@@ -1527,7 +1527,7 @@ function exportExcel_sale_report()
         if (($loop->so_qty>1) && ($loop->so_ontop_baht>0)) $ontop=$loop->so_ontop_baht/sprintf("%.2f", $loop->so_qty); else $ontop = 0;
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(16, $row, sprintf("%.2f", $ontop));
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(17, $row, $loop->gp);
-        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, ($loop->netprice * $loop->soi_qty));
+        $this->excel->getActiveSheet()->setCellValueByColumnAndRow(18, $row, (($loop->netprice * $loop->soi_qty)-$ontop));
         if ($this->session->userdata('sessstatus') == '88') { $this->excel->getActiveSheet()->setCellValueByColumnAndRow(19, $row, $loop->it_cost_baht); }
         $row++;
     }

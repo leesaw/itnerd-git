@@ -1484,9 +1484,9 @@ function transferstock_disable_confirm()
 {
     $currentdate = date("Y-m-d H:i:s");
 
-
     $stot_id = $this->input->post("stot_id");
-    $stock = array("id" => $stot_id, "stot_status" => 3, "stot_enable" => 0, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'));
+    $stot_remark = $this->input->post("remark");
+    $stock = array("id" => $stot_id, "stot_status" => 3, "stot_enable" => 0, "stot_confirm_dateadd" => $currentdate,"stot_confirm_by" => $this->session->userdata('sessid'), "stot_remark" => $stot_remark);
     $query = $this->tp_warehouse_transfer_model->editWarehouse_transfer_between($stock);
 
     if ($query) {

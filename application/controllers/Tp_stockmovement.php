@@ -28,7 +28,8 @@ function form_stockmovement()
   $this->load->model('tp_item_model','',TRUE);
   $data['brand_array'] = $this->tp_item_model->getBrand($sql);
 
-  $sql = "wh_enable = 1";
+  // $sql = "wh_enable = 1";
+  $sql = "";
   $this->load->model('tp_warehouse_model','',TRUE);
   $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
@@ -69,7 +70,8 @@ function result_stockmovement()
   $this->load->model('tp_item_model','',TRUE);
   $data['brand_array'] = $this->tp_item_model->getBrand($sql);
 
-  $sql = "wh_enable = 1";
+  // $sql = "wh_enable = 1";
+  $sql = "";
   $this->load->model('tp_warehouse_model','',TRUE);
   $data['whname_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 

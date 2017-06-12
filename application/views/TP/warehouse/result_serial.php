@@ -49,7 +49,7 @@
 								<tbody>
                                 <?php foreach($stock_array as $loop) { ?>
                                     <tr>
-                                    <td><?php echo $loop->itse_serial_number; if ($loop->itse_sample > 0) echo "(Sample)"; ?></td>
+                                    <td><?php echo $loop->itse_serial_number; if ($loop->itse_sample > 0) echo "(Sample)"; if ($loop->itse_consign == 1) echo "<b class='text-red'>(Consign)</b>"; ?></td>
                                     <td><?php echo $loop->br_name; ?></td>
                                     <td><?php echo $loop->it_refcode; ?></td>
                                     <td><?php echo $loop->it_model; ?></td>

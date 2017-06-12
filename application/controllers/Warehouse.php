@@ -517,7 +517,7 @@ function ajaxViewStock_serial()
 
     $this->load->library('Datatables');
     $this->datatables
-    ->select("it_refcode, IF(itse_sample = 1, CONCAT(itse_serial_number, '(Sample)'), itse_serial_number), br_name, it_model, itc_name, CONCAT(wh_code, ' - ', wh_name), '1', it_srp, it_short_description", false)
+    ->select("it_refcode, IF(itse_sample = 1, CONCAT(itse_serial_number, '(Sample)'), IF(itse_consign = 1, CONCAT(itse_serial_number, '(Consign)') ,itse_serial_number)), br_name, it_model, itc_name, CONCAT(wh_code, ' - ', wh_name), '1', it_srp, it_short_description", false)
     ->from('tp_item_serial')
     ->join('tp_warehouse', 'wh_id = itse_warehouse_id','left')
     ->join('tp_item', 'it_id = itse_item_id','left')
@@ -720,6 +720,7 @@ function exportExcel_stock_itemlist_caseback()
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(6, $row, $loop->wh_name." - ".$loop->wh_name_eng);
 
         if ($loop->itse_sample > 0) $serial = $loop->itse_serial_number."(Sample)";
+        elseif($loop->itse_consign == 1) $serial = $loop->itse_serial_number."(Consign)";
         else $serial = $loop->itse_serial_number;
         $this->excel->getActiveSheet()->setCellValueByColumnAndRow(7, $row, $serial);
 
