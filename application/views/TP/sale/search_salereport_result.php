@@ -19,7 +19,7 @@
             echo " Brand : ".$brand_name;
             echo " Shop : ".$shop_name;
             echo " ช่วงเวลา : ";
-            if ($startdate != '1970-01-01') $startdate;
+            if ($startdate != '1970-01-01') echo $startdate;
             echo " ถึง ".$enddate;  ?>
         </h1>
     </section>

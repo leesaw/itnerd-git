@@ -132,12 +132,17 @@ function top_ten()
   $data['enddate'] = $enddate;
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1 and soi_qty>0";
+
+  $sql_payment = $this->brand_suunto;
+
+  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."' and it_category_id = 1";
+
 
   $this->load->model('tp_suunto_model','',TRUE);
-  $data['top_array'] = $this->tp_suunto_model->get_top_ten_remark($sql);
+  $data['top_array'] = $this->tp_suunto_model->get_top_ten_remark($sql, $sql_payment);
 
-  $data['all_array'] = $this->tp_suunto_model->get_top_ten_all($sql, 0);
+  $data['all_array'] = $this->tp_suunto_model->get_top_ten_all($sql, $sql_payment, 0);
 
   $data['title'] = "Nerd | Suunto Top 10";
   $this->load->view('TP/suunto_report/view_top_ten',$data);
@@ -168,12 +173,17 @@ function exportExcel_top_ten()
   }
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1 and soi_qty>0";
+
+  $sql_payment = $this->brand_suunto;
+
+  $sql_payment .= " and posp_enable = '1' and posp_status!='V' and posp_issuedate >= '".$start."' and posp_issuedate <= '".$end."' and it_category_id = 1";
+
 
   $this->load->model('tp_suunto_model','',TRUE);
-  $top_array = $this->tp_suunto_model->get_top_ten_remark($sql);
+  $top_array = $this->tp_suunto_model->get_top_ten_remark($sql, $sql_payment);
 
-  $all_array = $this->tp_suunto_model->get_top_ten_all($sql, 0);
+  $all_array = $this->tp_suunto_model->get_top_ten_all($sql, $sql_payment, 0);
 
   //load our new PHPExcel library
   $this->load->library('excel');
@@ -213,7 +223,7 @@ function exportExcel_top_ten()
       $top_remark = ""; $top_price=0; $cost_performance = 0; $item_performance = 0;
       $cost_lifestyle = 0; $item_lifestyle = 0; $cost_outdoor = 0; $item_outdoor = 0;
       foreach($top_array as $loop2) {
-        if ($loop2->so_shop_id == $loop->so_shop_id) {
+        if ($loop2->sh_id == $loop->sh_id) {
           if ($top_price < $loop2->cost_price) {
             $top_remark = $loop2->it_remark;
             $top_price = $loop2->cost_price;
@@ -340,7 +350,7 @@ function exportExcel_sale_kpi()
 
 
   $sql = $this->brand_suunto;
-  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1";
+  $sql .= " and so_enable = 1 and so_issuedate >= '".$start."' and so_issuedate <= '".$end."' and it_category_id = 1 and soi_qty > 0";
 
   $sql_payment = $this->brand_suunto;
 

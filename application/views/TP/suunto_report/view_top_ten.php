@@ -94,7 +94,7 @@
                         <?php $top_remark = ""; $top_price=0; $cost_performance = 0; $item_performance = 0;
                         $cost_lifestyle = 0; $item_lifestyle = 0; $cost_outdoor = 0; $item_outdoor = 0;
                          foreach($top_array as $loop2) {
-                          if ($loop2->so_shop_id == $loop->so_shop_id) {
+                          if ($loop2->sh_id == $loop->sh_id) {
                             if ($top_price < $loop2->cost_price) {
                               $top_remark = $loop2->it_remark;
                               $top_price = $loop2->cost_price;
