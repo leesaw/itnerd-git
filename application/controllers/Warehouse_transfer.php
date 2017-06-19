@@ -22,7 +22,7 @@ function __construct()
          $this->no_rolex = "br_id != 888";
        }
      }else{
-       $this->no_rolex = "br_id = 888";
+       $this->no_rolex = "br_id > 0";
      }
 }
 
