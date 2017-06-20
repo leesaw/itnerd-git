@@ -118,6 +118,17 @@ Class Tp_shop_model extends CI_Model
 	return $query->result();
  }
 
+ function getBarcode_GP($where)
+ {
+    $this->db->select("sb_id, sb_shop_group_id, sb_item_brand_id, sb_number, sb_discount_percent, sb_gp, sb_brand_name, br_name, sg_name, sb_enable");
+    $this->db->from('tp_sale_barcode');
+    $this->db->join('tp_shop_group', 'sb_shop_group_id = sg_id', 'left');
+    $this->db->join('tp_brand', 'br_id = sb_item_brand_id', 'left');
+    if ($where != "") $this->db->where($where);
+    $query = $this->db->get();
+    return $query->result();
+ }
+
  function getMaxNumber_rolex_borrow_shop($month, $shop_id)
  {
     $start = $month."-01 00:00:00";
@@ -224,6 +235,12 @@ Class Tp_shop_model extends CI_Model
 	return $this->db->insert_id();
  }
 
+ function add_sale_barcode($insert=NULL)
+ {
+	$this->db->insert('tp_sale_barcode', $insert);
+	return $this->db->insert_id();
+ }
+
  function delShop($id=NULL)
  {
 	$this->db->where('sh_id', $id);
@@ -279,6 +296,14 @@ Class Tp_shop_model extends CI_Model
 	$this->db->where('posrobi_id', $edit['id']);
 	unset($edit['id']);
 	$query = $this->db->update('tp_pos_rolex_borrow_item', $edit);
+	return $query;
+ }
+
+ function edit_sale_barcode($edit=NULL)
+ {
+	$this->db->where('sb_id', $edit['id']);
+	unset($edit['id']);
+	$query = $this->db->update('tp_sale_barcode', $edit);
 	return $query;
  }
 
