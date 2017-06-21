@@ -45,7 +45,12 @@ function check_so_number()
 {
   $so_number = $this->input->post("so_number");
 
-  $sql = "so_enable = 1 and so_status = 'N' and so_number = '".$so_number."' and wh_enable = 1 and wh_group_id = 3";
+  $sql = "so_enable = 1 and so_status = 'N' and so_number = '".$so_number."' and wh_enable = 1";
+
+  if ($this->session->userdata('sessstatus') != 1) {
+    $sql .= " and wh_group_id = 3";
+  }
+
   $result = $this->tp_stock_return_model->get_saleorder_warehouse($sql);
   $output = 0;
   foreach ($result as $loop) {
@@ -284,7 +289,10 @@ function confirm_return_request()
       $data['so_array'] = array();
   }
 
-  $sql = "wh_enable = 1 and (wh_group_id = 3)";
+  $sql = "wh_enable = 1";
+  if ($this->session->userdata('sessstatus') != 1) {
+     $sql .= " and (wh_group_id = 3)";
+  }
   $this->load->model('tp_warehouse_model','',TRUE);
   $result = $this->tp_warehouse_model->getWarehouse($sql);
   $data['wh_array'] = $result;

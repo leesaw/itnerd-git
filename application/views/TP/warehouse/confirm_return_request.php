@@ -302,16 +302,24 @@ function returnform()
 function submitform(luxury)
 {
     var it_final = document.getElementsByName('it_final');
+		var whid = document.getElementById("whid").value;
     for(var i=0; i<it_final.length; i++){
         if (it_final[i].value == 0) {
             alert("กรุณาใส่สินค้าให้ครบทุกช่อง");
             return;
         }
     }
-    var r = confirm("ยืนยันการขอคืนสินค้า !!");
-    if (r == true) {
-        confirmform(luxury);
-    }
+
+		if(whid <= 0) {
+			alert("กรุณาเลือกคลังที่รับคืน");
+			return;
+		}else{
+			var r = confirm("ยืนยันการขอคืนสินค้า !!");
+			if (r == true) {
+					confirmform(luxury);
+			}
+		}
+
 }
 
 function calculate() {

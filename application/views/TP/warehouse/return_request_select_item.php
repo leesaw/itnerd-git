@@ -269,12 +269,15 @@ function submitform(x)
 				}
 			}
 
-			var r = confirm("ยืนยันขอคืนสินค้า !!");
-			if (r == true) {
-					confirmform(x);
+			if (it_id.length < 1) {
+				alert("กรุณาเลือกสินค้าที่ต้องการย้ายคลังอย่างน้อย 1 ชิ้น !!!");
+			}else{
+				var r = confirm("ยืนยันขอคืนสินค้า !!");
+				if (r == true) {
+						confirmform(x);
+				}
 			}
 		}
-
 }
 
 function confirmform(x)
