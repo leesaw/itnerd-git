@@ -20,7 +20,7 @@ function form_new_invoice()
     $data['datein'] = date("d/m/Y");
 
     $this->load->model('tp_warehouse_model','',TRUE);
-    $sql = "wh_group_id != 3 and wh_group_id != 6";
+    $sql = "wh_group_id != 6";
     $data['wh_array'] = $this->tp_warehouse_model->getWarehouse($sql);
 
     $data['title'] = "NGG| Nerd - Create Invoice";

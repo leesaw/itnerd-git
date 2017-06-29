@@ -625,6 +625,20 @@
                 <i class="fa fa-dashboard"></i> <span>รายงานยอดเคลื่อนไหวสินค้า</span>
               </a>
             </li>
+            <li class="treeview">
+                <a href="#"><i class="fa fa-tags"></i> <span>Suunto Report</span><i class="fa fa-angle-left pull-right"></i></a>
+                <ul class="treeview-menu">
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/inventory_now"); ?>"><i class="fa fa-circle-o"></i> จำนวนคงเหลือปัจจุบัน</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/top_ten"); ?>"><i class="fa fa-circle-o"></i> อันดับยอดขายประจำเดือน</a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url("tp_suunto_report/sale_kpi"); ?>"><i class="fa fa-circle-o"></i> รายงานขายประจำเดือน</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                <a href="<?php echo site_url("warehouse/getBalance"); ?>"><i class="fa fa-circle-o"></i> ตรวจสอบจำนวนสินค้า</a>
             </li>

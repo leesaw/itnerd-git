@@ -6,7 +6,7 @@ public $brand_suunto = "";
 function __construct()
 {
   parent::__construct();
-  if (!($this->session->userdata('sessusername')) || (($this->session->userdata('sessstatus') != 7) && ($this->session->userdata('sessstatus') != 1))) redirect('login', 'refresh');
+  if (!($this->session->userdata('sessusername')) || (($this->session->userdata('sessstatus') != 7) && ($this->session->userdata('sessstatus') != 1) && ($this->session->userdata('sessstatus') != 88))) redirect('login', 'refresh');
   $this->brand_suunto = "br_id = '896'";
 }
 
