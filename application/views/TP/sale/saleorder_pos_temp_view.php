@@ -7,13 +7,13 @@
 <body class="skin-red">
 	<div class="wrapper">
 	<?php $this->load->view('menu'); ?>
-	
+
         <div class="content-wrapper">
         <section class="content-header">
-            
+
             <h1>ข้อมูลใบเสร็จรับเงิน</h1>
         </section>
-            
+
 		<section class="content">
 		<div class="row">
             <div class="col-xs-12">
@@ -68,13 +68,13 @@
                                     <label class="control-label" for="inputSuccess">ชำระเงิน</label>
                                     <input type="text" class="form-control" name="payment" id="payment" value="<?php if ($loop->posrot_payment=='C') echo "เงินสด"; if ($loop->posrot_payment=='D') echo "บัตรเครดิต"; if ($loop->posrot_payment=='Q') echo "เช็ค"; ?>" readonly>
                                 </div>
-							</div> 
+							</div>
                             <div class="col-md-3">
                                 <div class="form-group-lg has-success">
                                     <label class="control-label" for="inputSuccess"><?php if ($loop->posrot_payment=='C') echo "จำนวนเงินที่จ่าย"; if ($loop->posrot_payment=='D') echo "บัตรเครดิตธนาคาร"; if ($loop->posrot_payment=='Q') echo "เลขที่"; ?></label>
                                     <input type="text" class="form-control input-lg text-blue" name="payment_value" id="payment_value" style="font-weight:bold;" value="<?php echo $loop->posrot_payment_value; ?>" readonly>
                                 </div>
-							</div> 
+							</div>
                         </div>
                         <?php $remark = $loop->posrot_remark;
                               $sale_person = $loop->sp_barcode."-".$loop->firstname." ".$loop->lastname;
@@ -126,8 +126,8 @@
 										</div>
 									</div>
 								</div>
-							</div>	
-						</div>	
+							</div>
+						</div>
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group-sm has-success">
@@ -147,6 +147,7 @@
 							<div class="col-md-12">
                                 <a href="<?php echo site_url("sale/saleorder_rolex_temp_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-primary" name="printbtn" id="printbtn"><i class='fa fa-print'></i>  พิมพ์ใบเสร็จรับเงิน </button></a>&nbsp;&nbsp;
                                 <a href="<?php echo site_url("sale/saleorder_rolex_temp_edit")."/".$pos_rolex_id; ?>"><button type="button" class="btn btn-warning" name="printbtn" id="printbtn"><i class='fa fa-edit'></i>  แก้ไขใบเสร็จรับเงิน </button></a>&nbsp;&nbsp;
+																<a href="<?php echo site_url("sale/saleorder_rolex_temp_invoice_print")."/".$pos_rolex_id; ?>" target="_blank"><button type="button" class="btn btn-success" name="invoicebtn" id="invoicebtn"><i class='fa fa-print'></i>  พิมพ์ใบกำกับภาษี </button></a>&nbsp;&nbsp;
                                 <button type="button" class="btn btn-danger pull-right" name="voidbtn" id="voidbtn" onclick="del_confirm()" <?php if($pos_status=='V') echo "disabled"; ?>><i class='fa fa-close'></i>  ยกเลิกใบเสร็จรับเงิน (Void) </button>
                                 <form action="<?php echo site_url("sale/saleorder_rolex_void_pos_temp")."/".$pos_rolex_id; ?>" method="post" name="form2" id ="form2"><input type="hidden" name="remarkvoid" id="remarkvoid" value=""></form>
 							</div>
@@ -154,7 +155,7 @@
 
 					</div>
 				</div>
-			</div>	
+			</div>
             </div></section>
 	</div>
 </div>
@@ -163,28 +164,28 @@
 <script src="<?php echo base_url(); ?>js/bootbox.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
-{    
-    
+{
+
 });
 
-    
+
 function del_confirm() {
 	bootbox.confirm("ต้องการยกเลิกใบเสร็จรับเงินที่เลือกไว้ใช่หรือไม่ ?", function(result) {
 				var currentForm = this;
             	if (result) {
-				    bootbox.prompt("เนื่องจาก..", function(result) {                
-                      if (result === null) {                                             
-                        document.getElementById("form2").submit();                           
+				    bootbox.prompt("เนื่องจาก..", function(result) {
+                      if (result === null) {
+                        document.getElementById("form2").submit();
                       } else {
                         document.getElementById("remarkvoid").value=result;
-                        document.getElementById("form2").submit();                       
+                        document.getElementById("form2").submit();
                       }
                     });
 				}
 
 		});
 }
-    
+
 </script>
 </body>
 </html>

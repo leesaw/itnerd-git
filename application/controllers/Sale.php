@@ -865,6 +865,47 @@ function saleorder_rolex_temp_print()
     $mpdf->Output();
 }
 
+function saleorder_rolex_temp_invoice_print()
+{
+    $id = $this->uri->segment(3);
+
+    $this->load->library('mpdf/mpdf');
+    $mpdf= new mPDF('th','A4','0', 'thsaraban');
+    $stylesheet = file_get_contents('application/libraries/mpdf/css/style.css');
+    //$mpdf->SetWatermarkImage(base_url()."dist/img/logo-nggtp.jpg", 0.05, array(100,60), array(55,110));
+    $mpdf->showWatermarkImage = true;
+
+    $sql = "posrot_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp($sql);
+    if($query){
+        $data['pos_array'] =  $query;
+    }else{
+        $data['pos_array'] = array();
+    }
+
+
+    $sql = "posroit_pos_rolex_temp_id = '".$id."'";
+    $query = $this->tp_saleorder_model->getPOS_rolex_temp_item($sql);
+    if($query){
+        $data['item_array'] =  $query;
+    }else{
+        $data['item_array'] = array();
+    }
+
+    $demo_item = 0;
+    foreach($query as $loop) {
+      if ($loop->itse_serial_number == 'demo01') {
+        $demo_item = 1;
+      }
+    }
+
+    //echo $html;
+    $mpdf->SetJS('this.print();');
+    $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML($this->load->view("TP/sale/bill_rolex_print_from_temp", $data, TRUE));
+    $mpdf->Output();
+}
+
 function saleorder_rolex_pos_temp_last()
 {
     $id = $this->uri->segment(3);
